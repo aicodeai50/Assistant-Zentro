@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -18,42 +19,55 @@ export default function HomePage() {
               Learn faster. Prepare smarter. Upskill teams with AI.
             </h1>
 
-            <p className="mt-4 text-neutral-300">
-              Shynvo helps students and professionals build real skills — and helps
-              companies measure skill gaps, generate upskilling plans, and practice interviews.
+            <p className="mt-4 text-white/70">
+              Generate quizzes, flashcards, interview practice, and upskilling
+              plans — with optional “sci-fi assistant” UI for a futuristic
+              experience.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
+              <Link
                 className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
                 href="/demo"
               >
                 View demo
-              </a>
-              <a
+              </Link>
+              <Link
                 className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
                 href="/pricing"
               >
                 See pricing
-              </a>
-              <a
+              </Link>
+              <Link
                 className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
                 href="/robot"
               >
                 Try the sci-fi robot
-              </a>
+              </Link>
             </div>
 
-            <div className="mt-6 text-sm text-neutral-400">
-              Built for: <span className="text-neutral-200">Students</span>,{" "}
-              <span className="text-neutral-200">Professionals</span>,{" "}
-              <span className="text-neutral-200">Teams</span>
+            <div className="mt-6 text-sm text-white/60">
+              Built for:{" "}
+              <span className="text-white/80">Students</span>,{" "}
+              <span className="text-white/80">Professionals</span>,{" "}
+              <span className="text-white/80">Teams</span>
+            </div>
+
+            <div className="mt-6 grid gap-3 rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div className="text-sm font-semibold text-white/80">
+                Why people switch to Shynvo
+              </div>
+              <ul className="list-disc space-y-2 pl-5 text-sm text-white/60">
+                <li>Instant practice from any topic (no course hunting).</li>
+                <li>Interview simulation + scoring to improve faster.</li>
+                <li>Company features for team skills + upskilling plans.</li>
+              </ul>
             </div>
           </div>
 
           {/* HERO CARD */}
-          <div className="rounded-3xl border border-neutral-800 bg-neutral-950 p-6 shadow-xl">
-            <div className="text-sm text-neutral-400">What you get</div>
+          <div className="rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-xl">
+            <div className="text-sm text-white/60">What you get</div>
 
             <div className="mt-4 grid gap-3">
               <Feature title="Adaptive quizzes + flashcards">
@@ -63,33 +77,37 @@ export default function HomePage() {
                 Practice questions, feedback, and scoring.
               </Feature>
               <Feature title="Company tools (Team)">
-                Skill matrix, team upskilling plans, admin analytics.
+                Skill matrix, upskilling plans, admin analytics.
               </Feature>
-              <Feature title="Cinematic assistant robot (optional)">
-                A futuristic experience that users can enable/disable.
+              <Feature title="Cinematic robot (optional)">
+                Futuristic UI you can enable/disable anytime.
               </Feature>
             </div>
 
-            <a
+            <Link
               className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-white hover:bg-white/10"
               href="/pricing"
             >
               Upgrade anytime →
-            </a>
+            </Link>
+
+            <div className="mt-3 text-xs text-white/50">
+              Tip: start with the demo, then choose a plan when ready.
+            </div>
           </div>
         </section>
 
-        {/* SOCIAL PROOF / TRUST */}
+        {/* TRUST / STATS */}
         <section className="mt-14 grid gap-4 md:grid-cols-3">
           <Stat value="Free" label="Start with the free tier" />
-          <Stat value="Pro" label="Upgrade for interview prep + higher limits" />
-          <Stat value="Team" label="Company tools + seats + analytics" />
+          <Stat value="Pro" label="Interview prep + higher limits" />
+          <Stat value="Team" label="Seats + analytics + skill matrix" />
         </section>
 
         {/* WHO IT’S FOR */}
         <section className="mt-16">
           <h2 className="text-2xl font-bold">Who Shynvo is for</h2>
-          <p className="mt-2 text-neutral-300">
+          <p className="mt-2 text-white/70">
             Choose your path — Shynvo adapts the experience to your role.
           </p>
 
@@ -98,34 +116,111 @@ export default function HomePage() {
               Quizzes, flashcards, study plans, and confidence-building practice.
             </Card>
             <Card title="Professionals">
-              Skill-gap analysis, project execution plans, interview readiness.
+              Skill-gap analysis, certification prep, interview readiness.
             </Card>
             <Card title="Companies">
-              Admin dashboards, team upskilling, and interview simulation at scale.
+              Team upskilling plans, skill matrix, admin analytics + seats.
             </Card>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="mt-16 rounded-3xl border border-neutral-800 bg-neutral-950 p-8">
-          <h2 className="text-2xl font-bold">Ready to try it?</h2>
-          <p className="mt-2 text-neutral-300">
-            Start with the demo, then upgrade when you’re ready.
-          </p>
+        {/* HOW IT WORKS */}
+        <section className="mt-16 rounded-3xl border border-white/10 bg-neutral-950 p-8">
+          <h2 className="text-2xl font-bold">How it works</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <Step n="1" title="Choose a goal">
+              Quiz, flashcards, interview practice, or upskilling plan.
+            </Step>
+            <Step n="2" title="Get AI-generated practice">
+              Fast content you can repeat daily.
+            </Step>
+            <Step n="3" title="Track improvement">
+              Upgrade for deeper scoring and team features.
+            </Step>
+          </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
               className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
               href="/demo"
             >
               Open demo
-            </a>
-            <a
+            </Link>
+            <Link
               className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
+              href="/robot"
+            >
+              See the robot experience
+            </Link>
+          </div>
+        </section>
+
+        {/* PRICING TEASER */}
+        <section className="mt-16">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Pricing</h2>
+              <p className="mt-2 text-white/70">
+                Start free. Upgrade when you need more power.
+              </p>
+            </div>
+            <Link className="text-sm text-white/70 underline hover:text-white" href="/pricing">
+              View full pricing →
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <MiniPlan title="Free" price="NOK 0" items={["Basic quizzes", "Basic flashcards", "Community support"]} />
+            <MiniPlan title="Pro" price="NOK 299 / month" items={["Higher limits", "Interview simulator", "Skill prep"]} />
+            <MiniPlan title="Team" price="NOK 999 / month" items={["Seats", "Skill matrix", "Admin analytics"]} />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold">FAQ</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <Faq q="Is the robot required?">
+              No — it’s optional. The core product works normally without it.
+            </Faq>
+            <Faq q="Do you store my private data?">
+              Only what’s necessary to provide the service. See the Privacy page for details.
+            </Faq>
+            <Faq q="Can companies add seats?">
+              Yes — Team plan is designed for seats, admins, and analytics.
+            </Faq>
+            <Faq q="What’s next?">
+              We’ll connect the demo + robot panel to more backend endpoints (quizzes, interviews, analytics).
+            </Faq>
+          </div>
+        </section>
+
+        {/* FINAL CTA */}
+        <section className="mt-16 rounded-3xl border border-white/10 bg-white/5 p-8">
+          <h2 className="text-2xl font-bold">Ready to try it?</h2>
+          <p className="mt-2 text-white/70">
+            Start with the demo, then upgrade when you’re ready.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
+              href="/demo"
+            >
+              Open demo
+            </Link>
+            <Link
+              className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
               href="/pricing"
             >
               View pricing
-            </a>
+            </Link>
+            <Link
+              className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+              href="/robot"
+            >
+              Try the robot
+            </Link>
           </div>
         </section>
       </main>
@@ -137,27 +232,64 @@ export default function HomePage() {
 
 function Feature({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-neutral-800 bg-black p-4">
-      <div className="font-semibold text-neutral-100">{title}</div>
-      <div className="mt-1 text-sm text-neutral-400">{children}</div>
+    <div className="rounded-2xl border border-white/10 bg-black p-4">
+      <div className="font-semibold text-white">{title}</div>
+      <div className="mt-1 text-sm text-white/60">{children}</div>
     </div>
   );
 }
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-3xl border border-neutral-800 bg-black p-6">
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="text-lg font-semibold">{title}</div>
-      <div className="mt-2 text-sm text-neutral-400">{children}</div>
+      <div className="mt-2 text-sm text-white/60">{children}</div>
     </div>
   );
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-3xl border border-neutral-800 bg-black p-6">
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="text-2xl font-bold">{value}</div>
-      <div className="mt-1 text-sm text-neutral-400">{label}</div>
+      <div className="mt-1 text-sm text-white/60">{label}</div>
+    </div>
+  );
+}
+
+function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm font-semibold">
+          {n}
+        </div>
+        <div className="font-semibold">{title}</div>
+      </div>
+      <div className="mt-3 text-sm text-white/60">{children}</div>
+    </div>
+  );
+}
+
+function MiniPlan({ title, price, items }: { title: string; price: string; items: string[] }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
+      <div className="text-lg font-semibold">{title}</div>
+      <div className="mt-2 text-2xl font-bold">{price}</div>
+      <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-white/60">
+        {items.map((x) => (
+          <li key={x}>{x}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Faq({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
+      <div className="font-semibold">{q}</div>
+      <div className="mt-2 text-sm text-white/60">{children}</div>
     </div>
   );
 }

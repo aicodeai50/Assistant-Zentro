@@ -1,34 +1,56 @@
+import Link from "next/link";
+
 export default function SiteNav() {
   return (
-    <header className="border-b border-neutral-900 bg-black">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="/" className="flex items-center gap-2 text-white">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5">
-            S
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-lg font-semibold tracking-tight text-white">
+            Shynvo
           </span>
-          <span className="font-semibold tracking-tight">Shynvo</span>
-        </a>
+          <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/60">
+            Beta
+          </span>
+        </Link>
 
-        <nav className="flex items-center gap-3 text-sm">
-          <a className="rounded-lg px-3 py-2 text-neutral-300 hover:text-white" href="/demo">
+        <nav className="hidden items-center gap-6 md:flex">
+          <Link className="text-sm text-white/70 hover:text-white" href="/demo">
             Demo
-          </a>
-          <a className="rounded-lg px-3 py-2 text-neutral-300 hover:text-white" href="/robot">
-            Robot
-          </a>
-          <a className="rounded-lg px-3 py-2 text-neutral-300 hover:text-white" href="/pricing">
-            Pricing
-          </a>
-          <a className="rounded-lg px-3 py-2 text-neutral-300 hover:text-white" href="/docs">
-            Docs
-          </a>
-          <a
-            className="rounded-xl border border-white/10 bg-white px-4 py-2 font-semibold text-black hover:bg-neutral-200"
-            href="/login"
+          </Link>
+          <Link
+            className="text-sm text-white/70 hover:text-white"
+            href="/pricing"
           >
-            Log in
-          </a>
+            Pricing
+          </Link>
+          <Link
+            className="text-sm text-white/70 hover:text-white"
+            href="/robot"
+          >
+            Robot
+          </Link>
+          <Link
+            className="text-sm text-white/70 hover:text-white"
+            href="/contact"
+          >
+            Contact
+          </Link>
         </nav>
+
+        <div className="flex items-center gap-2">
+          <Link
+            href="/demo"
+            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+          >
+            View demo
+          </Link>
+          <Link
+            href="/pricing"
+            className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-neutral-200"
+          >
+            Upgrade
+          </Link>
+        </div>
       </div>
     </header>
   );
