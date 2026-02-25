@@ -25,6 +25,7 @@ export default function HomePage() {
               experience.
             </p>
 
+            {/* ✅ HERO BUTTONS */}
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
@@ -32,17 +33,27 @@ export default function HomePage() {
               >
                 View demo
               </Link>
+
               <Link
                 className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
                 href="/pricing"
               >
                 See pricing
               </Link>
+
               <Link
                 className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
                 href="/robot"
               >
                 Try the sci-fi robot
+              </Link>
+
+              {/* ✅ NEW: OS ENTRY */}
+              <Link
+                className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+                href="/os"
+              >
+                Enter Shynvo OS (2050)
               </Link>
             </div>
 
@@ -51,6 +62,30 @@ export default function HomePage() {
               <span className="text-white/80">Students</span>,{" "}
               <span className="text-white/80">Professionals</span>,{" "}
               <span className="text-white/80">Teams</span>
+            </div>
+
+            {/* ✅ NEW: SYSTEM STATUS (2050 FEEL) */}
+            <div className="mt-6 grid gap-3 rounded-3xl border border-white/10 bg-neutral-950 p-5">
+              <div className="flex items-center justify-between">
+                <div className="text-sm font-semibold text-white/80">
+                  SYSTEM STATUS
+                </div>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/60">
+                  Live preview
+                </span>
+              </div>
+
+              <div className="grid gap-2">
+                <Row k="Cognitive Load" v="Balanced" />
+                <Row k="Skill Momentum" v="Rising" />
+                <Row k="Focus Window" v="42 minutes remaining" />
+                <Row k="Trajectory" v="Builder → Founder" />
+              </div>
+
+              <div className="text-xs text-white/50">
+                This “OS layer” is optional — Shynvo stays simple, but can feel
+                futuristic when enabled.
+              </div>
             </div>
 
             <div className="mt-6 grid gap-3 rounded-3xl border border-white/10 bg-white/5 p-5">
@@ -152,6 +187,12 @@ export default function HomePage() {
             >
               See the robot experience
             </Link>
+            <Link
+              className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+              href="/os"
+            >
+              Enter Shynvo OS →
+            </Link>
           </div>
         </section>
 
@@ -164,15 +205,30 @@ export default function HomePage() {
                 Start free. Upgrade when you need more power.
               </p>
             </div>
-            <Link className="text-sm text-white/70 underline hover:text-white" href="/pricing">
+            <Link
+              className="text-sm text-white/70 underline hover:text-white"
+              href="/pricing"
+            >
               View full pricing →
             </Link>
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <MiniPlan title="Free" price="NOK 0" items={["Basic quizzes", "Basic flashcards", "Community support"]} />
-            <MiniPlan title="Pro" price="NOK 299 / month" items={["Higher limits", "Interview simulator", "Skill prep"]} />
-            <MiniPlan title="Team" price="NOK 999 / month" items={["Seats", "Skill matrix", "Admin analytics"]} />
+            <MiniPlan
+              title="Free"
+              price="NOK 0"
+              items={["Basic quizzes", "Basic flashcards", "Community support"]}
+            />
+            <MiniPlan
+              title="Pro"
+              price="NOK 299 / month"
+              items={["Higher limits", "Interview simulator", "Skill prep"]}
+            />
+            <MiniPlan
+              title="Team"
+              price="NOK 999 / month"
+              items={["Seats", "Skill matrix", "Admin analytics"]}
+            />
           </div>
         </section>
 
@@ -184,13 +240,15 @@ export default function HomePage() {
               No — it’s optional. The core product works normally without it.
             </Faq>
             <Faq q="Do you store my private data?">
-              Only what’s necessary to provide the service. See the Privacy page for details.
+              Only what’s necessary to provide the service. See the Privacy page
+              for details.
             </Faq>
             <Faq q="Can companies add seats?">
               Yes — Team plan is designed for seats, admins, and analytics.
             </Faq>
             <Faq q="What’s next?">
-              We’ll connect the demo + robot panel to more backend endpoints (quizzes, interviews, analytics).
+              We’ll connect the demo + robot panel to more backend endpoints
+              (quizzes, interviews, analytics).
             </Faq>
           </div>
         </section>
@@ -221,6 +279,12 @@ export default function HomePage() {
             >
               Try the robot
             </Link>
+            <Link
+              className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+              href="/os"
+            >
+              Enter OS
+            </Link>
           </div>
         </section>
       </main>
@@ -230,7 +294,13 @@ export default function HomePage() {
   );
 }
 
-function Feature({ title, children }: { title: string; children: React.ReactNode }) {
+function Feature({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black p-4">
       <div className="font-semibold text-white">{title}</div>
@@ -257,7 +327,15 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+function Step({
+  n,
+  title,
+  children,
+}: {
+  n: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="flex items-center gap-3">
@@ -271,7 +349,15 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   );
 }
 
-function MiniPlan({ title, price, items }: { title: string; price: string; items: string[] }) {
+function MiniPlan({
+  title,
+  price,
+  items,
+}: {
+  title: string;
+  price: string;
+  items: string[];
+}) {
   return (
     <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="text-lg font-semibold">{title}</div>
@@ -290,6 +376,15 @@ function Faq({ q, children }: { q: string; children: React.ReactNode }) {
     <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="font-semibold">{q}</div>
       <div className="mt-2 text-sm text-white/60">{children}</div>
+    </div>
+  );
+}
+
+function Row({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black px-4 py-3">
+      <div className="text-sm text-white/60">{k}</div>
+      <div className="text-sm font-semibold text-white/80">{v}</div>
     </div>
   );
 }
