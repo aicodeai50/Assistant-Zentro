@@ -2,28 +2,28 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 
-export default function TrajectoryPage() {
+export default function MomentumPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <SiteNav />
 
       <main className="mx-auto max-w-6xl px-6 py-14">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Trajectory</h1>
-          <Link className="text-sm text-white/70 underline hover:text-white" href="/os">
+          <h1 className="text-3xl font-bold">Skill Momentum</h1>
+          <Link href="/os" className="text-sm text-white/70 underline hover:text-white">
             ← Back to OS
           </Link>
         </div>
 
-        <p className="mt-3 max-w-2xl text-white/70">
-          This is a futuristic “skill trajectory” dashboard placeholder. Next we’ll connect it
-          to goals, streaks, skill graph, and recommendations.
+        <p className="mt-4 max-w-2xl text-white/70">
+          Tracks consistency, streaks, and velocity of skill improvement.
+          This is a 2050-style placeholder for momentum intelligence.
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <Card title="Current State">Baseline: building…</Card>
-          <Card title="Next Best Action">Suggested plan: building…</Card>
-          <Card title="30-Day Projection">Trajectory: building…</Card>
+          <Card title="Momentum Score">Building…</Card>
+          <Card title="Daily Streak">Building…</Card>
+          <Card title="Weekly Velocity">Building…</Card>
         </div>
       </main>
 
