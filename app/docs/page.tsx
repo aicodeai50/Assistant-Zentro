@@ -1,3 +1,5 @@
+"use client";
+
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 
