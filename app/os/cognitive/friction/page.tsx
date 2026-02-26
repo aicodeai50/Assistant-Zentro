@@ -1,0 +1,13 @@
+import OSShell from "@/components/os/OSShell";
+import { BackRow } from "@/components/os/OSCard";
+
+export default function Page() {
+  return (
+    <OSShell title="Friction Spikes" subtitle="When things feel hard, keep progress alive.">
+      <BackRow href="/os/cognitive" />
+      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
+        Rule: reduce complexity, keep reps. Flashcards + small recall drills only.
+      </div>
+    </OSShell>
+  );
+}

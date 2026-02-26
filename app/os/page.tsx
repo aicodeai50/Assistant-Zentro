@@ -7,28 +7,28 @@ const tiles = [
     title: "Cognitive Load",
     value: "Balanced",
     subtitle: "Mental bandwidth & fatigue signals",
-    href: "/dashboard/cognitive-load",
+    href: "/os/cognitive",
     badge: "Live preview",
   },
   {
     title: "Skill Momentum",
     value: "Rising",
     subtitle: "Streaks, velocity, skill acceleration",
-    href: "/dashboard/momentum",
+    href: "/os/momentum",
     badge: "Live preview",
   },
   {
     title: "Focus Window",
     value: "42 min remaining",
     subtitle: "Deep work window + distraction shield",
-    href: "/dashboard/focus",
+    href: "/os/focus",
     badge: "Live preview",
   },
   {
     title: "Trajectory",
     value: "Builder → Founder",
     subtitle: "Your next 90 days mapped as missions",
-    href: "/dashboard/trajectory",
+    href: "/os/trajectory",
     badge: "Live preview",
   },
 ];
@@ -50,7 +50,7 @@ export default function ShynvoOSPage() {
 
       <main className="relative mx-auto max-w-6xl px-6 py-14">
         {/* Header */}
-        <section className="animate-fade-in">
+        <section>
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             Shynvo OS — 2050 interface
@@ -108,7 +108,10 @@ export default function ShynvoOSPage() {
         </section>
 
         <div className="mt-10">
-          <Link href="/" className="text-sm text-white/70 underline hover:text-white">
+          <Link
+            href="/"
+            className="text-sm text-white/70 underline hover:text-white"
+          >
             ← Back to homepage
           </Link>
         </div>

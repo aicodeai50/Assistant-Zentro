@@ -17,23 +17,20 @@ export default function SiteNav() {
           <Link className="text-sm text-white/70 hover:text-white" href="/demo">
             Demo
           </Link>
-          <Link
-            className="text-sm text-white/70 hover:text-white"
-            href="/pricing"
-          >
+          <Link className="text-sm text-white/70 hover:text-white" href="/pricing">
             Pricing
           </Link>
-          <Link
-            className="text-sm text-white/70 hover:text-white"
-            href="/robot"
-          >
+          <Link className="text-sm text-white/70 hover:text-white" href="/robot">
             Robot
           </Link>
-          <Link
-            className="text-sm text-white/70 hover:text-white"
-            href="/contact"
-          >
+          <Link className="text-sm text-white/70 hover:text-white" href="/docs">
+            Docs
+          </Link>
+          <Link className="text-sm text-white/70 hover:text-white" href="/contact">
             Contact
+          </Link>
+          <Link className="text-sm text-white/70 hover:text-white" href="/os">
+            OS
           </Link>
         </nav>
 
