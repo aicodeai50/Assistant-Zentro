@@ -1,3 +1,4 @@
+cat > components/os/OSCard.tsx <<'EOF'
 import Link from "next/link";
 import React from "react";
 
@@ -56,3 +57,4 @@ export function BackRow({ href = "/os" }: { href?: string }) {
     </Link>
   );
 }
+EOF

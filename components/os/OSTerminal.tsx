@@ -1,11 +1,9 @@
+cat > components/os/OSTerminal.tsx <<'EOF'
 "use client";
 
 import { useEffect, useRef } from "react";
 
-type Line = {
-  type: "system" | "user" | "output";
-  text: string;
-};
+type Line = { type: "system" | "user" | "output"; text: string };
 
 export default function OSTerminal({ initialLines = [] }: { initialLines?: Line[] }) {
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -28,3 +26,4 @@ export default function OSTerminal({ initialLines = [] }: { initialLines?: Line[
     </div>
   );
 }
+EOF

@@ -1,3 +1,4 @@
+cat > components/os/OSShell.tsx <<'EOF'
 import Link from "next/link";
 import React from "react";
 
@@ -13,7 +14,7 @@ export default function OSShell({
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="border-b border-white/10 bg-black/70 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="text-xs text-white/50">Shynvo OS • 2050 mode</div>
             <h1 className="text-lg font-semibold">{title}</h1>
@@ -55,3 +56,4 @@ export default function OSShell({
     </div>
   );
 }
+EOF
