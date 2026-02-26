@@ -1,37 +1,58 @@
 import Link from "next/link";
+import React from "react";
 
-export default function OsCardLink({
+export function OSCard({
   title,
-  subtitle,
-  href,
-  badge,
+  value,
+  hint,
 }: {
   title: string;
-  subtitle: string;
+  value: string;
+  hint?: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="text-sm text-white/60">{title}</div>
+      <div className="mt-2 text-3xl font-bold">{value}</div>
+      {hint ? <div className="mt-2 text-sm text-white/50">{hint}</div> : null}
+    </div>
+  );
+}
+
+export function BoxLink({
+  href,
+  title,
+  desc,
+  tag,
+}: {
   href: string;
-  badge?: string;
+  title: string;
+  desc: string;
+  tag?: string;
 }) {
   return (
     <Link
       href={href}
-      className="group block rounded-3xl border border-white/10 bg-black/40 p-6 transition hover:border-white/20 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/20"
+      className="block rounded-3xl border border-white/10 bg-black/40 p-5 transition hover:border-white/20 hover:bg-white/5"
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="text-lg font-semibold text-white">{title}</div>
-          <div className="mt-2 text-sm text-white/60">{subtitle}</div>
-        </div>
-
-        {badge ? (
-          <span className="shrink-0 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/70">
-            {badge}
+      <div className="flex items-center justify-between gap-3">
+        <div className="font-semibold">{title}</div>
+        {tag ? (
+          <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/60">
+            {tag}
           </span>
         ) : null}
       </div>
+      <div className="mt-2 text-sm text-white/60">{desc}</div>
+      <div className="mt-4 text-xs text-white/40">Open →</div>
+    </Link>
+  );
+}
 
-      <div className="mt-5 text-sm font-semibold text-white/70 group-hover:text-white">
-        Open →
-      </div>
+export function BackRow({ href = "/os" }: { href?: string }) {
+  return (
+    <Link href={href} className="text-sm text-white/70 hover:text-white">
+      ← Back
     </Link>
   );
 }

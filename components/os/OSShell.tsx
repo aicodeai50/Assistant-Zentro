@@ -1,6 +1,7 @@
 import Link from "next/link";
+import React from "react";
 
-export default function OsShell({
+export default function OSShell({
   title,
   subtitle,
   children,
@@ -11,51 +12,46 @@ export default function OsShell({
 }) {
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur">
+      <header className="border-b border-white/10 bg-black/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-semibold tracking-tight">Shynvo</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/60">
-              OS (2050)
-            </span>
-          </Link>
+          <div>
+            <div className="text-xs text-white/50">Shynvo OS • 2050 mode</div>
+            <h1 className="text-lg font-semibold">{title}</h1>
+            {subtitle ? (
+              <p className="mt-1 text-sm text-white/60">{subtitle}</p>
+            ) : null}
+          </div>
 
-          <div className="flex items-center gap-2">
-            <Link
-              href="/os"
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-            >
+          <nav className="flex flex-wrap items-center gap-3 text-sm">
+            <Link href="/os" className="text-white/70 hover:text-white">
               OS Home
             </Link>
-            <Link
-              href="/demo"
-              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-neutral-200"
-            >
-              View demo
+            <Link href="/os/momentum" className="text-white/70 hover:text-white">
+              Momentum
             </Link>
-          </div>
+            <Link href="/os/focus" className="text-white/70 hover:text-white">
+              Focus
+            </Link>
+            <Link href="/os/cognitive" className="text-white/70 hover:text-white">
+              Cognitive
+            </Link>
+            <Link href="/os/trajectory" className="text-white/70 hover:text-white">
+              Trajectory
+            </Link>
+            <Link href="/os/terminal" className="text-white/70 hover:text-white">
+              Terminal
+            </Link>
+          </nav>
         </div>
-      </div>
+      </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-12">
-        <div className="mb-8">
-          <p className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-            Shynvo OS Signal
-          </p>
-          <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-            {title}
-          </h1>
-          {subtitle ? (
-            <p className="mt-3 max-w-3xl text-white/70">{subtitle}</p>
-          ) : null}
+      <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
+
+      <footer className="border-t border-white/10 py-8">
+        <div className="mx-auto max-w-6xl px-6 text-xs text-white/50">
+          Shynvo OS is a fictional preview UI. Core product remains available in Demo.
         </div>
-
-        {children}
-
-        <div className="mt-12 border-t border-white/10 pt-6 text-xs text-white/50">
-          This is a fictional UI layer (2050 mode) — the core product works without it.
-        </div>
-      </main>
+      </footer>
     </div>
   );
 }
