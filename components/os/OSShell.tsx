@@ -1,57 +1,80 @@
-import Link from "next/link";
+// components/os/OSShell.tsx
 import React from "react";
+import "@/app/os/os-atmosphere.css";
+
+type OSShellProps = {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+
+  chips?: string[];
+  rightSlot?: React.ReactNode;
+};
 
 export default function OSShell({
   title,
   subtitle,
   children,
-}: {
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
-}) {
+  chips = ["online", "signal: stable", "sync: idle", "shield: on"],
+  rightSlot,
+}: OSShellProps) {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="border-b border-white/10 bg-black/70 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div>
-            <div className="text-xs text-white/50">Shynvo OS • 2050 mode</div>
-            <h1 className="text-lg font-semibold">{title}</h1>
-            {subtitle && (
-              <p className="mt-1 text-sm text-white/60">{subtitle}</p>
+    <div className="os-atmosphere min-h-screen w-full">
+      {/* System header strip */}
+      <div className="sticky top-0 z-20 border-b border-white/10 bg-black/50 backdrop-blur">
+        <div className="mx-auto w-full max-w-6xl px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              {/* Pulsing status dot */}
+              <span className="relative inline-flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/40 opacity-60" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white/80" />
+              </span>
+
+              <div className="text-xs uppercase tracking-widest text-white/60">
+                Shynvo OS
+              </div>
+
+              <div className="hidden h-4 w-px bg-white/10 sm:block" />
+
+              <div className="flex flex-wrap items-center gap-2">
+                {chips.map((c) => (
+                  <span
+                    key={c}
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {rightSlot ? (
+              <div className="flex items-center gap-2">{rightSlot}</div>
+            ) : (
+              <div className="text-xs text-white/50">
+                system: stable • demo mode
+              </div>
             )}
           </div>
-
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/os" className="text-white/70 hover:text-white">
-              OS Home
-            </Link>
-            <Link href="/os/momentum" className="text-white/70 hover:text-white">
-              Momentum
-            </Link>
-            <Link href="/os/focus" className="text-white/70 hover:text-white">
-              Focus
-            </Link>
-            <Link href="/os/cognitive" className="text-white/70 hover:text-white">
-              Cognitive
-            </Link>
-            <Link
-              href="/os/trajectory"
-              className="text-white/70 hover:text-white"
-            >
-              Trajectory
-            </Link>
-          </nav>
         </div>
-      </header>
+      </div>
 
-      <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
-
-      <footer className="border-t border-white/10 py-8">
-        <div className="mx-auto max-w-6xl px-6 text-xs text-white/50">
-          Shynvo OS is a preview UI. Core product lives in Demo.
+      {/* Page header + content */}
+      <div className="mx-auto w-full max-w-6xl px-4 py-6">
+        <div className="mb-5">
+          <div className="text-2xl font-semibold text-white/90">
+            {title}
+          </div>
+          {subtitle && (
+            <div className="mt-1 text-sm text-white/60">
+              {subtitle}
+            </div>
+          )}
         </div>
-      </footer>
+
+        {children}
+      </div>
     </div>
   );
 }

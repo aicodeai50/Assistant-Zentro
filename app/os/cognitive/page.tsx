@@ -1,53 +1,73 @@
+// app/os/cognitive/page.tsx
+import Link from "next/link";
 import OSShell from "@/components/os/OSShell";
-import { BackRow, BoxLink, OSCard } from "@/components/os/OSCard";
+import OSCard from "@/components/os/OSCard";
 
-export default function CognitivePage() {
+export default function CognitiveHubPage() {
   return (
     <OSShell
-      title="Cognitive Load"
-      subtitle="Signal dashboard for mental bandwidth, friction, and recovery."
+      title="Cognitive"
+      subtitle="Signal-based guidance for focus, friction, recovery, and getting unstuck."
+      chips={["online", "module: cognitive", "signal: ready", "sync: idle"]}
     >
-      <BackRow />
-
-      <section className="mt-6 grid gap-4 md:grid-cols-3">
-        <OSCard title="Energy" value="Balanced" hint="Baseline capacity" />
-        <OSCard title="Friction" value="Low" hint="Context-switch cost" />
-        <OSCard title="Recovery" value="OK" hint="Reset speed" />
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-xl font-bold">Modules</h2>
-        <p className="mt-2 text-white/70">
-          Enter a module to see a mini readout + a quick action plan.
-        </p>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <BoxLink
-            href="/os/cognitive/energy"
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Link href="/os/cognitive/energy" className="block">
+          <OSCard
             title="Energy"
-            desc="Battery + fatigue signals. Tune your load."
-            tag="Core"
+            subtitle="Tune session length + break type based on your current signal."
+            icon="⚡"
           />
-          <BoxLink
-            href="/os/cognitive/friction"
+        </Link>
+
+        <Link href="/os/cognitive/friction" className="block">
+          <OSCard
             title="Friction"
-            desc="What’s slowing you down? Remove drag."
-            tag="Core"
+            subtitle="Identify blockers (confusion, distraction, unclear goal) and apply quick fixes."
+            icon="🧩"
           />
-          <BoxLink
-            href="/os/cognitive/recovery"
+        </Link>
+
+        <Link href="/os/cognitive/recovery" className="block">
+          <OSCard
             title="Recovery"
-            desc="Reset loop to keep momentum."
-            tag="Habit"
+            subtitle="Downshift plan: rest window, reset prompts, and a clean restart."
+            icon="🛟"
           />
-          <BoxLink
-            href="/os/cognitive/stuck"
+        </Link>
+
+        <Link href="/os/cognitive/stuck" className="block">
+          <OSCard
             title="Stuck"
-            desc="Break the loop with a fast unblock protocol."
-            tag="Pro"
+            subtitle="Unstuck protocol: reduce scope, reframe, generate the next step."
+            icon="🧠"
           />
+        </Link>
+      </div>
+
+      <div className="mt-6 rounded-xl border border-white/10 bg-black/30 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-xs uppercase tracking-widest text-white/60">
+              System Note
+            </div>
+            <div className="mt-1 text-sm text-white/85">
+              Cognitive is a demo flow: every page should feel like it’s actively guiding the user.
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+              status: online
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+              protocol: armed
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+              shield: stable
+            </span>
+          </div>
         </div>
-      </section>
+      </div>
     </OSShell>
   );
 }

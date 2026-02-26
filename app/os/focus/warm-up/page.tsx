@@ -1,29 +1,45 @@
-cat > app/os/focus/warm-up/page.tsx <<'EOF'
+// app/os/focus/warm-up/page.tsx
 import OSShell from "@/components/os/OSShell";
 import { BackRow } from "@/components/os/OSCard";
 
 export default function WarmUpPage() {
   return (
-    <OSShell title="Warm-up" subtitle="3 minutes • wake recall, get momentum">
-      <BackRow href="/os/focus" />
+    <OSShell
+      title="Focus / Warm-up"
+      subtitle="3-minute ignition: wake recall, prime focus, start clean."
+      chips={["online", "module: focus", "stage: warm-up", "sync: idle"]}
+    >
+      <BackRow href="/os/focus" label="Back to Focus" />
 
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        <h2 className="text-xl font-bold text-white">Warm-up protocol</h2>
-        <p className="mt-2">
-          Do 10 quick prompts. Keep it light—goal is to switch your brain on.
-        </p>
+      <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+        <div className="text-xs uppercase tracking-widest text-white/60">
+          Warm-up protocol (3 minutes)
+        </div>
 
-        <ul className="mt-4 list-disc space-y-2 pl-5">
-          <li>5 flashcards (fast recall)</li>
-          <li>3 “explain like I’m 12” prompts</li>
-          <li>2 mini questions (timed)</li>
-        </ul>
+        <div className="mt-3 space-y-2 text-sm text-white/80">
+          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-3">
+            1) 10 flash recalls (quick questions, no notes)
+          </div>
+          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-3">
+            2) Write one sentence: “Today’s win is ___”
+          </div>
+          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-3">
+            3) Start timer and begin the first tiny action
+          </div>
+        </div>
 
-        <div className="mt-6 text-sm text-white/50">
-          Tip: If you feel resistance, cut the set in half—just start.
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">
+            Start 3-min warm-up
+          </button>
+          <button className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">
+            Open flash set
+          </button>
+          <button className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">
+            Lock target
+          </button>
         </div>
       </div>
     </OSShell>
   );
 }
-EOF
