@@ -1,6 +1,4 @@
-cat > components/os/OSCard.tsx <<'EOF'
 import Link from "next/link";
-import React from "react";
 
 export function OSCard({
   title,
@@ -15,7 +13,7 @@ export function OSCard({
     <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
       <div className="text-sm text-white/60">{title}</div>
       <div className="mt-2 text-3xl font-bold">{value}</div>
-      {hint ? <div className="mt-2 text-sm text-white/50">{hint}</div> : null}
+      {hint && <div className="mt-2 text-sm text-white/50">{hint}</div>}
     </div>
   );
 }
@@ -38,11 +36,11 @@ export function BoxLink({
     >
       <div className="flex items-center justify-between gap-3">
         <div className="font-semibold">{title}</div>
-        {tag ? (
+        {tag && (
           <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/60">
             {tag}
           </span>
-        ) : null}
+        )}
       </div>
       <div className="mt-2 text-sm text-white/60">{desc}</div>
       <div className="mt-4 text-xs text-white/40">Open →</div>
@@ -57,4 +55,3 @@ export function BackRow({ href = "/os" }: { href?: string }) {
     </Link>
   );
 }
-EOF

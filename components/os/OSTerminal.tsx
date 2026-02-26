@@ -1,29 +1,61 @@
-cat > components/os/OSTerminal.tsx <<'EOF'
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState } from "react";
 
-type Line = { type: "system" | "user" | "output"; text: string };
+type Line = {
+  role: "system" | "user" | "assistant";
+  content: string;
+};
 
-export default function OSTerminal({ initialLines = [] }: { initialLines?: Line[] }) {
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+export default function OSTerminal() {
+  const [lines, setLines] = useState<Line[]>([
+    { role: "system", content: "Shynvo OS Terminal ready." },
+  ]);
+  const [input, setInput] = useState("");
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [initialLines]);
+  function send() {
+    if (!input.trim()) return;
+
+    setLines((prev) => [
+      ...prev,
+      { role: "user", content: input },
+      {
+        role: "assistant",
+        content: "Command received (demo mode).",
+      },
+    ]);
+
+    setInput("");
+  }
 
   return (
-    <div className="mt-6 rounded-3xl border border-white/10 bg-black p-5 font-mono text-sm text-white/80">
-      {initialLines.map((l, i) => (
-        <div key={i} className="mb-2">
-          {l.type === "system" && <span className="text-emerald-400">[system]</span>}
-          {l.type === "user" && <span className="text-sky-400">[you]</span>}
-          {l.type === "output" && <span className="text-white/60">[output]</span>}
-          <span className="ml-2">{l.text}</span>
-        </div>
-      ))}
-      <div ref={bottomRef} />
+    <div className="mt-6 rounded-3xl border border-white/10 bg-black/70 p-4 text-sm">
+      <div className="space-y-2 text-white/80">
+        {lines.map((l, i) => (
+          <div key={i}>
+            <span className="mr-2 text-white/40">
+              {l.role === "user" ? ">" : l.role === "assistant" ? "AI" : "SYS"}
+            </span>
+            {l.content}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          className="flex-1 rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-white outline-none"
+          placeholder="Type a command…"
+        />
+        <button
+          onClick={send}
+          className="rounded-xl bg-white px-4 py-2 font-semibold text-black"
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 }
-EOF
