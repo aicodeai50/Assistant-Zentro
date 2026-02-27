@@ -1,10 +1,12 @@
 import React from "react";
 import "@/app/os/os-atmosphere.css";
 import OSSideNav from "@/components/os/OSSideNav";
+import OSBottomDock from "@/components/os/OSBottomDock";
+import OSLocaleControl from "@/components/os/OSLocaleControl";
 
 type OSShellProps = {
-  title: string;
-  subtitle?: string;
+  title: string; // English title stays English
+  subtitle?: React.ReactNode; // can be string OR <OSSub ... />
   children: React.ReactNode;
   chips?: string[];
   rightSlot?: React.ReactNode;
@@ -48,21 +50,28 @@ export default function OSShell({
               </div>
             </div>
 
-            {rightSlot ? (
-              <div className="flex items-center gap-2">{rightSlot}</div>
-            ) : (
-              <div className="text-xs text-white/50">system: stable • demo mode</div>
-            )}
+            <div className="flex items-center gap-2">
+              <OSLocaleControl />
+              {rightSlot ? (
+                <div className="flex items-center gap-2">{rightSlot}</div>
+              ) : (
+                <div className="hidden sm:block text-xs text-white/50">
+                  system: stable
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-6xl px-4 py-6">
+      {/* Mobile dock */}
+      <OSBottomDock />
+
+      {/* Add bottom padding on mobile so content clears dock */}
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 pb-24 lg:pb-6">
         <div className="mb-5">
           <div className="text-2xl font-semibold text-white/90">{title}</div>
-          {subtitle ? (
-            <div className="mt-1 text-sm text-white/60">{subtitle}</div>
-          ) : null}
+          {subtitle ? <div className="mt-1">{subtitle}</div> : null}
         </div>
 
         <div className={showNav ? "grid grid-cols-1 gap-4 lg:grid-cols-12" : ""}>

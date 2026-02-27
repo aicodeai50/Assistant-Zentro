@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import OSShell from "@/components/os/OSShell";
 import { BackRow } from "@/components/os/OSCard";
+import OSSub from "@/components/os/OSSub";
 
 type Line = { t: "sys" | "user" | "out"; v: string };
 
@@ -12,7 +13,7 @@ const COMMANDS = ["help", "os", "planet", "cognitive", "focus", "momentum", "tra
 export default function OSTerminalPage() {
   const [input, setInput] = useState("");
   const [lines, setLines] = useState<Line[]>([
-    { t: "sys", v: "Shynvo OS Terminal â€” deck preview" },
+    { t: "sys", v: "Shynvo OS Terminal - deck preview" },
     { t: "out", v: "Type 'help' to see commands. Try: status, routes, planet" },
   ]);
 
@@ -44,7 +45,7 @@ export default function OSTerminalPage() {
 
     if (c === "clear") {
       setLines([
-        { t: "sys", v: "Shynvo OS Terminal â€” deck preview" },
+        { t: "sys", v: "Shynvo OS Terminal - deck preview" },
         { t: "out", v: "Cleared. Type 'help' to see commands." },
       ]);
       return { reply: "" };
@@ -52,9 +53,7 @@ export default function OSTerminalPage() {
 
     switch (c) {
       case "help":
-        return {
-          reply: ["Commands:", "- status", "- routes", "- planet", "- os", "- cognitive", "- focus", "- momentum", "- trajectory", "- clear"].join("\n"),
-        };
+        return { reply: ["Commands:", "- status", "- routes", "- planet", "- os", "- cognitive", "- focus", "- momentum", "- trajectory", "- clear"].join("\n") };
       case "status":
         return { reply: ["OS: online", "Signal: stable", "Sync: idle", "Mode: demo"].join("\n") };
       case "routes":
@@ -83,7 +82,29 @@ export default function OSTerminalPage() {
   };
 
   return (
-    <OSShell title="OS Terminal" subtitle="Diagnostics + route launcher (frontend-only)." chips={["online", "module: terminal", "access: local", "sync: idle"]}>
+    <OSShell
+      title="OS Terminal"
+      subtitle={
+        <OSSub
+          en="Diagnostics and route launcher (frontend-only)."
+          i18n={{
+            es: "Diagnostico y lanzador de rutas (solo frontend).",
+            fr: "Diagnostics et lanceur de routes (frontend uniquement).",
+            pt: "Diagnostico e iniciador de rotas (somente frontend).",
+            de: "Diagnose und Routenstarter (nur Frontend).",
+            it: "Diagnostica e avvio route (solo frontend).",
+            nl: "Diagnose en route-launcher (alleen frontend).",
+            tr: "Teshis ve rota baslatici (yalnizca frontend).",
+            ar: "Tashkhis wa itlaq al-masar (frontend faqat).",
+            hi: "Diagnostics aur route launcher (sirf frontend).",
+            zh: "Zhen duan yu lu jing qi dong (jin xian frontend).",
+            ja: "Shindan to rooto raanchaa (frontend nomi).",
+            ko: "Jindan gwa route launcher (frontend man).",
+          }}
+        />
+      }
+      chips={["online", "module: terminal", "access: local", "sync: idle"]}
+    >
       <BackRow href="/os" label="Back to OS Home" />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">

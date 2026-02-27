@@ -3,6 +3,7 @@
 import OSShell from "@/components/os/OSShell";
 import { BoxLink, OSCard } from "@/components/os/OSCard";
 import { useOSState } from "@/components/os/useOSState";
+import OSSub from "@/components/os/OSSub";
 
 export default function TrajectoryPage() {
   const [lastPhase, setLastPhase] = useOSState<string>("trajectory.lastPhase", "foundation");
@@ -11,7 +12,25 @@ export default function TrajectoryPage() {
   return (
     <OSShell
       title="Trajectory"
-      subtitle="90-day mission control. (Persisted locally)"
+      subtitle={
+        <OSSub
+          en="90-day mission control. Saved locally."
+          i18n={{
+            es: "Control de mision de 90 dias. Guardado localmente.",
+            fr: "Controle de mission 90 jours. Sauvegarde locale.",
+            pt: "Controle de missao de 90 dias. Salvo localmente.",
+            de: "90-Tage Missionskontrolle. Lokal gespeichert.",
+            it: "Controllo missione 90 giorni. Salvato localmente.",
+            nl: "90-dagen missiebesturing. Lokaal opgeslagen.",
+            tr: "90 gun gorev kontrolu. Yerelde kayitli.",
+            ar: "Tahakkum bi-muhimma 90 yawman. mahfuz mahalliyan.",
+            hi: "90-day mission control. Local save.",
+            zh: "90 tian ren wu kong zhi. Ben di bao cun.",
+            ja: "90 nichi mission control. rokaru hozon.",
+            ko: "90-il mission control. Local save.",
+          }}
+        />
+      }
       chips={["online", "module: trajectory", `last: ${lastPhase}`, `action: ${lastAction}`]}
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -37,37 +56,12 @@ export default function TrajectoryPage() {
 
       <div className="mt-6 rounded-xl border border-white/10 bg-black/30 p-4">
         <div className="text-xs uppercase tracking-widest text-white/60">Next Action</div>
-        <div className="mt-2 text-sm text-white/70">
-          This button simulates a mission system. It only updates local state for now.
-        </div>
+        <div className="mt-2 text-sm text-white/70">This button simulates a mission system (local state only).</div>
         <div className="mt-4 flex flex-wrap gap-2">
-          <button
-            onClick={() => setLastAction("lock-next-step")}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
-          >
-            Lock next step
-          </button>
-          <button
-            onClick={() => setLastAction("schedule-block")}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
-          >
-            Schedule block
-          </button>
-          <button
-            onClick={() => setLastAction("ship-slice")}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
-          >
-            Ship slice
-          </button>
-          <button
-            onClick={() => {
-              setLastPhase("foundation");
-              setLastAction("none");
-            }}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
-          >
-            Reset
-          </button>
+          <button onClick={() => setLastAction("lock-next-step")} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10">Lock next step</button>
+          <button onClick={() => setLastAction("schedule-block")} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10">Schedule block</button>
+          <button onClick={() => setLastAction("ship-slice")} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10">Ship slice</button>
+          <button onClick={() => { setLastPhase("foundation"); setLastAction("none"); }} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10">Reset</button>
         </div>
       </div>
     </OSShell>
