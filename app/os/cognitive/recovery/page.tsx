@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import OSShell from "@/components/os/OSShell";
 import { OSCard } from "@/components/os/OSCard";
+import { useOSState } from "@/components/os/useOSState";
 
 type RecoveryMode = "Downshift" | "Rest Window" | "Reset";
 
@@ -16,8 +17,8 @@ function planFor(mode: RecoveryMode, minutes: number) {
     return {
       headline: "Downshift (fast reset)",
       steps: [
-        "Stand + slow breath (60-90s)",
-        "Hydrate + change posture",
+        "Stand and slow breath (60-90s)",
+        "Hydrate and change posture",
         "Light exposure (2m)",
         "Return with one tiny objective",
       ],
@@ -34,39 +35,51 @@ function planFor(mode: RecoveryMode, minutes: number) {
         "If mind races: jot 3 bullets then stop",
         "Restart with smaller scope",
       ],
-      note: "Goal: real recovery, not doomscrolling.",
+      note: "Goal: real recovery, not scrolling.",
     };
   }
   return {
     headline: "Reset (clean reboot)",
     steps: [
       "Clear desk (60s)",
-      "Write: 'What matters in 30 minutes?'",
+      "Write: What matters in 30 minutes?",
       "Pick one deliverable",
-      "Start timer + begin",
+      "Start timer and begin",
     ],
     note: "Goal: remove ambiguity and re-enter with a win condition.",
   };
 }
 
-export default function CognitiveRecoveryPage() {
-  const [mode, setMode] = useState<RecoveryMode>("Downshift");
-  const [restMinutes, setRestMinutes] = useState<number>(20);
+function safeMode(v: string): RecoveryMode {
+  if (v === "Downshift" || v === "Rest Window" || v === "Reset") return v;
+  return "Downshift";
+}
 
+export default function CognitiveRecoveryPage() {
+  const [modeRaw, setModeRaw] = useOSState<string>("cognitive.recovery.mode", "Downshift");
+  const [restMinutes, setRestMinutes] = useOSState<number>("cognitive.recovery.minutes", 20);
+
+  const mode = safeMode(modeRaw);
   const plan = useMemo(() => planFor(mode, restMinutes), [mode, restMinutes]);
 
   return (
-    <OSShell title="Cognitive / Recovery" subtitle="Downshift, rest window, and reset prompts." chips={["online", "module: recovery", `mode: ${mode.toLowerCase().replace(" ", "-")}`, "sync: paused"]}>
+    <OSShell
+      title="Cognitive / Recovery"
+      subtitle="Downshift, rest window, and reset prompts. (Persisted locally)"
+      chips={["online", "module: cognitive", `recovery: ${mode.toLowerCase().replace(" ", "-")}`, "sync: paused"]}
+    >
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="lg:col-span-1 rounded-xl border border-white/10 bg-black/30 p-4">
           <div className="text-xs uppercase tracking-widest text-white/60">Recovery mode</div>
+          <div className="mt-2 text-xs text-white/55">Saved locally for continuity.</div>
+
           <div className="mt-3 space-y-2">
             {(["Downshift", "Rest Window", "Reset"] as RecoveryMode[]).map((m) => {
               const on = mode === m;
               return (
                 <button
                   key={m}
-                  onClick={() => setMode(m)}
+                  onClick={() => setModeRaw(m)}
                   className={[
                     "w-full rounded-lg border px-3 py-3 text-left transition",
                     on ? "border-white/25 bg-white/10" : "border-white/10 bg-white/5 hover:bg-white/10",
@@ -84,9 +97,28 @@ export default function CognitiveRecoveryPage() {
                 <div className="text-xs uppercase tracking-widest text-white/60">Rest length</div>
                 <div className="text-xs text-white/60">{restMinutes} min</div>
               </div>
-              <input className="mt-2 w-full accent-white" type="range" min={10} max={60} value={restMinutes} onChange={(e) => setRestMinutes(parseInt(e.target.value, 10))} />
+              <input
+                className="mt-2 w-full accent-white"
+                type="range"
+                min={10}
+                max={60}
+                value={restMinutes}
+                onChange={(e) => setRestMinutes(parseInt(e.target.value, 10))}
+              />
             </div>
           )}
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              onClick={() => {
+                setModeRaw("Downshift");
+                setRestMinutes(20);
+              }}
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70 hover:bg-white/10"
+            >
+              Reset defaults
+            </button>
+          </div>
         </div>
 
         <div className="lg:col-span-2 space-y-4">
@@ -105,9 +137,13 @@ export default function CognitiveRecoveryPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <OSCard title="Priority" value={mode === "Downshift" ? "Stabilize fast" : mode === "Rest Window" ? "Restore capacity" : "Re-enter clean"} hint="goal" icon="í·­" />
-            <OSCard title="Input rule" value={mode === "Rest Window" ? "No feeds" : "Minimal"} hint="protect recovery" icon="í³µ" />
-            <OSCard title="Restart" value="One tiny deliverable" hint="win condition" icon="âœ…" />
+            <OSCard
+              title="Priority"
+              value={mode === "Downshift" ? "Stabilize fast" : mode === "Rest Window" ? "Restore capacity" : "Re-enter clean"}
+              hint="goal"
+            />
+            <OSCard title="Input rule" value={mode === "Rest Window" ? "No feeds" : "Minimal"} hint="protect recovery" />
+            <OSCard title="Restart" value="One tiny deliverable" hint="win condition" />
           </div>
 
           <div className="rounded-xl border border-white/10 bg-black/30 p-4">

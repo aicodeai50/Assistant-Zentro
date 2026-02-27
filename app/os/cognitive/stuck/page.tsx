@@ -1,27 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import OSShell from "@/components/os/OSShell";
 import { OSCard } from "@/components/os/OSCard";
+import { useOSState } from "@/components/os/useOSState";
 
 type StuckType = "Too big" | "Too vague" | "Too risky" | "No energy" | "No clarity";
 
-const STUCK_TYPES: Array<{ key: StuckType; icon: string; hint: string }> = [
-  { key: "Too big", icon: "í³¦", hint: "Task is massive and shapeless." },
-  { key: "Too vague", icon: "í¼«ï¸", hint: "No clear next move." },
-  { key: "Too risky", icon: "âš ï¸", hint: "Fear of wasting time or failing." },
-  { key: "No energy", icon: "í´‹", hint: "Capacity is low." },
-  { key: "No clarity", icon: "í·©", hint: "Missing info / direction." },
+const STUCK_TYPES: Array<{ key: StuckType; hint: string }> = [
+  { key: "Too big", hint: "Task is massive and shapeless." },
+  { key: "Too vague", hint: "No clear next move." },
+  { key: "Too risky", hint: "Fear of wasting time or failing." },
+  { key: "No energy", hint: "Capacity is low." },
+  { key: "No clarity", hint: "Missing info or direction." },
 ];
 
+function safeType(v: string): StuckType {
+  const allowed: StuckType[] = ["Too big", "Too vague", "Too risky", "No energy", "No clarity"];
+  return (allowed.includes(v as StuckType) ? (v as StuckType) : "Too vague");
+}
+
 function nextSteps(stuck: StuckType, text: string): string[] {
-  const base = text.trim() || "this";
+  const base = (text || "").trim() || "this";
   switch (stuck) {
     case "Too big":
       return [`Define the smallest shippable slice of ${base}.`, "Write a 3-bullet outline.", "Do a 10-minute ugly first pass."];
     case "Too vague":
-      return ["Write the win: 'In 25 minutes, I will have ___.''", "Pick the first constraint you can decide now.", "Start with a placeholder and refine."];
+      return ["Write the win: In 25 minutes, I will have ____.", "Pick the first constraint you can decide now.", "Start with a placeholder and refine."];
     case "Too risky":
       return ["Run a cheap experiment for 15 minutes.", "Define the failure cost. Make it tiny.", "Ship a draft to yourself only."];
     case "No energy":
@@ -32,17 +38,23 @@ function nextSteps(stuck: StuckType, text: string): string[] {
 }
 
 export default function CognitiveStuckPage() {
-  const [type, setType] = useState<StuckType>("Too vague");
-  const [task, setTask] = useState<string>("draft the mission plan");
-  const [picked, setPicked] = useState<string>("");
+  const [typeRaw, setTypeRaw] = useOSState<string>("cognitive.stuck.type", "Too vague");
+  const [task, setTask] = useOSState<string>("cognitive.stuck.task", "draft the mission plan");
+  const [picked, setPicked] = useOSState<string>("cognitive.stuck.picked", "");
 
+  const type = safeType(typeRaw);
   const steps = useMemo(() => nextSteps(type, task), [type, task]);
 
   return (
-    <OSShell title="Cognitive / Stuck" subtitle="Unstuck protocol: reduce scope, reframe, generate next step." chips={["online", `stuck: ${type.toLowerCase().replace(" ", "-")}`, picked ? "target: locked" : "target: none", "sync: idle"]}>
+    <OSShell
+      title="Cognitive / Stuck"
+      subtitle="Unstuck protocol: reduce scope, reframe, generate next step. (Persisted locally)"
+      chips={["online", "module: cognitive", `stuck: ${type.toLowerCase().replace(" ", "-")}`, picked ? "target: locked" : "target: none"]}
+    >
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="lg:col-span-1 rounded-xl border border-white/10 bg-black/30 p-4">
           <div className="text-xs uppercase tracking-widest text-white/60">Stuck scan</div>
+          <div className="mt-2 text-xs text-white/55">Selections saved locally.</div>
 
           <div className="mt-3 rounded-lg border border-white/10 bg-black/40 p-3">
             <div className="text-xs uppercase tracking-widest text-white/60">Current task</div>
@@ -59,22 +71,36 @@ export default function CognitiveStuckPage() {
               return (
                 <button
                   key={s.key}
-                  onClick={() => setType(s.key)}
+                  onClick={() => setTypeRaw(s.key)}
                   className={[
                     "w-full rounded-lg border px-3 py-3 text-left transition",
                     on ? "border-white/25 bg-white/10" : "border-white/10 bg-white/5 hover:bg-white/10",
                   ].join(" ")}
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 text-lg">{s.icon}</div>
-                    <div>
-                      <div className="text-sm text-white/90">{s.key}</div>
-                      <div className="mt-1 text-xs text-white/60">{s.hint}</div>
-                    </div>
-                  </div>
+                  <div className="text-sm text-white/90">{s.key}</div>
+                  <div className="mt-1 text-xs text-white/60">{s.hint}</div>
                 </button>
               );
             })}
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              onClick={() => setPicked("")}
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70 hover:bg-white/10"
+            >
+              Clear picked
+            </button>
+            <button
+              onClick={() => {
+                setTypeRaw("Too vague");
+                setTask("draft the mission plan");
+                setPicked("");
+              }}
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70 hover:bg-white/10"
+            >
+              Defaults
+            </button>
           </div>
         </div>
 
@@ -111,9 +137,9 @@ export default function CognitiveStuckPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <OSCard title="Scope" value={type === "Too big" ? "Reduce 80%" : "Small slice"} hint="protocol" icon="âœ‚ï¸" />
-            <OSCard title="Clarity" value={type === "No clarity" ? "Ask 1 question" : "Good enough"} hint="protocol" icon="í´Ž" />
-            <OSCard title="Momentum" value={type === "No energy" ? "Micro-session" : "Commit 1 step"} hint="protocol" icon="íº€" />
+            <OSCard title="Scope" value={type === "Too big" ? "Reduce 80%" : "Small slice"} hint="protocol" />
+            <OSCard title="Clarity" value={type === "No clarity" ? "Ask 1 question" : "Good enough"} hint="protocol" />
+            <OSCard title="Momentum" value={type === "No energy" ? "Micro-session" : "Commit 1 step"} hint="protocol" />
           </div>
 
           <div className="rounded-xl border border-white/10 bg-black/30 p-4">

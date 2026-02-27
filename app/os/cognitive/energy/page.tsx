@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import OSShell from "@/components/os/OSShell";
 import { OSCard } from "@/components/os/OSCard";
+import { useOSState } from "@/components/os/useOSState";
 
 type EnergyBand = "Low" | "Medium" | "High";
 
@@ -61,7 +62,8 @@ function SignalBars({ value }: { value: number }) {
 }
 
 export default function CognitiveEnergyPage() {
-  const [signal, setSignal] = useState<number>(62);
+  // persisted slider value:
+  const [signal, setSignal] = useOSState<number>("cognitive.energy.signal", 62);
 
   const band = useMemo(() => bandFromSignal(signal), [signal]);
   const protocol = useMemo(() => protocolFor(band), [band]);
@@ -70,14 +72,19 @@ export default function CognitiveEnergyPage() {
     <OSShell
       title="Cognitive / Energy"
       subtitle="Energy protocol (signal-based session guidance)."
-      chips={["online", `signal: ${band.toLowerCase()}`, `mode: ${protocol.mode.toLowerCase()}`, "sync: idle"]}
+      chips={[
+        "online",
+        "module: cognitive",
+        `signal: ${band.toLowerCase()}`,
+        `mode: ${protocol.mode.toLowerCase()}`,
+      ]}
     >
       <div className="rounded-xl border border-white/10 bg-black/30 p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-xs uppercase tracking-widest text-white/60">Energy Signal</div>
             <div className="mt-1 text-sm text-white/80">
-              Band: <span className="text-white/90">{band}</span> â€¢ Mode:{" "}
+              Band: <span className="text-white/90">{band}</span> • Mode:{" "}
               <span className="text-white/90">{protocol.mode}</span>
             </div>
           </div>
@@ -98,12 +105,16 @@ export default function CognitiveEnergyPage() {
             onChange={(e) => setSignal(clamp(parseInt(e.target.value, 10), 0, 100))}
           />
         </div>
+
+        <div className="mt-2 text-xs text-white/55">
+          Saved locally so your demo feels continuous.
+        </div>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <OSCard title="Focus length" value={protocol.focus} hint="recommended" icon="â±ï¸" />
-        <OSCard title="Break type" value={protocol.breakType} hint="recommended" icon="í»§" />
-        <OSCard title="Operator prompt" value={protocol.prompt} hint="guidance" icon="í»°ï¸" />
+        <OSCard title="Focus length" value={protocol.focus} hint="recommended" />
+        <OSCard title="Break type" value={protocol.breakType} hint="recommended" />
+        <OSCard title="Operator prompt" value={protocol.prompt} hint="guidance" />
       </div>
 
       <div className="mt-4 rounded-xl border border-white/10 bg-black/30 p-4">

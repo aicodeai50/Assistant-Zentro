@@ -1,5 +1,6 @@
 import React from "react";
 import "@/app/os/os-atmosphere.css";
+import OSSideNav from "@/components/os/OSSideNav";
 
 type OSShellProps = {
   title: string;
@@ -7,6 +8,7 @@ type OSShellProps = {
   children: React.ReactNode;
   chips?: string[];
   rightSlot?: React.ReactNode;
+  showNav?: boolean;
 };
 
 export default function OSShell({
@@ -15,6 +17,7 @@ export default function OSShell({
   children,
   chips = ["online", "signal: stable", "sync: idle", "shield: on"],
   rightSlot,
+  showNav = true,
 }: OSShellProps) {
   return (
     <div className="os-atmosphere min-h-screen w-full">
@@ -57,10 +60,20 @@ export default function OSShell({
       <div className="mx-auto w-full max-w-6xl px-4 py-6">
         <div className="mb-5">
           <div className="text-2xl font-semibold text-white/90">{title}</div>
-          {subtitle ? <div className="mt-1 text-sm text-white/60">{subtitle}</div> : null}
+          {subtitle ? (
+            <div className="mt-1 text-sm text-white/60">{subtitle}</div>
+          ) : null}
         </div>
 
-        {children}
+        <div className={showNav ? "grid grid-cols-1 gap-4 lg:grid-cols-12" : ""}>
+          {showNav ? (
+            <div className="lg:col-span-4">
+              <OSSideNav />
+            </div>
+          ) : null}
+
+          <div className={showNav ? "lg:col-span-8" : ""}>{children}</div>
+        </div>
       </div>
     </div>
   );
