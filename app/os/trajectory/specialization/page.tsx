@@ -1,12 +1,14 @@
 import OSShell from "@/components/os/OSShell";
-import { BackRow } from "@/components/os/OSCard";
+import { BackRow, OSCard } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function SpecializationPage() {
   return (
-    <OSShell title="Specialization" subtitle="Weeks 5â€“8">
-      <BackRow href="/os/trajectory" />
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        Pick a track. Build portfolio signals. Practice targeted prompts.
+    <OSShell title="Trajectory / Specialization" subtitle="Narrow focus and deepen skill." chips={["online", "phase: specialization", "missions: active", "sync: idle"]}>
+      <BackRow href="/os/trajectory" label="Back to Trajectory" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <OSCard title="Objective" value="Depth" hint="fewer topics" icon="í¾¯" />
+        <OSCard title="This week" value="1 skill slice" hint="mastery" icon="í·©" />
+        <OSCard title="Next action" value="Choose one track" hint="commit" icon="âœ…" />
       </div>
     </OSShell>
   );

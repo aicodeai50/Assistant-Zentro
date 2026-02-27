@@ -1,28 +1,17 @@
-// components/os/OSCard.tsx
 import React from "react";
 import Link from "next/link";
 
 export type OSCardProps = {
   title: string;
-
-  // Newer usage (Cognitive)
-  subtitle?: string;
-
-  // Existing repo usage (Focus/Momentum)
-  value?: string;
-  hint?: string;
-
+  subtitle?: string; // new style
+  value?: string;    // legacy
+  hint?: string;     // legacy
   icon?: React.ReactNode;
   right?: React.ReactNode;
   className?: string;
   children?: React.ReactNode;
 };
 
-/**
- * OSCard supports BOTH styles:
- *  - <OSCard title subtitle icon />
- *  - <OSCard title value hint />
- */
 export function OSCard({
   title,
   subtitle,
@@ -37,31 +26,16 @@ export function OSCard({
   const bottomLine = hint;
 
   return (
-    <div
-      className={[
-        "rounded-xl border border-white/10 bg-black/30 p-4",
-        className,
-      ].join(" ")}
-    >
+    <div className={["rounded-xl border border-white/10 bg-black/30 p-4", className].join(" ")}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
-          {icon ? (
-            <div className="mt-0.5 text-lg text-white/80">{icon}</div>
-          ) : null}
-
+          {icon ? <div className="mt-0.5 text-lg text-white/80">{icon}</div> : null}
           <div>
             <div className="text-sm font-medium text-white/90">{title}</div>
-
-            {topLine ? (
-              <div className="mt-1 text-sm text-white/80">{topLine}</div>
-            ) : null}
-
-            {bottomLine ? (
-              <div className="mt-1 text-xs text-white/55">{bottomLine}</div>
-            ) : null}
+            {topLine ? <div className="mt-1 text-sm text-white/80">{topLine}</div> : null}
+            {bottomLine ? <div className="mt-1 text-xs text-white/55">{bottomLine}</div> : null}
           </div>
         </div>
-
         {right ? <div className="text-xs text-white/60">{right}</div> : null}
       </div>
 
@@ -70,16 +44,7 @@ export function OSCard({
   );
 }
 
-/**
- * Small layout helper used across OS pages.
- */
-export function BackRow({
-  href = "/os",
-  label = "Back",
-}: {
-  href?: string;
-  label?: string;
-}) {
+export function BackRow({ href = "/os", label = "Back" }: { href?: string; label?: string }) {
   return (
     <div className="mb-4">
       <Link
@@ -93,33 +58,23 @@ export function BackRow({
   );
 }
 
-/**
- * BoxLink accepts both "new" and "legacy" prop names:
- *  - new:  subtitle / hint
- *  - old:  desc / tag
- */
 export function BoxLink({
   href,
   title,
   subtitle,
   value,
   hint,
-  desc,
-  tag,
+  desc, // legacy alias
+  tag,  // legacy alias
   icon,
 }: {
   href: string;
   title: string;
-
-  // New props
   subtitle?: string;
   value?: string;
   hint?: string;
-
-  // Legacy aliases (used in existing pages)
   desc?: string;
   tag?: string;
-
   icon?: React.ReactNode;
 }) {
   const finalSubtitle = subtitle ?? desc;
@@ -139,5 +94,4 @@ export function BoxLink({
   );
 }
 
-/** Default export for convenience */
 export default OSCard;

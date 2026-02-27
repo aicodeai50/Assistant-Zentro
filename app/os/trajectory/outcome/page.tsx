@@ -1,12 +1,14 @@
 import OSShell from "@/components/os/OSShell";
-import { BackRow } from "@/components/os/OSCard";
+import { BackRow, OSCard } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function OutcomePage() {
   return (
-    <OSShell title="Outcome" subtitle="Weeks 9â€“12">
-      <BackRow href="/os/trajectory" />
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        Mock interviews + measurable readiness score. Prepare for real applications.
+    <OSShell title="Trajectory / Outcome" subtitle="Ship, measure, iterate." chips={["online", "phase: outcome", "missions: active", "sync: idle"]}>
+      <BackRow href="/os/trajectory" label="Back to Trajectory" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <OSCard title="Objective" value="Ship results" hint="measurable" icon="í¿" />
+        <OSCard title="This week" value="Deliverable" hint="publish/submit" icon="í³¦" />
+        <OSCard title="Next action" value="Define metric" hint="success criteria" icon="í³" />
       </div>
     </OSShell>
   );

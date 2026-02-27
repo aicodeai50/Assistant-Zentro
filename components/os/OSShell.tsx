@@ -1,4 +1,3 @@
-// components/os/OSShell.tsx
 import React from "react";
 import "@/app/os/os-atmosphere.css";
 
@@ -6,7 +5,6 @@ type OSShellProps = {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
-
   chips?: string[];
   rightSlot?: React.ReactNode;
 };
@@ -20,12 +18,10 @@ export default function OSShell({
 }: OSShellProps) {
   return (
     <div className="os-atmosphere min-h-screen w-full">
-      {/* System header strip */}
       <div className="sticky top-0 z-20 border-b border-white/10 bg-black/50 backdrop-blur">
         <div className="mx-auto w-full max-w-6xl px-4 py-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              {/* Pulsing status dot */}
               <span className="relative inline-flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/40 opacity-60" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white/80" />
@@ -52,25 +48,16 @@ export default function OSShell({
             {rightSlot ? (
               <div className="flex items-center gap-2">{rightSlot}</div>
             ) : (
-              <div className="text-xs text-white/50">
-                system: stable • demo mode
-              </div>
+              <div className="text-xs text-white/50">system: stable • demo mode</div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Page header + content */}
       <div className="mx-auto w-full max-w-6xl px-4 py-6">
         <div className="mb-5">
-          <div className="text-2xl font-semibold text-white/90">
-            {title}
-          </div>
-          {subtitle && (
-            <div className="mt-1 text-sm text-white/60">
-              {subtitle}
-            </div>
-          )}
+          <div className="text-2xl font-semibold text-white/90">{title}</div>
+          {subtitle ? <div className="mt-1 text-sm text-white/60">{subtitle}</div> : null}
         </div>
 
         {children}

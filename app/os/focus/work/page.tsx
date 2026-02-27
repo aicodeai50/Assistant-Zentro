@@ -1,17 +1,15 @@
 import OSShell from "@/components/os/OSShell";
-import { BackRow } from "@/components/os/OSCard";
+import { BackRow, OSCard } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function WorkPage() {
   return (
-    <OSShell title="Work Block" subtitle="30 minutes. One target.">
-      <BackRow href="/os/focus" />
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        Choose ONE:
-        <ul className="mt-3 list-disc space-y-2 pl-5">
-          <li>Quiz drill</li>
-          <li>Flashcard drill</li>
-          <li>Interview simulation</li>
-        </ul>
+    <OSShell title="Focus / Work Loop" subtitle="Single objective execution loop." chips={["online", "module: focus", "loop: work", "sync: idle"]}>
+      <BackRow href="/os/focus" label="Back to Focus" />
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <OSCard title="Objective" value="Ship a small slice" hint="done/not done" icon="í¾¯" />
+        <OSCard title="Timer" value="25 min" hint="build block" icon="â±ï¸" />
+        <OSCard title="Rule" value="No switching" hint="park thoughts" icon="í³µ" />
       </div>
     </OSShell>
   );

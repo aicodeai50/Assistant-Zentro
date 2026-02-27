@@ -1,63 +1,14 @@
-import Link from "next/link";
-import SiteNav from "@/components/SiteNav";
-import SiteFooter from "@/components/SiteFooter";
-
-const actions = [
-  { title: "10-min Drill", desc: "Rapid flashcards + recall loop.", href: "/os/momentum/drill" },
-  { title: "Hard Prompt", desc: "One interview-style question with scoring.", href: "/os/momentum/hard-prompt" },
-  { title: "Reflection", desc: "Note what felt slow ‚Üí becomes tomorrow‚Äôs drill.", href: "/os/momentum/reflection" },
-];
+import OSShell from "@/components/os/OSShell";
+import { BoxLink } from "@/components/os/OSCard";
 
 export default function MomentumPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <SiteNav />
-      <main className="mx-auto max-w-6xl px-6 py-12">
-        <Link href="/os" className="text-sm text-white/70 underline hover:text-white">
-          ‚Üê Back to OS
-        </Link>
-
-        <h1 className="mt-4 text-4xl font-bold">Skill Momentum</h1>
-        <p className="mt-2 text-white/70">
-          Momentum is your learning ‚Äúengine‚Äù. It combines streaks, repetition, and challenge into one signal.
-        </p>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <Stat label="Streak" value="11 days" sub="Consistency engine" />
-          <Stat label="Velocity" value="7.4/wk" sub="Practice frequency" />
-          <Stat label="Trend" value="Rising" sub="Current direction" />
-        </div>
-
-        <h2 className="mt-10 text-2xl font-bold">Recommended mission (today)</h2>
-        <p className="mt-2 text-white/70">
-          Do a 10-minute drill + one ‚Äúhard prompt‚Äù to push your curve upward.
-        </p>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {actions.map((a) => (
-            <Link
-              key={a.href}
-              href={a.href}
-              className="rounded-3xl border border-white/10 bg-neutral-950 p-6 hover:bg-white/5"
-            >
-              <div className="font-semibold">{a.title}</div>
-              <div className="mt-2 text-sm text-white/60">{a.desc}</div>
-              <div className="mt-4 text-sm font-semibold text-white/70">Open ‚Üí</div>
-            </Link>
-          ))}
-        </div>
-      </main>
-      <SiteFooter />
-    </div>
-  );
-}
-
-function Stat({ label, value, sub }: { label: string; value: string; sub: string }) {
-  return (
-    <div className="rounded-3xl border border-white/10 bg-neutral-950 p-6">
-      <div className="text-sm text-white/60">{label}</div>
-      <div className="mt-2 text-3xl font-bold">{value}</div>
-      <div className="mt-2 text-sm text-white/60">{sub}</div>
-    </div>
+    <OSShell title="Momentum" subtitle="Keep moving: drills, reflection, and hard prompts." chips={["online", "module: momentum", "signal: alive", "sync: idle"]}>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <BoxLink href="/os/momentum/drill" title="Drill" desc="Short repetition loop." tag="mode" icon="Ìµä" />
+        <BoxLink href="/os/momentum/reflection" title="Reflection" desc="Close loops and learn." tag="mode" icon="Ì∫û" />
+        <BoxLink href="/os/momentum/hard-prompt" title="Hard Prompt" desc="One question that forces clarity." tag="mode" icon="‚ö°" />
+      </div>
+    </OSShell>
   );
 }

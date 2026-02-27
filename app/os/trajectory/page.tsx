@@ -1,53 +1,15 @@
 import OSShell from "@/components/os/OSShell";
-import { BackRow, BoxLink, OSCard } from "@/components/os/OSCard";
+import { BoxLink } from "@/components/os/OSCard";
 
 export default function TrajectoryPage() {
   return (
-    <OSShell
-      title="Trajectory"
-      subtitle="Trajectory turns goals into missions. Instead of random learning, you follow a map."
-    >
-      <BackRow />
-
-      <section className="mt-6 grid gap-4 md:grid-cols-3">
-        <OSCard title="Arc" value="Builder â†’ Founder" hint="Role evolution" />
-        <OSCard title="Horizon" value="90 days" hint="Timeframe" />
-        <OSCard title="Confidence" value="Upward" hint="Signal direction" />
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-xl font-bold">Mission map</h2>
-        <p className="mt-2 text-white/70">
-          A fictional roadmap showing how Shynvo guides users.
-        </p>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <BoxLink
-            href="/os/trajectory/foundation"
-            title="Weeks 1â€“2: Foundation"
-            desc="Stabilize routine + baseline skill map."
-            tag="Phase"
-          />
-          <BoxLink
-            href="/os/trajectory/specialization"
-            title="Weeks 5â€“8: Specialization"
-            desc="Pick a track + build portfolio signals."
-            tag="Phase"
-          />
-          <BoxLink
-            href="/os/trajectory/acceleration"
-            title="Weeks 3â€“4: Acceleration"
-            desc="Increase difficulty + interview simulation."
-            tag="Phase"
-          />
-          <BoxLink
-            href="/os/trajectory/outcome"
-            title="Weeks 9â€“12: Outcome"
-            desc="Mock interviews + measurable readiness score."
-            tag="Phase"
-          />
-        </div>
-      </section>
+    <OSShell title="Trajectory" subtitle="90-day mission control." chips={["online", "module: trajectory", "phase: overview", "sync: idle"]}>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <BoxLink href="/os/trajectory/foundation" title="Foundation" desc="Set systems and remove chaos." tag="Phase 1" icon="í·±" />
+        <BoxLink href="/os/trajectory/acceleration" title="Acceleration" desc="Increase output with stable loops." tag="Phase 2" icon="íº€" />
+        <BoxLink href="/os/trajectory/specialization" title="Specialization" desc="Narrow focus and deepen skill." tag="Phase 3" icon="í¾¯" />
+        <BoxLink href="/os/trajectory/outcome" title="Outcome" desc="Ship, measure, iterate." tag="Phase 4" icon="í¿" />
+      </div>
     </OSShell>
   );
 }

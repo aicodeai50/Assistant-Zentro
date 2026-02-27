@@ -1,22 +1,18 @@
 import OSShell from "@/components/os/OSShell";
 import { BackRow } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function DeepWorkPage() {
   return (
-    <OSShell title="Deep Work" subtitle="45 minutes. No distractions. One outcome.">
-      <BackRow href="/os/focus" />
+    <OSShell title="Focus / Deep Work" subtitle="Protect the sprint and eliminate context switching." chips={["online", "module: focus", "mode: deep-work", "sync: locked"]}>
+      <BackRow href="/os/focus" label="Back to Focus" />
 
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        <h2 className="text-lg font-semibold text-white">Deep Work Session</h2>
-        <p className="mt-2 text-white/70">
-          Pick one task and commit. Timer + focus shield coming next.
-        </p>
-
-        <ul className="mt-4 list-disc space-y-2 pl-5">
-          <li>One task only</li>
-          <li>Phone away</li>
-          <li>Ship something small</li>
-        </ul>
+      <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+        <div className="text-xs uppercase tracking-widest text-white/60">Deep work rules</div>
+        <div className="mt-3 space-y-2 text-sm text-white/80">
+          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-3">1) One task only</div>
+          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-3">2) No messages, no tabs</div>
+          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-3">3) 45–60 min sprint • full break after</div>
+        </div>
       </div>
     </OSShell>
   );

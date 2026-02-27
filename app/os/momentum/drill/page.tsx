@@ -1,19 +1,12 @@
 import OSShell from "@/components/os/OSShell";
 import { BackRow } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function DrillPage() {
   return (
-    <OSShell title="10-min Drill" subtitle="Rapid recall to build momentum.">
-      <BackRow href="/os/momentum" />
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6">
-        <p className="text-white/70">
-          Drill template:
-        </p>
-        <ul className="mt-4 list-disc space-y-2 pl-5 text-white/70">
-          <li>Pick 15 flashcards (or generate from a topic).</li>
-          <li>Answer fast. Mark misses.</li>
-          <li>Repeat misses twice.</li>
-        </ul>
+    <OSShell title="Momentum / Drill" subtitle="Small reps to keep velocity." chips={["online", "mode: drill", "sync: idle", "shield: on"]}>
+      <BackRow href="/os/momentum" label="Back to Momentum" />
+      <div className="rounded-xl border border-white/10 bg-black/30 p-4 text-sm text-white/80">
+        10-minute drill: pick one micro-skill and repeat it 5 times.
       </div>
     </OSShell>
   );

@@ -3,39 +3,27 @@
    OS-only • CSS-only • Production-safe
    ===================================================== */
 
-/* -----------------------------
-   Core variables
-   ----------------------------- */
 :root {
-  /* Neon palette */
   --os-cyan: 0, 255, 255;
   --os-indigo: 120, 110, 255;
   --os-magenta: 255, 0, 190;
 
-  /* Atmosphere intensity */
   --os-scanline-opacity: 0.10;
   --os-noise-opacity: 0.06;
   --os-bloom-opacity: 0.18;
 
-  /* Polish knobs */
   --os-card-glow: 0.18;
   --os-card-glow-hover: 0.32;
   --os-focus-ring: 0.32;
   --os-btn-glow: 0.22;
 }
 
-/* -----------------------------
-   OS wrapper
-   ----------------------------- */
 .os-atmosphere {
   position: relative;
   min-height: 100vh;
   background: #05060a;
 }
 
-/* -----------------------------
-   Atmosphere overlays
-   ----------------------------- */
 .os-atmosphere::before,
 .os-atmosphere::after {
   content: "";
@@ -45,7 +33,6 @@
   z-index: 0;
 }
 
-/* Neon bloom + gradient drift */
 .os-atmosphere::before {
   opacity: var(--os-bloom-opacity);
   filter: blur(18px);
@@ -58,7 +45,6 @@
   animation: os-drift 18s ease-in-out infinite alternate;
 }
 
-/* Scanlines + noise */
 .os-atmosphere::after {
   background:
     repeating-linear-gradient(
@@ -77,15 +63,12 @@
   filter: contrast(120%);
 }
 
-/* Ensure content is above overlays */
 .os-atmosphere > * {
   position: relative;
   z-index: 1;
 }
 
-/* -----------------------------
-   Card / panel polish
-   ----------------------------- */
+/* Card/panel polish */
 .os-atmosphere .rounded-xl.border.border-white\/10 {
   position: relative;
   overflow: hidden;
@@ -94,7 +77,6 @@
     0 8px 30px rgba(0, 0, 0, 0.55);
 }
 
-/* Neon rim */
 .os-atmosphere .rounded-xl.border.border-white\/10::before {
   content: "";
   position: absolute;
@@ -114,7 +96,6 @@
   mix-blend-mode: screen;
 }
 
-/* Top glass sheen */
 .os-atmosphere .rounded-xl.border.border-white\/10::after {
   content: "";
   position: absolute;
@@ -124,26 +105,12 @@
   height: 60%;
   pointer-events: none;
   border-radius: 999px;
-  background: radial-gradient(
-    closest-side,
-    rgba(255, 255, 255, 0.12),
-    transparent 70%
-  );
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.12), transparent 70%);
   opacity: 0.45;
   transform: rotate(-6deg);
 }
 
-/* Hover lift */
-.os-atmosphere a:hover .rounded-xl.border.border-white\/10,
-.os-atmosphere button:hover .rounded-xl.border.border-white\/10 {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 14px 48px rgba(0, 0, 0, 0.62);
-}
-
-/* -----------------------------
-   Button polish
-   ----------------------------- */
+/* Buttons */
 .os-atmosphere button.rounded-lg.border.border-white\/10.bg-white\/5,
 .os-atmosphere a.rounded-lg.border.border-white\/10.bg-white\/5 {
   position: relative;
@@ -152,7 +119,6 @@
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
-/* Aura */
 .os-atmosphere button.rounded-lg.border.border-white\/10.bg-white\/5::before,
 .os-atmosphere a.rounded-lg.border.border-white\/10.bg-white\/5::before {
   content: "";
@@ -169,7 +135,6 @@
   mix-blend-mode: screen;
 }
 
-/* Hover lift */
 .os-atmosphere button.rounded-lg.border.border-white\/10.bg-white\/5:hover,
 .os-atmosphere a.rounded-lg.border.border-white\/10.bg-white\/5:hover {
   transform: translateY(-1px);
@@ -178,9 +143,7 @@
     0 10px 28px rgba(0, 0, 0, 0.55);
 }
 
-/* -----------------------------
-   Focus ring (keyboard)
-   ----------------------------- */
+/* Focus ring */
 .os-atmosphere button:focus-visible,
 .os-atmosphere a:focus-visible,
 .os-atmosphere input:focus-visible,
@@ -191,21 +154,7 @@
     0 0 0 6px rgba(var(--os-cyan), var(--os-focus-ring));
 }
 
-/* -----------------------------
-   Inputs
-   ----------------------------- */
-.os-atmosphere input[type="text"],
-.os-atmosphere textarea {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.os-atmosphere input[type="range"] {
-  filter: drop-shadow(0 0 10px rgba(var(--os-cyan), 0.10));
-}
-
-/* -----------------------------
-   Header strip polish
-   ----------------------------- */
+/* Header strip polish */
 .os-atmosphere .sticky.top-0 {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
 }
@@ -228,24 +177,14 @@
   opacity: 0.75;
 }
 
-/* -----------------------------
-   Animation
-   ----------------------------- */
 @keyframes os-drift {
   0%   { transform: translate3d(-8px, -6px, 0) scale(1); }
   50%  { transform: translate3d(10px, 6px, 0) scale(1.02); }
   100% { transform: translate3d(-6px, 10px, 0) scale(1.01); }
 }
 
-/* -----------------------------
-   Accessibility
-   ----------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .os-atmosphere::before {
-    animation: none;
-  }
+  .os-atmosphere::before { animation: none; }
   .os-atmosphere button,
-  .os-atmosphere a {
-    transition: none;
-  }
+  .os-atmosphere a { transition: none; }
 }

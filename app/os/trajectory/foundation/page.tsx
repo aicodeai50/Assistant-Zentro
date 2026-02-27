@@ -1,12 +1,14 @@
 import OSShell from "@/components/os/OSShell";
-import { BackRow } from "@/components/os/OSCard";
+import { BackRow, OSCard } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function FoundationPage() {
   return (
-    <OSShell title="Foundation" subtitle="Weeks 1â€“2">
-      <BackRow href="/os/trajectory" />
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        Build the routine. Define goals. Start daily drills.
+    <OSShell title="Trajectory / Foundation" subtitle="Stabilize systems and build baseline." chips={["online", "phase: foundation", "missions: active", "sync: idle"]}>
+      <BackRow href="/os/trajectory" label="Back to Trajectory" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <OSCard title="Objective" value="Stability + clarity" hint="reduce chaos" icon="í·±" />
+        <OSCard title="This week" value="3 missions" hint="small wins" icon="í³†" />
+        <OSCard title="Next action" value="Pick one system to lock" hint="start now" icon="âœ…" />
       </div>
     </OSShell>
   );

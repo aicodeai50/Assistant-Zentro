@@ -1,12 +1,14 @@
 import OSShell from "@/components/os/OSShell";
-import { BackRow } from "@/components/os/OSCard";
+import { BackRow, OSCard } from "@/components/os/OSCard";
 
-export default function Page() {
+export default function AccelerationPage() {
   return (
-    <OSShell title="Acceleration" subtitle="Weeks 3â€“4">
-      <BackRow href="/os/trajectory" />
-      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
-        Increase difficulty. Add interview simulation. Tight feedback loops.
+    <OSShell title="Trajectory / Acceleration" subtitle="Increase output with stable loops." chips={["online", "phase: acceleration", "missions: active", "sync: idle"]}>
+      <BackRow href="/os/trajectory" label="Back to Trajectory" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <OSCard title="Objective" value="More output" hint="same stress" icon="íº€" />
+        <OSCard title="This week" value="2 deep sessions" hint="protect time" icon="â±ï¸" />
+        <OSCard title="Next action" value="Schedule 2 blocks" hint="calendar" icon="í³Œ" />
       </div>
     </OSShell>
   );

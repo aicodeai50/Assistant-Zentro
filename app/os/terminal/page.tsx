@@ -1,114 +1,149 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import OSShell from "@/components/os/OSShell";
 import { BackRow } from "@/components/os/OSCard";
 
 type Line = { t: "sys" | "user" | "out"; v: string };
 
+const COMMANDS = ["help", "os", "planet", "cognitive", "focus", "momentum", "trajectory", "status", "routes", "clear"];
+
 export default function OSTerminalPage() {
   const [input, setInput] = useState("");
   const [lines, setLines] = useState<Line[]>([
-    { t: "sys", v: "Shynvo OS Terminal — 2050 preview" },
-    { t: "out", v: "Type 'help' to see commands." },
+    { t: "sys", v: "Shynvo OS Terminal — deck preview" },
+    { t: "out", v: "Type 'help' to see commands. Try: status, routes, planet" },
   ]);
 
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    boxRef.current?.scrollTo({ top: boxRef.current.scrollHeight });
+    boxRef.current?.scrollTo({ top: boxRef.current.scrollHeight, behavior: "smooth" });
   }, [lines]);
+
+  function push(line: Line) {
+    setLines((l) => [...l, line]);
+  }
 
   function run(cmdRaw: string) {
     const cmd = cmdRaw.trim();
     if (!cmd) return;
 
-    setLines((l) => [...l, { t: "user", v: `> ${cmd}` }]);
+    push({ t: "user", v: `> ${cmd}` });
 
-    const reply = handle(cmd);
-    setLines((l) => [...l, { t: "out", v: reply }]);
+    const { reply, nav } = handle(cmd);
+    if (reply) push({ t: "out", v: reply });
+    if (nav) push({ t: "out", v: `-> open: ${nav}` });
+
+    setInput("");
   }
 
-  function handle(cmd: string) {
-    switch (cmd.toLowerCase()) {
+  function handle(cmd: string): { reply: string; nav?: string } {
+    const c = cmd.toLowerCase();
+
+    if (c === "clear") {
+      setLines([
+        { t: "sys", v: "Shynvo OS Terminal — deck preview" },
+        { t: "out", v: "Cleared. Type 'help' to see commands." },
+      ]);
+      return { reply: "" };
+    }
+
+    switch (c) {
       case "help":
-        return [
-          "Commands:",
-          "- os",
-          "- momentum",
-          "- focus",
-          "- cognitive",
-          "- trajectory",
-          "- clear",
-        ].join("\n");
+        return {
+          reply: ["Commands:", "- status", "- routes", "- planet", "- os", "- cognitive", "- focus", "- momentum", "- trajectory", "- clear"].join("\n"),
+        };
+      case "status":
+        return { reply: ["OS: online", "Signal: stable", "Sync: idle", "Mode: demo"].join("\n") };
+      case "routes":
+        return { reply: ["/os", "/os/planet", "/os/cognitive", "/os/focus", "/os/momentum", "/os/trajectory"].join("\n") };
       case "os":
-        window.location.href = "/os";
-        return "Opening /os …";
-      case "momentum":
-        window.location.href = "/os/momentum";
-        return "Opening /os/momentum …";
-      case "focus":
-        window.location.href = "/os/focus";
-        return "Opening /os/focus …";
+        return { reply: "Opening OS Home...", nav: "/os" };
+      case "planet":
+        return { reply: "Opening Orbital Nexus...", nav: "/os/planet" };
       case "cognitive":
-        window.location.href = "/os/cognitive";
-        return "Opening /os/cognitive …";
+        return { reply: "Opening Cognitive hub...", nav: "/os/cognitive" };
+      case "focus":
+        return { reply: "Opening Focus module...", nav: "/os/focus" };
+      case "momentum":
+        return { reply: "Opening Momentum module...", nav: "/os/momentum" };
       case "trajectory":
-        window.location.href = "/os/trajectory";
-        return "Opening /os/trajectory …";
-      case "clear":
-        setLines([{ t: "sys", v: "Shynvo OS Terminal — 2050 preview" }]);
-        return "Cleared.";
+        return { reply: "Opening Trajectory...", nav: "/os/trajectory" };
       default:
-        return `Unknown command: ${cmd}\nType 'help'`;
+        return { reply: `Unknown command: '${cmd}'. Type 'help'.` };
     }
   }
 
-  return (
-    <OSShell title="OS Terminal" subtitle="Command interface (fictional preview)">
-      <BackRow href="/os" />
+  const colorFor = (t: Line["t"]) => {
+    if (t === "sys") return "text-white/60";
+    if (t === "user") return "text-white/85";
+    return "text-white/75";
+  };
 
-      <div className="mt-6 rounded-3xl border border-white/10 bg-black/70 p-5">
-        <div
-          ref={boxRef}
-          className="h-[360px] overflow-auto rounded-2xl border border-white/10 bg-black p-4 font-mono text-sm"
-        >
-          {lines.map((x, i) => (
-            <div
-              key={i}
-              className={
-                x.t === "sys"
-                  ? "text-emerald-300"
-                  : x.t === "user"
-                  ? "text-white"
-                  : "text-white/70"
-              }
-            >
-              {x.v.split("\n").map((row, idx) => (
-                <div key={idx}>{row}</div>
+  return (
+    <OSShell title="OS Terminal" subtitle="Diagnostics + route launcher (frontend-only)." chips={["online", "module: terminal", "access: local", "sync: idle"]}>
+      <BackRow href="/os" label="Back to OS Home" />
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2 rounded-xl border border-white/10 bg-black/30 p-4">
+          <div className="text-xs uppercase tracking-widest text-white/60">Console</div>
+
+          <div ref={boxRef} className="mt-3 h-[360px] overflow-auto rounded-lg border border-white/10 bg-black/50 p-3 font-mono text-sm">
+            {lines.map((line, idx) => (
+              <div key={idx} className={["whitespace-pre-wrap", colorFor(line.t)].join(" ")}>
+                {line.v}
+              </div>
+            ))}
+          </div>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              run(input);
+            }}
+            className="mt-3 flex gap-2"
+          >
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a command (help, status, routes, planet)..."
+              className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white/85 outline-none"
+              list="terminal-commands"
+            />
+            <datalist id="terminal-commands">
+              {COMMANDS.map((c) => (
+                <option key={c} value={c} />
               ))}
-            </div>
-          ))}
+            </datalist>
+
+            <button type="submit" className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10">
+              Run
+            </button>
+          </form>
         </div>
 
-        <form
-          className="mt-3 flex gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            run(input);
-            setInput("");
-          }}
-        >
-          <input
-            className="flex-1 rounded-xl border border-white/10 bg-black px-3 py-3 text-sm text-white placeholder:text-white/40"
-            placeholder="Type a command… (help, os, momentum, focus)"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <button className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black">
-            Run
-          </button>
-        </form>
+        <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+          <div className="text-xs uppercase tracking-widest text-white/60">Quick links</div>
+          <div className="mt-3 flex flex-col gap-2">
+            <Link className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10" href="/os/planet">
+              Orbital Nexus
+            </Link>
+            <Link className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10" href="/os/cognitive">
+              Cognitive
+            </Link>
+            <Link className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10" href="/os/focus">
+              Focus
+            </Link>
+            <Link className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10" href="/os/momentum">
+              Momentum
+            </Link>
+            <Link className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10" href="/os/trajectory">
+              Trajectory
+            </Link>
+          </div>
+        </div>
       </div>
     </OSShell>
   );
