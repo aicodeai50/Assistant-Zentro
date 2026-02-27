@@ -3,6 +3,7 @@ import "@/app/os/os-atmosphere.css";
 import OSSideNav from "@/components/os/OSSideNav";
 import OSBottomDock from "@/components/os/OSBottomDock";
 import OSLocaleControl from "@/components/os/OSLocaleControl";
+import OSThemeSync from "@/components/os/OSThemeSync";
 
 type OSShellProps = {
   title: string; // English title stays English
@@ -23,6 +24,8 @@ export default function OSShell({
 }: OSShellProps) {
   return (
     <div className="os-atmosphere min-h-screen w-full">
+      <OSThemeSync />
+
       <div className="sticky top-0 z-20 border-b border-white/10 bg-black/50 backdrop-blur">
         <div className="mx-auto w-full max-w-6xl px-4 py-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -67,8 +70,8 @@ export default function OSShell({
       {/* Mobile dock */}
       <OSBottomDock />
 
-      {/* Add bottom padding on mobile so content clears dock */}
-      <div className="mx-auto w-full max-w-6xl px-4 py-6 pb-24 lg:pb-6">
+      {/* bottom padding on mobile so content clears dock */}
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 pb-28 lg:pb-6">
         <div className="mb-5">
           <div className="text-2xl font-semibold text-white/90">{title}</div>
           {subtitle ? <div className="mt-1">{subtitle}</div> : null}

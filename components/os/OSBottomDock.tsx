@@ -5,15 +5,16 @@ import { usePathname } from "next/navigation";
 
 type DockItem = {
   href: string;
-  label: string; // English label stays English
-  icon: string;  // ASCII icon tag
+  label: string;
+  icon: string;
 };
 
 const ITEMS: DockItem[] = [
   { href: "/os", label: "Home", icon: "OS" },
   { href: "/os/planet", label: "Planet", icon: "PL" },
+  { href: "/os/missions", label: "Missions", icon: "MSN" },
+  { href: "/os/council", label: "Council", icon: "AIC" },
   { href: "/os/cognitive", label: "Mind", icon: "COG" },
-  { href: "/os/focus", label: "Focus", icon: "FOC" },
   { href: "/os/trajectory", label: "Path", icon: "TRJ" },
 ];
 
@@ -28,7 +29,7 @@ export default function OSBottomDock() {
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-white/10 bg-black/60 backdrop-blur">
       <div className="mx-auto max-w-6xl px-3 py-2">
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-6 gap-2">
           {ITEMS.map((it) => {
             const active = isActive(pathname, it.href);
 
@@ -44,7 +45,6 @@ export default function OSBottomDock() {
                     : "border-white/10 bg-white/5 hover:bg-white/10",
                 ].join(" ")}
               >
-                {/* active glow */}
                 {active ? (
                   <span
                     aria-hidden="true"
@@ -56,7 +56,6 @@ export default function OSBottomDock() {
                   />
                 ) : null}
 
-                {/* pulse beacon */}
                 {active ? (
                   <span className="pointer-events-none absolute right-2 top-2 inline-flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/40 opacity-60" />
@@ -67,9 +66,10 @@ export default function OSBottomDock() {
                 <div className="text-[11px] font-semibold tracking-widest text-white/85">
                   {it.icon}
                 </div>
-                <div className="mt-0.5 text-[10px] text-white/60">{it.label}</div>
+                <div className="mt-0.5 text-[10px] text-white/60">
+                  {it.label}
+                </div>
 
-                {/* active underline */}
                 <div className="mt-2 flex justify-center">
                   <span
                     className={[
@@ -83,7 +83,6 @@ export default function OSBottomDock() {
           })}
         </div>
 
-        {/* tiny system strip above safe area */}
         <div className="mt-2 flex items-center justify-between text-[10px] text-white/45">
           <span>system: stable</span>
           <span>dock: active</span>

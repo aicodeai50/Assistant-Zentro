@@ -188,3 +188,30 @@
   .os-atmosphere button,
   .os-atmosphere a { transition: none; }
 }
+
+/* OS_THEME_PRESETS */
+/* Theme attribute: <html data-os-theme="nebula|tokyo|onyx"> */
+
+:root[data-os-theme="nebula"] .os-atmosphere {
+  --os-accent: rgba(120, 160, 255, 0.85);
+  --os-accent2: rgba(255, 100, 220, 0.50);
+  --os-glow: rgba(120, 160, 255, 0.18);
+}
+
+:root[data-os-theme="tokyo"] .os-atmosphere {
+  --os-accent: rgba(70, 255, 220, 0.85);
+  --os-accent2: rgba(180, 120, 255, 0.55);
+  --os-glow: rgba(70, 255, 220, 0.14);
+}
+
+:root[data-os-theme="onyx"] .os-atmosphere {
+  --os-accent: rgba(255, 255, 255, 0.70);
+  --os-accent2: rgba(255, 255, 255, 0.25);
+  --os-glow: rgba(255, 255, 255, 0.10);
+}
+
+/* Optional: subtle accent highlight utility */
+.os-accent-border {
+  border-color: rgba(255,255,255,0.12) !important;
+  box-shadow: 0 0 0 1px var(--os-glow), 0 0 20px var(--os-glow);
+}
