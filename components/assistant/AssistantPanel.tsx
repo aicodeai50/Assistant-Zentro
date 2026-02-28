@@ -13,20 +13,7 @@ import { renderAssistantHtml } from "@/lib/sh-assistant/render";
 import { useLogbook } from "@/stores/logbook/logbook.store";
 
 const API_URL = "/api/public/chat";
-
-type Mode = "Tutor" | "Interviewer" | "Analyst" | "Builder" | "Support";
-const MODES: Mode[] = ["Tutor", "Interviewer", "Analyst", "Builder", "Support"];
-
-function normalizeMode(v: string | null): Mode {
-  if (!v) return "Tutor";
-  const x = v.toLowerCase().trim();
-  if (x === "tutor") return "Tutor";
-  if (x === "interviewer") return "Interviewer";
-  if (x === "analyst") return "Analyst";
-  if (x === "builder") return "Builder";
-  if (x === "support") return "Support";
-  return "Tutor";
-}
+const STORAGE_KEY = "sh_assistant_chat_v2";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -42,24 +29,16 @@ export default function AssistantPanel() {
   const { addEntry } = useLogbook();
 
   const [theme, setTheme] = useState<ThemeMode>("dark");
-  const [mode, setMode] = useState<Mode>("Tutor");
-
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  // Load persisted state + URL mode
+  // Load persisted state
   useEffect(() => {
     setTheme(loadTheme());
     setMessages(loadChat());
-
-    // Mode comes from /assistant?mode=Builder (Robot/Split will use this)
-    if (typeof window !== "undefined") {
-      const m = new URLSearchParams(window.location.search).get("mode");
-      setMode(normalizeMode(m));
-    }
   }, []);
 
   // Apply theme
@@ -73,39 +52,31 @@ export default function AssistantPanel() {
   // Persist chat
   useEffect(() => {
     saveChat(messages);
-    // Auto-scroll
     requestAnimationFrame(() => {
       listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
     });
   }, [messages]);
 
-  const canSend = useMemo(() => text.trim().length > 0 && !busy, [text, busy]);
-
-  async function copy(code: string, btn?: HTMLButtonElement | null) {
-    try {
-      await navigator.clipboard.writeText(code);
-      if (btn) {
-        const prev = btn.textContent;
-        btn.textContent = "Copied";
-        setTimeout(() => (btn.textContent = prev || "Copy"), 1200);
-      }
-    } catch {
-      if (btn) {
-        const prev = btn.textContent;
-        btn.textContent = "Failed";
-        setTimeout(() => (btn.textContent = prev || "Copy"), 1200);
-      }
-    }
-  }
+  const canSend = useMemo(
+    () => text.trim().length > 0 && !busy,
+    [text, busy]
+  );
 
   function log(type: "user" | "assistant", content: string) {
     addEntry({
       id: uid(),
-      type: type === "user" ? "user" : "assistant",
-      title: `Shynvo SH Assistant AI • ${mode}`,
+      type,
+      title: "Shynvo SH Assistant AI",
       content,
       timestamp: Date.now(),
     });
+  }
+
+  function clearChat() {
+    setMessages([]);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(STORAGE_KEY);
+    }
   }
 
   async function send() {
@@ -136,55 +107,33 @@ export default function AssistantPanel() {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Mode prefix = frontend-only sync, no backend changes required
-        body: JSON.stringify({ message: `[Mode: ${mode}] ${msg}` }),
+        body: JSON.stringify({ message: msg }),
       });
 
       const data = await res.json().catch(() => ({}));
-      const reply = data.reply || data.message || data.error || "No response returned.";
+      const reply =
+        data.reply || data.message || data.error || "No response returned.";
 
-      setMessages((prev) => {
-        const next = [...prev];
-        for (let i = next.length - 1; i >= 0; i--) {
-          if (next[i].role === "assistant" && next[i].content === "_Thinking…_") {
-            next[i] = { ...next[i], content: String(reply) };
-            break;
-          }
-        }
-        return next;
-      });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.content === "_Thinking…_"
+            ? { ...m, content: String(reply) }
+            : m
+        )
+      );
 
       log("assistant", String(reply));
     } catch {
-      setMessages((prev) => {
-        const next = [...prev];
-        for (let i = next.length - 1; i >= 0; i--) {
-          if (next[i].role === "assistant" && next[i].content === "_Thinking…_") {
-            next[i] = { ...next[i], content: "❌ Network error contacting backend." };
-            break;
-          }
-        }
-        return next;
-      });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.content === "_Thinking…_"
+            ? { ...m, content: "❌ Network error contacting backend." }
+            : m
+        )
+      );
     } finally {
       setBusy(false);
     }
-  }
-
-  function clearChat() {
-    setMessages([]);
-  }
-
-  // Copy buttons (event delegation)
-  function onChatClick(e: React.MouseEvent<HTMLDivElement>) {
-    const target = e.target as HTMLElement;
-    const btn = target.closest(".sh-copy") as HTMLButtonElement | null;
-    if (!btn) return;
-
-    const wrap = btn.closest(".sh-codewrap");
-    const codeEl = wrap?.querySelector("pre code") as HTMLElement | null;
-    const code = codeEl?.innerText || "";
-    copy(code, btn);
   }
 
   return (
@@ -212,38 +161,16 @@ export default function AssistantPanel() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Mode pills (desktop) */}
-          <div className="hidden md:flex items-center gap-1 mr-1">
-            {MODES.map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setMode(m)}
-                className={[
-                  "px-3 py-2 rounded-xl border text-xs font-extrabold transition",
-                  m === mode
-                    ? "border-white/20 bg-white/10"
-                    : "border-white/10 bg-black/30 hover:bg-white/5",
-                ].join(" ")}
-                title={`Mode: ${m}`}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-
-          {/* Mode label (mobile) */}
-          <div className="md:hidden text-[11px] font-extrabold text-white/60 px-2 py-1 rounded-xl border border-white/10 bg-black/30">
-            Mode: {mode}
-          </div>
-
           <button
             className="px-3 py-2 rounded-xl border border-white/10 bg-black/30 text-sm font-semibold hover:bg-white/5"
-            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+            onClick={() =>
+              setTheme((t) => (t === "dark" ? "light" : "dark"))
+            }
             type="button"
           >
             Theme
           </button>
+
           <button
             className="px-3 py-2 rounded-xl border border-white/10 bg-black/30 text-sm font-semibold hover:bg-white/5"
             onClick={clearChat}
@@ -257,8 +184,7 @@ export default function AssistantPanel() {
       {/* Chat */}
       <div
         ref={listRef}
-        onClick={onChatClick}
-        className={cx("flex-1 overflow-y-auto px-4 py-4", "bg-black/30")}
+        className="flex-1 overflow-y-auto px-4 py-4 bg-black/30"
       >
         {messages.length === 0 && (
           <div className="text-sm text-white/60">
@@ -294,7 +220,7 @@ export default function AssistantPanel() {
                   )}
                 >
                   <div className="text-xs font-extrabold text-white/60 mb-1">
-                    {isUser ? "You" : `Shynvo SH Assistant AI • ${mode}`}
+                    {isUser ? "You" : "Shynvo SH Assistant AI"}
                   </div>
 
                   {isUser ? (
@@ -342,66 +268,6 @@ export default function AssistantPanel() {
           Send
         </button>
       </div>
-
-      {/* Inline styles for code blocks (no extra deps) */}
-      <style jsx global>{`
-        :root[data-sh-theme="light"] {
-          color-scheme: light;
-        }
-        :root[data-sh-theme="light"] body {
-          background: #eef2ff;
-        }
-        .assistant-html code {
-          padding: 2px 7px;
-          border-radius: 10px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-            "Liberation Mono", monospace;
-          font-size: 0.92em;
-        }
-        .sh-codewrap {
-          margin-top: 10px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 16px;
-          overflow: hidden;
-          background: rgba(0, 0, 0, 0.18);
-        }
-        .sh-codebar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 12px;
-          font-size: 0.78rem;
-          color: rgba(231, 234, 243, 0.75);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          background: rgba(255, 255, 255, 0.03);
-        }
-        .sh-lang {
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          font-weight: 900;
-          opacity: 0.8;
-        }
-        .sh-copy {
-          padding: 7px 10px;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          background: rgba(255, 255, 255, 0.06);
-          color: rgba(231, 234, 243, 0.92);
-          cursor: pointer;
-          font-weight: 900;
-        }
-        .sh-pre {
-          margin: 0;
-          padding: 12px;
-          background: transparent !important;
-          font-size: 0.86rem;
-          line-height: 1.65;
-          white-space: pre-wrap;
-          word-break: break-word;
-        }
-      `}</style>
     </div>
   );
 }
