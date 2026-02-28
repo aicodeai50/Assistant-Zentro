@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 const DEFAULT_BACKEND =
   "https://sh-backend-api-production-5b7e.up.railway.app/api/public/chat";
+
+export function GET() {
+  // Diagnostic: proves this route exists on Vercel
+  return NextResponse.json({ ok: true, route: "/api/public/chat" });
+}
 
 export async function POST(req: Request) {
   try {
