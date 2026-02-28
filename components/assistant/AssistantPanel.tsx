@@ -14,6 +14,20 @@ import { useLogbook } from "@/stores/logbook/logbook.store";
 
 const API_URL = "/api/public/chat";
 
+type Mode = "Tutor" | "Interviewer" | "Analyst" | "Builder" | "Support";
+const MODES: Mode[] = ["Tutor", "Interviewer", "Analyst", "Builder", "Support"];
+
+function normalizeMode(v: string | null): Mode {
+  if (!v) return "Tutor";
+  const x = v.toLowerCase().trim();
+  if (x === "tutor") return "Tutor";
+  if (x === "interviewer") return "Interviewer";
+  if (x === "analyst") return "Analyst";
+  if (x === "builder") return "Builder";
+  if (x === "support") return "Support";
+  return "Tutor";
+}
+
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
@@ -28,21 +42,30 @@ export default function AssistantPanel() {
   const { addEntry } = useLogbook();
 
   const [theme, setTheme] = useState<ThemeMode>("dark");
+  const [mode, setMode] = useState<Mode>("Tutor");
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  // Load persisted state
+  // Load persisted state + URL mode
   useEffect(() => {
     setTheme(loadTheme());
     setMessages(loadChat());
+
+    // Mode comes from /assistant?mode=Builder (Robot/Split will use this)
+    if (typeof window !== "undefined") {
+      const m = new URLSearchParams(window.location.search).get("mode");
+      setMode(normalizeMode(m));
+    }
   }, []);
 
   // Apply theme
   useEffect(() => {
-    if (theme === "light") document.documentElement.setAttribute("data-sh-theme", "light");
+    if (theme === "light")
+      document.documentElement.setAttribute("data-sh-theme", "light");
     else document.documentElement.removeAttribute("data-sh-theme");
     saveTheme(theme);
   }, [theme]);
@@ -79,7 +102,7 @@ export default function AssistantPanel() {
     addEntry({
       id: uid(),
       type: type === "user" ? "user" : "assistant",
-      title: "Shynvo SH Assistant AI",
+      title: `Shynvo SH Assistant AI • ${mode}`,
       content,
       timestamp: Date.now(),
     });
@@ -92,7 +115,13 @@ export default function AssistantPanel() {
     setBusy(true);
     setText("");
 
-    const userMessage: ChatMessage = { id: uid(), role: "user", content: msg, ts: Date.now() };
+    const userMessage: ChatMessage = {
+      id: uid(),
+      role: "user",
+      content: msg,
+      ts: Date.now(),
+    };
+
     const thinkingMessage: ChatMessage = {
       id: uid(),
       role: "assistant",
@@ -107,16 +136,15 @@ export default function AssistantPanel() {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg }),
+        // Mode prefix = frontend-only sync, no backend changes required
+        body: JSON.stringify({ message: `[Mode: ${mode}] ${msg}` }),
       });
 
       const data = await res.json().catch(() => ({}));
-      const reply =
-        data.reply || data.message || data.error || "No response returned.";
+      const reply = data.reply || data.message || data.error || "No response returned.";
 
       setMessages((prev) => {
         const next = [...prev];
-        // replace last assistant thinking message (safe)
         for (let i = next.length - 1; i >= 0; i--) {
           if (next[i].role === "assistant" && next[i].content === "_Thinking…_") {
             next[i] = { ...next[i], content: String(reply) };
@@ -174,12 +202,41 @@ export default function AssistantPanel() {
             SH
           </div>
           <div>
-            <div className="font-extrabold leading-tight">Shynvo SH Assistant AI</div>
-            <div className="text-xs text-white/60 -mt-0.5">secure • calm • clean</div>
+            <div className="font-extrabold leading-tight">
+              Shynvo SH Assistant AI
+            </div>
+            <div className="text-xs text-white/60 -mt-0.5">
+              secure • calm • clean
+            </div>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Mode pills (desktop) */}
+          <div className="hidden md:flex items-center gap-1 mr-1">
+            {MODES.map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMode(m)}
+                className={[
+                  "px-3 py-2 rounded-xl border text-xs font-extrabold transition",
+                  m === mode
+                    ? "border-white/20 bg-white/10"
+                    : "border-white/10 bg-black/30 hover:bg-white/5",
+                ].join(" ")}
+                title={`Mode: ${m}`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+
+          {/* Mode label (mobile) */}
+          <div className="md:hidden text-[11px] font-extrabold text-white/60 px-2 py-1 rounded-xl border border-white/10 bg-black/30">
+            Mode: {mode}
+          </div>
+
           <button
             className="px-3 py-2 rounded-xl border border-white/10 bg-black/30 text-sm font-semibold hover:bg-white/5"
             onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
@@ -201,14 +258,15 @@ export default function AssistantPanel() {
       <div
         ref={listRef}
         onClick={onChatClick}
-        className={cx(
-          "flex-1 overflow-y-auto px-4 py-4",
-          "bg-black/30"
-        )}
+        className={cx("flex-1 overflow-y-auto px-4 py-4", "bg-black/30")}
       >
         {messages.length === 0 && (
           <div className="text-sm text-white/60">
-            Say hello to <span className="font-semibold text-white/80">Shynvo SH Assistant AI</span>.
+            Say hello to{" "}
+            <span className="font-semibold text-white/80">
+              Shynvo SH Assistant AI
+            </span>
+            .
           </div>
         )}
 
@@ -216,7 +274,13 @@ export default function AssistantPanel() {
           {messages.map((m) => {
             const isUser = m.role === "user";
             return (
-              <div key={m.id} className={cx("flex gap-3", isUser ? "justify-end" : "justify-start")}>
+              <div
+                key={m.id}
+                className={cx(
+                  "flex gap-3",
+                  isUser ? "justify-end" : "justify-start"
+                )}
+              >
                 {!isUser && (
                   <div className="h-9 w-9 rounded-2xl grid place-items-center font-black border border-white/10 bg-white/5">
                     SH
@@ -230,7 +294,7 @@ export default function AssistantPanel() {
                   )}
                 >
                   <div className="text-xs font-extrabold text-white/60 mb-1">
-                    {isUser ? "You" : "Shynvo SH Assistant AI"}
+                    {isUser ? "You" : `Shynvo SH Assistant AI • ${mode}`}
                   </div>
 
                   {isUser ? (
@@ -238,7 +302,9 @@ export default function AssistantPanel() {
                   ) : (
                     <div
                       className="assistant-html"
-                      dangerouslySetInnerHTML={{ __html: renderAssistantHtml(m.content) }}
+                      dangerouslySetInnerHTML={{
+                        __html: renderAssistantHtml(m.content),
+                      }}
                     />
                   )}
                 </div>
@@ -288,49 +354,50 @@ export default function AssistantPanel() {
         .assistant-html code {
           padding: 2px 7px;
           border-radius: 10px;
-          background: rgba(255,255,255,.06);
-          border: 1px solid rgba(255,255,255,.10);
-          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-          font-size: .92em;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+            "Liberation Mono", monospace;
+          font-size: 0.92em;
         }
-        .sh-codewrap{
-          margin-top:10px;
-          border:1px solid rgba(255,255,255,.10);
+        .sh-codewrap {
+          margin-top: 10px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 16px;
-          overflow:hidden;
-          background: rgba(0,0,0,.18);
+          overflow: hidden;
+          background: rgba(0, 0, 0, 0.18);
         }
-        .sh-codebar{
-          display:flex;
-          align-items:center;
-          justify-content:space-between;
-          padding:10px 12px;
-          font-size: .78rem;
-          color: rgba(231,234,243,.75);
-          border-bottom:1px solid rgba(255,255,255,.10);
-          background: rgba(255,255,255,.03);
+        .sh-codebar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px 12px;
+          font-size: 0.78rem;
+          color: rgba(231, 234, 243, 0.75);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.03);
         }
-        .sh-lang{
+        .sh-lang {
           text-transform: uppercase;
-          letter-spacing:.08em;
-          font-weight:900;
-          opacity:.8;
+          letter-spacing: 0.08em;
+          font-weight: 900;
+          opacity: 0.8;
         }
-        .sh-copy{
-          padding:7px 10px;
+        .sh-copy {
+          padding: 7px 10px;
           border-radius: 12px;
-          border:1px solid rgba(255,255,255,.12);
-          background: rgba(255,255,255,.06);
-          color: rgba(231,234,243,.92);
-          cursor:pointer;
-          font-weight:900;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.06);
+          color: rgba(231, 234, 243, 0.92);
+          cursor: pointer;
+          font-weight: 900;
         }
-        .sh-pre{
-          margin:0;
-          padding:12px;
+        .sh-pre {
+          margin: 0;
+          padding: 12px;
           background: transparent !important;
-          font-size:.86rem;
-          line-height:1.65;
+          font-size: 0.86rem;
+          line-height: 1.65;
           white-space: pre-wrap;
           word-break: break-word;
         }

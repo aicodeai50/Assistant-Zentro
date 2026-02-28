@@ -6,6 +6,7 @@ import "@/app/os/os-cinematic.css";
 import { ReactNode } from "react";
 import Link from "next/link";
 
+import OSTerminalHost from "@/components/os/OSTerminalHost";
 import OSSideNav from "@/components/os/OSSideNav";
 import OSStoryBar from "@/components/os/OSStoryBar";
 import OSBootOverlay from "@/components/os/OSBootOverlay";
@@ -90,6 +91,15 @@ export default function OSShell({
                 SH Assistant
               </Link>
 
+              {/* Split entry */}
+              <Link
+                href="/split"
+                className="os-btn px-3 py-1 text-xs hover:bg-white/10"
+                title="Open Split View"
+              >
+                Split
+              </Link>
+
               <button
                 onClick={() => setStoryOpen(!storyOpen)}
                 className="os-btn px-3 py-1 text-xs hover:bg-white/10"
@@ -163,9 +173,12 @@ export default function OSShell({
           </div>
         </div>
 
-        <div className="mt-6 text-center text-xs text-white/40">
-          Shynvo OS – cinematic UI layer (frontend only)
-        </div>
+       
+        <OSTerminalHost />
+
+<div className="mt-6 text-center text-xs text-white/40">
+  Shynvo OS – cinematic UI layer (frontend only)
+</div>
       </div>
     </div>
   );
