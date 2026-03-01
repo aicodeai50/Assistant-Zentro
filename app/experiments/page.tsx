@@ -1,84 +1,129 @@
-"use client";
-
 import Link from "next/link";
 
 export default function ExperimentsPage() {
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* background */}
-      <div className="pointer-events-none fixed inset-0">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(1100px circle at 18% 18%, rgba(163,230,53,0.18), transparent 55%),
-              radial-gradient(1000px circle at 82% 22%, rgba(34,211,238,0.10), transparent 58%),
-              linear-gradient(180deg, rgba(2,6,23,0.65), rgba(0,0,0,0.92))
-            `,
-          }}
-        />
-        <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:46px_46px]" />
-        <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:18px_18px]" />
-      </div>
-
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-10">
-        {/* top bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-xs tracking-widest text-white/80">
-              SHYNVO
+      <main className="mx-auto max-w-7xl px-6 py-16">
+        {/* HEADER */}
+        <section className="mb-12">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-white/60">
+                Explore Experiments (Beta)
+              </p>
+              <h1 className="mt-2 text-3xl font-bold md:text-4xl">
+                Standalone AI universes
+              </h1>
+              <p className="mt-3 max-w-2xl text-white/70">
+                Experiments are immersive, fullscreen AI prototypes — separate
+                from Shynvo OS. Each evolves independently with its own versions
+                and visuals.
+              </p>
             </div>
-            <div className="text-xs text-white/60">Experiments</div>
-          </div>
 
-          <div className="flex items-center gap-2">
             <Link
-              href="/os"
-              className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-xs text-white/80 hover:bg-white/15"
+              href="/experiments"
+              className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold hover:bg-white/15"
             >
-              Enter OS (2050)
+              Open Experiment Hub →
             </Link>
           </div>
-        </div>
+        </section>
 
-        {/* hero */}
-        <div className="mt-8 rounded-3xl border border-white/15 bg-black/35 p-6 backdrop-blur-xl">
-          <div className="text-3xl font-semibold text-white/95">Experiment Hub</div>
-          <div className="mt-2 text-sm text-white/70">
-            Standalone AI universes. Fullscreen. Shareable. Separate from Shynvo OS.
-          </div>
-          <div className="mt-4 h-[1px] w-full bg-[linear-gradient(90deg,transparent,rgba(163,230,53,0.35),rgba(34,211,238,0.20),transparent)]" />
-        </div>
-
-        {/* list */}
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {/* GRID */}
+        <section className="grid gap-6 md:grid-cols-2">
+          {/* Thought Forge */}
           <Link
             href="/experiments/thought-forge"
-            className="block rounded-3xl border border-white/15 bg-white/10 p-6 hover:bg-white/15"
+            className="group rounded-3xl border border-white/15 bg-gradient-to-br from-lime-500/20 via-emerald-500/10 to-cyan-500/10 p-6 transition hover:scale-[1.01] hover:border-white/30"
           >
-            <div className="text-lg font-semibold text-white">Thought Forge</div>
-            <div className="mt-1 text-sm text-white/70">
-              Immersive mind-map graph. Click nodes to expand.
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Thought Forge</h2>
+              <span className="rounded-full bg-black/40 px-3 py-1 text-xs text-white/70">
+                v0.2 · Beta
+              </span>
             </div>
-            <div className="mt-4 text-xs text-white/55">Phase 1 complete • Phase 2 AI next</div>
+
+            <p className="mt-3 text-white/80">
+              A living concept graph. Seed a thought, click nodes, and expand
+              meaning visually.
+            </p>
+
+            <p className="mt-4 text-xs text-white/60">
+              Phase 1 stable · AI expansion next
+            </p>
+
+            <div className="mt-6 text-sm font-semibold text-white/80">
+              Enter →
+            </div>
           </Link>
 
-          {/* placeholders for future experiments */}
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="text-lg font-semibold text-white/70">Debate Matrix</div>
-            <div className="mt-1 text-sm text-white/50">Coming soon</div>
-          </div>
+          {/* Debate Matrix */}
+          <Link
+            href="/experiments/debate-matrix"
+            className="group rounded-3xl border border-white/15 bg-gradient-to-br from-purple-500/20 via-pink-500/10 to-indigo-500/10 p-6 transition hover:scale-[1.01] hover:border-white/30"
+          >
+            <h2 className="text-xl font-semibold">Debate Matrix</h2>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="text-lg font-semibold text-white/70">Chrono Vault</div>
-            <div className="mt-1 text-sm text-white/50">Coming soon</div>
-          </div>
-        </div>
+            <p className="mt-3 text-white/80">
+              Multi-agent debate to break echo chambers. Arguments mapped for &
+              against.
+            </p>
 
-        <div className="mt-10 text-center text-xs text-white/45">
-          Experiments are separate from OS • No shared UI primitives
+            <p className="mt-4 text-xs text-white/60">
+              Experimental logic engine
+            </p>
+
+            <div className="mt-6 text-sm font-semibold text-white/80">
+              Enter →
+            </div>
+          </Link>
+
+          {/* Chrono Vault */}
+          <Link
+            href="/experiments/chrono-vault"
+            className="group rounded-3xl border border-white/15 bg-gradient-to-br from-teal-500/20 via-sky-500/10 to-violet-500/10 p-6 transition hover:scale-[1.01] hover:border-white/30"
+          >
+            <h2 className="text-xl font-semibold">Chrono Vault</h2>
+
+            <p className="mt-3 text-white/80">
+              Future-self simulation with branching timelines and reflective
+              guidance.
+            </p>
+
+            <p className="mt-4 text-xs text-white/60">
+              Narrative timelines · Decision futures
+            </p>
+
+            <div className="mt-6 text-sm font-semibold text-white/80">
+              Enter →
+            </div>
+          </Link>
+
+          {/* Beta Notes */}
+          <Link
+            href="/experiments/beta-notes"
+            className="group rounded-3xl border border-white/15 bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-rose-500/10 p-6 transition hover:scale-[1.01] hover:border-white/30"
+          >
+            <h2 className="text-xl font-semibold">Beta Notes</h2>
+
+            <ul className="mt-3 space-y-2 text-sm text-white/80">
+              <li>• v0.2 Canvas stability + build fixes</li>
+              <li>• v0.3 AI-generated nodes</li>
+              <li>• v0.4 Animated emergence + thinking effects</li>
+            </ul>
+
+            <div className="mt-6 text-sm font-semibold text-white/80">
+              Open notes →
+            </div>
+          </Link>
+        </section>
+
+        {/* FOOT NOTE */}
+        <div className="mt-12 text-center text-xs text-white/50">
+          Experiments are separate from Shynvo OS · No shared UI primitives
         </div>
-      </div>
+      </main>
     </div>
   );
 }
