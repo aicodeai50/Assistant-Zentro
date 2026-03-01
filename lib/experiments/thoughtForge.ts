@@ -1,5 +1,9 @@
 // lib/experiments/thoughtForge.ts
 
+/* ======================================================
+   Types
+   ====================================================== */
+
 export type ThoughtForgeNodeType = "seed" | "concept" | "detail";
 
 export type ThoughtForgeNode = {
@@ -32,14 +36,10 @@ export type ThoughtForgeAIResponse = {
   edges: ThoughtForgeEdge[];
 };
 
-/** ----------------------------
- * Phase 1 (local graph helpers)
- * -----------------------------*/
+/* ======================================================
+   Phase 1 — Local graph helpers (NO backend)
+   ====================================================== */
 
-/**
- * Create a fresh graph with a seed node at the center.
- * This matches what your page.tsx expects.
- */
 export function createSeedGraph(seedLabel: string): TFGraph {
   const seed: ThoughtForgeNode = {
     id: "seed",
@@ -53,7 +53,7 @@ export function createSeedGraph(seedLabel: string): TFGraph {
   };
 }
 
-function slugify(input: string) {
+function slugify(input: string): string {
   return input
     .trim()
     .toLowerCase()
@@ -63,7 +63,7 @@ function slugify(input: string) {
     .slice(0, 48);
 }
 
-function uniqueId(base: string, existing: Set<string>) {
+function uniqueId(base: string, existing: Set<string>): string {
   let id = base;
   let i = 2;
   while (existing.has(id)) {
@@ -74,21 +74,17 @@ function uniqueId(base: string, existing: Set<string>) {
   return id;
 }
 
-/**
- * Phase 1 behavior: click a node -> add 3 local detail nodes.
- * Safe, deterministic, no backend.
- */
 export function expandNode(graph: TFGraph, nodeId: string): TFGraph {
   const node = graph.nodes.find((n) => n.id === nodeId);
   if (!node) return graph;
 
   const existingIds = new Set(graph.nodes.map((n) => n.id));
 
-  // If it's already expanded, don't spam duplicates.
   const alreadyExpanded = graph.links.some((l) => l.source === nodeId);
   if (alreadyExpanded) return graph;
 
   const base = slugify(node.label || "node");
+
   const newNodes: ThoughtForgeNode[] = [
     {
       id: uniqueId(`${base}-detail`, existingIds),
@@ -119,11 +115,11 @@ export function expandNode(graph: TFGraph, nodeId: string): TFGraph {
   };
 }
 
-/** ----------------------------
- * Phase 2 (AI expansion helpers)
- * -----------------------------*/
+/* ======================================================
+   Phase 2 — AI helpers (STRICT + SAFE)
+   ====================================================== */
 
-function extractJSON(text: string) {
+function extractJSON(text: string): unknown {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
   if (start === -1 || end === -1) {
@@ -141,21 +137,27 @@ function isNodeType(x: unknown): x is ThoughtForgeNodeType {
 }
 
 function normalizeAIResponse(raw: unknown): ThoughtForgeAIResponse {
-  const obj = raw as any;
+  const obj = raw as Record<string, unknown>;
 
-  const nodesIn = Array.isArray(obj?.nodes) ? obj.nodes : [];
-  const edgesIn = Array.isArray(obj?.edges) ? obj.edges : [];
+  const nodesIn = Array.isArray(obj.nodes) ? obj.nodes : [];
+  const edgesIn = Array.isArray(obj.edges) ? obj.edges : [];
 
-  // Normalize nodes
-  const nodes: ThoughtForgeNode[] = nodesIn
-    .map((n: any) => ({
-      id: safeString(n?.id).trim(),
-      label: safeString(n?.label).trim(),
-      type: isNodeType(n?.type) ? (n.type as ThoughtForgeNodeType) : ("detail" as const),
-    }))
-    .filter((n) => n.id && n.label && isNodeType(n.type));
+  /* ---------- Normalize nodes ---------- */
+  const nodes: ThoughtForgeNode[] = (nodesIn as unknown[])
+    .map((n: unknown): ThoughtForgeNode => {
+      const o = n as Record<string, unknown>;
+      return {
+        id: safeString(o.id).trim(),
+        label: safeString(o.label).trim(),
+        type: isNodeType(o.type) ? o.type : "detail",
+      };
+    })
+    .filter(
+      (n: ThoughtForgeNode) =>
+        Boolean(n.id) && Boolean(n.label) && isNodeType(n.type)
+    );
 
-  // Ensure unique node ids
+  /* ---------- Deduplicate nodes ---------- */
   const used = new Set<string>();
   const dedupedNodes: ThoughtForgeNode[] = [];
   for (const n of nodes) {
@@ -165,36 +167,33 @@ function normalizeAIResponse(raw: unknown): ThoughtForgeAIResponse {
     }
   }
 
-  // Normalize edges and keep only edges that reference real nodes
-  const edges: ThoughtForgeEdge[] = edgesIn
-    .map((e: any) => ({
-      from: safeString(e?.from).trim(),
-      to: safeString(e?.to).trim(),
-      label: typeof e?.label === "string" ? e.label : undefined,
-    }))
-    .filter((e) => e.from && e.to && used.has(e.from) && used.has(e.to));
+  /* ---------- Normalize edges ---------- */
+  const edges: ThoughtForgeEdge[] = (edgesIn as unknown[])
+    .map((e: unknown): ThoughtForgeEdge => {
+      const o = e as Record<string, unknown>;
+      return {
+        from: safeString(o.from).trim(),
+        to: safeString(o.to).trim(),
+        label: typeof o.label === "string" ? o.label : undefined,
+      };
+    })
+    .filter(
+      (e: ThoughtForgeEdge) =>
+        Boolean(e.from) && Boolean(e.to) && used.has(e.from) && used.has(e.to)
+    );
 
-  // Ensure there is at least one seed node (create one if missing)
-  const hasSeed = dedupedNodes.some((n) => n.type === "seed");
-  if (!hasSeed) {
+  /* ---------- Ensure seed exists ---------- */
+  if (!dedupedNodes.some((n) => n.type === "seed")) {
     dedupedNodes.unshift({
       id: "seed",
       label: "Seed",
       type: "seed",
     });
-    used.add("seed");
   }
 
   return { nodes: dedupedNodes, edges };
 }
 
-/**
- * Calls /api/public/chat (your Next proxy) and expects strict JSON.
- *
- * IMPORTANT: This uses your frontend route `/api/public/chat`
- * so it works both locally and on Vercel, while the route itself
- * can proxy to Railway (recommended).
- */
 export async function generateThoughtForgeExpansion(params: {
   seed: string;
   mode: "seedToConcepts" | "conceptToDetails";
@@ -207,17 +206,17 @@ Return ONLY valid JSON:
   "edges": [{ "from": "string", "to": "string", "label": "string" }]
 }
 Rules:
-- JSON only (no markdown)
-- Include one seed node
-- Use unique ids
-- Concept count: 8–12 (seedToConcepts)
-- Detail count: 6–10 (conceptToDetails)
+- JSON only
+- Include a seed node
+- Unique ids
+- Concepts: 8–12
+- Details: 6–10
 `.trim();
 
   const user =
     params.mode === "seedToConcepts"
-      ? `Seed: "${params.seed}". Generate 8–12 distinct concept nodes connected from the seed.`
-      : `Seed: "${params.seed}". Expand "${params.focusNodeLabel ?? "this concept"}" into 6–10 detail nodes connected from that concept.`;
+      ? `Seed: "${params.seed}". Generate concept nodes.`
+      : `Seed: "${params.seed}". Expand "${params.focusNodeLabel ?? "this concept"}".`;
 
   const res = await fetch("/api/public/chat", {
     method: "POST",
@@ -240,10 +239,10 @@ Rules:
   return normalizeAIResponse(parsed);
 }
 
-/**
- * Optional helper: convert AI response to TFGraph.
- * Ready for Phase 2 wiring.
- */
+/* ======================================================
+   Utilities
+   ====================================================== */
+
 export function aiResponseToGraph(ai: ThoughtForgeAIResponse): TFGraph {
   return {
     nodes: ai.nodes,
@@ -255,23 +254,28 @@ export function aiResponseToGraph(ai: ThoughtForgeAIResponse): TFGraph {
   };
 }
 
-/**
- * Merge an AI response into an existing graph safely.
- * This prevents duplicate nodes/links and lets you expand progressively.
- */
-export function mergeGraphWithAI(graph: TFGraph, ai: ThoughtForgeAIResponse): TFGraph {
+export function mergeGraphWithAI(
+  graph: TFGraph,
+  ai: ThoughtForgeAIResponse
+): TFGraph {
   const nodeMap = new Map<string, ThoughtForgeNode>();
   for (const n of graph.nodes) nodeMap.set(n.id, n);
   for (const n of ai.nodes) {
     if (!nodeMap.has(n.id)) nodeMap.set(n.id, n);
   }
 
-  const linkKey = (l: ThoughtForgeLink) => `${l.source}::${l.target}::${l.label ?? ""}`;
-  const linkSet = new Set<string>(graph.links.map(linkKey));
+  const linkKey = (l: ThoughtForgeLink) =>
+    `${l.source}::${l.target}::${l.label ?? ""}`;
 
+  const linkSet = new Set<string>(graph.links.map(linkKey));
   const mergedLinks: ThoughtForgeLink[] = [...graph.links];
+
   for (const e of ai.edges) {
-    const l: ThoughtForgeLink = { source: e.from, target: e.to, label: e.label };
+    const l: ThoughtForgeLink = {
+      source: e.from,
+      target: e.to,
+      label: e.label,
+    };
     const k = linkKey(l);
     if (!linkSet.has(k)) {
       linkSet.add(k);
