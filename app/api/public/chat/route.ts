@@ -1,38 +1,22 @@
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
-const DEFAULT_BACKEND =
-  "https://sh-backend-api-production-5b7e.up.railway.app/api/public/chat";
-
-export function GET() {
-  return NextResponse.json({ ok: true, route: "/api/public/chat", method: "GET" });
-}
-
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => ({}));
+  const base =  process.env.RAILWAY_API_BASE_URL;
 
-  const backendUrl = (process.env.BACKEND_URL || DEFAULT_BACKEND).trim();
-  const SH_API_KEY = (process.env.SH_API_KEY || "").trim();
-  const hasKey = Boolean(SH_API_KEY);
 
-  if (!hasKey) {
+  if (!base) {
     return NextResponse.json(
-      {
-        ok: false,
-        error: "SH_API_KEY missing on Vercel",
-        backendUrl,
-        receivedBody: body,
-      },
+      { error: "Missing RAILWAY_API_BASE_URL" },
       { status: 500 }
     );
   }
 
-  const upstream = await fetch(backendUrl, {
+  const body = await req.json();
+
+  const upstream = await fetch(`${base}/api/public/chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-sh-api-key": SH_API_KEY,
     },
     body: JSON.stringify(body),
   });
@@ -42,8 +26,8 @@ export async function POST(req: Request) {
   return new NextResponse(text, {
     status: upstream.status,
     headers: {
-      "Content-Type": upstream.headers.get("content-type") || "application/json",
-      "Cache-Control": "no-store",
+      "Content-Type":
+        upstream.headers.get("Content-Type") ?? "application/json",
     },
   });
 }
