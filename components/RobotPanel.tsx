@@ -3,25 +3,27 @@
 import { useMemo, useState } from "react";
 import type { RobotMode } from "@/components/RobotModePicker";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
-const SH_API_KEY = process.env.NEXT_PUBLIC_SH_API_KEY || "";
-
 type Msg = { role: "user" | "assistant"; content: string };
 
-async function callPublicChat(messages: Msg[]) {
-  const res = await fetch(`${API_BASE}/api/public/chat`, {
+async function callPublicChat(payload: {
+  message: string;
+  mode: RobotMode;
+  messages?: Msg[];
+}) {
+  const res = await fetch("/api/public/chat", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-sh-api-key": SH_API_KEY,
-    },
-    body: JSON.stringify({ messages }),
+    headers: { "Content-Type": "application/json" },
+    // backend currently accepts { message }, but we also include mode for future prompt routing
+    body: JSON.stringify(payload),
   });
 
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.error || data?.details || "Request failed");
-  return data?.reply || "";
+
+  if (!res.ok) {
+    throw new Error(data?.error || data?.details || data?.message || "Request failed");
+  }
+
+  return data?.reply || data?.message || "";
 }
 
 export default function RobotPanel({
@@ -41,8 +43,6 @@ export default function RobotPanel({
         "I’m your Shynvo Robot. Pick a mode + give me a goal (quiz, flashcards, interview prep, research) and I’ll generate a result.",
     },
   ]);
-
-  const envOk = Boolean(SH_API_KEY);
 
   const quicks = useMemo(() => {
     const common = [
@@ -117,8 +117,7 @@ export default function RobotPanel({
     return [
       {
         label: "Onboarding Help",
-        prompt:
-          "Explain how a new user should start using Shynvo in 3 steps.",
+        prompt: "Explain how a new user should start using Shynvo in 3 steps.",
       },
       {
         label: "Pricing FAQ",
@@ -137,21 +136,22 @@ export default function RobotPanel({
     setError(null);
     setBusy(true);
 
-    const next = [...messages, { role: "user", content: prompt }] as Msg[];
-    setMessages(next);
+    const nextMsgs = [...messages, { role: "user", content: prompt }] as Msg[];
+    setMessages(nextMsgs);
     setInput("");
 
     try {
-      if (!envOk) {
-        throw new Error(
-          "Missing NEXT_PUBLIC_SH_API_KEY. Add it in .env.local then restart: npm run dev"
-        );
-      }
+      // Use the same proxy route as the SH Assistant
+      // No public keys needed in the browser.
+      const reply = await callPublicChat({
+        message: prompt,
+        mode,
+        messages: nextMsgs,
+      });
 
-      const reply = await callPublicChat(next);
-      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      setMessages((m) => [...m, { role: "assistant", content: String(reply) }]);
     } catch (e: any) {
-      setError(e.message || "Failed");
+      setError(e?.message || "Failed");
     } finally {
       setBusy(false);
     }
@@ -167,21 +167,12 @@ export default function RobotPanel({
           <div className="text-xs text-neutral-500">Mode: {mode}</div>
         </div>
 
-        <span className="text-xs text-neutral-400">
-          Backend: {API_BASE.replace(/^https?:\/\//, "")}
-        </span>
+        <span className="text-xs text-neutral-400">Backend: /api/public/chat</span>
       </div>
 
       {!enabled && (
         <div className="mt-4 rounded-2xl border border-neutral-800 bg-black p-4 text-sm text-neutral-400">
           Robot is OFF. Turn it ON to use commands.
-        </div>
-      )}
-
-      {enabled && !envOk && (
-        <div className="mt-4 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-200">
-          Missing <code>NEXT_PUBLIC_SH_API_KEY</code>. The panel can’t call your
-          backend until you add it.
         </div>
       )}
 
@@ -243,8 +234,8 @@ export default function RobotPanel({
       </form>
 
       <p className="mt-3 text-xs text-neutral-500">
-        Note: This uses backend endpoint <code>/api/public/chat</code>. Next we
-        can switch to protected endpoints + user JWT.
+        Note: This uses the Shynvo proxy endpoint <code>/api/public/chat</code>.
+        No public keys are stored in the browser.
       </p>
     </div>
   );
