@@ -17,11 +17,10 @@ export default function UniverseCard({ u }: { u: UniverseDef }) {
         )}
         style={{
           borderColor: `${u.accent}88`,
-          background: u.bg, // THIS is the universe background
+          background: u.bg,
           boxShadow: `0 0 0 1px rgba(255,255,255,0.06), 0 0 70px ${u.accent}22`,
         }}
       >
-        {/* neon beam (unique per box) */}
         <div
           className="pointer-events-none absolute left-0 top-0 h-full w-[6px] opacity-95"
           style={{
@@ -30,7 +29,6 @@ export default function UniverseCard({ u }: { u: UniverseDef }) {
           }}
         />
 
-        {/* hover aura */}
         <div
           className="pointer-events-none absolute -inset-12 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
@@ -38,10 +36,8 @@ export default function UniverseCard({ u }: { u: UniverseDef }) {
           }}
         />
 
-        {/* hologrid */}
         <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:44px_44px]" />
 
-        {/* content */}
         <div className="relative p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">

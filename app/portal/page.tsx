@@ -15,7 +15,11 @@ export default function PortalHomePage() {
         </span>
       }
     >
-      {/* Big neon banner (VERY visible color) */}
+      {/* DEPLOY MARKER (remove later) */}
+      <div className="fixed top-2 left-2 z-[9999] rounded bg-red-600 px-3 py-2 text-xs font-bold text-white">
+        DEPLOY MARKER: PORTAL V2
+      </div>
+
       <div
         className="rounded-3xl border border-white/15 p-5 backdrop-blur-xl"
         style={{

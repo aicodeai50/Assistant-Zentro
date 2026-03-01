@@ -6,7 +6,6 @@ import Link from "next/link";
 export type PortalTheme = "neon" | "aurora" | "void" | "ember";
 
 function bgFor(theme: PortalTheme) {
-  // Much stronger sci-fi color fields
   if (theme === "aurora") {
     return `
       radial-gradient(1200px circle at 20% 15%, rgba(34,211,238,0.45), transparent 45%),
@@ -52,7 +51,7 @@ export default function PortalShell({
   subtitle,
   rightSlot,
   children,
-  theme = "neon",
+  theme = "aurora",
 }: {
   title: string;
   subtitle?: ReactNode;
@@ -71,13 +70,9 @@ export default function PortalShell({
             filter: "saturate(1.25) contrast(1.1)",
           }}
         />
-        {/* drifting aurora layer */}
         <div className="aurora-drift absolute inset-0 opacity-70" />
-        {/* hologrid */}
         <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:46px_46px]" />
-        {/* star/noise dots */}
         <div className="absolute inset-0 opacity-[0.12] [background-image:radial-gradient(rgba(255,255,255,0.16)_1px,transparent_1px)] [background-size:18px_18px]" />
-        {/* cinematic film */}
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.06),transparent_30%,rgba(255,255,255,0.04))]" />
       </div>
 
@@ -132,7 +127,6 @@ export default function PortalShell({
         </div>
       </div>
 
-      {/* global keyframes */}
       <style jsx global>{`
         .aurora-drift {
           background: radial-gradient(900px circle at 20% 30%, rgba(34, 211, 238, 0.20), transparent 55%),
