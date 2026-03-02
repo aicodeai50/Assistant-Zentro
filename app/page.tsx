@@ -18,49 +18,51 @@ export default function HomePage() {
             </p>
 
             <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-              The AI platform for learning, exams, and career readiness.
+              Learn faster. Prepare smarter. Upskill teams with AI.
             </h1>
 
             <p className="mt-4 text-white/70">
-              Study smarter, prepare faster, and upskill with structured AI environments — from
-              university to industry. Start simple, or switch into cinematic OS mode.
+              Generate quizzes, flashcards, interview practice, and upskilling plans — with optional
+              “sci-fi assistant” UI for a futuristic experience.
             </p>
 
-            {/* MAIN BUTTON BOXES (ALL WORKING ROUTES) */}
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              <QuickBtn
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
                 href="/demo"
-                title="View demo"
-                desc="See how Shynvo generates practice instantly."
-                variant="primary"
-              />
-              <QuickBtn
+              >
+                View demo
+              </Link>
+
+              <Link
+                className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
                 href="/pricing"
-                title="See pricing"
-                desc="Choose Free, Pro, or Team."
-              />
-              <QuickBtn
+              >
+                See pricing
+              </Link>
+
+              <Link
+                className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
                 href="/robot"
-                title="Try the sci-fi robot"
-                desc="Cinematic assistant UI (optional)."
-              />
-              <QuickBtn
+              >
+                Try the sci-fi robot
+              </Link>
+
+              {/* ✅ UPDATED OS BUTTON (portal gradient) */}
+              <Link
                 href="/os"
-                title="Enter Shynvo OS (2050)"
-                desc="Full immersive OS interface."
-              />
-              <QuickBtn
-                href="/university"
-                title="University Hub"
-                desc="Faculty environments for students."
-                glow="cyan"
-              />
-              <QuickBtn
-                href="/experiments"
-                title="Explore Experiments (Beta)"
-                desc="Standalone AI universes."
-                glow="purple"
-              />
+                className="rounded-xl border border-white/10 px-5 py-3 font-semibold text-white transition hover:brightness-110"
+                style={{
+                  background: `
+                    radial-gradient(700px circle at 20% 20%, rgba(34,211,238,0.18), transparent 55%),
+                    radial-gradient(700px circle at 80% 30%, rgba(163,230,53,0.14), transparent 55%),
+                    radial-gradient(700px circle at 30% 90%, rgba(244,114,182,0.12), transparent 60%),
+                    linear-gradient(180deg, rgba(10,10,15,0.92), rgba(0,0,0,0.85))
+                  `,
+                }}
+              >
+                Enter Shynvo OS (2050)
+              </Link>
             </div>
 
             <div className="mt-6 text-sm text-white/60">
@@ -69,56 +71,46 @@ export default function HomePage() {
               <span className="text-white/80">Teams</span>
             </div>
 
-            {/* WHY BOX */}
             <div className="mt-6 grid gap-3 rounded-3xl border border-white/10 bg-white/5 p-5">
-              <div className="text-sm font-semibold text-white/80">Why people switch to Shynvo</div>
+              <div className="text-sm font-semibold text-white/80">
+                Why people switch to Shynvo
+              </div>
               <ul className="list-disc space-y-2 pl-5 text-sm text-white/60">
                 <li>Instant practice from any topic (no course hunting).</li>
-                <li>Exam prep + interview simulation to improve faster.</li>
-                <li>Clear environments (University, OS, Experiments) — not a confusing tool soup.</li>
+                <li>Interview simulation + scoring to improve faster.</li>
+                <li>Company features for team skills + upskilling plans.</li>
               </ul>
             </div>
           </div>
 
-          {/* RIGHT CARD (CLEAR “HOW USERS USE IT”) */}
+          {/* HERO CARD */}
           <div className="rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-xl">
-            <div className="text-sm text-white/60">How it works</div>
+            <div className="text-sm text-white/60">What you get</div>
 
             <div className="mt-4 grid gap-3">
-              <HowRow n="1" title="Pick a path">
-                Demo (quick), University Hub (students), OS (immersive), or Experiments (beta).
-              </HowRow>
-              <HowRow n="2" title="Generate practice">
-                Quizzes, flashcards, exam drills, interview prompts — instantly.
-              </HowRow>
-              <HowRow n="3" title="Repeat + improve">
-                Use daily loops. Upgrade for deeper scoring, higher limits, and team features.
-              </HowRow>
+              <Feature title="Adaptive quizzes + flashcards">
+                Generate practice instantly from any topic.
+              </Feature>
+              <Feature title="Interview simulation (Pro)">
+                Practice questions, feedback, and scoring.
+              </Feature>
+              <Feature title="Company tools (Team)">
+                Skill matrix, upskilling plans, admin analytics + seats.
+              </Feature>
+              <Feature title="Cinematic robot (optional)">
+                Futuristic UI you can enable/disable anytime.
+              </Feature>
             </div>
 
-            <div className="mt-6 grid gap-3">
-              <Link
-                className="inline-flex w-full items-center justify-center rounded-xl bg-white px-4 py-3 font-semibold text-black hover:bg-neutral-200"
-                href="/demo"
-              >
-                Open demo →
-              </Link>
-              <Link
-                className="inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-white hover:bg-white/10"
-                href="/university"
-              >
-                Go to University Hub →
-              </Link>
-              <Link
-                className="inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-black px-4 py-3 font-semibold text-white hover:bg-white/5"
-                href="/os"
-              >
-                Enter OS →
-              </Link>
-            </div>
+            <Link
+              className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-semibold text-white hover:bg-white/10"
+              href="/pricing"
+            >
+              Upgrade anytime →
+            </Link>
 
             <div className="mt-3 text-xs text-white/50">
-              Tip: Most users start with the demo, then choose University or OS.
+              Tip: start with the demo, then choose a plan when ready.
             </div>
           </div>
         </section>
@@ -139,10 +131,10 @@ export default function HomePage() {
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <Card title="Students">
-              Faculty environments, exam drills, recall loops, and confidence-building practice.
+              Quizzes, flashcards, study plans, and confidence-building practice.
             </Card>
             <Card title="Professionals">
-              Skill-gap analysis, certification prep, interview readiness and guided improvement.
+              Skill-gap analysis, certification prep, interview readiness.
             </Card>
             <Card title="Companies">
               Team upskilling plans, skill matrix, admin analytics + seats.
@@ -150,10 +142,98 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* HOW IT WORKS */}
+        <section className="mt-16 rounded-3xl border border-white/10 bg-neutral-950 p-8">
+          <h2 className="text-2xl font-bold">How it works</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <Step n="1" title="Choose a goal">
+              Quiz, flashcards, interview practice, or upskilling plan.
+            </Step>
+            <Step n="2" title="Get AI-generated practice">
+              Fast content you can repeat daily.
+            </Step>
+            <Step n="3" title="Track improvement">
+              Upgrade for deeper scoring and team features.
+            </Step>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
+              href="/demo"
+            >
+              Open demo
+            </Link>
+            <Link
+              className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
+              href="/robot"
+            >
+              See the robot experience
+            </Link>
+            <Link
+              className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+              href="/os"
+            >
+              Enter Shynvo OS →
+            </Link>
+          </div>
+        </section>
+
+        {/* PRICING TEASER */}
+        <section className="mt-16">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Pricing</h2>
+              <p className="mt-2 text-white/70">Start free. Upgrade when you need more power.</p>
+            </div>
+            <Link className="text-sm text-white/70 underline hover:text-white" href="/pricing">
+              View full pricing →
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <MiniPlan
+              title="Free"
+              price="NOK 0"
+              items={["Basic quizzes", "Basic flashcards", "Community support"]}
+            />
+            <MiniPlan
+              title="Pro"
+              price="NOK 299 / month"
+              items={["Higher limits", "Interview simulator", "Skill prep"]}
+            />
+            <MiniPlan
+              title="Team"
+              price="NOK 999 / month"
+              items={["Seats", "Skill matrix", "Admin analytics"]}
+            />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold">FAQ</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <Faq q="Is the robot required?">
+              No — it’s optional. The core product works normally without it.
+            </Faq>
+            <Faq q="Do you store my private data?">
+              Only what’s necessary to provide the service. See the Privacy page for details.
+            </Faq>
+            <Faq q="Can companies add seats?">
+              Yes — Team plan is designed for seats, admins, and analytics.
+            </Faq>
+            <Faq q="What’s next?">
+              We’ll connect the demo + robot panel to more backend endpoints (quizzes, interviews,
+              analytics).
+            </Faq>
+          </div>
+        </section>
+
         {/* FINAL CTA */}
         <section className="mt-16 rounded-3xl border border-white/10 bg-white/5 p-8">
           <h2 className="text-2xl font-bold">Ready to try it?</h2>
-          <p className="mt-2 text-white/70">Start with the demo, then choose a path.</p>
+          <p className="mt-2 text-white/70">Start with the demo, then upgrade when you’re ready.</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -164,21 +244,21 @@ export default function HomePage() {
             </Link>
             <Link
               className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
-              href="/university"
+              href="/pricing"
             >
-              University Hub
+              View pricing
             </Link>
             <Link
               className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
-              href="/experiments"
+              href="/robot"
             >
-              Experiments (Beta)
+              Try the robot
             </Link>
             <Link
               className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
               href="/os"
             >
-              Enter OS (2050)
+              Enter Shynvo OS (2050)
             </Link>
           </div>
         </section>
@@ -189,82 +269,11 @@ export default function HomePage() {
   );
 }
 
-/* --------------------------- UI helpers --------------------------- */
-
-function QuickBtn({
-  href,
-  title,
-  desc,
-  variant,
-  glow,
-}: {
-  href: string;
-  title: string;
-  desc: string;
-  variant?: "primary";
-  glow?: "cyan" | "purple";
-}) {
-  const base =
-    "group relative overflow-hidden rounded-2xl border px-5 py-4 transition";
-  const primary =
-    "border-white/10 bg-white text-black hover:bg-neutral-200";
-  const normal =
-    "border-white/10 bg-white/5 text-white hover:bg-white/10";
-
-  const glowStyle =
-    glow === "cyan"
-      ? {
-          background: `
-            radial-gradient(700px circle at 20% 20%, rgba(34,211,238,0.18), transparent 55%),
-            radial-gradient(700px circle at 80% 30%, rgba(56,189,248,0.12), transparent 55%),
-            linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.20))
-          `,
-        }
-      : glow === "purple"
-      ? {
-          background: `
-            radial-gradient(700px circle at 18% 25%, rgba(168,85,247,0.18), transparent 55%),
-            radial-gradient(700px circle at 82% 22%, rgba(244,114,182,0.12), transparent 55%),
-            linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.20))
-          `,
-        }
-      : undefined;
-
-  return (
-    <Link
-      href={href}
-      className={[
-        base,
-        variant === "primary" ? primary : normal,
-      ].join(" ")}
-      style={glowStyle}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="font-semibold">{title}</div>
-        <span className="text-xs opacity-70 group-hover:opacity-100">→</span>
-      </div>
-      <div
-        className={[
-          "mt-1 text-sm",
-          variant === "primary" ? "text-black/70" : "text-white/60",
-        ].join(" ")}
-      >
-        {desc}
-      </div>
-    </Link>
-  );
-}
-
-function HowRow({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+function Feature({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black p-4">
-      <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm font-semibold">
-          {n}
-        </div>
-        <div className="font-semibold text-white">{title}</div>
-      </div>
-      <div className="mt-2 text-sm text-white/60">{children}</div>
+      <div className="font-semibold text-white">{title}</div>
+      <div className="mt-1 text-sm text-white/60">{children}</div>
     </div>
   );
 }
@@ -283,6 +292,43 @@ function Stat({ value, label }: { value: string; label: string }) {
     <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="text-2xl font-bold">{value}</div>
       <div className="mt-1 text-sm text-white/60">{label}</div>
+    </div>
+  );
+}
+
+function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm font-semibold">
+          {n}
+        </div>
+        <div className="font-semibold">{title}</div>
+      </div>
+      <div className="mt-3 text-sm text-white/60">{children}</div>
+    </div>
+  );
+}
+
+function MiniPlan({ title, price, items }: { title: string; price: string; items: string[] }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
+      <div className="text-lg font-semibold">{title}</div>
+      <div className="mt-2 text-2xl font-bold">{price}</div>
+      <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-white/60">
+        {items.map((x) => (
+          <li key={x}>{x}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Faq({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black p-6">
+      <div className="font-semibold">{q}</div>
+      <div className="mt-2 text-sm text-white/60">{children}</div>
     </div>
   );
 }
