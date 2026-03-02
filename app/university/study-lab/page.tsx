@@ -1,45 +1,64 @@
-import Link from "next/link";
-import ArenaTutor from "@/components/university/ArenaTutor";
-import { getFacultyFromSearchParam } from "@/lib/university/faculties";
+"use client";
 
-export default async function StudyLabPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ faculty?: string }>;
-}) {
-  const sp = await searchParams;
-  const faculty = getFacultyFromSearchParam(sp?.faculty);
+import Link from "next/link";
+import { useState } from "react";
+
+export default function StudyLabPage() {
+  const [input, setInput] = useState("");
+  const [reply, setReply] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function askTutor() {
+    if (!input.trim()) return;
+    setLoading(true);
+    setReply(null);
+
+    const res = await fetch("/api/public/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: input }],
+      }),
+    });
+
+    const data = await res.json();
+    setReply(data.reply ?? "No response.");
+    setLoading(false);
+  }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="mx-auto w-full max-w-6xl px-6 py-12">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div className="text-xs tracking-widest text-white/60">UNIVERSITY HUB</div>
-            <h1 className="mt-2 text-3xl font-semibold">Study Lab</h1>
-            <p className="mt-2 text-white/70">
-              Learn deeply, build retention, and generate practice from your topic or notes.
-            </p>
-          </div>
+    <div className="min-h-screen bg-black text-white px-6 py-12">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-semibold">Study Lab</h1>
+        <p className="mt-2 text-white/70">
+          Ask your faculty tutor anything. Get explanations, examples, and guidance.
+        </p>
 
-          <div className="flex items-center gap-2">
-            <Link
-              href="/university"
-              className="rounded-2xl border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/85 hover:bg-white/15"
-            >
-              Back to Hub →
-            </Link>
-            <Link
-              href="/"
-              className="rounded-2xl border border-white/15 bg-black/40 px-4 py-2 text-sm text-white/85 hover:bg-white/10"
-            >
-              Home →
-            </Link>
-          </div>
-        </div>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask a question…"
+          className="mt-6 w-full rounded-xl bg-black/60 border border-white/15 p-4 text-white"
+        />
 
-        <div className="mt-8">
-          <ArenaTutor faculty={faculty} arena="study-lab" />
+        <button
+          onClick={askTutor}
+          disabled={loading}
+          className="mt-4 rounded-xl bg-white text-black px-6 py-3 font-semibold"
+        >
+          {loading ? "Thinking…" : "Ask Tutor →"}
+        </button>
+
+        {reply && (
+          <div className="mt-6 rounded-xl border border-white/15 bg-white/5 p-4 whitespace-pre-wrap">
+            {reply}
+          </div>
+        )}
+
+        <div className="mt-6 text-sm">
+          <Link href="/university" className="underline">
+            ← Back to University Hub
+          </Link>
         </div>
       </div>
     </div>
