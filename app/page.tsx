@@ -26,6 +26,7 @@ export default function HomePage() {
               “sci-fi assistant” UI for a futuristic experience.
             </p>
 
+            {/* HERO BUTTONS (compact portals) */}
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
@@ -33,23 +34,42 @@ export default function HomePage() {
               >
                 View demo
               </Link>
+
               <Link
                 className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
                 href="/pricing"
               >
                 See pricing
               </Link>
+
               <Link
                 className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
                 href="/robot"
               >
                 Try the sci-fi robot
               </Link>
+
               <Link
                 className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
                 href="/os"
               >
                 Enter Shynvo OS (2050)
+              </Link>
+
+              {/* NEW: University Hub (small button) */}
+              <Link
+                className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+                href="/university"
+              >
+                University Hub →
+              </Link>
+
+              {/* NEW: Experiments Hub (small button) */}
+              <Link
+                className="rounded-xl border border-white/10 bg-black px-5 py-3 font-semibold text-white hover:bg-white/5"
+                href="/experiments"
+              >
+                Experiments (Beta) →
               </Link>
             </div>
 
@@ -115,6 +135,7 @@ export default function HomePage() {
               </p>
             </div>
 
+            {/* Keep this CTA too (optional). It's already a compact button. */}
             <Link
               href="/experiments"
               className="inline-flex rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
@@ -170,17 +191,17 @@ export default function HomePage() {
               <div className="flex items-center justify-between gap-3">
                 <div className="text-lg font-semibold text-white/90">Debate Matrix</div>
                 <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-                  Alpha
+                  Soon
                 </div>
               </div>
 
               <p className="mt-2 text-sm text-white/75">
-                Multi-agent debate to break echo chambers. Arguments mapped for &amp; against.
+                Multi-agent debate to break echo chambers. Arguments mapped for & against.
               </p>
 
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">Experimental logic engine</div>
-                <div className="text-xs text-white/80 group-hover:text-white">Enter →</div>
+                <div className="text-xs text-white/60">Status: planned</div>
+                <div className="text-xs text-white/80 group-hover:text-white">Preview →</div>
               </div>
             </Link>
 
@@ -200,7 +221,7 @@ export default function HomePage() {
               <div className="flex items-center justify-between gap-3">
                 <div className="text-lg font-semibold text-white/90">Chrono Vault</div>
                 <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-                  Alpha
+                  Soon
                 </div>
               </div>
 
@@ -209,8 +230,8 @@ export default function HomePage() {
               </p>
 
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">Narrative timelines • Decision futures</div>
-                <div className="text-xs text-white/80 group-hover:text-white">Enter →</div>
+                <div className="text-xs text-white/60">Status: planned</div>
+                <div className="text-xs text-white/80 group-hover:text-white">Preview →</div>
               </div>
             </Link>
 
@@ -262,67 +283,6 @@ export default function HomePage() {
             <Card title="Companies">
               Team upskilling plans, skill matrix, admin analytics + seats.
             </Card>
-          </div>
-        </section>
-
-        {/* UNIVERSITY HUB */}
-        <section className="mt-16 rounded-3xl border border-white/10 bg-neutral-950 p-8">
-          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">University Hub</h2>
-              <p className="mt-2 text-white/70">
-                AI-powered study, exams, and career prep — adapted to every faculty.
-              </p>
-            </div>
-
-            <Link className="text-sm text-white/70 underline hover:text-white" href="/university">
-              Enter University Hub →
-            </Link>
-          </div>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-black p-6">
-              <div className="text-lg font-semibold text-white">All faculties</div>
-              <div className="mt-2 text-sm text-white/60">
-                STEM &amp; IT, Business &amp; Economics, Medicine &amp; Health, Law &amp; Social
-                Sciences, Arts &amp; Humanities, Education, and Custom tracks.
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-white/10 bg-black p-6">
-              <div className="text-lg font-semibold text-white">4 core arenas</div>
-              <div className="mt-2 text-sm text-white/60">
-                Study Lab, Exam Arena, Concept Forge, Career Launchpad — same structure, faculty-tuned
-                prompts.
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-white/10 bg-black p-6">
-              <div className="text-lg font-semibold text-white">Fast start</div>
-              <div className="mt-2 text-sm text-white/60">
-                Pick your faculty and start practicing in minutes. No setup, no friction.
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              href="/university"
-              className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
-            >
-              Enter University Hub →
-            </Link>
-
-            <Link
-              href="/experiments"
-              className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
-            >
-              Explore Experiments (Beta) →
-            </Link>
-          </div>
-
-          <div className="mt-3 text-xs text-white/50">
-            University Hub is structured + practical. Experiments are immersive AI universes.
           </div>
         </section>
 
@@ -480,7 +440,15 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+function Step({
+  n,
+  title,
+  children,
+}: {
+  n: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="flex items-center gap-3">
