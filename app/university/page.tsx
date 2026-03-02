@@ -18,9 +18,8 @@ type Arena = {
   id: ArenaId;
   title: string;
   desc: string;
-  href: string; // IMPORTANT: real route
   cta: string;
-  badge: string;
+  href: string;
 };
 
 type Faculty = {
@@ -75,33 +74,29 @@ export default function UniversityHubPage() {
             id: "study",
             title: "Study Lab",
             desc: "Turn lectures + notes into mastery loops: explanations → drills → recall.",
-            href: "/university/study-lab",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=stem-it",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
-            desc: "Timed reasoning + applied problem-solving. Train speed and accuracy.",
-            href: "/university/exam-arena",
+            desc: "Timed practice + grading to improve speed, accuracy, and exam performance.",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=stem-it",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
             desc: "Visualize systems and dependencies: architectures, formulas, modules.",
-            href: "/university/concept-forge",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=stem-it",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
             desc: "Interview prep: coding prompts, system design, internship readiness.",
-            href: "/university/career-launchpad",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=stem-it",
           },
         },
       },
@@ -116,33 +111,29 @@ export default function UniversityHubPage() {
             id: "study",
             title: "Study Lab",
             desc: "Understand models and frameworks with examples and micro-drills.",
-            href: "/university/study-lab",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=business",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
             desc: "Case questions + calculations + structured reasoning under time.",
-            href: "/university/exam-arena",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=business",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
             desc: "Map incentives, flows, and strategic relationships.",
-            href: "/university/concept-forge",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=business",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
             desc: "Prep for consulting/finance/startups: interviews + skill gap guidance.",
-            href: "/university/career-launchpad",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=business",
           },
         },
       },
@@ -156,34 +147,30 @@ export default function UniversityHubPage() {
           study: {
             id: "study",
             title: "Study Lab",
-            desc: "Spaced recall + explanations for pathways, symptoms, mechanisms.",
-            href: "/university/study-lab",
+            desc: "Spaced recall + explanations for pathways, symptoms, and mechanisms.",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=medicine",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
             desc: "Clinical prompts: recall + application with feedback on reasoning.",
-            href: "/university/exam-arena",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=medicine",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
             desc: "Visualize body systems and causal chains (why symptoms appear).",
-            href: "/university/concept-forge",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=medicine",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
             desc: "Placement readiness + reflective decision prompts for specialization.",
-            href: "/university/career-launchpad",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=medicine",
           },
         },
       },
@@ -197,34 +184,30 @@ export default function UniversityHubPage() {
           study: {
             id: "study",
             title: "Study Lab",
-            desc: "Structured summaries and drills for cases, theories, legal logic.",
-            href: "/university/study-lab",
+            desc: "Structured summaries and drills for cases, theories, and legal logic.",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=law-social",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
             desc: "Issue spotting + argument building + writing structure practice.",
-            href: "/university/exam-arena",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=law-social",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
             desc: "Map arguments and contradictions to sharpen reasoning.",
-            href: "/university/concept-forge",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=law-social",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
-            desc: "Clerkships/firms/research/policy roles — interview prep + direction.",
-            href: "/university/career-launchpad",
+            desc: "Clerkships/firms/research/policy — interview prep + direction.",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=law-social",
           },
         },
       },
@@ -238,34 +221,30 @@ export default function UniversityHubPage() {
           study: {
             id: "study",
             title: "Study Lab",
-            desc: "Interpret texts and ideas with guided prompts + synthesis practice.",
-            href: "/university/study-lab",
+            desc: "Guided analysis for texts, theories, and creative frameworks.",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=arts-humanities",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
-            desc: "Essay structure, analysis depth, and clarity drills with feedback.",
-            href: "/university/exam-arena",
+            desc: "Essay structure + interpretation practice with clarity feedback.",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=arts-humanities",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
-            desc: "Map themes, movements, and conceptual evolution across time.",
-            href: "/university/concept-forge",
+            desc: "Map themes, movements, and conceptual evolution across eras.",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=arts-humanities",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
-            desc: "Portfolio story, interviews, and direction for creative/academic paths.",
-            href: "/university/career-launchpad",
+            desc: "Portfolio story + interviews for creative/academic paths.",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=arts-humanities",
           },
         },
       },
@@ -280,33 +259,29 @@ export default function UniversityHubPage() {
             id: "study",
             title: "Study Lab",
             desc: "Scenario-based learning: methods, theory, classroom strategies.",
-            href: "/university/study-lab",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=education",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
             desc: "Lesson planning + classroom tradeoffs under constraints.",
-            href: "/university/exam-arena",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=education",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
             desc: "Map learning theories into real teaching decisions.",
-            href: "/university/concept-forge",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=education",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
             desc: "Certification readiness + interview practice for placements.",
-            href: "/university/career-launchpad",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=education",
           },
         },
       },
@@ -321,33 +296,29 @@ export default function UniversityHubPage() {
             id: "study",
             title: "Study Lab",
             desc: "Combine subjects into one learning flow. Your goals drive the structure.",
-            href: "/university/study-lab",
             cta: "Open Study Lab →",
-            badge: "Faculty-tuned",
+            href: "/university/study-lab?faculty=custom",
           },
           exam: {
             id: "exam",
             title: "Exam Arena",
             desc: "Cross-domain reasoning drills with clarity feedback.",
-            href: "/university/exam-arena",
             cta: "Enter Exam Arena →",
-            badge: "Timed",
+            href: "/university/exam-arena?faculty=custom",
           },
           concept: {
             id: "concept",
             title: "Concept Forge",
             desc: "Merge ideas across disciplines to find patterns and insight.",
-            href: "/university/concept-forge",
             cta: "Launch Concept Forge →",
-            badge: "Visual",
+            href: "/university/concept-forge?faculty=custom",
           },
           career: {
             id: "career",
             title: "Career Launchpad",
-            desc: "Nonlinear paths + emerging roles — sharpen narrative and readiness.",
-            href: "/university/career-launchpad",
+            desc: "Nonlinear paths + emerging roles — sharpen your narrative and readiness.",
             cta: "Open Launchpad →",
-            badge: "Career",
+            href: "/university/career-launchpad?faculty=custom",
           },
         },
       },
@@ -358,7 +329,7 @@ export default function UniversityHubPage() {
   const [active, setActive] = useState<FacultyId>("stem-it");
   const faculty = faculties.find((f) => f.id === active) ?? faculties[0];
 
-  const withFaculty = (href: string) => `${href}?faculty=${active}`;
+  const arenas = [faculty.arenas.study, faculty.arenas.exam, faculty.arenas.concept, faculty.arenas.career];
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -376,6 +347,7 @@ export default function UniversityHubPage() {
           }}
         />
         <div className="absolute inset-0 opacity-[0.10] [background-image:radial-gradient(rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:18px_18px]" />
+        <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:46px_46px]" />
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl px-6 py-12">
@@ -384,8 +356,7 @@ export default function UniversityHubPage() {
             <div className="text-xs tracking-widest text-white/70">UNIVERSITY HUB</div>
             <h1 className="mt-2 text-4xl font-semibold text-white">Study environments for every faculty</h1>
             <p className="mt-3 max-w-2xl text-white/70">
-              Pick a faculty. Shynvo adapts examples, prompts, and drills — using the same 4 arenas:
-              Study, Exam, Concept, Career.
+              Pick a faculty. Shynvo adapts examples, prompts, and drills — using the same 4 arenas: Study, Exam, Concept, Career.
             </p>
           </div>
 
@@ -452,36 +423,33 @@ export default function UniversityHubPage() {
           </div>
         </div>
 
-        {/* CLICKABLE ARENAS */}
         <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {(["study", "exam", "concept", "career"] as ArenaId[]).map((id) => {
-            const a = faculty.arenas[id];
-            return (
-              <Link key={id} href={withFaculty(a.href)} className={CARD}>
-                <Glow a={`${faculty.accent}33`} b="rgba(255,255,255,0.08)" c="rgba(0,0,0,0.00)" />
-                <div className="relative">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-xl font-semibold text-white">{a.title}</div>
-                      <div className="mt-1 text-sm text-white/70">{a.desc}</div>
-                    </div>
-                    <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
-                      {a.badge}
-                    </div>
+          {arenas.map((a) => (
+            <Link key={a.id} href={a.href} className={CARD}>
+              <Glow a={`${faculty.accent}33`} b="rgba(255,255,255,0.08)" c="rgba(0,0,0,0.00)" />
+              <div className="relative">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-xl font-semibold text-white">{a.title}</div>
+                    <div className="mt-1 text-sm text-white/70">{a.desc}</div>
                   </div>
-
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="text-xs text-white/60">Open the environment</div>
-                    <div className="text-sm text-white/85 group-hover:text-white">{a.cta}</div>
+                  <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
+                    Open
                   </div>
                 </div>
-              </Link>
-            );
-          })}
+
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="text-xs text-white/60">Open the environment</div>
+                  <div className="text-sm text-white/85 group-hover:text-white">{a.cta}</div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
 
+        {/* Professional footer (no “404”, no “cinematic” copy) */}
         <div className="mt-10 text-center text-xs text-white/45">
-          University Hub is structured • Each environment is its own page (no more 404)
+          University Hub • Faculty-tuned environments • Practice, feedback, and guided tutoring
         </div>
       </div>
     </div>
