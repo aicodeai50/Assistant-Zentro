@@ -127,7 +127,7 @@ export default function HomePage() {
             {/* Thought Forge */}
             <Link
               href="/experiments/thought-forge"
-              className="group rounded-3xl border border-white/10 p-6 hover:brightness-110 transition"
+              className="group rounded-3xl border border-white/10 p-6 transition hover:brightness-110"
               style={{
                 background: `
                   radial-gradient(800px circle at 20% 20%, rgba(34,211,238,0.18), transparent 55%),
@@ -157,7 +157,7 @@ export default function HomePage() {
             {/* Debate Matrix */}
             <Link
               href="/experiments/debate-matrix"
-              className="group rounded-3xl border border-white/10 p-6 hover:brightness-110 transition"
+              className="group rounded-3xl border border-white/10 p-6 transition hover:brightness-110"
               style={{
                 background: `
                   radial-gradient(850px circle at 18% 22%, rgba(244,114,182,0.16), transparent 55%),
@@ -170,24 +170,24 @@ export default function HomePage() {
               <div className="flex items-center justify-between gap-3">
                 <div className="text-lg font-semibold text-white/90">Debate Matrix</div>
                 <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-                  Soon
+                  Alpha
                 </div>
               </div>
 
               <p className="mt-2 text-sm text-white/75">
-                Multi-agent debate to break echo chambers. Arguments mapped for & against.
+                Multi-agent debate to break echo chambers. Arguments mapped for &amp; against.
               </p>
 
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">Status: planned</div>
-                <div className="text-xs text-white/80 group-hover:text-white">Preview →</div>
+                <div className="text-xs text-white/60">Experimental logic engine</div>
+                <div className="text-xs text-white/80 group-hover:text-white">Enter →</div>
               </div>
             </Link>
 
             {/* Chrono Vault */}
             <Link
               href="/experiments/chrono-vault"
-              className="group rounded-3xl border border-white/10 p-6 hover:brightness-110 transition"
+              className="group rounded-3xl border border-white/10 p-6 transition hover:brightness-110"
               style={{
                 background: `
                   radial-gradient(900px circle at 22% 25%, rgba(34,211,238,0.16), transparent 55%),
@@ -200,7 +200,7 @@ export default function HomePage() {
               <div className="flex items-center justify-between gap-3">
                 <div className="text-lg font-semibold text-white/90">Chrono Vault</div>
                 <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-                  Soon
+                  Alpha
                 </div>
               </div>
 
@@ -209,15 +209,15 @@ export default function HomePage() {
               </p>
 
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">Status: planned</div>
-                <div className="text-xs text-white/80 group-hover:text-white">Preview →</div>
+                <div className="text-xs text-white/60">Narrative timelines • Decision futures</div>
+                <div className="text-xs text-white/80 group-hover:text-white">Enter →</div>
               </div>
             </Link>
 
             {/* Beta notes */}
             <Link
-              href="/experiments#beta-notes"
-              className="group rounded-3xl border border-white/10 p-6 hover:brightness-110 transition"
+              href="/experiments/beta-notes"
+              className="group rounded-3xl border border-white/10 p-6 transition hover:brightness-110"
               style={{
                 background: `
                   radial-gradient(900px circle at 18% 25%, rgba(99,102,241,0.16), transparent 55%),
@@ -262,6 +262,67 @@ export default function HomePage() {
             <Card title="Companies">
               Team upskilling plans, skill matrix, admin analytics + seats.
             </Card>
+          </div>
+        </section>
+
+        {/* UNIVERSITY HUB */}
+        <section className="mt-16 rounded-3xl border border-white/10 bg-neutral-950 p-8">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">University Hub</h2>
+              <p className="mt-2 text-white/70">
+                AI-powered study, exams, and career prep — adapted to every faculty.
+              </p>
+            </div>
+
+            <Link className="text-sm text-white/70 underline hover:text-white" href="/university">
+              Enter University Hub →
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-3xl border border-white/10 bg-black p-6">
+              <div className="text-lg font-semibold text-white">All faculties</div>
+              <div className="mt-2 text-sm text-white/60">
+                STEM &amp; IT, Business &amp; Economics, Medicine &amp; Health, Law &amp; Social
+                Sciences, Arts &amp; Humanities, Education, and Custom tracks.
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-black p-6">
+              <div className="text-lg font-semibold text-white">4 core arenas</div>
+              <div className="mt-2 text-sm text-white/60">
+                Study Lab, Exam Arena, Concept Forge, Career Launchpad — same structure, faculty-tuned
+                prompts.
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-black p-6">
+              <div className="text-lg font-semibold text-white">Fast start</div>
+              <div className="mt-2 text-sm text-white/60">
+                Pick your faculty and start practicing in minutes. No setup, no friction.
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/university"
+              className="rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
+            >
+              Enter University Hub →
+            </Link>
+
+            <Link
+              href="/experiments"
+              className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10"
+            >
+              Explore Experiments (Beta) →
+            </Link>
+          </div>
+
+          <div className="mt-3 text-xs text-white/50">
+            University Hub is structured + practical. Experiments are immersive AI universes.
           </div>
         </section>
 
@@ -419,15 +480,7 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function Step({
-  n,
-  title,
-  children,
-}: {
-  n: string;
-  title: string;
-  children: React.ReactNode;
-}) {
+function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-3xl border border-white/10 bg-black p-6">
       <div className="flex items-center gap-3">

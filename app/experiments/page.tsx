@@ -3,15 +3,7 @@ import Link from "next/link";
 const CARD =
   "group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 p-6 backdrop-blur-xl transition hover:bg-white/10";
 
-function Glow({
-  a,
-  b,
-  c,
-}: {
-  a: string;
-  b: string;
-  c: string;
-}) {
+function Glow({ a, b, c }: { a: string; b: string; c: string }) {
   return (
     <div
       className="pointer-events-none absolute inset-0 opacity-80"
@@ -65,13 +57,20 @@ export default function ExperimentsHubPage() {
       <div className="mt-10 grid gap-4 md:grid-cols-2">
         {/* Thought Forge */}
         <Link href="/experiments/thought-forge" className={CARD}>
-          <Glow a="rgba(163,230,53,0.35)" b="rgba(34,211,238,0.20)" c="rgba(16,185,129,0.15)" />
+          <Glow
+            a="rgba(163,230,53,0.35)"
+            b="rgba(34,211,238,0.20)"
+            c="rgba(16,185,129,0.15)"
+          />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-xl font-semibold text-white">Thought Forge</div>
+                <div className="text-xl font-semibold text-white">
+                  Thought Forge
+                </div>
                 <div className="mt-1 text-sm text-white/70">
-                  A living concept graph. Seed a thought, click nodes, and expand meaning visually.
+                  A living concept graph. Seed a thought, click nodes, and
+                  expand meaning visually.
                 </div>
               </div>
               <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
@@ -92,13 +91,20 @@ export default function ExperimentsHubPage() {
 
         {/* Debate Matrix */}
         <Link href="/experiments/debate-matrix" className={CARD}>
-          <Glow a="rgba(180,120,255,0.28)" b="rgba(255,120,180,0.20)" c="rgba(120,200,255,0.14)" />
+          <Glow
+            a="rgba(180,120,255,0.28)"
+            b="rgba(255,120,180,0.20)"
+            c="rgba(120,200,255,0.14)"
+          />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-xl font-semibold text-white">Debate Matrix</div>
+                <div className="text-xl font-semibold text-white">
+                  Debate Matrix
+                </div>
                 <div className="mt-1 text-sm text-white/70">
-                  Multi-agent debate to break echo chambers. Arguments mapped for & against.
+                  Multi-agent debate to break echo chambers. Arguments mapped
+                  for &amp; against.
                 </div>
               </div>
               <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
@@ -119,13 +125,20 @@ export default function ExperimentsHubPage() {
 
         {/* Chrono Vault */}
         <Link href="/experiments/chrono-vault" className={CARD}>
-          <Glow a="rgba(120,255,220,0.20)" b="rgba(120,180,255,0.20)" c="rgba(255,180,120,0.12)" />
+          <Glow
+            a="rgba(120,255,220,0.20)"
+            b="rgba(120,180,255,0.20)"
+            c="rgba(255,180,120,0.12)"
+          />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-xl font-semibold text-white">Chrono Vault</div>
+                <div className="text-xl font-semibold text-white">
+                  Chrono Vault
+                </div>
                 <div className="mt-1 text-sm text-white/70">
-                  Future-self simulation with branching timelines and reflective guidance.
+                  Future-self simulation with branching timelines and reflective
+                  guidance.
                 </div>
               </div>
               <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
@@ -146,11 +159,17 @@ export default function ExperimentsHubPage() {
 
         {/* Beta Notes */}
         <Link href="/experiments/beta-notes" className={CARD}>
-          <Glow a="rgba(255,180,120,0.18)" b="rgba(180,120,255,0.18)" c="rgba(120,200,255,0.12)" />
+          <Glow
+            a="rgba(255,180,120,0.18)"
+            b="rgba(180,120,255,0.18)"
+            c="rgba(120,200,255,0.12)"
+          />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-xs tracking-widest text-white/70">BETA NOTES</div>
+                <div className="text-xs tracking-widest text-white/70">
+                  BETA NOTES
+                </div>
                 <div className="mt-2 text-sm text-white/75">
                   • v0.2 Canvas stability + build fixes
                   <br />
