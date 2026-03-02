@@ -551,4 +551,4 @@ export default function UniversityHubPage() {
       </div>
     </div>
   );
-}
+  }
