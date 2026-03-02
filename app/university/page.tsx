@@ -25,7 +25,7 @@ type Faculty = {
   id: FacultyId;
   name: string;
   tagline: string;
-  accent: string; // used for glow + chips
+  accent: string;
   includes: string[];
   arenas: Record<ArenaId, Arena>;
 };
@@ -59,6 +59,10 @@ function Chip({ text, accent }: { text: string; accent: string }) {
   );
 }
 
+function arenaHref(faculty: FacultyId, arena: ArenaId) {
+  return `/university/${arena}?faculty=${encodeURIComponent(faculty)}`;
+}
+
 export default function UniversityHubPage() {
   const faculties: Faculty[] = useMemo(
     () => [
@@ -69,30 +73,10 @@ export default function UniversityHubPage() {
         accent: "#22D3EE",
         includes: ["CS", "IT", "Engineering", "Data", "AI", "Cybersecurity", "Math"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Break down formulas, algorithms, systems, and problem sets into mastery loops.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Timed reasoning, coding logic, calculations, and applied problem solving under pressure.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Visualize dependencies: architectures, modules, equations, and cause-effect systems.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Tech interviews, system design prompts, and role readiness for internships & jobs.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Turn lectures + notes into mastery loops: explanations → drills → recall.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Timed reasoning + applied problem-solving. Train speed and accuracy.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Visualize systems and dependencies: architectures, formulas, modules.", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Interview prep: coding prompts, system design, internship readiness.", cta: "Open Launchpad →" },
         },
       },
       {
@@ -102,30 +86,10 @@ export default function UniversityHubPage() {
         accent: "#A3E635",
         includes: ["Finance", "Accounting", "Management", "Marketing", "Economics", "Strategy"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Understand frameworks, models, and market logic with clear explanations and drills.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Case-style questions, calculations, and structured decision tradeoffs with feedback.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Map incentives, flows, and strategic relationships to see the business system clearly.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Interview prep for consulting/finance/startups + role-aligned skill gap guidance.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Understand models and frameworks with examples and micro-drills.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Case questions + calculations + structured reasoning under time.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Map incentives, flows, and strategic relationships.", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Prep for consulting/finance/startups: interviews + skill gap guidance.", cta: "Open Launchpad →" },
         },
       },
       {
@@ -135,30 +99,10 @@ export default function UniversityHubPage() {
         accent: "#FB7185",
         includes: ["Medicine", "Nursing", "Pharmacy", "Public Health", "Biology", "Physiology"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Memorize pathways, symptoms, and mechanisms with spaced recall and explanations.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Clinical-style prompts: recall + application under pressure with clarity feedback.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Visualize body systems and causal chains: why symptoms appear and what shifts them.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Residency/placement readiness + reflective reasoning prompts to strengthen decisions.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Spaced recall + explanations for pathways, symptoms, mechanisms.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Clinical prompts: recall + application with feedback on reasoning.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Visualize body systems and causal chains (why symptoms appear).", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Placement readiness + reflective decision prompts for specialization.", cta: "Open Launchpad →" },
         },
       },
       {
@@ -168,30 +112,10 @@ export default function UniversityHubPage() {
         accent: "#B48CFF",
         includes: ["Law", "Politics", "Sociology", "Psychology", "IR", "Public Policy"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Understand cases, theories, and legal logic with structured summaries and drills.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Issue spotting, argument building, and written answer structure with scoring.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Map arguments, positions, and contradictions to sharpen reasoning and reduce bias.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Clerkships, firms, research and policy roles — prep interviews and clarity of direction.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Structured summaries and drills for cases, theories, legal logic.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Issue spotting + argument building + writing structure practice.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Map arguments and contradictions to sharpen reasoning.", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Clerkships, firms, research/policy roles — interview prep + direction.", cta: "Open Launchpad →" },
         },
       },
       {
@@ -201,30 +125,10 @@ export default function UniversityHubPage() {
         accent: "#38BDF8",
         includes: ["Philosophy", "Literature", "History", "Design", "Media", "Languages"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Analyze texts, theories, and creative frameworks with guided prompts and synthesis.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Essay structure, interpretation practice, critique depth — with feedback for clarity.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Map themes, movements, and conceptual evolution across authors, eras, and theories.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Creative, academic, and cultural paths — portfolios, interviews, and story clarity.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Guided prompts for analysis, synthesis, and clarity of interpretation.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Essay structure + critique depth + clarity feedback.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Map themes, movements, and conceptual evolution across eras.", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Portfolio + interview readiness for creative/academic/cultural paths.", cta: "Open Launchpad →" },
         },
       },
       {
@@ -234,30 +138,10 @@ export default function UniversityHubPage() {
         accent: "#34D399",
         includes: ["Teaching", "Pedagogy", "Curriculum", "Learning Science", "Assessment"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Learn methods, theory, and classroom strategies with scenario-based practice.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Plan lessons and handle classroom tradeoffs under constraints with feedback.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Map learning theories and student-centered models into real teaching decisions.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Certification readiness + interview practice for teaching roles and school placements.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Scenario-based learning: methods, theory, classroom strategies.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Lesson planning + classroom tradeoffs under constraints.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Map learning theories into real teaching decisions.", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Certification readiness + interview practice for placements.", cta: "Open Launchpad →" },
         },
       },
       {
@@ -267,30 +151,10 @@ export default function UniversityHubPage() {
         accent: "#F59E0B",
         includes: ["Mix your fields", "Create your own track", "Cross-domain synthesis"],
         arenas: {
-          study: {
-            id: "study",
-            title: "Study Lab",
-            desc: "Combine subjects into one learning flow. Your goals decide the structure.",
-            cta: "Open Study Lab →",
-          },
-          exam: {
-            id: "exam",
-            title: "Exam Arena",
-            desc: "Cross-domain reasoning and synthesis drills — get feedback on clarity and logic.",
-            cta: "Enter Exam Arena →",
-          },
-          concept: {
-            id: "concept",
-            title: "Concept Forge",
-            desc: "Merge ideas across disciplines to find patterns, links, and deeper insight.",
-            cta: "Launch Concept Forge →",
-          },
-          career: {
-            id: "career",
-            title: "Career Launchpad",
-            desc: "Nonlinear paths, emerging roles, and narrative clarity for your unique profile.",
-            cta: "Open Launchpad →",
-          },
+          study: { id: "study", title: "Study Lab", desc: "Combine subjects into one learning flow. Your goals drive the structure.", cta: "Open Study Lab →" },
+          exam: { id: "exam", title: "Exam Arena", desc: "Cross-domain reasoning drills with clarity feedback.", cta: "Enter Exam Arena →" },
+          concept: { id: "concept", title: "Concept Forge", desc: "Merge ideas across disciplines to find patterns and insight.", cta: "Launch Concept Forge →" },
+          career: { id: "career", title: "Career Launchpad", desc: "Nonlinear paths + emerging roles — sharpen your narrative and readiness.", cta: "Open Launchpad →" },
         },
       },
     ],
@@ -302,7 +166,7 @@ export default function UniversityHubPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* soft universe background */}
+      {/* background */}
       <div className="pointer-events-none fixed inset-0">
         <div
           className="absolute inset-0"
@@ -324,15 +188,13 @@ export default function UniversityHubPage() {
         {/* Header */}
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div>
-            <div className="text-xs tracking-widest text-white/70">
-              UNIVERSITY HUB
-            </div>
+            <div className="text-xs tracking-widest text-white/70">UNIVERSITY HUB</div>
             <h1 className="mt-2 text-4xl font-semibold text-white">
               Study environments for every faculty
             </h1>
             <p className="mt-3 max-w-2xl text-white/70">
-              Choose your faculty. Shynvo adapts the prompts, examples, and
-              practice loops — while keeping the same 4 core arenas.
+              Pick a faculty. Shynvo adapts examples, prompts, and drills — using the same 4 arenas:
+              Study, Exam, Concept, Career.
             </p>
           </div>
 
@@ -352,14 +214,11 @@ export default function UniversityHubPage() {
           </div>
         </div>
 
-        {/* Faculty selector */}
+        {/* selector */}
         <div className="mt-10 rounded-3xl border border-white/15 bg-black/35 p-5 backdrop-blur-xl">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="text-sm text-white/80">
-              Select faculty
-              <span className="ml-2 text-xs text-white/50">
-                (changes subtitles + examples)
-              </span>
+              Select faculty <span className="ml-2 text-xs text-white/50">(changes the environment)</span>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -376,11 +235,7 @@ export default function UniversityHubPage() {
                         ? "border-white/25 bg-white/15 text-white"
                         : "border-white/15 bg-white/5 text-white/70 hover:bg-white/10",
                     ].join(" ")}
-                    style={
-                      isActive
-                        ? { boxShadow: `0 0 24px ${f.accent}2A` }
-                        : undefined
-                    }
+                    style={isActive ? { boxShadow: `0 0 24px ${f.accent}2A` } : undefined}
                   >
                     {f.name}
                   </button>
@@ -392,9 +247,7 @@ export default function UniversityHubPage() {
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
               <div className="text-xs tracking-widest text-white/60">FACULTY</div>
-              <div className="mt-1 text-lg font-semibold text-white">
-                {faculty.name}
-              </div>
+              <div className="mt-1 text-lg font-semibold text-white">{faculty.name}</div>
               <div className="mt-1 text-sm text-white/70">{faculty.tagline}</div>
             </div>
 
@@ -409,146 +262,89 @@ export default function UniversityHubPage() {
           </div>
         </div>
 
-        {/* Arenas */}
+        {/* arenas (NOW THEY OPEN PAGES) */}
         <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {/* Study Lab */}
-          <div className={CARD}>
-            <Glow
-              a={`${faculty.accent}33`}
-              b="rgba(255,255,255,0.08)"
-              c="rgba(0,0,0,0.00)"
-            />
+          <Link href={arenaHref(faculty.id, "study")} className={CARD}>
+            <Glow a={`${faculty.accent}33`} b="rgba(255,255,255,0.08)" c="rgba(0,0,0,0.00)" />
             <div className="relative">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xl font-semibold text-white">
-                    {faculty.arenas.study.title}
-                  </div>
-                  <div className="mt-1 text-sm text-white/70">
-                    {faculty.arenas.study.desc}
-                  </div>
+                  <div className="text-xl font-semibold text-white">{faculty.arenas.study.title}</div>
+                  <div className="mt-1 text-sm text-white/70">{faculty.arenas.study.desc}</div>
                 </div>
                 <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
                   Faculty-tuned
                 </div>
               </div>
-
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">
-                  Notes → drills → recall → mastery
-                </div>
-                <div className="text-sm text-white/85 group-hover:text-white">
-                  {faculty.arenas.study.cta}
-                </div>
+                <div className="text-xs text-white/60">Notes → drills → recall → mastery</div>
+                <div className="text-sm text-white/85 group-hover:text-white">{faculty.arenas.study.cta}</div>
               </div>
             </div>
-          </div>
+          </Link>
 
-          {/* Exam Arena */}
-          <div className={CARD}>
-            <Glow
-              a="rgba(255,255,255,0.10)"
-              b={`${faculty.accent}2A`}
-              c="rgba(0,0,0,0.00)"
-            />
+          <Link href={arenaHref(faculty.id, "exam")} className={CARD}>
+            <Glow a="rgba(255,255,255,0.10)" b={`${faculty.accent}2A`} c="rgba(0,0,0,0.00)" />
             <div className="relative">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xl font-semibold text-white">
-                    {faculty.arenas.exam.title}
-                  </div>
-                  <div className="mt-1 text-sm text-white/70">
-                    {faculty.arenas.exam.desc}
-                  </div>
+                  <div className="text-xl font-semibold text-white">{faculty.arenas.exam.title}</div>
+                  <div className="mt-1 text-sm text-white/70">{faculty.arenas.exam.desc}</div>
                 </div>
                 <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
                   Timed
                 </div>
               </div>
-
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">
-                  Practice under pressure
-                </div>
-                <div className="text-sm text-white/85 group-hover:text-white">
-                  {faculty.arenas.exam.cta}
-                </div>
+                <div className="text-xs text-white/60">Practice under pressure</div>
+                <div className="text-sm text-white/85 group-hover:text-white">{faculty.arenas.exam.cta}</div>
               </div>
             </div>
-          </div>
+          </Link>
 
-          {/* Concept Forge */}
-          <div className={CARD}>
-            <Glow
-              a="rgba(120,180,255,0.16)"
-              b={`${faculty.accent}24`}
-              c="rgba(180,140,255,0.14)"
-            />
+          <Link href={arenaHref(faculty.id, "concept")} className={CARD}>
+            <Glow a="rgba(120,180,255,0.16)" b={`${faculty.accent}24`} c="rgba(180,140,255,0.14)" />
             <div className="relative">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xl font-semibold text-white">
-                    {faculty.arenas.concept.title}
-                  </div>
-                  <div className="mt-1 text-sm text-white/70">
-                    {faculty.arenas.concept.desc}
-                  </div>
+                  <div className="text-xl font-semibold text-white">{faculty.arenas.concept.title}</div>
+                  <div className="mt-1 text-sm text-white/70">{faculty.arenas.concept.desc}</div>
                 </div>
                 <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
                   Visual
                 </div>
               </div>
-
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">
-                  Relationships → clarity
-                </div>
-                <div className="text-sm text-white/85 group-hover:text-white">
-                  {faculty.arenas.concept.cta}
-                </div>
+                <div className="text-xs text-white/60">Relationships → clarity</div>
+                <div className="text-sm text-white/85 group-hover:text-white">{faculty.arenas.concept.cta}</div>
               </div>
             </div>
-          </div>
+          </Link>
 
-          {/* Career Launchpad */}
-          <div className={CARD}>
-            <Glow
-              a="rgba(255,180,120,0.12)"
-              b={`${faculty.accent}22`}
-              c="rgba(34,211,238,0.10)"
-            />
+          <Link href={arenaHref(faculty.id, "career")} className={CARD}>
+            <Glow a="rgba(255,180,120,0.12)" b={`${faculty.accent}22`} c="rgba(34,211,238,0.10)" />
             <div className="relative">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xl font-semibold text-white">
-                    {faculty.arenas.career.title}
-                  </div>
-                  <div className="mt-1 text-sm text-white/70">
-                    {faculty.arenas.career.desc}
-                  </div>
+                  <div className="text-xl font-semibold text-white">{faculty.arenas.career.title}</div>
+                  <div className="mt-1 text-sm text-white/70">{faculty.arenas.career.desc}</div>
                 </div>
                 <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
                   Career
                 </div>
               </div>
-
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-xs text-white/60">
-                  Role readiness → next steps
-                </div>
-                <div className="text-sm text-white/85 group-hover:text-white">
-                  {faculty.arenas.career.cta}
-                </div>
+                <div className="text-xs text-white/60">Role readiness → next steps</div>
+                <div className="text-sm text-white/85 group-hover:text-white">{faculty.arenas.career.cta}</div>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
 
-        {/* Footer note */}
         <div className="mt-10 text-center text-xs text-white/45">
-          University Hub is a structured environment • Experiments remain separate
+          Tip: choose a faculty → open an arena → follow the steps on the arena page.
         </div>
       </div>
     </div>
   );
-  }
+}
