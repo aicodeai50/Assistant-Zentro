@@ -2,80 +2,109 @@
 
 import { useState } from "react";
 import { api } from "@/lib/api";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setBusy(true);
+    setError(null);
+
+    const em = email.trim().toLowerCase();
+    if (!em) return setError("Email required");
+    if (password.length < 8) return setError("Password must be at least 8 characters");
+
+    setLoading(true);
     try {
-      const res = await api("/auth/register", {
+      await api("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email: em,
+          password,
+          name: name.trim() || undefined,
+        }),
       });
 
-      if (!res.ok) {
-        setError(res.error || "Signup failed");
-        return;
-      }
-
       router.push("/dashboard");
+    } catch (err: any) {
+      setError(err?.message || "Signup failed");
     } finally {
-      setBusy(false);
+      setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-[#05070A] text-white flex items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
-        <div className="text-xs tracking-[0.22em] text-white/50">SHYNVO</div>
-        <h1 className="mt-2 text-2xl font-semibold">Start your 7-day trial</h1>
-        <p className="mt-1 text-sm text-white/60">
-          Create an account. Upgrade after trial ends to keep using Shynvo.
-        </p>
+    <div className="min-h-screen bg-black text-white px-4 py-10">
+      <div className="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h1 className="text-2xl font-semibold">Create account</h1>
+        <p className="mt-1 text-sm text-white/70">Start your 7-day trial.</p>
 
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-          <input
-            className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none focus:border-white/20"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-          />
-          <input
-            className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none focus:border-white/20"
-            placeholder="Password (min 8 chars)"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="new-password"
-          />
+          <div>
+            <label className="text-sm text-white/80">Name (optional)</label>
+            <input
+              className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 px-3 py-2 outline-none"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
+            />
+          </div>
 
-          {error ? <div className="text-sm text-red-400">{error}</div> : null}
+          <div>
+            <label className="text-sm text-white/80">Email</label>
+            <input
+              className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 px-3 py-2 outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              inputMode="email"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm text-white/80">Password</label>
+            <input
+              className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 px-3 py-2 outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              autoComplete="new-password"
+              placeholder="At least 8 characters"
+            />
+            <p className="mt-1 text-xs text-white/60">
+              Any password is allowed — just minimum 8 characters.
+            </p>
+          </div>
+
+          {error ? (
+            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm">
+              {error}
+            </div>
+          ) : null}
 
           <button
-            disabled={busy}
-            className="w-full rounded-xl bg-white text-black py-3 font-medium hover:opacity-90 disabled:opacity-60"
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-white text-black py-2 font-medium disabled:opacity-60"
           >
-            {busy ? "Creating..." : "Create account"}
+            {loading ? "Creating..." : "Create account"}
           </button>
         </form>
 
-        <div className="mt-5 text-sm text-white/60">
+        <p className="mt-4 text-sm text-white/70">
           Already have an account?{" "}
-          <Link className="text-white underline underline-offset-4" href="/login">
-            Login
+          <Link className="text-white underline" href="/login">
+            Sign in
           </Link>
-        </div>
+        </p>
       </div>
-    </main>
+    </div>
   );
 }
