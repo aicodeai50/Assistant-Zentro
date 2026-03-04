@@ -1,25 +1,20 @@
-"use client";
-
-import SiteNav from "@/components/SiteNav";
-import SiteFooter from "@/components/SiteFooter";
-
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <SiteNav />
-      <main className="mx-auto max-w-4xl px-6 py-14">
-        <h1 className="text-3xl font-bold">Contact</h1>
-        <p className="mt-3 text-neutral-300">
-          For support or business inquiries:
-        </p>
-        <p className="mt-4 text-neutral-200">
-          Email:{" "}
-          <a className="underline" href="mailto:sandraherbert50.sh@gmail.com">
-            sandraherbert50.sh@gmail.com
-          </a>
-        </p>
-      </main>
-      <SiteFooter />
+    <div className="py-14">
+      <h1 className="text-4xl font-semibold">Contact</h1>
+      <p className="mt-3 text-white/70">
+        For support or business inquiries:
+      </p>
+
+      <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div className="text-sm text-white/70">Email</div>
+        <a
+          href="mailto:hi@shynvo.app"
+          className="mt-1 block text-lg font-semibold text-white underline underline-offset-4"
+        >
+          hi@shynvo.app
+        </a>
+      </div>
     </div>
   );
 }

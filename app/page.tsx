@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 
 type Building = {
   name: string;
@@ -87,74 +87,122 @@ export default function HomePage() {
 
   const plans: PricingPlan[] = [
     {
-      name: "Starter Access — 30 Days",
-      subtitle: "Full access for 30 days. Upgrade required after trial.",
-      bullets: ["All buildings unlocked during trial", "Full Shynvo OS access", "University Hub + Experiments included", "Upgrade required after 30 days"],
-      cta: "Create Account",
+      name: "Starter — 7 Day Free Trial",
+      subtitle: "Full access for 7 days. Upgrade required after trial.",
+      bullets: [
+        "All environments unlocked during trial",
+        "Shynvo OS + University Hub + Experiments",
+        "Upgrade required after day 7",
+        "Email support via hi@shynvo.app",
+      ],
+      cta: "Create account",
       href: "/signup",
     },
     {
       name: "Pro",
       subtitle: "Individual intelligence infrastructure.",
-      bullets: ["Unlimited OS missions and loops", "Advanced orchestration and analytics", "Extended memory depth (when enabled)", "Full building access"],
+      bullets: [
+        "Unlimited missions and loops",
+        "Advanced orchestration and analytics",
+        "Full environment access",
+        "Priority support",
+      ],
       cta: "Upgrade to Pro",
-      href: "/pricing",
+      href: "mailto:hi@shynvo.app?subject=Shynvo%20Pro%20Upgrade",
       highlight: true,
     },
     {
       name: "Team",
       subtitle: "Organizational intelligence system.",
-      bullets: ["Seats + admin controls", "Skill matrix + org analytics", "Team missions + dashboards", "Enterprise-grade workflows"],
-      cta: "Talk to us",
-      href: "mailto:hi@shynvo.app?subject=Shynvo%20Team%20Inquiry",
+      bullets: [
+        "Seats + admin controls",
+        "Skill matrix + org analytics",
+        "Team missions + dashboards",
+        "Enterprise workflows",
+      ],
+      cta: "Upgrade to Team",
+      href: "mailto:hi@shynvo.app?subject=Shynvo%20Team%20Upgrade",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0F14] text-white">
+    <div className="min-h-screen">
       <BackgroundFX />
 
-      <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Hero />
+      <section className="relative pt-10 sm:pt-14 lg:pt-16">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-white/60" />
+              Structured Intelligence Platform
+            </div>
 
-        <Section
-          id="buildings"
-          eyebrow="Environments"
-          title="Explore the buildings"
-          subtitle="Each building is a purpose-built system with its own departments, identity, and workflows—non-repetitive by design."
-        >
-          <BuildingsGrid buildings={buildings} />
-        </Section>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+              Shynvo
+            </h1>
 
-        <Section
-          id="why"
-          eyebrow="Differentiation"
-          title="Why Shynvo"
-          subtitle="Shynvo is structured as a multi-environment intelligence platform—built to feel like a universe of working systems."
-        >
-          <Pillars />
-        </Section>
+            <p className="mt-2 text-xl text-white/90 sm:text-2xl">
+              Architecture of Applied Intelligence
+            </p>
 
-        <Section
-          id="how"
-          eyebrow="Onboarding"
-          title="How it works"
-          subtitle="Start fast. Stay structured. Move across environments without losing context."
-        >
-          <HowItWorks />
-        </Section>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
+              A multi-environment intelligence platform for learning, execution, strategy, resilience, and organizational growth.
+            </p>
 
-        <Section
-          id="pricing"
-          eyebrow="Plans"
-          title="Pricing"
-          subtitle="Starter Access includes full platform access for 30 days. After that, upgrading is required to continue."
-        >
-          <Pricing plans={plans} />
-        </Section>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#buildings"
+                className="rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+              >
+                Enter Platform
+              </a>
+            </div>
 
-        <Footer />
-      </main>
+            <div className="mt-4 text-xs text-white/60">
+              Trial: full access for 7 days. Upgrade required after trial.
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+              <div className="h-full w-full p-6">
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-semibold text-white/80">
+                    Cinematic Robot Visual
+                  </div>
+                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">
+                    Silent on homepage
+                  </div>
+                </div>
+                <div className="mt-6 h-[70%] rounded-2xl border border-white/10 bg-[radial-gradient(900px_240px_at_50%_20%,rgba(255,255,255,0.08),transparent_60%)]" />
+                <div className="mt-4 text-xs text-white/60">
+                  Robot activates inside <span className="text-white/80">Shynvo OS</span>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 border-t border-white/10" />
+      </section>
+
+      <Section
+        id="buildings"
+        eyebrow="Environments"
+        title="Explore the buildings"
+        subtitle="Each building is a purpose-built system with its own departments, identity, and workflows—non-repetitive by design."
+      >
+        <BuildingsGrid buildings={buildings} />
+      </Section>
+
+      <Section
+        id="pricing"
+        eyebrow="Plans"
+        title="Pricing"
+        subtitle="Start with a 7-day free trial. After that, upgrading is required to continue."
+      >
+        <Pricing plans={plans} />
+      </Section>
 
       <ShynvoGuide />
 
@@ -162,8 +210,6 @@ export default function HomePage() {
     </div>
   );
 }
-
-/* ---------------------------- UI: Background ---------------------------- */
 
 function BackgroundFX() {
   return (
@@ -174,63 +220,6 @@ function BackgroundFX() {
     </div>
   );
 }
-
-/* ------------------------------ UI: Hero -------------------------------- */
-
-function Hero() {
-  return (
-    <section className="relative pt-10 sm:pt-14 lg:pt-16">
-      <div className="grid items-center gap-10 lg:grid-cols-2">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/60" />
-            Structured Intelligence Platform
-          </div>
-
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">Shynvo</h1>
-          <p className="mt-2 text-xl text-white/90 sm:text-2xl">Architecture of Applied Intelligence</p>
-
-          <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
-            A multi-environment intelligence platform for learning, execution, strategy, resilience, and organizational growth.
-          </p>
-
-          {/* ONLY ONE button here now */}
-          <div className="mt-6">
-            <a
-              href="#buildings"
-              className="inline-block rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-            >
-              Enter Platform
-            </a>
-          </div>
-
-          <div className="mt-4 text-xs text-white/60">Starter Access includes full access for 30 days. Upgrade required after trial.</div>
-        </div>
-
-        <div className="relative">
-          <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-            <div className="h-full w-full p-6">
-              <div className="flex items-center justify-between">
-                <div className="text-xs font-semibold text-white/80">Cinematic Robot Visual</div>
-                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">Silent on homepage</div>
-              </div>
-              <div className="mt-6 h-[70%] rounded-2xl border border-white/10 bg-[radial-gradient(900px_240px_at_50%_20%,rgba(255,255,255,0.08),transparent_60%)]" />
-              <div className="mt-4 text-xs text-white/60">
-                Robot activates inside <span className="text-white/80">Shynvo OS</span>.
-              </div>
-            </div>
-          </div>
-
-          <div className="pointer-events-none absolute -bottom-6 -left-6 hidden h-40 w-40 rounded-full bg-white/5 blur-2xl lg:block" />
-        </div>
-      </div>
-
-      <div className="mt-10 border-t border-white/10" />
-    </section>
-  );
-}
-
-/* ------------------------------ UI: Section ----------------------------- */
 
 function Section({
   id,
@@ -256,8 +245,6 @@ function Section({
     </section>
   );
 }
-
-/* -------------------------- UI: Buildings Grid -------------------------- */
 
 function BuildingsGrid({ buildings }: { buildings: Building[] }) {
   return (
@@ -299,7 +286,9 @@ function BuildingCard({ b }: { b: Building }) {
         </div>
 
         {b.planned ? (
-          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70">Planned</span>
+          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70">
+            Planned
+          </span>
         ) : null}
       </div>
 
@@ -307,7 +296,10 @@ function BuildingCard({ b }: { b: Building }) {
 
       <div className="mt-4 flex flex-wrap gap-2">
         {b.tags.map((t) => (
-          <span key={t} className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70">
+          <span
+            key={t}
+            className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
+          >
             {t}
           </span>
         ))}
@@ -327,59 +319,16 @@ function BuildingCard({ b }: { b: Building }) {
   );
 }
 
-/* ------------------------------ UI: Pillars ----------------------------- */
-
-function Pillars() {
-  const items = [
-    { title: "Non-repetitive environments", body: "Each building has its own departments, tone, and workflows." },
-    { title: "Connected intelligence", body: "Structured systems designed to connect without duplicating features." },
-    { title: "Execution-first OS", body: "Missions, focus loops, momentum tracking, and a command layer." },
-    { title: "Professional-grade standards", body: "Clean UI, stable routing, no placeholders, no demo tone." },
-  ];
-
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {items.map((it) => (
-        <div key={it.title} className="rounded-3xl border border-white/10 bg-white/5 p-5">
-          <div className="text-sm font-semibold">{it.title}</div>
-          <p className="mt-2 text-sm leading-6 text-white/70">{it.body}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* --------------------------- UI: How It Works --------------------------- */
-
-function HowItWorks() {
-  const steps = [
-    { n: "01", title: "Choose a building", body: "Enter the environment that matches your purpose." },
-    { n: "02", title: "Run a workflow", body: "Use structured departments instead of generic chat." },
-    { n: "03", title: "Track progress", body: "Operate through missions, systems, and clear outcomes." },
-  ];
-
-  return (
-    <div className="grid gap-4 md:grid-cols-3">
-      {steps.map((s) => (
-        <div key={s.n} className="rounded-3xl border border-white/10 bg-white/5 p-5">
-          <div className="text-xs font-semibold text-white/60">{s.n}</div>
-          <div className="mt-2 text-base font-semibold">{s.title}</div>
-          <p className="mt-2 text-sm leading-6 text-white/70">{s.body}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ------------------------------ UI: Pricing ----------------------------- */
-
 function Pricing({ plans }: { plans: PricingPlan[] }) {
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       {plans.map((p) => (
         <div
           key={p.name}
-          className={cx("rounded-3xl border p-5", p.highlight ? "border-white/20 bg-white/7" : "border-white/10 bg-white/5")}
+          className={cx(
+            "rounded-3xl border p-5",
+            p.highlight ? "border-white/20 bg-white/7" : "border-white/10 bg-white/5"
+          )}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -387,7 +336,9 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
               <div className="mt-1 text-sm text-white/70">{p.subtitle}</div>
             </div>
             {p.highlight ? (
-              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/80">Recommended</span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/80">
+                Recommended
+              </span>
             ) : null}
           </div>
 
@@ -404,62 +355,15 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
             href={p.href}
             className={cx(
               "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold",
-              p.highlight ? "bg-white text-[#0B0F14] hover:bg-white/90" : "ring-1 ring-white/15 hover:bg-white/5"
+              p.highlight
+                ? "bg-white text-[#0B0F14] hover:bg-white/90"
+                : "ring-1 ring-white/15 hover:bg-white/5"
             )}
           >
             {p.cta}
           </a>
-
-          {p.name.includes("Starter") ? (
-            <div className="mt-3 text-xs text-white/60">After 30 days, upgrading is required to continue using Shynvo.</div>
-          ) : null}
         </div>
       ))}
-    </div>
-  );
-}
-
-/* ------------------------------ UI: Footer ------------------------------ */
-
-function Footer() {
-  return (
-    <footer className="border-t border-white/10 py-12">
-      <div className="grid gap-8 md:grid-cols-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-white/10 ring-1 ring-white/15" />
-            <div className="text-sm font-semibold">Shynvo</div>
-          </div>
-          <p className="mt-3 text-sm leading-6 text-white/70">Architecture of Applied Intelligence.</p>
-          <p className="mt-2 text-xs text-white/55">Multi-environment platform for learning, execution, strategy, resilience, and teams.</p>
-        </div>
-
-        <FooterCol title="Product" links={[{ label: "Buildings", href: "#buildings" }, { label: "Pricing", href: "#pricing" }]} />
-        <FooterCol title="Company" links={[{ label: "Contact", href: "/contact" }, { label: "Email", href: "mailto:hi@shynvo.app" }]} />
-        <FooterCol title="Legal" links={[{ label: "Terms", href: "/terms" }, { label: "Privacy", href: "/privacy" }]} />
-      </div>
-
-      <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-        <span>Shynvo © {new Date().getFullYear()}</span>
-        <span>Support: hi@shynvo.app</span>
-      </div>
-    </footer>
-  );
-}
-
-function FooterCol({ title, links }: { title: string; links: Array<{ label: string; href: string }> }) {
-  return (
-    <div>
-      <div className="text-xs font-semibold uppercase tracking-wider text-white/60">{title}</div>
-      <ul className="mt-3 space-y-2">
-        {links.map((l) => (
-          <li key={l.label}>
-            <a href={l.href} className="text-sm text-white/75 hover:text-white">
-              {l.label}
-            </a>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
@@ -471,19 +375,21 @@ type Msg = { role: "user" | "guide"; text: string };
 function ShynvoGuide() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: "guide", text: "Shynvo Guide: quick answers about the platform. Ask about buildings, pricing, or Starter Access." },
+    { role: "guide", text: "Shynvo Guide: quick answers about the platform. Ask about environments, pricing, or trial." },
   ]);
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const qa: GuideQA[] = useMemo(
     () => [
-      { match: (q) => /what is shynvo\??|shynvo\??\s*$/.test(q), answer: "Shynvo is a multi-environment intelligence platform built around structured buildings for learning, execution, strategy, and teams." },
-      { match: (q) => /shynvo os|what is os|what is shynvo os/.test(q), answer: "Shynvo OS is the execution cockpit. It runs missions, focus systems, and strategic orchestration." },
-      { match: (q) => /university hub|university/.test(q), answer: "University Hub is the academic campus for structured study, exam prep, and faculty-based learning workflows." },
-      { match: (q) => /experiments|beta/.test(q), answer: "Experiments are standalone AI worlds for thinking, debate, simulation, and concept development." },
-      { match: (q) => /pricing|plans|cost|price/.test(q), answer: "Starter Access (30 days), Pro, and Team. Upgrade is required after the trial." },
-      { match: (q) => /login|sign in|account/.test(q), answer: "Create an account to save progress and use platform features." },
+      {
+        match: (q) => /what is shynvo\??|shynvo\??\s*$/.test(q),
+        answer:
+          "Shynvo is a multi-environment intelligence platform built around structured systems for learning and execution.",
+      },
+      { match: (q) => /pricing|plans|cost|price/.test(q), answer: "Start with a 7-day free trial. Upgrade is required after trial." },
+      { match: (q) => /trial|7 day|free/.test(q), answer: "Trial gives full access for 7 days. After that you upgrade to continue." },
+      { match: (q) => /contact|email|support/.test(q), answer: "Support: hi@shynvo.app" },
     ],
     []
   );
@@ -499,7 +405,7 @@ function ShynvoGuide() {
   function reply(qRaw: string) {
     const q = qRaw.trim().toLowerCase();
     const found = qa.find((x) => x.match(q));
-    return found?.answer || "I can help with quick platform questions (buildings, pricing, Starter Access).";
+    return found?.answer || "Ask about environments, pricing, trial, or support email.";
   }
 
   function send() {
@@ -524,14 +430,17 @@ function ShynvoGuide() {
           <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
 
           <div
-            className={cx("absolute right-0 top-0 h-full w-full border-l border-white/10 bg-[#0B0F14]", "sm:w-[420px]")}
+            className={cx(
+              "absolute right-0 top-0 h-full w-full border-l border-white/10 bg-[#0B0F14]",
+              "sm:w-[420px]"
+            )}
             role="dialog"
             aria-modal="true"
           >
             <div className="flex items-center justify-between border-b border-white/10 p-4">
               <div>
                 <div className="text-sm font-semibold">Shynvo Guide</div>
-                <div className="text-xs text-white/60">Quick answers about the platform.</div>
+                <div className="text-xs text-white/60">Quick answers.</div>
               </div>
               <button
                 onClick={() => setOpen(false)}
@@ -549,7 +458,9 @@ function ShynvoGuide() {
                     key={idx}
                     className={cx(
                       "max-w-[92%] rounded-2xl border px-4 py-3 text-sm leading-6",
-                      m.role === "user" ? "ml-auto border-white/10 bg-white/10 text-white" : "border-white/10 bg-white/5 text-white/85"
+                      m.role === "user"
+                        ? "ml-auto border-white/10 bg-white/10 text-white"
+                        : "border-white/10 bg-white/5 text-white/85"
                     )}
                   >
                     {m.text}
@@ -569,11 +480,14 @@ function ShynvoGuide() {
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20"
                   placeholder="Ask about Shynvo..."
                 />
-                <button onClick={send} className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90">
+                <button
+                  onClick={send}
+                  className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+                >
                   Send
                 </button>
               </div>
-              <div className="mt-2 text-[11px] text-white/50">Short answers only. For deep work, open Shynvo OS.</div>
+              <div className="mt-2 text-[11px] text-white/50">Support: hi@shynvo.app</div>
             </div>
           </div>
         </div>
@@ -582,12 +496,16 @@ function ShynvoGuide() {
   );
 }
 
-/* -------------------------------- Icons -------------------------------- */
-
 function ArrowRightIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M10 7 15 12 10 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M10 7 15 12 10 17"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

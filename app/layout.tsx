@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import SiteNav from "./components/SiteNav";
+import SiteFooter from "./components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Shynvo",
@@ -10,10 +11,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-[#0B0F14] text-white">
-        {/* IMPORTANT: Nav rendered ONCE here */}
+      <body className="min-h-screen bg-[#0B0F14] text-white">
         <SiteNav />
-        {children}
+        <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );
