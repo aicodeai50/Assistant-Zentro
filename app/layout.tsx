@@ -1,32 +1,19 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SiteFooter from "./components/SiteFooter";
+import type { Metadata } from "next";
 import SiteNav from "./components/SiteNav";
-import TrialGate from "./components/TrialGate";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Shynvo",
-  description: "A multi-environment AI platform for learning, strategy, execution, and growth.",
+  description: "Architecture of Applied Intelligence",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#05070A] text-white`}>
+      <body className="bg-[#0B0F14] text-white">
+        {/* IMPORTANT: Nav rendered ONCE here */}
         <SiteNav />
-        <TrialGate>{children}</TrialGate>
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );
