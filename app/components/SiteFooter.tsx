@@ -9,24 +9,22 @@ type FooterLink = {
 
 const LINKS: FooterLink[] = [
   { label: "Docs", href: "/docs" },
-  { label: "Research", href: "/research" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Terms", href: "/terms" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "Contact", href: "mailto:hi@shynvo.app", external: true }, // ✅ your email
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Contact", href: "/contact" },
+  { label: "Email", href: "mailto:hi@shynvo.app", external: true },
 ];
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 mt-14">
-      <div className="mx-auto max-w-6xl px-4 py-10">
+    <footer className="mt-14 border-t border-white/10">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div>
             <div className="text-lg font-semibold">Shynvo</div>
-            <p className="text-sm text-white/70 mt-2 max-w-sm">
-              Multi-environment AI platform for building, learning, and deploying.
+            <p className="mt-2 max-w-sm text-sm text-white/70">
+              Multi-environment AI platform for learning, building, and deploying.
             </p>
-            <p className="text-sm text-white/70 mt-3">
+            <p className="mt-3 text-sm text-white/70">
               Email:{" "}
               <a className="underline" href="mailto:hi@shynvo.app">
                 hi@shynvo.app
@@ -34,7 +32,7 @@ export default function SiteFooter() {
             </p>
           </div>
 
-          <nav className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-3">
+          <nav className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-4" aria-label="Footer">
             {LINKS.map((x) =>
               x.external ? (
                 <a
@@ -47,11 +45,7 @@ export default function SiteFooter() {
                   {x.label}
                 </a>
               ) : (
-                <Link
-                  key={x.label}
-                  href={x.href}
-                  className="text-sm text-white/70 hover:text-white"
-                >
+                <Link key={x.label} href={x.href} className="text-sm text-white/70 hover:text-white">
                   {x.label}
                 </Link>
               )
@@ -59,7 +53,7 @@ export default function SiteFooter() {
           </nav>
         </div>
 
-        <div className="text-xs text-white/50 mt-10">
+        <div className="mt-10 text-xs text-white/50">
           © {new Date().getFullYear()} Shynvo. All rights reserved.
         </div>
       </div>

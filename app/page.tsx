@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import Link from "next/link";
 
 type Building = {
   name: string;
   label: string;
   desc: string;
   tags: string[];
-  href: string;
+  href?: string; // optional now (v1: some are parked)
   planned?: boolean;
   accent?: "neutral" | "os" | "university" | "experiments" | "enterprise" | "frontier" | "arcade";
 };
@@ -31,13 +32,14 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 export default function HomePage() {
+  // v1: we show the platform universe, but park non-shipping routes to avoid broken nav/build confusion
   const buildings: Building[] = [
     {
       name: "University Hub",
       label: "Structured Academic Campus",
       desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
       tags: ["Study", "Exams", "Career"],
-      href: "/university",
+      planned: true,
       accent: "university",
     },
     {
@@ -45,7 +47,7 @@ export default function HomePage() {
       label: "Dimensional Execution Cockpit",
       desc: "Missions, focus systems, AI agents, and strategic orchestration in one cockpit.",
       tags: ["Missions", "Focus", "Terminal"],
-      href: "/os",
+      planned: true,
       accent: "os",
     },
     {
@@ -53,7 +55,7 @@ export default function HomePage() {
       label: "AI Exploration Worlds",
       desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
       tags: ["Debate", "Simulation", "Concepts"],
-      href: "/experiments",
+      planned: true,
       accent: "experiments",
     },
     {
@@ -61,7 +63,6 @@ export default function HomePage() {
       label: "Organizational Intelligence System",
       desc: "Admin tools, skill matrices, team missions, and analytics for organizations.",
       tags: ["Teams", "OKRs", "Analytics"],
-      href: "/enterprise-suite",
       planned: true,
       accent: "enterprise",
     },
@@ -70,7 +71,6 @@ export default function HomePage() {
       label: "High-Reliability Decision Environment",
       desc: "Decision drills, crisis simulation, protocols, and resilience systems.",
       tags: ["Tactical", "Crisis", "Protocols"],
-      href: "/frontier-lab",
       planned: true,
       accent: "frontier",
     },
@@ -79,7 +79,6 @@ export default function HomePage() {
       label: "Competitive Skill Arena",
       desc: "Gamified drills, interview simulations, and performance scoring modes.",
       tags: ["Drills", "Interviews", "Scoring"],
-      href: "/arcade-sim",
       planned: true,
       accent: "arcade",
     },
@@ -90,36 +89,26 @@ export default function HomePage() {
       name: "Starter — 7 Day Free Trial",
       subtitle: "Full access for 7 days. Upgrade required after trial.",
       bullets: [
-        "All environments unlocked during trial",
-        "Shynvo OS + University Hub + Experiments",
+        "Full access for 7 days",
+        "Learn + build your workflow baseline",
         "Upgrade required after day 7",
-        "Email support via hi@shynvo.app",
+        "Support via hi@shynvo.app",
       ],
       cta: "Create account",
       href: "/signup",
     },
     {
-      name: "Pro",
+      name: "Pro — 299 NOK/month",
       subtitle: "Individual intelligence infrastructure.",
-      bullets: [
-        "Unlimited missions and loops",
-        "Advanced orchestration and analytics",
-        "Full environment access",
-        "Priority support",
-      ],
+      bullets: ["Unlimited missions and loops", "Advanced orchestration + analytics", "Full environment access", "Priority support"],
       cta: "Upgrade to Pro",
       href: "mailto:hi@shynvo.app?subject=Shynvo%20Pro%20Upgrade",
       highlight: true,
     },
     {
-      name: "Team",
+      name: "Team — 999 NOK/month",
       subtitle: "Organizational intelligence system.",
-      bullets: [
-        "Seats + admin controls",
-        "Skill matrix + org analytics",
-        "Team missions + dashboards",
-        "Enterprise workflows",
-      ],
+      bullets: ["Seats + admin controls", "Skill matrix + org analytics", "Team missions + dashboards", "Enterprise workflows"],
       cta: "Upgrade to Team",
       href: "mailto:hi@shynvo.app?subject=Shynvo%20Team%20Upgrade",
     },
@@ -137,13 +126,9 @@ export default function HomePage() {
               Structured Intelligence Platform
             </div>
 
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-              Shynvo
-            </h1>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">Shynvo</h1>
 
-            <p className="mt-2 text-xl text-white/90 sm:text-2xl">
-              Architecture of Applied Intelligence
-            </p>
+            <p className="mt-2 text-xl text-white/90 sm:text-2xl">Architecture of Applied Intelligence</p>
 
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
               A multi-environment intelligence platform for learning, execution, strategy, resilience, and organizational growth.
@@ -156,20 +141,23 @@ export default function HomePage() {
               >
                 Enter Platform
               </a>
+
+              <Link
+                href="/docs"
+                className="rounded-xl px-5 py-3 text-center text-sm font-semibold ring-1 ring-white/15 hover:bg-white/5"
+              >
+                Read Docs
+              </Link>
             </div>
 
-            <div className="mt-4 text-xs text-white/60">
-              Trial: full access for 7 days. Upgrade required after trial.
-            </div>
+            <div className="mt-4 text-xs text-white/60">Trial: full access for 7 days. Upgrade required after trial.</div>
           </div>
 
           <div className="relative">
             <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5">
               <div className="h-full w-full p-6">
                 <div className="flex items-center justify-between">
-                  <div className="text-xs font-semibold text-white/80">
-                    Cinematic Robot Visual
-                  </div>
+                  <div className="text-xs font-semibold text-white/80">Cinematic Robot Visual</div>
                   <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">
                     Silent on homepage
                   </div>
@@ -266,15 +254,21 @@ function BuildingCard({ b }: { b: Building }) {
     }
   }, [b.accent]);
 
+  const Wrapper: any = b.href ? "a" : "div";
+  const wrapperProps = b.href
+    ? { href: b.href, "aria-label": `Enter ${b.name}` }
+    : { role: "group", "aria-label": `${b.name} (planned)` };
+
   return (
-    <a
-      href={b.href}
+    <Wrapper
+      {...wrapperProps}
       className={cx(
         "group relative block rounded-3xl border p-5 transition",
-        "hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
+        b.href
+          ? "cursor-pointer hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+          : "cursor-default opacity-[0.92]",
         accent
       )}
-      aria-label={`Enter ${b.name}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -285,7 +279,7 @@ function BuildingCard({ b }: { b: Building }) {
           </div>
         </div>
 
-        {b.planned ? (
+        {b.planned || !b.href ? (
           <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70">
             Planned
           </span>
@@ -306,7 +300,9 @@ function BuildingCard({ b }: { b: Building }) {
       </div>
 
       <div className="mt-5 flex items-center justify-between">
-        <span className="text-sm font-semibold text-white/90 group-hover:text-white">Enter</span>
+        <span className="text-sm font-semibold text-white/90 group-hover:text-white">
+          {b.href ? "Enter" : "Preview"}
+        </span>
         <span className="rounded-full border border-white/10 bg-white/5 p-2">
           <ArrowRightIcon />
         </span>
@@ -315,7 +311,7 @@ function BuildingCard({ b }: { b: Building }) {
       {b.accent === "os" ? (
         <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(800px_220px_at_50%_0%,rgba(255,255,255,0.10),transparent_55%)] opacity-60" />
       ) : null}
-    </a>
+    </Wrapper>
   );
 }
 
@@ -325,10 +321,7 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
       {plans.map((p) => (
         <div
           key={p.name}
-          className={cx(
-            "rounded-3xl border p-5",
-            p.highlight ? "border-white/20 bg-white/7" : "border-white/10 bg-white/5"
-          )}
+          className={cx("rounded-3xl border p-5", p.highlight ? "border-white/20 bg-white/7" : "border-white/10 bg-white/5")}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -351,17 +344,28 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
             ))}
           </ul>
 
-          <a
-            href={p.href}
-            className={cx(
-              "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold",
-              p.highlight
-                ? "bg-white text-[#0B0F14] hover:bg-white/90"
-                : "ring-1 ring-white/15 hover:bg-white/5"
-            )}
-          >
-            {p.cta}
-          </a>
+          {/* Use Link for internal routes to avoid full reload */}
+          {p.href.startsWith("/") ? (
+            <Link
+              href={p.href}
+              className={cx(
+                "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold",
+                p.highlight ? "bg-white text-[#0B0F14] hover:bg-white/90" : "ring-1 ring-white/15 hover:bg-white/5"
+              )}
+            >
+              {p.cta}
+            </Link>
+          ) : (
+            <a
+              href={p.href}
+              className={cx(
+                "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold",
+                p.highlight ? "bg-white text-[#0B0F14] hover:bg-white/90" : "ring-1 ring-white/15 hover:bg-white/5"
+              )}
+            >
+              {p.cta}
+            </a>
+          )}
         </div>
       ))}
     </div>
@@ -384,12 +388,12 @@ function ShynvoGuide() {
     () => [
       {
         match: (q) => /what is shynvo\??|shynvo\??\s*$/.test(q),
-        answer:
-          "Shynvo is a multi-environment intelligence platform built around structured systems for learning and execution.",
+        answer: "Shynvo is a multi-environment intelligence platform built around structured systems for learning and execution.",
       },
       { match: (q) => /pricing|plans|cost|price/.test(q), answer: "Start with a 7-day free trial. Upgrade is required after trial." },
       { match: (q) => /trial|7 day|free/.test(q), answer: "Trial gives full access for 7 days. After that you upgrade to continue." },
       { match: (q) => /contact|email|support/.test(q), answer: "Support: hi@shynvo.app" },
+      { match: (q) => /docs|documentation/.test(q), answer: "Docs are available at /docs. Pricing is on the homepage (#pricing)." },
     ],
     []
   );
@@ -405,7 +409,7 @@ function ShynvoGuide() {
   function reply(qRaw: string) {
     const q = qRaw.trim().toLowerCase();
     const found = qa.find((x) => x.match(q));
-    return found?.answer || "Ask about environments, pricing, trial, or support email.";
+    return found?.answer || "Ask about environments, pricing, docs, trial, or support email.";
   }
 
   function send() {
@@ -430,10 +434,7 @@ function ShynvoGuide() {
           <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
 
           <div
-            className={cx(
-              "absolute right-0 top-0 h-full w-full border-l border-white/10 bg-[#0B0F14]",
-              "sm:w-[420px]"
-            )}
+            className={cx("absolute right-0 top-0 h-full w-full border-l border-white/10 bg-[#0B0F14]", "sm:w-[420px]")}
             role="dialog"
             aria-modal="true"
           >
@@ -458,9 +459,7 @@ function ShynvoGuide() {
                     key={idx}
                     className={cx(
                       "max-w-[92%] rounded-2xl border px-4 py-3 text-sm leading-6",
-                      m.role === "user"
-                        ? "ml-auto border-white/10 bg-white/10 text-white"
-                        : "border-white/10 bg-white/5 text-white/85"
+                      m.role === "user" ? "ml-auto border-white/10 bg-white/10 text-white" : "border-white/10 bg-white/5 text-white/85"
                     )}
                   >
                     {m.text}
@@ -480,10 +479,7 @@ function ShynvoGuide() {
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20"
                   placeholder="Ask about Shynvo..."
                 />
-                <button
-                  onClick={send}
-                  className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-                >
+                <button onClick={send} className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90">
                   Send
                 </button>
               </div>
@@ -498,21 +494,15 @@ function ShynvoGuide() {
 
 function ArrowRightIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M10 7 15 12 10 17"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10 7 15 12 10 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
 function CloseIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M7 7l10 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       <path d="M17 7 7 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
