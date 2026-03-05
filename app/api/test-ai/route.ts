@@ -4,19 +4,17 @@ export async function POST(req: Request) {
     const message = String(body?.message ?? "").trim();
 
     if (!message) {
-      return Response.json({ reply: "Please type a message." }, { status: 400 });
+      return Response.json({ reply: "Please enter a message." }, { status: 400 });
     }
 
     const apiKey = process.env.OPENAI_API_KEY;
-
     if (!apiKey) {
       return Response.json(
-        { reply: "OPENAI_API_KEY is missing on Vercel. Add it in Project Settings → Environment Variables." },
+        { reply: "Missing OPENAI_API_KEY. Add it in Vercel → Project → Settings → Environment Variables." },
         { status: 200 }
       );
     }
 
-    // Minimal OpenAI request (Chat Completions)
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -26,16 +24,16 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: "gpt-4.1-mini",
         messages: [
-          { role: "system", content: "You are Shynvo Search. Be helpful, concise, and accurate." },
+          { role: "system", content: "You are Shynvo Search. Be helpful, accurate, and concise." },
           { role: "user", content: message },
         ],
-        temperature: 0.6,
+        temperature: 0.7,
       }),
     });
 
     if (!r.ok) {
-      const errText = await r.text();
-      return Response.json({ reply: `OpenAI error: ${r.status}\n${errText}` }, { status: 200 });
+      const err = await r.text();
+      return Response.json({ reply: `OpenAI error: ${r.status}\n${err}` }, { status: 200 });
     }
 
     const data = await r.json();
