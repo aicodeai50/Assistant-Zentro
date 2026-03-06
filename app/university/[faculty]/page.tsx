@@ -51,7 +51,7 @@ export default function FacultyPage({ params }: { params: { faculty: string } })
             {faculty.tracks.map((t) => (
               <Link
                 key={t.key}
-                href={`/university/${faculty.key}/${t.key}`}
+                href={`/university/${faculty.key}/track/${t.key}`}
                 className={cx(
                   "block rounded-2xl border p-4 transition",
                   "border-white/10 bg-white/5 hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"

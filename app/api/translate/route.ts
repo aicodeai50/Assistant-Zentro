@@ -1,57 +1,28 @@
+import { NextResponse } from "next/server";
+export const runtime = "nodejs";
+
+function mustEnv(name: string) {
+  const v = process.env[name];
+  if (!v) throw new Error(`Missing ${name}`);
+  return v;
+}
+
 export async function POST(req: Request) {
   try {
+    const base = mustEnv("NEXT_PUBLIC_API_URL");
+    const key = mustEnv("SH_API_KEY");
     const body = await req.json();
-    const text = String(body?.text ?? "").trim();
-    const targetLang = String(body?.targetLang ?? "en").trim();
 
-    if (!text) {
-      return Response.json({ translated: "" }, { status: 400 });
-    }
-
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return Response.json(
-        { translated: text, note: "Missing OPENAI_API_KEY" },
-        { status: 200 }
-      );
-    }
-
-    const r = await fetch("https://api.openai.com/v1/chat/completions", {
+    const res = await fetch(`${base.replace(/\/$/, "")}/api/translate`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1-mini",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a translation engine. Translate the user's text to the requested target language. Output ONLY the translated text.",
-          },
-          {
-            role: "user",
-            content: `Target language: ${targetLang}\n\nText:\n${text}`,
-          },
-        ],
-        temperature: 0.2,
-      }),
+      headers: { "Content-Type": "application/json", "x-sh-key": key },
+      body: JSON.stringify(body),
+      cache: "no-store",
     });
 
-    if (!r.ok) {
-      const err = await r.text();
-      return Response.json({ translated: text, error: err }, { status: 200 });
-    }
-
-    const data = await r.json();
-    const translated = data?.choices?.[0]?.message?.content ?? text;
-
-    return Response.json({ translated });
-  } catch (e: any) {
-    return Response.json(
-      { translated: "", error: e?.message ?? "unknown" },
-      { status: 200 }
-    );
+    const data = await res.json().catch(() => ({}));
+    return NextResponse.json(data, { status: res.status });
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message || "translate proxy failed" }, { status: 500 });
   }
 }
