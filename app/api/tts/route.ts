@@ -1,31 +1,57 @@
 import OpenAI from "openai";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getOpenAI() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+  return new OpenAI({ apiKey });
+}
 
 export async function POST(req: Request) {
   try {
-    const { text } = await req.json();
-    const input = String(text || "").trim();
-    if (!input) return new Response("Missing text", { status: 400 });
+    const client = getOpenAI();
+    if (!client) {
+      return new Response(
+        JSON.stringify({
+          error:
+            "OPENAI_API_KEY is missing. Set it in .env.local (local) and in Vercel Project Settings (production).",
+        }),
+        { status: 500, headers: { "content-type": "application/json" } }
+      );
+    }
 
-    // OpenAI TTS
-    const audio = await openai.audio.speech.create({
+    const body = await req.json().catch(() => ({}));
+    const input = String(body?.input ?? "").trim();
+
+    if (!input) {
+      return new Response(JSON.stringify({ error: "Missing input" }), {
+        status: 400,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    const audio = await client.audio.speech.create({
       model: "gpt-4o-mini-tts",
-      voice: "verse",
+      voice: "alloy",
       input,
-      format: "mp3",
+      response_format: "mp3",
     });
 
     const buf = Buffer.from(await audio.arrayBuffer());
+
     return new Response(buf, {
+      status: 200,
       headers: {
-        "Content-Type": "audio/mpeg",
-        "Cache-Control": "no-store",
+        "content-type": "audio/mpeg",
+        "cache-control": "no-store",
       },
     });
-  } catch {
-    return new Response("TTS error", { status: 500 });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: err?.message ?? "TTS failed" }), {
+      status: 500,
+      headers: { "content-type": "application/json" },
+    });
   }
 }
