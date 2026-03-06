@@ -15,9 +15,7 @@ export async function POST(req: Request) {
     const key = mustEnv("SH_API_KEY");
     const body = await req.json();
 
-    const url = `${base.replace(/\/$/, "")}/api/university-chat`;
-
-    const res = await fetch(url, {
+    const res = await fetch(`${base.replace(/\/$/, "")}/api/robot-chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,44 +25,16 @@ export async function POST(req: Request) {
       cache: "no-store",
     });
 
-    const contentType = res.headers.get("content-type") || "";
-
-    if (contentType.includes("application/json")) {
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        return NextResponse.json(
-          {
-            answer:
-              data?.error ||
-              data?.message ||
-              `University backend error (${res.status}).`,
-          },
-          { status: 200 }
-        );
-      }
-
-      if (typeof data?.answer === "string" && data.answer.trim()) {
-        return NextResponse.json({ answer: data.answer }, { status: 200 });
-      }
-
-      return NextResponse.json(
-        {
-          answer:
-            "University backend responded, but no valid answer field was returned.",
-        },
-        { status: 200 }
-      );
-    }
-
-    const text = await res.text().catch(() => "");
+    const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
       return NextResponse.json(
         {
           answer:
-            text?.trim() ||
-            `University backend error (${res.status}) with non-JSON response.`,
+            data?.answer ||
+            data?.error ||
+            data?.message ||
+            `Backend error (${res.status})`,
         },
         { status: 200 }
       );
@@ -73,16 +43,17 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         answer:
-          text?.trim() ||
-          "University backend returned a non-JSON response with no text.",
+          data?.answer ||
+          data?.reply ||
+          data?.message ||
+          "Backend responded but no answer field was returned.",
       },
       { status: 200 }
     );
   } catch (err: any) {
     return NextResponse.json(
       {
-        answer:
-          err?.message || "University chat proxy failed before reaching backend.",
+        answer: err?.message || "University chat proxy failed.",
       },
       { status: 200 }
     );
