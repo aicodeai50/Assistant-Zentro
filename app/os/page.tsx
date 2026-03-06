@@ -105,33 +105,45 @@ export default function ShynvoOSPage() {
           </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <button className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5">
+            <Link
+              href="/os/missions/create"
+              className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Pass my exam</div>
               <div className="mt-1 text-sm text-white/60">
                 Build a focused academic mission
               </div>
-            </button>
+            </Link>
 
-            <button className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5">
+            <Link
+              href="/os/missions/create"
+              className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Launch a project</div>
               <div className="mt-1 text-sm text-white/60">
                 Turn an idea into an execution plan
               </div>
-            </button>
+            </Link>
 
-            <button className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5">
+            <Link
+              href="/os/missions/create"
+              className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Improve my skills</div>
               <div className="mt-1 text-sm text-white/60">
                 Create a guided improvement path
               </div>
-            </button>
+            </Link>
 
-            <button className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5">
+            <Link
+              href="/os/missions/create"
+              className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Organize my week</div>
               <div className="mt-1 text-sm text-white/60">
                 Convert priorities into scheduled sessions
               </div>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -153,7 +165,9 @@ export default function ShynvoOSPage() {
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="text-sm font-semibold text-white">AI Agent Layer</div>
-              <div className="mt-1 text-sm text-white/60">Connected in platform architecture</div>
+              <div className="mt-1 text-sm text-white/60">
+                Connected in platform architecture
+              </div>
             </div>
           </div>
         </div>
@@ -204,7 +218,13 @@ export default function ShynvoOSPage() {
               </span>
 
               <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
                   <path
                     d="M10 7 15 12 10 17"
                     stroke="currentColor"
