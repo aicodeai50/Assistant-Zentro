@@ -50,6 +50,35 @@ const ROLE_INFO: Record<
   },
 };
 
+function buildSystemPrompt(faculty: string, track: string, role: UniRole) {
+  const roleLabel = ROLE_INFO[role].title;
+  const roleBehavior =
+    role === "teacher"
+      ? "Teach like a professional university teacher. Explain step by step, clearly and academically."
+      : role === "tutor"
+      ? "Act like a university tutor. Focus on assignments, exam practice, feedback, and guided reasoning."
+      : "Act like a university assistant. Be concise, practical, organized, and helpful with study planning and summaries.";
+
+  return `
+You are a ${roleLabel} inside Shynvo University.
+
+Current faculty: ${faculty}
+Current course: ${track}
+
+Rules:
+1. Only answer questions related to this faculty and this course.
+2. If the user asks about another faculty or unrelated topic, do NOT answer it in detail.
+3. Instead, politely say you are not permitted to answer outside this course and faculty, and ask the user to go to the correct faculty.
+4. Always answer in the same language the user writes in.
+5. Be professional, educational, and clear.
+6. If the user asks nonsense, spam, or irrelevant things, say:
+"I’m not permitted to answer that. Please ask a relevant academic question."
+
+Role behavior:
+${roleBehavior}
+  `.trim();
+}
+
 export default function TrackPageClient({
   faculty,
   track,
@@ -91,33 +120,42 @@ export default function TrackPageClient({
       if (!audioRef.current) return;
       audioRef.current.src = url;
       await audioRef.current.play();
-    } catch {}
+    } catch {
+      // ignore
+    }
   }
 
   async function sendMessage() {
     const text = input.trim();
     if (!text || loading) return;
 
-    setMessages((prev) => [...prev, { role: "user", text }]);
+    const nextMessages = [...messages, { role: "user" as const, text }];
+    setMessages(nextMessages);
     setInput("");
     setLoading(true);
 
     try {
-      const res = await fetch("/api/university-chat", {
+      const systemPrompt = buildSystemPrompt(faculty, trackTitle, selectedRole);
+
+      const res = await fetch("/api/public/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          facultyKey: faculty,
-          trackKey: track,
-          role: selectedRole,
           message: text,
-          history: messages.slice(-8),
+          systemPrompt,
+          messages: nextMessages.map((m) => ({
+            role: m.role === "user" ? "user" : "assistant",
+            content: m.text,
+          })),
         }),
       });
 
       const data = await res.json().catch(() => null);
+
       const answer =
-        (data?.answer as string) ||
+        data?.answer ||
+        data?.reply ||
+        data?.message ||
         "I could not respond right now. Please try again.";
 
       setMessages((prev) => [...prev, { role: "ai", text: answer }]);
