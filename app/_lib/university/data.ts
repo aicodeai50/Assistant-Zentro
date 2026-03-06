@@ -10,7 +10,7 @@ export type FacultyKey =
 
 export type TrackKey =
   | "cs"
-  | "it"
+  | "it-core"
   | "software"
   | "data"
   | "ai"
@@ -20,7 +20,7 @@ export type TrackKey =
   | "marketing"
   | "management"
   | "accounting"
-  | "law"
+  | "law-core"
   | "politics"
   | "nursing"
   | "medicine"
@@ -34,8 +34,6 @@ export type TrackKey =
   | "psychology"
   | "philosophy";
 
-export type UniRole = "teacher" | "tutor" | "assistant";
-
 export type UniTrack = {
   key: TrackKey;
   title: string;
@@ -47,8 +45,8 @@ export type UniFaculty = {
   key: FacultyKey;
   title: string;
   subtitle: string;
-  areas: string[];     // left-side “areas” like Algorithms/Systems/Data…
-  tracks: UniTrack[];  // right-side “fields” like CS/AI/Cybersecurity…
+  areas: string[];
+  tracks: UniTrack[];
 };
 
 export const FACULTIES: UniFaculty[] = [
@@ -58,26 +56,26 @@ export const FACULTIES: UniFaculty[] = [
     subtitle: "Computing, software, systems, data, and security — built for serious learners.",
     areas: ["Algorithms", "Systems", "Mathematics", "Data", "Engineering"],
     tracks: [
-      { key: "cs", title: "Computer Science", subtitle: "Theory + practice of computation.", tags: ["Algorithms", "Complexity", "Systems"] },
-      { key: "it", title: "Information Technology", subtitle: "Infrastructure, platforms, and operations.", tags: ["Cloud", "Networks", "Ops"] },
-      { key: "software", title: "Software Engineering", subtitle: "Building robust products and systems.", tags: ["Architecture", "Testing", "DevOps"] },
-      { key: "data", title: "Data Science", subtitle: "Statistics, analysis, and decision intelligence.", tags: ["ML", "Stats", "Pipelines"] },
-      { key: "ai", title: "Artificial Intelligence", subtitle: "Models, reasoning, and applied AI.", tags: ["LLMs", "Agents", "ML"] },
-      { key: "cybersecurity", title: "Cybersecurity", subtitle: "Defense, offense, and secure design.", tags: ["Threats", "Security", "Risk"] },
-      { key: "math", title: "Mathematics", subtitle: "Foundations for CS, AI, and engineering.", tags: ["Linear Algebra", "Calculus", "Discrete Math"] },
-    ],
+      { key: "cs", title: "Computer Science", subtitle: "Theory and practice of computation.", tags: ["Algorithms", "Programming", "Systems"] },
+      { key: "it-core", title: "Information Technology", subtitle: "Infrastructure, platforms, and technical operations.", tags: ["Networks", "Cloud", "Support"] },
+      { key: "software", title: "Software Engineering", subtitle: "Designing and building reliable software systems.", tags: ["Architecture", "Testing", "DevOps"] },
+      { key: "data", title: "Data Science", subtitle: "Analysis, statistics, and intelligent decision systems.", tags: ["Statistics", "ML", "Pipelines"] },
+      { key: "ai", title: "Artificial Intelligence", subtitle: "Models, reasoning, and applied intelligent systems.", tags: ["LLMs", "Agents", "ML"] },
+      { key: "cybersecurity", title: "Cybersecurity", subtitle: "Defense, secure systems, and threat awareness.", tags: ["Security", "Risk", "Threats"] },
+      { key: "math", title: "Mathematics for Computing", subtitle: "Mathematical foundation for CS, AI, and engineering.", tags: ["Calculus", "Linear Algebra", "Discrete Math"] }
+    ]
   },
   {
     key: "business",
     title: "Business & Management",
-    subtitle: "Professional decision-making, strategy, markets, and execution.",
+    subtitle: "Professional decision-making, markets, leadership, and execution.",
     areas: ["Strategy", "Markets", "Operations", "Leadership", "Analysis"],
     tracks: [
-      { key: "finance", title: "Finance", subtitle: "Capital, valuation, and financial analysis.", tags: ["Valuation", "Accounting", "Risk"] },
-      { key: "marketing", title: "Marketing", subtitle: "Brand, growth, research, and positioning.", tags: ["Research", "Growth", "Brand"] },
-      { key: "management", title: "Management", subtitle: "Teams, execution, and organizational design.", tags: ["Leadership", "Ops", "Systems"] },
-      { key: "accounting", title: "Accounting", subtitle: "Reporting, auditing, and financial truth.", tags: ["Reporting", "Auditing", "Controls"] },
-    ],
+      { key: "finance", title: "Finance", subtitle: "Capital, valuation, and financial analysis.", tags: ["Valuation", "Risk", "Accounting"] },
+      { key: "marketing", title: "Marketing", subtitle: "Growth, positioning, and customer strategy.", tags: ["Brand", "Growth", "Research"] },
+      { key: "management", title: "Management", subtitle: "People, execution, and organizational systems.", tags: ["Leadership", "Ops", "Teams"] },
+      { key: "accounting", title: "Accounting", subtitle: "Reporting, controls, and financial structure.", tags: ["Reporting", "Audit", "Controls"] }
+    ]
   },
   {
     key: "law",
@@ -85,50 +83,50 @@ export const FACULTIES: UniFaculty[] = [
     subtitle: "Legal reasoning, governance, and public institutions.",
     areas: ["Law", "Policy", "Governance", "Ethics", "Institutions"],
     tracks: [
-      { key: "law", title: "Law", subtitle: "Contracts, rights, liability, and case reasoning.", tags: ["Contracts", "Casework", "Ethics"] },
-      { key: "politics", title: "Politics & Policy", subtitle: "Institutions, strategy, and policy design.", tags: ["Policy", "Governance", "Debate"] },
-    ],
+      { key: "law-core", title: "Law", subtitle: "Case reasoning, contracts, liability, and rights.", tags: ["Cases", "Contracts", "Ethics"] },
+      { key: "politics", title: "Politics & Policy", subtitle: "Government, institutions, and public strategy.", tags: ["Policy", "Governance", "Debate"] }
+    ]
   },
   {
     key: "health",
     title: "Health Sciences",
-    subtitle: "Clinical learning, public health, and patient-centered knowledge.",
+    subtitle: "Clinical learning, patient-centered knowledge, and public health.",
     areas: ["Clinical", "Research", "Public Health", "Practice", "Ethics"],
     tracks: [
-      { key: "nursing", title: "Nursing", subtitle: "Patient care, practice, and clinical excellence.", tags: ["Clinical", "Care", "Practice"] },
-      { key: "medicine", title: "Medicine", subtitle: "Core medical sciences and patient reasoning.", tags: ["Clinical", "Diagnosis", "Systems"] },
-      { key: "public-health", title: "Public Health", subtitle: "Population health and prevention systems.", tags: ["Epidemiology", "Policy", "Prevention"] },
-    ],
+      { key: "nursing", title: "Nursing", subtitle: "Patient care, safety, and applied clinical practice.", tags: ["Care", "Clinical", "Practice"] },
+      { key: "medicine", title: "Medicine", subtitle: "Medical sciences and patient reasoning.", tags: ["Diagnosis", "Systems", "Clinical"] },
+      { key: "public-health", title: "Public Health", subtitle: "Population health and prevention systems.", tags: ["Prevention", "Policy", "Epidemiology"] }
+    ]
   },
   {
     key: "engineering",
     title: "Engineering",
-    subtitle: "Design, systems thinking, and real-world engineering practice.",
+    subtitle: "Design, mechanics, systems thinking, and practical engineering work.",
     areas: ["Design", "Systems", "Mechanics", "Electrics", "Materials"],
     tracks: [
-      { key: "mechanical", title: "Mechanical Engineering", subtitle: "Mechanics, design, and manufacturing.", tags: ["Design", "Thermo", "CAD"] },
-      { key: "electrical", title: "Electrical Engineering", subtitle: "Circuits, signals, and power.", tags: ["Circuits", "Signals", "Power"] },
-      { key: "civil", title: "Civil Engineering", subtitle: "Structures, cities, and infrastructure.", tags: ["Structures", "Infrastructure", "Planning"] },
-    ],
+      { key: "mechanical", title: "Mechanical Engineering", subtitle: "Mechanics, design, and production systems.", tags: ["Mechanics", "Design", "Thermo"] },
+      { key: "electrical", title: "Electrical Engineering", subtitle: "Circuits, signals, and power systems.", tags: ["Circuits", "Signals", "Power"] },
+      { key: "civil", title: "Civil Engineering", subtitle: "Structures, infrastructure, and the built environment.", tags: ["Structures", "Cities", "Infrastructure"] }
+    ]
   },
   {
     key: "education",
     title: "Education",
-    subtitle: "Teaching science, pedagogy, and learning design.",
+    subtitle: "Teaching science, pedagogy, assessment, and learning design.",
     areas: ["Pedagogy", "Assessment", "Classroom", "Learning Design", "Research"],
     tracks: [
-      { key: "teacher-ed", title: "Teacher Education", subtitle: "Professional teaching methods and curriculum.", tags: ["Curriculum", "Assessment", "Practice"] },
-    ],
+      { key: "teacher-ed", title: "Teacher Education", subtitle: "Professional teaching methods and curriculum practice.", tags: ["Teaching", "Curriculum", "Assessment"] }
+    ]
   },
   {
     key: "arts",
     title: "Creative Arts",
-    subtitle: "Craft, design, media, and creative production with professional standards.",
+    subtitle: "Craft, media, design, and creative production with professional standards.",
     areas: ["Design", "Media", "Production", "Critique", "Portfolio"],
     tracks: [
-      { key: "design", title: "Design", subtitle: "Visual systems, product design, and interaction.", tags: ["UX", "Systems", "Portfolio"] },
-      { key: "media", title: "Media & Production", subtitle: "Storytelling and production pipelines.", tags: ["Video", "Audio", "Narrative"] },
-    ],
+      { key: "design", title: "Design", subtitle: "Visual systems, digital design, and interaction work.", tags: ["UX", "Visual", "Systems"] },
+      { key: "media", title: "Media & Production", subtitle: "Storytelling, production, and creative communication.", tags: ["Video", "Audio", "Narrative"] }
+    ]
   },
   {
     key: "interdisciplinary",
@@ -137,9 +135,9 @@ export const FACULTIES: UniFaculty[] = [
     areas: ["Systems", "Human Behavior", "Reasoning", "Ethics", "Research"],
     tracks: [
       { key: "psychology", title: "Psychology", subtitle: "Mind, behavior, and research methods.", tags: ["Behavior", "Methods", "Cognition"] },
-      { key: "philosophy", title: "Philosophy", subtitle: "Reasoning, ethics, and argument quality.", tags: ["Logic", "Ethics", "Debate"] },
-    ],
-  },
+      { key: "philosophy", title: "Philosophy", subtitle: "Logic, ethics, and argument quality.", tags: ["Logic", "Ethics", "Debate"] }
+    ]
+  }
 ];
 
 export function getFaculty(key: string) {
@@ -147,40 +145,7 @@ export function getFaculty(key: string) {
 }
 
 export function getTrack(facultyKey: string, trackKey: string) {
-  const f = getFaculty(facultyKey);
-  if (!f) return null;
-  return f.tracks.find((t) => t.key === trackKey) ?? null;
+  const faculty = getFaculty(facultyKey);
+  if (!faculty) return null;
+  return faculty.tracks.find((t) => t.key === trackKey) ?? null;
 }
-
-export const ROLE_LABELS: Record<UniRole, { title: string; subtitle: string; responsibilities: string[] }> = {
-  teacher: {
-    title: "Teacher",
-    subtitle: "Teaches the full course material like a professional educator.",
-    responsibilities: [
-      "Explain concepts step-by-step with structure",
-      "Build complete lesson plans from provided materials",
-      "Teach fundamentals → advanced",
-      "Use examples and practice questions",
-    ],
-  },
-  tutor: {
-    title: "Tutor",
-    subtitle: "Helps with assignments, exam preparation, and targeted understanding.",
-    responsibilities: [
-      "Solve problems with the student (guided)",
-      "Review assignments and improve reasoning",
-      "Prepare exam-style drills and feedback",
-      "Spot weaknesses and fix them",
-    ],
-  },
-  assistant: {
-    title: "Assistant",
-    subtitle: "Fast helper for study workflows: summaries, notes, planning, and quick support.",
-    responsibilities: [
-      "Summarize notes/material quickly",
-      "Create study plans and checklists",
-      "Generate flashcards and quizzes",
-      "Help with formatting and clarity",
-    ],
-  },
-};
