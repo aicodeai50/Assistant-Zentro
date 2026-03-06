@@ -100,7 +100,7 @@ export default function HomePage() {
       href: "/signup",
     },
     {
-      name: "Pro — 250 NOK/month",
+      name: "Pro — 30 USD/month",
       subtitle: "Individual intelligence infrastructure.",
       bullets: ["Unlimited missions and loops", "Advanced orchestration + analytics", "Full environment access", "Priority support"],
       cta: "Upgrade to Pro",
@@ -108,7 +108,7 @@ export default function HomePage() {
       highlight: true,
     },
     {
-      name: "Team — 850 NOK/month",
+      name: "Team — 70 USD/month",
       subtitle: "Organizational intelligence system.",
       bullets: ["Seats + admin controls", "Skill matrix + org analytics", "Team missions + dashboards", "Enterprise workflows"],
       cta: "Upgrade to Team",
