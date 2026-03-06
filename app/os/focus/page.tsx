@@ -19,9 +19,12 @@ export default function OSFocusPage() {
           <div className="mt-2 text-2xl font-semibold text-white">Ready to start</div>
           <div className="mt-3 text-sm text-white/70">Next block: 45-minute focused execution window</div>
 
-          <button className="mt-6 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90">
+          <Link
+            href="/os/focus/session"
+            className="mt-6 inline-flex rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+          >
             Start Focus Session
-          </button>
+          </Link>
         </div>
 
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -31,6 +34,12 @@ export default function OSFocusPage() {
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Keep sessions measurable</div>
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Log outcome after completion</div>
           </div>
+
+          <textarea
+            className="mt-4 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40"
+            rows={4}
+            placeholder="Write session notes or execution intention..."
+          />
         </div>
       </div>
     </section>

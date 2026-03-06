@@ -4,30 +4,6 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-type MissionCard = {
-  title: string;
-  subtitle: string;
-  status: string;
-};
-
-const MISSION_CARDS: MissionCard[] = [
-  {
-    title: "Active Missions",
-    subtitle: "View all live missions, their status, and next required action.",
-    status: "Online",
-  },
-  {
-    title: "Create Mission",
-    subtitle: "Turn a goal into a structured mission with phases and execution blocks.",
-    status: "Ready",
-  },
-  {
-    title: "Mission Archive",
-    subtitle: "Review completed and paused missions with historical progress.",
-    status: "Available",
-  },
-];
-
 export default function OSMissionsPage() {
   return (
     <section className="py-10 sm:py-14">
@@ -71,26 +47,35 @@ export default function OSMissionsPage() {
           </h2>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <Link
+              href="/os/missions/create"
+              className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Goal</div>
               <div className="mt-2 text-sm text-white/65">
                 The user states what they want to achieve.
               </div>
-            </div>
+            </Link>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <Link
+              href="/os/missions/active"
+              className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Mission</div>
               <div className="mt-2 text-sm text-white/65">
                 The OS structures the goal into a guided path.
               </div>
-            </div>
+            </Link>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <Link
+              href="/os/missions/sessions"
+              className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Sessions</div>
               <div className="mt-2 text-sm text-white/65">
                 Execution happens through scheduled focus blocks.
               </div>
-            </div>
+            </Link>
           </div>
 
           <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
@@ -113,24 +98,33 @@ export default function OSMissionsPage() {
           </div>
 
           <div className="mt-4 space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <Link
+              href="/os/focus"
+              className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Current State</div>
               <div className="mt-1 text-sm text-white/65">Structured mission layer ready</div>
-            </div>
+            </Link>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <Link
+              href="/os/timeline"
+              className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">Execution Use</div>
               <div className="mt-1 text-sm text-white/65">
                 Supports study, project, and professional mission flows
               </div>
-            </div>
+            </Link>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <Link
+              href="/os/robots"
+              className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5"
+            >
               <div className="text-sm font-semibold text-white">System Role</div>
               <div className="mt-1 text-sm text-white/65">
                 Distinct from University Hub: this is execution, not teaching
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
@@ -144,27 +138,63 @@ export default function OSMissionsPage() {
         </h2>
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {MISSION_CARDS.map((card) => (
-          <div
-            key={card.title}
-            className={cx(
-              "group relative overflow-hidden rounded-3xl border p-5 transition",
-              "border-white/10 bg-white/5"
-            )}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="text-base font-semibold text-white">{card.title}</div>
-                <div className="mt-1 text-sm leading-6 text-white/70">{card.subtitle}</div>
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <Link
+          href="/os/missions/active"
+          className={cx(
+            "rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/7 transition"
+          )}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-base font-semibold text-white">Active Missions</div>
+              <div className="mt-1 text-sm leading-6 text-white/70">
+                View all live missions, their status, and next required action.
               </div>
-
-              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/75">
-                {card.status}
-              </span>
             </div>
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/75">
+              Online
+            </span>
           </div>
-        ))}
+        </Link>
+
+        <Link
+          href="/os/missions/create"
+          className={cx(
+            "rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/7 transition"
+          )}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-base font-semibold text-white">Create Mission</div>
+              <div className="mt-1 text-sm leading-6 text-white/70">
+                Turn a goal into a structured mission with phases and execution blocks.
+              </div>
+            </div>
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/75">
+              Ready
+            </span>
+          </div>
+        </Link>
+
+        <Link
+          href="/os/missions/sessions"
+          className={cx(
+            "rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/7 transition"
+          )}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-base font-semibold text-white">Mission Sessions</div>
+              <div className="mt-1 text-sm leading-6 text-white/70">
+                Open the session layer connected to mission execution.
+              </div>
+            </div>
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/75">
+              Live
+            </span>
+          </div>
+        </Link>
       </div>
     </section>
   );

@@ -14,16 +14,20 @@ export default function OSTimelinePage() {
       </p>
 
       <div className="mt-8 grid gap-4 lg:grid-cols-3">
-        {[
-          ["Today", "Mission review, 2 focus blocks, 1 log update"],
-          ["This Week", "Study sessions, project execution, review windows"],
-          ["Planning Logic", "Time allocation based on priority and effort"],
-        ].map(([title, text]) => (
-          <div key={title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="text-lg font-semibold text-white">{title}</div>
-            <div className="mt-2 text-sm leading-6 text-white/70">{text}</div>
-          </div>
-        ))}
+        <Link href="/os/timeline/today" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">Today</div>
+          <div className="mt-2 text-sm leading-6 text-white/70">Mission review, 2 focus blocks, 1 log update</div>
+        </Link>
+
+        <Link href="/os/timeline/week" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">This Week</div>
+          <div className="mt-2 text-sm leading-6 text-white/70">Study sessions, project execution, review windows</div>
+        </Link>
+
+        <Link href="/os/timeline/logic" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">Planning Logic</div>
+          <div className="mt-2 text-sm leading-6 text-white/70">Time allocation based on priority and effort</div>
+        </Link>
       </div>
     </section>
   );

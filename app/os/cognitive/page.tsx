@@ -14,16 +14,20 @@ export default function OSCognitivePage() {
       </p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
-        {[
-          ["Focus State", "Stable"],
-          ["Recovery Level", "Moderate"],
-          ["Friction Signals", "Low"],
-        ].map(([title, value]) => (
-          <div key={title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="text-sm text-white/60">{title}</div>
-            <div className="mt-2 text-2xl font-semibold text-white">{value}</div>
-          </div>
-        ))}
+        <Link href="/os/cognitive/focus-state" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-sm text-white/60">Focus State</div>
+          <div className="mt-2 text-2xl font-semibold text-white">Stable</div>
+        </Link>
+
+        <Link href="/os/cognitive/recovery-level" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-sm text-white/60">Recovery Level</div>
+          <div className="mt-2 text-2xl font-semibold text-white">Moderate</div>
+        </Link>
+
+        <Link href="/os/cognitive/friction-signals" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-sm text-white/60">Friction Signals</div>
+          <div className="mt-2 text-2xl font-semibold text-white">Low</div>
+        </Link>
       </div>
     </section>
   );

@@ -14,15 +14,15 @@ export default function OSCouncilPage() {
       </p>
 
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <Link href="/os/council/input" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
           <div className="text-lg font-semibold text-white">Decision Input</div>
           <div className="mt-3 text-sm text-white/70">Example: Should I focus on exams first or product work first?</div>
-        </div>
+        </Link>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <Link href="/os/council/output" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
           <div className="text-lg font-semibold text-white">Council Output</div>
           <div className="mt-3 text-sm text-white/70">Multi-angle analysis from specialized reasoning perspectives.</div>
-        </div>
+        </Link>
       </div>
     </section>
   );

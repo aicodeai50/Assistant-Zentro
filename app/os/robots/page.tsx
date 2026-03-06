@@ -14,12 +14,25 @@ export default function OSRobotsPage() {
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {["StudyBot", "CodeBot", "StrategyBot", "ResearchBot"].map((bot) => (
-          <div key={bot} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="text-lg font-semibold text-white">{bot}</div>
-            <div className="mt-2 text-sm text-white/70">Available in the OS execution layer</div>
-          </div>
-        ))}
+        <Link href="/os/robots/studybot" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">StudyBot</div>
+          <div className="mt-2 text-sm text-white/70">Available in the OS execution layer</div>
+        </Link>
+
+        <Link href="/os/robots/codebot" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">CodeBot</div>
+          <div className="mt-2 text-sm text-white/70">Available in the OS execution layer</div>
+        </Link>
+
+        <Link href="/os/robots/strategybot" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">StrategyBot</div>
+          <div className="mt-2 text-sm text-white/70">Available in the OS execution layer</div>
+        </Link>
+
+        <Link href="/os/robots/researchbot" className="rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/7 transition">
+          <div className="text-lg font-semibold text-white">ResearchBot</div>
+          <div className="mt-2 text-sm text-white/70">Available in the OS execution layer</div>
+        </Link>
       </div>
     </section>
   );

@@ -17,9 +17,15 @@ export default function OSLogbookPage() {
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="text-lg font-semibold text-white">Recent Entries</div>
           <div className="mt-3 space-y-3 text-sm text-white/70">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Focus session completed • 45 min</div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Mission review saved • exam preparation</div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Weekly reflection stored</div>
+            <Link href="/os/logbook/focus-session" className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5">
+              Focus session completed • 45 min
+            </Link>
+            <Link href="/os/logbook/mission-review" className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5">
+              Mission review saved • exam preparation
+            </Link>
+            <Link href="/os/logbook/weekly-reflection" className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/5">
+              Weekly reflection stored
+            </Link>
           </div>
         </div>
 
