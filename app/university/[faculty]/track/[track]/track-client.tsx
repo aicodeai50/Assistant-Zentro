@@ -79,6 +79,23 @@ ${roleBehavior}
   `.trim();
 }
 
+function extractReply(raw: string) {
+  try {
+    const data = JSON.parse(raw);
+    return (
+      data?.answer ||
+      data?.reply ||
+      data?.message ||
+      data?.output ||
+      data?.choices?.[0]?.message?.content ||
+      data?.choices?.[0]?.text ||
+      ""
+    );
+  } catch {
+    return raw;
+  }
+}
+
 export default function TrackPageClient({
   faculty,
   track,
@@ -141,26 +158,29 @@ export default function TrackPageClient({
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          message: text,
-          systemPrompt,
-          messages: nextMessages.map((m) => ({
-            role: m.role === "user" ? "user" : "assistant",
-            content: m.text,
-          })),
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...nextMessages.map((m) => ({
+              role: m.role === "user" ? "user" : "assistant",
+              content: m.text,
+            })),
+          ],
         }),
       });
 
-      const data = await res.json().catch(() => null);
+      const raw = await res.text();
+      const answer = extractReply(raw);
 
-      const answer =
-        data?.answer ||
-        data?.reply ||
-        data?.message ||
-        "I could not respond right now. Please try again.";
+      if (!res.ok) {
+        throw new Error(answer || `Request failed: ${res.status}`);
+      }
 
-      setMessages((prev) => [...prev, { role: "ai", text: answer }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: answer || "No reply returned." },
+      ]);
 
-      if (mode === "voice") {
+      if (mode === "voice" && answer) {
         await playVoice(answer);
       }
 
@@ -170,10 +190,13 @@ export default function TrackPageClient({
           behavior: "smooth",
         });
       }, 50);
-    } catch {
+    } catch (e: any) {
       setMessages((prev) => [
         ...prev,
-        { role: "ai", text: "Network error. Please try again." },
+        {
+          role: "ai",
+          text: e?.message || "Network error. Please try again.",
+        },
       ]);
     } finally {
       setLoading(false);
