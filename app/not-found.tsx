@@ -19,7 +19,7 @@ export default function NotFound() {
           <Link href="/contact" className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm hover:bg-white/15">
             Contact
           </Link>
-          <Link href="/portal" className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm hover:bg-white/15">
+          <Link href="/enterprise" className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm hover:bg-white/15">
             Portal
           </Link>
         </div>

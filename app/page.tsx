@@ -41,7 +41,7 @@ export default function HomePage() {
       label: "Structured Academic Campus",
       desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
       tags: ["Study", "Exams", "Career"],
-      href: "/docs",
+      href: "/university",
       accent: "university",
     },
     {
@@ -49,7 +49,7 @@ export default function HomePage() {
       label: "Dimensional Execution Cockpit",
       desc: "Missions, focus systems, AI agents, and strategic orchestration in one cockpit.",
       tags: ["Missions", "Focus", "Terminal"],
-      href: "/docs",
+      href: "/os",
       accent: "os",
     },
     {
@@ -57,7 +57,7 @@ export default function HomePage() {
       label: "AI Exploration Worlds",
       desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
       tags: ["Debate", "Simulation", "Concepts"],
-      href: "/docs",
+      href: "/experiments",
       accent: "experiments",
     },
     {
@@ -65,7 +65,7 @@ export default function HomePage() {
       label: "Organizational Intelligence System",
       desc: "Admin tools, skill matrices, team missions, and analytics for organizations.",
       tags: ["Teams", "OKRs", "Analytics"],
-      href: "/docs",
+      href: "/enterprise",
       accent: "enterprise",
     },
     {
@@ -102,7 +102,12 @@ export default function HomePage() {
     {
       name: "Pro — 30 USD/month",
       subtitle: "Individual intelligence infrastructure.",
-      bullets: ["Unlimited missions and loops", "Advanced orchestration + analytics", "Full environment access", "Priority support"],
+      bullets: [
+        "Unlimited missions and loops",
+        "Advanced orchestration + analytics",
+        "Full environment access",
+        "Priority support",
+      ],
       cta: "Upgrade to Pro",
       href: "mailto:hi@shynvo.app?subject=Shynvo%20Pro%20Upgrade",
       highlight: true,
@@ -110,7 +115,12 @@ export default function HomePage() {
     {
       name: "Team — 70 USD/month",
       subtitle: "Organizational intelligence system.",
-      bullets: ["Seats + admin controls", "Skill matrix + org analytics", "Team missions + dashboards", "Enterprise workflows"],
+      bullets: [
+        "Seats + admin controls",
+        "Skill matrix + org analytics",
+        "Team missions + dashboards",
+        "Enterprise workflows",
+      ],
       cta: "Upgrade to Team",
       href: "mailto:hi@shynvo.app?subject=Shynvo%20Team%20Upgrade",
     },
@@ -154,7 +164,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Cinematic Robot Chamber (NOT the guide) */}
           <div className="relative">
             <RobotChamber onActivate={() => router.push("/robot")} />
             <div className="mt-3 text-xs text-white/60">Click the chamber to open the robot trial experience.</div>
@@ -177,7 +186,6 @@ export default function HomePage() {
         <Pricing plans={plans} />
       </Section>
 
-      {/* Public short-answer Guide (bottom-left) */}
       <ShynvoGuide open={guideOpen} onOpenChange={setGuideOpen} />
 
       <div className="h-10" />
@@ -533,8 +541,6 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
   );
 }
 
-/* --------------------------- Public Guide Chat (short) -------------------------- */
-
 type Msg = { role: "user" | "guide"; text: string };
 
 function ShynvoGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (next: boolean) => void }) {
@@ -579,7 +585,6 @@ function ShynvoGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (nex
 
   return (
     <>
-      {/* bottom-left */}
       <button
         onClick={() => onOpenChange(true)}
         className="fixed bottom-5 left-5 z-50 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] shadow-lg hover:bg-white/90"
