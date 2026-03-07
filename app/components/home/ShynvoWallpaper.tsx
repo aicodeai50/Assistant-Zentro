@@ -1,18 +1,29 @@
-export default function ShynvoWallpaper() {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#070B11]">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 h-full w-full object-cover opacity-40"
-      >
-        <source src="/shynvo-wallpaper.mp4" type="video/mp4" />
-      </video>
+"use client";
 
-      {/* Fallback cinematic portal layers if video is missing or subtle */}
+import { useState } from "react";
+
+export default function ShynvoWallpaper() {
+  const [videoError, setVideoError] = useState(false);
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#070B11]"
+    >
+      {!videoError ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
+          onError={() => setVideoError(true)}
+        >
+          <source src="/shynvo-wallpaper.mp4" type="video/mp4" />
+        </video>
+      ) : null}
+
       <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_50%,rgba(56,189,248,0.12),transparent_45%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(900px_540px_at_50%_50%,rgba(167,139,250,0.10),transparent_40%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(700px_420px_at_50%_50%,rgba(255,255,255,0.05),transparent_38%)]" />
@@ -49,6 +60,7 @@ export default function ShynvoWallpaper() {
             linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
           background-size: 56px 56px;
           mask-image: radial-gradient(circle at center, rgba(0,0,0,0.9), transparent 75%);
+          -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,0.9), transparent 75%);
         }
 
         .portal-ring {

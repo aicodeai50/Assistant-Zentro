@@ -28,6 +28,8 @@ type GuideQA = {
   answer: string;
 };
 
+type Msg = { role: "user" | "guide"; text: string };
+
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
@@ -136,13 +138,13 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen text-white">
       <ShynvoWallpaper />
 
       <section className="relative pt-10 sm:pt-14 lg:pt-16">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-white/60" />
               Structured Intelligence Platform
             </div>
@@ -158,12 +160,15 @@ export default function HomePage() {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#buildings"
-                className="rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+                className="rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
               >
                 Enter Platform
               </a>
 
-              <Link href="/docs" className="rounded-xl px-5 py-3 text-center text-sm font-semibold ring-1 ring-white/15 hover:bg-white/5">
+              <Link
+                href="/docs"
+                className="rounded-xl px-5 py-3 text-center text-sm font-semibold ring-1 ring-white/15 transition hover:bg-white/5"
+              >
                 Read Docs
               </Link>
             </div>
@@ -203,7 +208,6 @@ export default function HomePage() {
 }
 
 function RobotChamber({ onActivate }: { onActivate: () => void }) {
-  const [hot, setHot] = useState(false);
   const [typed, setTyped] = useState("");
   const teaser = "Welcome to Shynvo Robot. Click to enter the multilingual robot experience.";
 
@@ -214,6 +218,7 @@ function RobotChamber({ onActivate }: { onActivate: () => void }) {
       setTyped(teaser.slice(0, i));
       if (i >= teaser.length) clearInterval(timer);
     }, 26);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -221,16 +226,25 @@ function RobotChamber({ onActivate }: { onActivate: () => void }) {
     <button
       type="button"
       onClick={onActivate}
-      onMouseEnter={() => setHot(true)}
-      onMouseLeave={() => setHot(false)}
       className={cx(
         "group relative w-full overflow-hidden rounded-3xl border text-left",
-        "border-white/10 bg-white/5",
-        "transition focus:outline-none focus:ring-2 focus:ring-white/20"
+        "border-white/10 bg-white/5 backdrop-blur-sm",
+        "transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-white/20"
       )}
       aria-label="Open cinematic robot"
     >
-      <div className="relative aspect-[4/3] w-full">
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+        >
+          <source src="/robot.mp4" type="video/mp4" />
+        </video>
+
         <div className="absolute inset-0 bg-[radial-gradient(900px_280px_at_50%_15%,rgba(255,255,255,0.10),transparent_62%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(650px_220px_at_70%_60%,rgba(56,189,248,0.12),transparent_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(540px_220px_at_25%_70%,rgba(167,139,250,0.10),transparent_60%)]" />
@@ -243,46 +257,27 @@ function RobotChamber({ onActivate }: { onActivate: () => void }) {
           <div className="sh-scan h-full w-full" />
         </div>
 
+        <div className="absolute inset-0 bg-black/30" />
+
         <div className="absolute inset-0">
           <Particles />
         </div>
 
-        <div className="absolute inset-0 grid place-items-center p-6">
-          <div className="relative h-full w-full rounded-2xl border border-white/10 bg-black/20 backdrop-blur-[1px]">
-            <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(520px_200px_at_50%_35%,rgba(255,255,255,0.09),transparent_62%)]" />
-
-            <div className="absolute left-1/2 top-[18%] h-[28%] w-[42%] -translate-x-1/2 rounded-[2rem] border border-white/12 bg-white/5">
-              <div className="absolute left-1/2 top-[36%] h-10 w-10 -translate-x-1/2 rounded-full border border-white/15 bg-white/5">
-                <div className={cx("absolute inset-0 rounded-full", hot ? "sh-core-hot" : "sh-core")} />
-              </div>
-              <div className="absolute left-1/2 top-[72%] h-[2px] w-[54%] -translate-x-1/2 bg-white/20" />
-            </div>
-
-            <div className="absolute left-1/2 top-[48%] h-[36%] w-[56%] -translate-x-1/2 rounded-[2.2rem] border border-white/12 bg-white/5">
-              <div className="absolute left-1/2 top-[18%] h-14 w-14 -translate-x-1/2 rounded-2xl border border-white/15 bg-white/5">
-                <div className={cx("absolute inset-0 rounded-2xl", hot ? "sh-core-hot" : "sh-core")} />
-              </div>
-              <div className="absolute left-1/2 top-[62%] h-[2px] w-[70%] -translate-x-1/2 bg-white/20" />
-            </div>
-
-            <div className="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]" />
-            <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(900px_340px_at_50%_120%,rgba(0,0,0,0.65),transparent_55%)]" />
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 border-t border-white/10 bg-black/30 px-5 py-4">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-white/10 bg-black/40 px-5 py-4 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
               <div className="text-xs font-semibold text-white/85">Shynvo Robot</div>
               <div className="text-[11px] text-white/55">Open multilingual robot experience</div>
             </div>
+
             <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
               <ArrowRightIcon />
             </span>
           </div>
 
           <div className="mt-3 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white/80">
-            {typed}<span className="animate-pulse text-white/50">|</span>
+            {typed}
+            <span className="animate-pulse text-white/50">|</span>
           </div>
         </div>
 
@@ -291,6 +286,7 @@ function RobotChamber({ onActivate }: { onActivate: () => void }) {
             transform: skewX(-18deg) translateX(0);
             animation: sweep 2.6s linear infinite;
           }
+
           @keyframes sweep {
             0% {
               transform: skewX(-18deg) translateX(-40%);
@@ -308,13 +304,14 @@ function RobotChamber({ onActivate }: { onActivate: () => void }) {
           .sh-scan {
             background: repeating-linear-gradient(
               to bottom,
-              rgba(255, 255, 255, 0.22),
-              rgba(255, 255, 255, 0.22) 1px,
+              rgba(255, 255, 255, 0.18),
+              rgba(255, 255, 255, 0.18) 1px,
               transparent 1px,
               transparent 6px
             );
             animation: scan 3.2s linear infinite;
           }
+
           @keyframes scan {
             0% {
               transform: translateY(0);
@@ -326,43 +323,6 @@ function RobotChamber({ onActivate }: { onActivate: () => void }) {
             100% {
               transform: translateY(24px);
               opacity: 0.12;
-            }
-          }
-
-          .sh-core {
-            background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.22), rgba(56, 189, 248, 0.2), transparent 64%);
-            animation: pulse 2.2s ease-in-out infinite;
-          }
-          .sh-core-hot {
-            background: radial-gradient(
-              circle at 50% 45%,
-              rgba(255, 255, 255, 0.28),
-              rgba(56, 189, 248, 0.28),
-              rgba(167, 139, 250, 0.18),
-              transparent 64%
-            );
-            animation: pulseHot 1.4s ease-in-out infinite;
-          }
-          @keyframes pulse {
-            0%,
-            100% {
-              transform: scale(0.92);
-              opacity: 0.72;
-            }
-            50% {
-              transform: scale(1.02);
-              opacity: 0.95;
-            }
-          }
-          @keyframes pulseHot {
-            0%,
-            100% {
-              transform: scale(0.9);
-              opacity: 0.78;
-            }
-            50% {
-              transform: scale(1.06);
-              opacity: 1;
             }
           }
         `}</style>
@@ -418,16 +378,6 @@ function Particles() {
   );
 }
 
-function BackgroundFX() {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden">
-      <div className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-white/5 blur-3xl" />
-      <div className="absolute -bottom-48 right-[-120px] h-[520px] w-[520px] rounded-full bg-white/4 blur-3xl" />
-      <div className="absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(255,255,255,0.06),transparent_60%)]" />
-    </div>
-  );
-}
-
 function Section({
   id,
   eyebrow,
@@ -467,9 +417,17 @@ function BuildingCard({ b }: { b: Building }) {
   const accent = useMemo(() => {
     switch (b.accent) {
       case "os":
-        return "border-white/20 bg-white/6 ring-1 ring-white/10";
+        return "border-cyan-400/20";
+      case "university":
+        return "border-amber-400/20";
+      case "enterprise":
+        return "border-indigo-400/20";
+      case "frontier":
+        return "border-purple-400/20";
+      case "arcade":
+        return "border-pink-400/20";
       default:
-        return "border-white/10 bg-white/5";
+        return "border-white/10";
     }
   }, [b.accent]);
 
@@ -477,27 +435,35 @@ function BuildingCard({ b }: { b: Building }) {
     <Link
       href={b.href}
       className={cx(
-        "group relative block rounded-3xl border p-5 transition",
-        "hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
+        "group relative block overflow-hidden rounded-3xl border p-6 transition-all duration-300 backdrop-blur-xl",
+        "bg-white/[0.04] hover:bg-white/[0.08]",
+        "hover:shadow-[0_0_40px_rgba(255,255,255,0.06)]",
         accent
       )}
       aria-label={`Open ${b.name}`}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
+        <div className="absolute inset-0 bg-[radial-gradient(600px_240px_at_50%_0%,rgba(255,255,255,0.08),transparent_70%)]" />
+      </div>
+
+      <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-white/8 ring-1 ring-white/10" />
+          <div className="h-10 w-10 rounded-2xl bg-white/10 ring-1 ring-white/15" />
           <div>
-            <div className="text-base font-semibold">{b.name}</div>
+            <div className="text-base font-semibold text-white">{b.name}</div>
             <div className="mt-0.5 text-xs text-white/60">{b.label}</div>
           </div>
         </div>
       </div>
 
-      <p className="mt-4 line-clamp-2 text-sm leading-6 text-white/70">{b.desc}</p>
+      <p className="mt-4 text-sm leading-6 text-white/70">{b.desc}</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
         {b.tags.map((t) => (
-          <span key={t} className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70">
+          <span
+            key={t}
+            className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/75"
+          >
             {t}
           </span>
         ))}
@@ -505,14 +471,11 @@ function BuildingCard({ b }: { b: Building }) {
 
       <div className="mt-5 flex items-center justify-between">
         <span className="text-sm font-semibold text-white/90 group-hover:text-white">Open</span>
-        <span className="rounded-full border border-white/10 bg-white/5 p-2">
+
+        <span className="rounded-full border border-white/10 bg-white/5 p-2 transition group-hover:bg-white/10">
           <ArrowRightIcon />
         </span>
       </div>
-
-      {b.accent === "os" ? (
-        <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(800px_220px_at_50%_0%,rgba(255,255,255,0.10),transparent_55%)] opacity-60" />
-      ) : null}
     </Link>
   );
 }
@@ -521,14 +484,22 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       {plans.map((p) => (
-        <div key={p.name} className={cx("rounded-3xl border p-5", p.highlight ? "border-white/20 bg-white/7" : "border-white/10 bg-white/5")}>
+        <div
+          key={p.name}
+          className={cx(
+            "rounded-3xl border p-5 backdrop-blur-sm",
+            p.highlight ? "border-white/20 bg-white/7" : "border-white/10 bg-white/5"
+          )}
+        >
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="text-base font-semibold">{p.name}</div>
               <div className="mt-1 text-sm text-white/70">{p.subtitle}</div>
             </div>
             {p.highlight ? (
-              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/80">Recommended</span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/80">
+                Recommended
+              </span>
             ) : null}
           </div>
 
@@ -545,7 +516,7 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
             <Link
               href={p.href}
               className={cx(
-                "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold",
+                "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold transition",
                 p.highlight ? "bg-white text-[#0B0F14] hover:bg-white/90" : "ring-1 ring-white/15 hover:bg-white/5"
               )}
             >
@@ -555,7 +526,7 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
             <a
               href={p.href}
               className={cx(
-                "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold",
+                "mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold transition",
                 p.highlight ? "bg-white text-[#0B0F14] hover:bg-white/90" : "ring-1 ring-white/15 hover:bg-white/5"
               )}
             >
@@ -567,8 +538,6 @@ function Pricing({ plans }: { plans: PricingPlan[] }) {
     </div>
   );
 }
-
-type Msg = { role: "user" | "guide"; text: string };
 
 function ShynvoGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (next: boolean) => void }) {
   const [msgs, setMsgs] = useState<Msg[]>([
@@ -614,7 +583,7 @@ function ShynvoGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (nex
     <>
       <button
         onClick={() => onOpenChange(true)}
-        className="fixed bottom-5 left-5 z-50 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] shadow-lg hover:bg-white/90"
+        className="fixed bottom-5 left-5 z-50 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] shadow-lg transition hover:bg-white/90"
         aria-label="Open Shynvo Guide"
       >
         Guide
@@ -624,13 +593,24 @@ function ShynvoGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (nex
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/60" onClick={() => onOpenChange(false)} />
 
-          <div className={cx("absolute left-0 top-0 h-full w-full border-r border-white/10 bg-[#0B0F14]", "sm:w-[420px]")} role="dialog" aria-modal="true">
+          <div
+            className={cx(
+              "absolute left-0 top-0 h-full w-full border-r border-white/10 bg-[#0B0F14]",
+              "sm:w-[420px]"
+            )}
+            role="dialog"
+            aria-modal="true"
+          >
             <div className="flex items-center justify-between border-b border-white/10 p-4">
               <div>
                 <div className="text-sm font-semibold">Shynvo Guide</div>
                 <div className="text-xs text-white/60">Public • short answers</div>
               </div>
-              <button onClick={() => onOpenChange(false)} className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5" aria-label="Close guide">
+              <button
+                onClick={() => onOpenChange(false)}
+                className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5"
+                aria-label="Close guide"
+              >
                 <CloseIcon />
               </button>
             </div>
@@ -662,7 +642,10 @@ function ShynvoGuide({ open, onOpenChange }: { open: boolean; onOpenChange: (nex
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20"
                   placeholder="Ask about Shynvo..."
                 />
-                <button onClick={send} className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90">
+                <button
+                  onClick={send}
+                  className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
+                >
                   Send
                 </button>
               </div>
