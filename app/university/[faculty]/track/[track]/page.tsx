@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import TrackPageClient from "./track-client";
 
 type CoursePageProps = {
-  params: {
+  params: Promise<{
     faculty: string;
     track: string;
-  };
+  }>;
 };
 
 type CourseConfig = {
@@ -72,8 +73,9 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function UniversityCourseRoomPage({ params }: CoursePageProps) {
-  const key = `${params.faculty}/${params.track}`;
+export default async function UniversityCourseRoomPage({ params }: CoursePageProps) {
+  const { faculty, track } = await params;
+  const key = `${faculty}/${track}`;
   const course = COURSE_MAP[key];
 
   if (!course) notFound();
@@ -121,7 +123,7 @@ export default function UniversityCourseRoomPage({ params }: CoursePageProps) {
     <section className="py-10 sm:py-14">
       <div className="flex items-center justify-between gap-3">
         <Link
-          href={`/university/${params.faculty}`}
+          href={`/university/${faculty}`}
           className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
         >
           ← Back to Faculty
@@ -250,6 +252,8 @@ export default function UniversityCourseRoomPage({ params }: CoursePageProps) {
           </Link>
         ))}
       </div>
+
+      <TrackPageClient faculty={faculty} track={track} trackTitle={course.title} />
     </section>
   );
 }
