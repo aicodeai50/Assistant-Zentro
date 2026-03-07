@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 type UniRole = "teacher" | "tutor" | "assistant";
+type HelpMode = "teaching" | "exam" | "explanation" | "assignment" | "revision";
 type Msg = { role: "user" | "ai"; text: string };
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -67,8 +67,15 @@ const ROLE_INFO: Record<
   },
 };
 
-function buildSystemPrompt(faculty: string, track: string, role: UniRole) {
+function buildSystemPrompt(
+  facultyTitle: string,
+  redirectLabel: string,
+  trackTitle: string,
+  role: UniRole,
+  helpMode: HelpMode
+) {
   const roleLabel = ROLE_INFO[role].title;
+
   const roleBehavior =
     role === "teacher"
       ? "Teach like a professional university teacher. Explain step by step, clearly and academically."
@@ -76,33 +83,48 @@ function buildSystemPrompt(faculty: string, track: string, role: UniRole) {
       ? "Act like a university tutor. Focus on assignments, exam practice, feedback, and guided reasoning."
       : "Act like a university assistant. Be concise, practical, organized, and helpful with study planning and summaries.";
 
+  const modeBehavior =
+    helpMode === "teaching"
+      ? "Focus on structured teaching."
+      : helpMode === "exam"
+      ? "Focus on exam preparation, likely questions, recall points, and practice."
+      : helpMode === "explanation"
+      ? "Focus on simple explanation, clarity, and breaking difficult things down."
+      : helpMode === "assignment"
+      ? "Focus on assignment guidance, reasoning, structure, and solution steps."
+      : "Focus on revision, summaries, memory cues, and quick review.";
+
   return `
 You are a ${roleLabel} inside Shynvo University.
 
-Current faculty: ${faculty}
-Current course: ${track}
+Current faculty: ${facultyTitle}
+Current course: ${trackTitle}
 
 Rules:
 1. Only answer questions related to this faculty and this course.
 2. If the user asks about another faculty or unrelated topic, do NOT answer it in detail.
-3. Instead, politely say you are not permitted to answer outside this course and faculty, and ask the user to go to the correct faculty.
-4. Always answer in the same language the user writes in.
-5. Be professional, educational, and clear.
-6. If the user asks nonsense, spam, or irrelevant things, say:
-"I’m not permitted to answer that. Please ask a relevant academic question."
+3. Politely say this room is restricted to ${facultyTitle} and this course.
+4. If the user asks for another faculty such as medicine while inside IT, direct them to the correct faculty. The current redirect target is: ${redirectLabel}.
+5. Always answer in the same language the user writes in.
+6. Be professional, educational, and clear.
+7. If the user asks nonsense, spam, or irrelevant things, say:
+"I’m not permitted to answer that here. Please ask a relevant academic question for this course or go to ${redirectLabel}."
 
 Role behavior:
 ${roleBehavior}
+
+Support mode:
+${modeBehavior}
   `.trim();
 }
 
 export default function TrackPageClient({
-  faculty,
-  track,
+  facultyTitle,
+  redirectLabel,
   trackTitle,
 }: {
-  faculty: string;
-  track: string;
+  facultyTitle: string;
+  redirectLabel: string;
   trackTitle: string;
 }) {
   const searchParams = useSearchParams();
@@ -114,10 +136,11 @@ export default function TrackPageClient({
       : "teacher"
   );
   const [mode, setMode] = useState<"text" | "voice">("text");
+  const [helpMode, setHelpMode] = useState<HelpMode>("teaching");
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "ai",
-      text: "Welcome. Choose Teacher, Tutor, or Assistant. Ask in any language. This room only answers questions related to this course and faculty.",
+      text: `Welcome. Choose Teacher, Tutor, or Assistant. Ask in any language. This room only answers questions related to ${trackTitle} inside ${facultyTitle}.`,
     },
   ]);
   const [input, setInput] = useState("");
@@ -159,7 +182,13 @@ export default function TrackPageClient({
     setLoading(true);
 
     try {
-      const systemPrompt = buildSystemPrompt(faculty, trackTitle, selectedRole);
+      const systemPrompt = buildSystemPrompt(
+        facultyTitle,
+        redirectLabel,
+        trackTitle,
+        selectedRole,
+        helpMode
+      );
 
       const res = await fetch("/api/public/chat", {
         method: "POST",
@@ -180,7 +209,7 @@ export default function TrackPageClient({
         data?.answer ||
         data?.reply ||
         data?.message ||
-        "I could not respond right now. Please try again.";
+        `I could not respond right now. Please ask again about ${trackTitle} in ${facultyTitle}.`;
 
       setMessages((prev) => [...prev, { role: "ai", text: answer }]);
 
@@ -205,185 +234,173 @@ export default function TrackPageClient({
   }
 
   return (
-    <section className="py-10 sm:py-14">
-      <div className="flex items-center justify-between gap-3">
-        <Link
-          href={`/university/${faculty}`}
-          className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
-        >
-          ← Back to Faculty
-        </Link>
-
-        <Link
-          href={`/university/${faculty}/track/${track}`}
-          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
-        >
-          Course overview →
-        </Link>
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
-            Course Room
-          </div>
-
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            {trackTitle}
-          </h1>
-
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
-            This course contains its own Teacher, Tutor, and Assistant. They only
-            answer this faculty field and will redirect unrelated questions.
-          </p>
+    <section className="mt-12 grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
+      <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
+          Selected Role
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-1">
-            {(["teacher", "tutor", "assistant"] as UniRole[]).map((role) => (
-              <button
-                key={role}
-                onClick={() => setSelectedRole(role)}
-                className={cx(
-                  "rounded-xl px-3 py-2 text-sm font-semibold transition",
-                  selectedRole === role
-                    ? "bg-white text-[#0B0F14]"
-                    : "text-white/80 hover:bg-white/5"
-                )}
-              >
-                {ROLE_INFO[role].title}
-              </button>
-            ))}
-          </div>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+          {roleInfo.title}
+        </h2>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-1">
-            {(["text", "voice"] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => setMode(m)}
-                className={cx(
-                  "rounded-xl px-3 py-2 text-sm font-semibold transition",
-                  mode === m ? "bg-white text-[#0B0F14]" : "text-white/80 hover:bg-white/5"
-                )}
-              >
-                {m === "text" ? "Text" : "Voice"}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+        <p className="mt-2 text-sm leading-6 text-white/70">
+          {roleInfo.subtitle}
+        </p>
 
-      <div className="mt-8 grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-            Selected Role
-          </div>
-
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-            {roleInfo.title}
-          </h2>
-
-          <p className="mt-2 text-sm leading-6 text-white/70">
-            {roleInfo.subtitle}
-          </p>
-
-          <ul className="mt-5 space-y-3">
-            {roleInfo.responsibilities.map((item) => (
-              <li key={item} className="flex gap-3 text-sm text-white/80">
-                <span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-white/60" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-            <div className="text-sm font-semibold text-white">Faculty rule</div>
-            <div className="mt-2 text-sm leading-6 text-white/70">
-              This role only works inside this course and faculty. If a user asks about
-              another field, it should redirect them to the correct faculty.
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <div className="text-sm font-semibold text-white">Quick starts</div>
-
-            <div className="mt-3 grid gap-3">
-              {roleInfo.starterPrompts.map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() => sendMessage(item.prompt)}
-                  className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left transition hover:bg-white/7"
-                >
-                  <div className="text-sm font-semibold text-white">{item.label}</div>
-                  <div className="mt-1 text-sm text-white/60">{item.prompt}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <div className="text-sm font-semibold text-white">Live course channel</div>
-              <div className="text-xs text-white/60">
-                Multilingual • Faculty-locked • {mode === "text" ? "Text mode" : "Voice mode"}
-              </div>
-            </div>
-
-            <div className="text-xs text-white/60">
-              {loading ? "Thinking..." : "Ready"}
-            </div>
-          </div>
-
-          <div
-            ref={listRef}
-            className="mt-5 h-[420px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4"
-          >
-            <div className="space-y-3">
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={cx(
-                    "max-w-[90%] rounded-2xl border px-4 py-3 text-sm leading-6",
-                    m.role === "user"
-                      ? "ml-auto border-white/10 bg-white/10 text-white"
-                      : "border-white/10 bg-white/5 text-white/85"
-                  )}
-                >
-                  {m.text}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 flex gap-3">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") sendMessage();
-              }}
-              placeholder={`Ask the ${roleInfo.title} in any language...`}
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
-            />
-
+        <div className="mt-5 flex flex-wrap gap-2">
+          {(["teacher", "tutor", "assistant"] as UniRole[]).map((role) => (
             <button
-              type="button"
-              onClick={() => sendMessage()}
-              disabled={loading || !input.trim()}
-              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+              key={role}
+              onClick={() => setSelectedRole(role)}
+              className={cx(
+                "rounded-xl px-3 py-2 text-sm font-semibold transition",
+                selectedRole === role
+                  ? "bg-white text-[#0B0F14]"
+                  : "border border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+              )}
             >
-              Send
+              {ROLE_INFO[role].title}
             </button>
+          ))}
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {(["text", "voice"] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={cx(
+                "rounded-xl px-3 py-2 text-sm font-semibold transition",
+                mode === m
+                  ? "bg-white text-[#0B0F14]"
+                  : "border border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+              )}
+            >
+              {m === "text" ? "Text" : "Voice"}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
+            Help Mode
           </div>
 
-          {mode === "voice" ? <audio ref={audioRef} className="hidden" /> : null}
-
-          <div className="mt-3 text-xs text-white/50">
-            Tip: choose Voice mode if you want spoken answers.
+          <div className="flex flex-wrap gap-2">
+            {(["teaching", "exam", "explanation", "assignment", "revision"] as HelpMode[]).map((item) => (
+              <button
+                key={item}
+                onClick={() => setHelpMode(item)}
+                className={cx(
+                  "rounded-full px-3 py-2 text-sm font-semibold transition",
+                  helpMode === item
+                    ? "bg-cyan-100 text-[#0B0F14]"
+                    : "border border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+                )}
+              >
+                {item.charAt(0).toUpperCase() + item.slice(1)}
+              </button>
+            ))}
           </div>
+        </div>
+
+        <ul className="mt-6 space-y-3">
+          {roleInfo.responsibilities.map((item) => (
+            <li key={item} className="flex gap-3 text-sm text-white/80">
+              <span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-white/60" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+          <div className="text-sm font-semibold text-white">Faculty rule</div>
+          <div className="mt-2 text-sm leading-6 text-white/70">
+            This role only works inside {facultyTitle}. If a user asks about another field,
+            redirect them to the correct faculty such as {redirectLabel}.
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <div className="text-sm font-semibold text-white">Quick starts</div>
+
+          <div className="mt-3 grid gap-3">
+            {roleInfo.starterPrompts.map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => sendMessage(item.prompt)}
+                className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left transition hover:bg-white/7"
+              >
+                <div className="text-sm font-semibold text-white">{item.label}</div>
+                <div className="mt-1 text-sm text-white/60">{item.prompt}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="text-sm font-semibold text-white">Live course channel</div>
+            <div className="text-xs text-white/60">
+              Multilingual • Faculty-locked • {mode === "text" ? "Text mode" : "Voice mode"} • {helpMode}
+            </div>
+          </div>
+
+          <div className="text-xs text-white/60">
+            {loading ? "Thinking..." : "Ready"}
+          </div>
+        </div>
+
+        <div
+          ref={listRef}
+          className="mt-5 h-[420px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4"
+        >
+          <div className="space-y-3">
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={cx(
+                  "max-w-[90%] rounded-2xl border px-4 py-3 text-sm leading-6",
+                  m.role === "user"
+                    ? "ml-auto border-white/10 bg-white/10 text-white"
+                    : "border-white/10 bg-white/5 text-white/85"
+                )}
+              >
+                {m.text}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 flex gap-3">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") sendMessage();
+            }}
+            placeholder={`Ask the ${roleInfo.title} about ${trackTitle}...`}
+            className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+          />
+
+          <button
+            type="button"
+            onClick={() => sendMessage()}
+            disabled={loading || !input.trim()}
+            className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Send
+          </button>
+        </div>
+
+        {mode === "voice" ? <audio ref={audioRef} className="hidden" /> : null}
+
+        <div className="mt-3 text-xs text-white/50">
+          Tip: choose Voice mode if you want spoken answers.
         </div>
       </div>
     </section>

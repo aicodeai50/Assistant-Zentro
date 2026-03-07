@@ -1,4 +1,5 @@
 import Link from "next/link";
+import UniversityNav from "@/components/university/UniversityNav";
 import { FACULTIES } from "@/_lib/university/data";
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -8,8 +9,10 @@ function cx(...classes: Array<string | false | null | undefined>) {
 export default function UniversityHubPage() {
   return (
     <section className="py-10 sm:py-14">
+      <UniversityNav />
+
       <div className="flex flex-col gap-3">
-        <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
+        <div className="text-xs font-semibold uppercase tracking-wider text-cyan-100/70">
           University Hub
         </div>
 
@@ -31,7 +34,7 @@ export default function UniversityHubPage() {
             href={`/university/${f.key}`}
             className={cx(
               "group relative overflow-hidden rounded-3xl border p-5 transition",
-              "border-white/10 bg-white/5 hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+              "border-cyan-300/15 bg-white/5 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
             )}
             aria-label={`Open ${f.title}`}
           >
@@ -73,8 +76,12 @@ export default function UniversityHubPage() {
               ))}
             </div>
 
+            <div className="mt-5 text-sm font-semibold text-white/90 group-hover:text-white">
+              Open faculty
+            </div>
+
             <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100">
-              <div className="absolute inset-0 bg-[radial-gradient(900px_240px_at_50%_0%,rgba(255,255,255,0.10),transparent_60%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(900px_240px_at_50%_0%,rgba(56,189,248,0.10),transparent_60%)]" />
             </div>
           </Link>
         ))}

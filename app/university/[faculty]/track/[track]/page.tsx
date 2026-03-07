@@ -1,103 +1,43 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import UniversityNav from "@/components/university/UniversityNav";
+import { getTrack } from "@/_lib/university/data";
 import TrackPageClient from "./track-client";
-
-type CoursePageProps = {
-  params: Promise<{
-    faculty: string;
-    track: string;
-  }>;
-};
-
-type CourseConfig = {
-  title: string;
-  facultyLabel: string;
-  summary: string;
-  teacherHref: string;
-  tutorHref: string;
-  assistantHref: string;
-};
-
-const COURSE_MAP: Record<string, CourseConfig> = {
-  "it/computer-science": {
-    title: "Computer Science",
-    facultyLabel: "IT & Computer Science",
-    summary: "Theory and practice of computation, algorithms, systems, and software thinking.",
-    teacherHref: "/university/it/track/computer-science?role=teacher",
-    tutorHref: "/university/it/track/computer-science?role=tutor",
-    assistantHref: "/university/it/track/computer-science?role=assistant",
-  },
-  "it/information-technology": {
-    title: "Information Technology",
-    facultyLabel: "IT & Computer Science",
-    summary: "Infrastructure, platforms, support systems, and operational technology environments.",
-    teacherHref: "/university/it/track/information-technology?role=teacher",
-    tutorHref: "/university/it/track/information-technology?role=tutor",
-    assistantHref: "/university/it/track/information-technology?role=assistant",
-  },
-  "it/software-engineering": {
-    title: "Software Engineering",
-    facultyLabel: "IT & Computer Science",
-    summary: "Designing, testing, shipping, and maintaining reliable software systems.",
-    teacherHref: "/university/it/track/software-engineering?role=teacher",
-    tutorHref: "/university/it/track/software-engineering?role=tutor",
-    assistantHref: "/university/it/track/software-engineering?role=assistant",
-  },
-  "it/data-science": {
-    title: "Data Science",
-    facultyLabel: "IT & Computer Science",
-    summary: "Analysis, statistics, data pipelines, and intelligent decision systems.",
-    teacherHref: "/university/it/track/data-science?role=teacher",
-    tutorHref: "/university/it/track/data-science?role=tutor",
-    assistantHref: "/university/it/track/data-science?role=assistant",
-  },
-  "it/artificial-intelligence": {
-    title: "Artificial Intelligence",
-    facultyLabel: "IT & Computer Science",
-    summary: "Models, reasoning systems, applied intelligence, and modern AI workflows.",
-    teacherHref: "/university/it/track/artificial-intelligence?role=teacher",
-    tutorHref: "/university/it/track/artificial-intelligence?role=tutor",
-    assistantHref: "/university/it/track/artificial-intelligence?role=assistant",
-  },
-  "it/cybersecurity": {
-    title: "Cybersecurity",
-    facultyLabel: "IT & Computer Science",
-    summary: "Defense, secure systems, threats, risk awareness, and operational protection.",
-    teacherHref: "/university/it/track/cybersecurity?role=teacher",
-    tutorHref: "/university/it/track/cybersecurity?role=tutor",
-    assistantHref: "/university/it/track/cybersecurity?role=assistant",
-  },
-};
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default async function UniversityCourseRoomPage({ params }: CoursePageProps) {
+export default async function UniversityCourseRoomPage({
+  params,
+}: {
+  params: Promise<{ faculty: string; track: string }>;
+}) {
   const { faculty, track } = await params;
-  const key = `${faculty}/${track}`;
-  const course = COURSE_MAP[key];
+  const result = getTrack(faculty, track);
 
-  if (!course) notFound();
+  if (!result) notFound();
+
+  const { faculty: facultyData, track: trackData } = result;
 
   const quickCards = [
     {
       title: "Teacher",
       subtitle: "Full academic teaching flow",
       body: "Structured explanations from foundation to advanced level.",
-      href: course.teacherHref,
+      href: `/university/${faculty}/track/${track}?role=teacher`,
     },
     {
       title: "Tutor",
       subtitle: "Assignments + exam practice",
       body: "Guided help for exercises, quizzes, and course problem-solving.",
-      href: course.tutorHref,
+      href: `/university/${faculty}/track/${track}?role=tutor`,
     },
     {
       title: "Assistant",
       subtitle: "Fast study support",
       body: "Summaries, checklists, revision structure, and quick clarifications.",
-      href: course.assistantHref,
+      href: `/university/${faculty}/track/${track}?role=assistant`,
     },
   ];
 
@@ -105,53 +45,39 @@ export default async function UniversityCourseRoomPage({ params }: CoursePagePro
     {
       title: "Course overview",
       text: "See the role structure of this room and how each academic role works.",
-      href: course.teacherHref,
+      href: `/university/${faculty}/track/${track}?role=teacher`,
     },
     {
       title: "Revision route",
       text: "Use Tutor and Assistant together for exam and weekly study planning.",
-      href: course.tutorHref,
+      href: `/university/${faculty}/track/${track}?role=tutor`,
     },
     {
       title: "Quick entry",
       text: "Jump directly into the live course room for this subject.",
-      href: course.assistantHref,
+      href: `/university/${faculty}/track/${track}?role=assistant`,
     },
   ];
 
   return (
     <section className="py-10 sm:py-14">
-      <div className="flex items-center justify-between gap-3">
-        <Link
-          href={`/university/${faculty}`}
-          className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
-        >
-          ← Back to Faculty
-        </Link>
+      <UniversityNav />
 
-        <Link
-          href="/university"
-          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
-        >
-          University Hub →
-        </Link>
-      </div>
-
-      <div className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
         Course Room
       </div>
 
       <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">
-        {course.title}
+        {trackData.title}
       </h1>
 
       <p className="mt-3 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-        Faculty: {course.facultyLabel}. {course.summary}
+        Faculty: {facultyData.title}. {trackData.subtitle}
       </p>
 
       <div className="mt-8 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+        <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
             Role Access
           </div>
 
@@ -181,20 +107,20 @@ export default async function UniversityCourseRoomPage({ params }: CoursePagePro
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+        <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
             Course Status
           </div>
 
           <div className="mt-4 space-y-4">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="text-sm font-semibold text-white">Faculty Lock</div>
-              <div className="mt-1 text-sm text-white/60">{course.facultyLabel}</div>
+              <div className="mt-1 text-sm text-white/60">{facultyData.title}</div>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="text-sm font-semibold text-white">Course Access</div>
-              <div className="mt-1 text-sm text-white/60">{course.title}</div>
+              <div className="mt-1 text-sm text-white/60">{trackData.title}</div>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
@@ -206,7 +132,7 @@ export default async function UniversityCourseRoomPage({ params }: CoursePagePro
       </div>
 
       <div className="mt-10">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
           Navigation
         </div>
 
@@ -226,7 +152,7 @@ export default async function UniversityCourseRoomPage({ params }: CoursePagePro
             href={item.href}
             className={cx(
               "group relative overflow-hidden rounded-3xl border p-5 transition",
-              "border-white/10 bg-white/5 hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+              "border-cyan-300/15 bg-white/5 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
             )}
           >
             <div className="text-base font-semibold text-white">{item.title}</div>
@@ -253,7 +179,11 @@ export default async function UniversityCourseRoomPage({ params }: CoursePagePro
         ))}
       </div>
 
-      <TrackPageClient faculty={faculty} track={track} trackTitle={course.title} />
+      <TrackPageClient
+        facultyTitle={facultyData.title}
+        redirectLabel={facultyData.redirectLabel}
+        trackTitle={trackData.title}
+      />
     </section>
   );
 }

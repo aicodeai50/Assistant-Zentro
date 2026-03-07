@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import UniversityNav from "@/components/university/UniversityNav";
 import { getFaculty } from "@/_lib/university/data";
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -12,24 +13,16 @@ export default async function FacultyPage({
   params: Promise<{ faculty: string }>;
 }) {
   const { faculty } = await params;
-
   const facultyData = getFaculty(faculty);
 
-  if (!facultyData) {
-    notFound();
-  }
+  if (!facultyData) notFound();
 
   return (
     <section className="py-10 sm:py-14">
-      <Link
-        href="/university"
-        className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
-      >
-        ← Back to University Hub
-      </Link>
+      <UniversityNav />
 
-      <div className="mt-4 flex flex-col gap-3">
-        <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
+      <div className="flex flex-col gap-3">
+        <div className="text-xs font-semibold uppercase tracking-wider text-cyan-100/70">
           Faculty
         </div>
 
@@ -54,7 +47,7 @@ export default async function FacultyPage({
       </div>
 
       <div className="mt-10 flex flex-col gap-3">
-        <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
+        <div className="text-xs font-semibold uppercase tracking-wider text-cyan-100/70">
           Courses
         </div>
 
@@ -75,7 +68,7 @@ export default async function FacultyPage({
             href={`/university/${facultyData.key}/track/${track.key}`}
             className={cx(
               "group relative overflow-hidden rounded-3xl border p-5 transition",
-              "border-white/10 bg-white/5 hover:bg-white/7 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+              "border-cyan-300/15 bg-white/5 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
             )}
             aria-label={`Open ${track.title}`}
           >
@@ -118,7 +111,7 @@ export default async function FacultyPage({
             </div>
 
             <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100">
-              <div className="absolute inset-0 bg-[radial-gradient(900px_240px_at_50%_0%,rgba(255,255,255,0.10),transparent_60%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(900px_240px_at_50%_0%,rgba(56,189,248,0.10),transparent_60%)]" />
             </div>
           </Link>
         ))}
