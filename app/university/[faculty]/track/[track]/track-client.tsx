@@ -2,6 +2,7 @@
 
 import React, { useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 type UniRole = "teacher" | "tutor" | "assistant";
 type Msg = { role: "user" | "ai"; text: string };
@@ -16,6 +17,7 @@ const ROLE_INFO: Record<
     title: string;
     subtitle: string;
     responsibilities: string[];
+    starterPrompts: { label: string; prompt: string }[];
   }
 > = {
   teacher: {
@@ -27,6 +29,11 @@ const ROLE_INFO: Record<
       "Uses examples, lessons, and concept breakdowns",
       "Keeps the teaching academic and professional",
     ],
+    starterPrompts: [
+      { label: "Explain the basics", prompt: "Explain the core foundations of this course." },
+      { label: "Create a lesson", prompt: "Teach this topic step by step like a university lecturer." },
+      { label: "Give examples", prompt: "Explain this topic with simple examples first, then advanced examples." },
+    ],
   },
   tutor: {
     title: "Tutor",
@@ -37,6 +44,11 @@ const ROLE_INFO: Record<
       "Reviews mistakes and improves understanding",
       "Supports targeted practice in the course",
     ],
+    starterPrompts: [
+      { label: "Exam practice", prompt: "Give me exam-style practice questions for this course." },
+      { label: "Solve a problem", prompt: "Help me solve a course problem step by step." },
+      { label: "Check my understanding", prompt: "Quiz me on the important topics in this course." },
+    ],
   },
   assistant: {
     title: "Assistant",
@@ -46,6 +58,11 @@ const ROLE_INFO: Record<
       "Creates revision plans and checklists",
       "Helps with quick course-related clarifications",
       "Supports daily study workflow and organization",
+    ],
+    starterPrompts: [
+      { label: "Summarize course", prompt: "Summarize the most important ideas in this course." },
+      { label: "Make a study plan", prompt: "Create a 7-day study plan for this course." },
+      { label: "Create revision notes", prompt: "Turn this course into quick revision notes and checklists." },
     ],
   },
 };
@@ -79,23 +96,6 @@ ${roleBehavior}
   `.trim();
 }
 
-function extractReply(raw: string) {
-  try {
-    const data = JSON.parse(raw);
-    return (
-      data?.answer ||
-      data?.reply ||
-      data?.message ||
-      data?.output ||
-      data?.choices?.[0]?.message?.content ||
-      data?.choices?.[0]?.text ||
-      ""
-    );
-  } catch {
-    return raw;
-  }
-}
-
 export default function TrackPageClient({
   faculty,
   track,
@@ -105,7 +105,14 @@ export default function TrackPageClient({
   track: string;
   trackTitle: string;
 }) {
-  const [selectedRole, setSelectedRole] = useState<UniRole>("teacher");
+  const searchParams = useSearchParams();
+  const initialRole = (searchParams.get("role") as UniRole) || "teacher";
+
+  const [selectedRole, setSelectedRole] = useState<UniRole>(
+    initialRole === "teacher" || initialRole === "tutor" || initialRole === "assistant"
+      ? initialRole
+      : "teacher"
+  );
   const [mode, setMode] = useState<"text" | "voice">("text");
   const [messages, setMessages] = useState<Msg[]>([
     {
@@ -142,8 +149,8 @@ export default function TrackPageClient({
     }
   }
 
-  async function sendMessage() {
-    const text = input.trim();
+  async function sendMessage(customText?: string) {
+    const text = (customText ?? input).trim();
     if (!text || loading) return;
 
     const nextMessages = [...messages, { role: "user" as const, text }];
@@ -158,29 +165,26 @@ export default function TrackPageClient({
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...nextMessages.map((m) => ({
-              role: m.role === "user" ? "user" : "assistant",
-              content: m.text,
-            })),
-          ],
+          message: text,
+          systemPrompt,
+          messages: nextMessages.map((m) => ({
+            role: m.role === "user" ? "user" : "assistant",
+            content: m.text,
+          })),
         }),
       });
 
-      const raw = await res.text();
-      const answer = extractReply(raw);
+      const data = await res.json().catch(() => null);
 
-      if (!res.ok) {
-        throw new Error(answer || `Request failed: ${res.status}`);
-      }
+      const answer =
+        data?.answer ||
+        data?.reply ||
+        data?.message ||
+        "I could not respond right now. Please try again.";
 
-      setMessages((prev) => [
-        ...prev,
-        { role: "ai", text: answer || "No reply returned." },
-      ]);
+      setMessages((prev) => [...prev, { role: "ai", text: answer }]);
 
-      if (mode === "voice" && answer) {
+      if (mode === "voice") {
         await playVoice(answer);
       }
 
@@ -190,13 +194,10 @@ export default function TrackPageClient({
           behavior: "smooth",
         });
       }, 50);
-    } catch (e: any) {
+    } catch {
       setMessages((prev) => [
         ...prev,
-        {
-          role: "ai",
-          text: e?.message || "Network error. Please try again.",
-        },
+        { role: "ai", text: "Network error. Please try again." },
       ]);
     } finally {
       setLoading(false);
@@ -205,16 +206,25 @@ export default function TrackPageClient({
 
   return (
     <section className="py-10 sm:py-14">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <Link
-            href={`/university/${faculty}`}
-            className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
-          >
-            ← Back to Faculty
-          </Link>
+      <div className="flex items-center justify-between gap-3">
+        <Link
+          href={`/university/${faculty}`}
+          className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
+        >
+          ← Back to Faculty
+        </Link>
 
-          <div className="mt-4 text-xs font-semibold uppercase tracking-wider text-white/60">
+        <Link
+          href={`/university/${faculty}/track/${track}`}
+          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
+        >
+          Course overview →
+        </Link>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
             Course Room
           </div>
 
@@ -253,9 +263,7 @@ export default function TrackPageClient({
                 onClick={() => setMode(m)}
                 className={cx(
                   "rounded-xl px-3 py-2 text-sm font-semibold transition",
-                  mode === m
-                    ? "bg-white text-[#0B0F14]"
-                    : "text-white/80 hover:bg-white/5"
+                  mode === m ? "bg-white text-[#0B0F14]" : "text-white/80 hover:bg-white/5"
                 )}
               >
                 {m === "text" ? "Text" : "Voice"}
@@ -265,62 +273,80 @@ export default function TrackPageClient({
         </div>
       </div>
 
-      <div className="mt-8 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="mt-8 grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
-            Selected role
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+            Selected Role
           </div>
 
-          <div className="mt-2 text-xl font-semibold text-white">
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
             {roleInfo.title}
-          </div>
+          </h2>
 
-          <div className="mt-1 text-sm text-white/70">{roleInfo.subtitle}</div>
+          <p className="mt-2 text-sm leading-6 text-white/70">
+            {roleInfo.subtitle}
+          </p>
 
-          <div className="mt-5 space-y-3">
+          <ul className="mt-5 space-y-3">
             {roleInfo.responsibilities.map((item) => (
-              <div key={item} className="flex gap-2 text-sm text-white/75">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/55" />
+              <li key={item} className="flex gap-3 text-sm text-white/80">
+                <span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-white/60" />
                 <span>{item}</span>
-              </div>
+              </li>
             ))}
+          </ul>
+
+          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="text-sm font-semibold text-white">Faculty rule</div>
+            <div className="mt-2 text-sm leading-6 text-white/70">
+              This role only works inside this course and faculty. If a user asks about
+              another field, it should redirect them to the correct faculty.
+            </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/65">
-            <div className="font-semibold text-white/85">Faculty rule</div>
-            <div className="mt-1">
-              This role only works inside this course and faculty. If a user asks
-              about another field, it should redirect them to the correct faculty.
+          <div className="mt-6">
+            <div className="text-sm font-semibold text-white">Quick starts</div>
+
+            <div className="mt-3 grid gap-3">
+              {roleInfo.starterPrompts.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => sendMessage(item.prompt)}
+                  className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left transition hover:bg-white/7"
+                >
+                  <div className="text-sm font-semibold text-white">{item.label}</div>
+                  <div className="mt-1 text-sm text-white/60">{item.prompt}</div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-4 sm:p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="text-sm font-semibold text-white">
-                Live course channel
-              </div>
+              <div className="text-sm font-semibold text-white">Live course channel</div>
               <div className="text-xs text-white/60">
-                Multilingual • Faculty-locked • {mode === "voice" ? "Voice mode" : "Text mode"}
+                Multilingual • Faculty-locked • {mode === "text" ? "Text mode" : "Voice mode"}
               </div>
             </div>
 
-            <div className={cx("text-xs", loading ? "text-white/70" : "text-white/50")}>
+            <div className="text-xs text-white/60">
               {loading ? "Thinking..." : "Ready"}
             </div>
           </div>
 
           <div
             ref={listRef}
-            className="mt-4 h-[430px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4"
+            className="mt-5 h-[420px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4"
           >
             <div className="space-y-3">
-              {messages.map((m, idx) => (
+              {messages.map((m, i) => (
                 <div
-                  key={idx}
+                  key={i}
                   className={cx(
-                    "max-w-[92%] rounded-2xl border px-4 py-3 text-sm leading-6",
+                    "max-w-[90%] rounded-2xl border px-4 py-3 text-sm leading-6",
                     m.role === "user"
                       ? "ml-auto border-white/10 bg-white/10 text-white"
                       : "border-white/10 bg-white/5 text-white/85"
@@ -332,29 +358,32 @@ export default function TrackPageClient({
             </div>
           </div>
 
-          <div className="mt-3 flex gap-2">
+          <div className="mt-4 flex gap-3">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") sendMessage();
               }}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20"
-              placeholder={`Ask the ${roleInfo.title.toLowerCase()} in any language...`}
+              placeholder={`Ask the ${roleInfo.title} in any language...`}
+              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
             />
+
             <button
-              onClick={sendMessage}
-              className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+              type="button"
+              onClick={() => sendMessage()}
+              disabled={loading || !input.trim()}
+              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Send
             </button>
           </div>
 
-          <div className="mt-2 text-[11px] text-white/50">
+          {mode === "voice" ? <audio ref={audioRef} className="hidden" /> : null}
+
+          <div className="mt-3 text-xs text-white/50">
             Tip: choose Voice mode if you want spoken answers.
           </div>
-
-          <audio ref={audioRef} className="hidden" />
         </div>
       </div>
     </section>
