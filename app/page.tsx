@@ -48,14 +48,6 @@ export default function HomePage() {
       accent: "university",
     },
     {
-      name: "Shynvo Academy",
-      label: "School Learning World",
-      desc: "Junior and senior high school learning, quizzes, tutor support, and badges.",
-      tags: ["School", "Quizzes", "Badges"],
-      href: "/academy",
-      accent: "university",
-    },
-    {
       name: "Shynvo OS",
       label: "Dimensional Execution Cockpit",
       desc: "Missions, focus systems, AI agents, and strategic orchestration in one cockpit.",
@@ -78,22 +70,6 @@ export default function HomePage() {
       tags: ["Teams", "OKRs", "Analytics"],
       href: "/enterprise",
       accent: "enterprise",
-    },
-    {
-      name: "Frontier Lab",
-      label: "High-Reliability Decision Environment",
-      desc: "Decision drills, crisis simulation, protocols, and resilience systems.",
-      tags: ["Tactical", "Crisis", "Protocols"],
-      href: "/frontier",
-      accent: "frontier",
-    },
-    {
-      name: "Arcade Sim",
-      label: "Competitive Skill Arena",
-      desc: "Gamified drills, interview simulations, and performance scoring modes.",
-      tags: ["Drills", "Interviews", "Scoring"],
-      href: "/arcade",
-      accent: "arcade",
     },
   ];
 
