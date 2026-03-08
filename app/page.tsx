@@ -1,4 +1,5 @@
 import Link from "next/link";
+import RobotTypingLine from "@/components/RobotTypingLine";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -196,9 +197,8 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/85">
-                Welcome to Shynvo Robot. Click to enter the multilingual robot
-                experience.
+              <div className="mt-4">
+                <RobotTypingLine />
               </div>
 
               <p className="mt-4 text-sm text-white/68">
