@@ -48,6 +48,14 @@ export default function HomePage() {
       accent: "university",
     },
     {
+      name: "Shynvo Academy",
+      label: "School Learning World",
+      desc: "Junior and senior high school learning, subject rooms, tutors, and classroom workshops.",
+      tags: ["School", "Subjects", "Badges"],
+      href: "/academy",
+      accent: "arcade",
+    },
+    {
       name: "Shynvo OS",
       label: "Dimensional Execution Cockpit",
       desc: "Missions, focus systems, AI agents, and strategic orchestration in one cockpit.",
