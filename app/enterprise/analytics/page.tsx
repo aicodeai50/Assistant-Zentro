@@ -1,54 +1,74 @@
-import Link from "next/link";
+"use client";
 
-const METRICS = [
-  {
-    title: "Mission Progress",
-    subtitle: "Healthy",
-    href: "/enterprise/analytics/progress",
-  },
-  {
-    title: "Workload Balance",
-    subtitle: "Moderate",
-    href: "/enterprise/analytics/workload",
-  },
-  {
-    title: "Team Output",
-    subtitle: "Improving",
-    href: "/enterprise/analytics/output",
-  },
-];
+import { useState } from "react";
+import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
 
 export default function EnterpriseAnalyticsPage() {
+  const [mission, setMission] = useState(78);
+  const [workload, setWorkload] = useState(64);
+  const [output, setOutput] = useState(71);
+
   return (
     <section className="py-10 sm:py-14">
-      <Link href="/enterprise" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white">
-        ← Back to Enterprise Suite
-      </Link>
+      <EnterpriseNav hubHref="/enterprise" hubTitle="Enterprise Suite" />
 
-      <div className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+      <div className="text-xs font-semibold uppercase tracking-wider text-emerald-100/70">
         Enterprise Suite
       </div>
 
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">
+      <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-6xl">
         Analytics
       </h1>
 
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
+      <p className="mt-4 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
         Analytics gives leaders visibility into progress, bottlenecks, workload, mission health, and team performance.
       </p>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
-        {METRICS.map((item) => (
-          <Link
-            key={item.title}
-            href={item.href}
-            className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/7"
-          >
-            <div className="text-2xl font-semibold text-white">{item.title}</div>
-            <div className="mt-3 text-sm text-white/70">{item.subtitle}</div>
-            <div className="mt-5 text-sm font-semibold text-white/90">Open detail →</div>
-          </Link>
-        ))}
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
+        <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
+          <div className="text-2xl font-semibold text-white">Mission Progress</div>
+          <div className="mt-3 text-sm text-white/70">{mission >= 70 ? "Healthy" : "Needs attention"}</div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={mission}
+            onChange={(e) => setMission(Number(e.target.value))}
+            className="mt-5 w-full"
+          />
+          <div className="mt-4 text-sm text-white/80">{mission}/100</div>
+          <div className="mt-5 text-sm font-semibold text-white/90">Open detail →</div>
+        </div>
+
+        <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
+          <div className="text-2xl font-semibold text-white">Workload Balance</div>
+          <div className="mt-3 text-sm text-white/70">{workload >= 70 ? "Stable" : "Moderate"}</div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={workload}
+            onChange={(e) => setWorkload(Number(e.target.value))}
+            className="mt-5 w-full"
+          />
+          <div className="mt-4 text-sm text-white/80">{workload}/100</div>
+          <div className="mt-5 text-sm font-semibold text-white/90">Open detail →</div>
+        </div>
+
+        <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
+          <div className="text-2xl font-semibold text-white">Team Output</div>
+          <div className="mt-3 text-sm text-white/70">{output >= 70 ? "Improving" : "Needs support"}</div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={output}
+            onChange={(e) => setOutput(Number(e.target.value))}
+            className="mt-5 w-full"
+          />
+          <div className="mt-4 text-sm text-white/80">{output}/100</div>
+          <div className="mt-5 text-sm font-semibold text-white/90">Open detail →</div>
+        </div>
       </div>
     </section>
   );
