@@ -43,46 +43,58 @@ const ENVIRONMENTS = [
   {
     title: "Frontier Lab",
     subtitle: "Engineering District",
-    desc: "Coding, programming languages, engineering logic, and real build practice.",
+    desc: "Coding, programming, system logic, and build practice.",
     href: "/frontier",
     tags: ["Coding", "Programming", "Build"],
   },
   {
     title: "Arcade Sim",
     subtitle: "Competitive Skill Arena",
-    desc: "Gamified drills, interview simulations, challenge modes, and scoring systems.",
+    desc: "Gamified drills, challenge modes, scoring, and simulation play.",
     href: "/arcade",
-    tags: ["Drills", "Games", "Scoring"],
+    tags: ["Games", "Drills", "Scoring"],
   },
 ];
 
 export default function HomePage() {
   return (
-    <section className="relative py-8 sm:py-10">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_20%_10%,rgba(255,255,255,0.06),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(1000px_560px_at_85%_18%,rgba(59,130,246,0.08),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_50%_100%,rgba(168,85,247,0.06),transparent_55%)]" />
+    <section className="relative py-6 sm:py-8">
+      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden rounded-[2rem]">
+        <div className="absolute inset-0 bg-[#07090d]" />
+        <div className="absolute inset-0 bg-[radial-gradient(900px_540px_at_18%_10%,rgba(59,130,246,0.08),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(1000px_560px_at_82%_20%,rgba(168,85,247,0.06),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_50%_100%,rgba(255,255,255,0.04),transparent_55%)]" />
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 sm:p-8">
-          <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/75">
-            • Structured Intelligence Platform
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem] opacity-30">
+        <video
+          className="h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/shynvo-wallpaper.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm sm:p-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/75">
+            <span className="h-2 w-2 rounded-full bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.8)]" />
+            Structured Intelligence Platform
           </div>
 
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
             Shynvo
           </h1>
 
-          <h2 className="mt-3 text-2xl font-medium tracking-tight text-white/90 sm:text-4xl">
+          <h2 className="mt-3 text-2xl font-medium tracking-tight text-white/90 sm:text-[2.35rem]">
             Architecture of Applied Intelligence
           </h2>
 
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-white/75 sm:text-lg">
+          <p className="mt-5 max-w-3xl text-base leading-8 text-white/78">
             A multi-environment intelligence platform for learning, execution, strategy,
             resilience, organizational growth, coding, and skill development.
           </p>
@@ -110,14 +122,18 @@ export default function HomePage() {
 
         <Link
           href="/robot"
-          className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 transition hover:bg-white/7"
+          className="group overflow-hidden rounded-[2rem] border border-white/10 bg-black/25 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] transition hover:bg-white/5"
         >
-          <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10">
+          <div className="relative h-[320px] w-full overflow-hidden border-b border-white/10 bg-black/30">
             <img
               src="/robot.webp"
               alt="Shynvo Robot"
               className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
             />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            <div className="absolute left-4 top-4 text-sm font-semibold text-white/90">
+              Shynvo Robot
+            </div>
           </div>
 
           <div className="p-5">
@@ -140,7 +156,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white/85">
               Welcome to Shynvo Robot. Click to enter the multilingual robot experience.
             </div>
 
