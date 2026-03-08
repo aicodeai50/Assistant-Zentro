@@ -65,7 +65,7 @@ const ENVIRONMENTS = [
 
 export default function HomePage() {
   return (
-    <section className="relative overflow-hidden py-8 sm:py-10">
+    <section className="relative overflow-hidden py-6 sm:py-8 lg:py-10">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
         <video
           className="h-full w-full object-cover opacity-22"
@@ -83,14 +83,14 @@ export default function HomePage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid items-stretch gap-6 lg:grid-cols-[1.12fr_0.88fr]">
+        <div className="grid items-start gap-5 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-[2rem] border border-white/10 bg-black/20 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm sm:p-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/80">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.85)]" />
               Structured Intelligence Platform
             </div>
 
-            <h1 className="mt-6 text-5xl font-semibold tracking-tight text-white sm:text-7xl">
+            <h1 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
               Shynvo
             </h1>
 
@@ -126,7 +126,7 @@ export default function HomePage() {
 
           <div className="rounded-[2rem] border border-white/10 bg-black/20 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm overflow-hidden">
             <Link href="/robot" className="group block h-full">
-              <div className="relative h-[255px] w-full overflow-hidden border-b border-white/10 bg-black/30 sm:h-[285px]">
+              <div className="relative h-[200px] sm:h-[220px] lg:h-[240px] w-full overflow-hidden border-b border-white/10 bg-black/30">
                 <video
                   className="h-full w-full object-cover"
                   src="/robot.mp4"
