@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
 
@@ -16,12 +17,12 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 const INITIAL_PEOPLE: Person[] = [
-  { id: "1", name: "Amina Yusuf", role: "CEO", team: "Leadership", email: "amina@company.com" },
-  { id: "2", name: "Daniel Reed", role: "Engineering Lead", team: "Engineering", email: "daniel@company.com" },
-  { id: "3", name: "Sarah Cole", role: "Product Lead", team: "Product", email: "sarah@company.com" },
-  { id: "4", name: "Michael Hart", role: "Marketing Lead", team: "Marketing", email: "michael@company.com" },
-  { id: "5", name: "Lina Hassan", role: "Operations", team: "Operations", email: "lina@company.com" },
-  { id: "6", name: "David Moore", role: "Frontend Engineer", team: "Engineering", email: "david@company.com" },
+  { id: "amina-yusuf", name: "Amina Yusuf", role: "CEO", team: "Leadership", email: "amina@company.com" },
+  { id: "daniel-reed", name: "Daniel Reed", role: "Engineering Lead", team: "Engineering", email: "daniel@company.com" },
+  { id: "sarah-cole", name: "Sarah Cole", role: "Product Lead", team: "Product", email: "sarah@company.com" },
+  { id: "michael-hart", name: "Michael Hart", role: "Marketing Lead", team: "Marketing", email: "michael@company.com" },
+  { id: "lina-hassan", name: "Lina Hassan", role: "Operations", team: "Operations", email: "lina@company.com" },
+  { id: "david-moore", name: "David Moore", role: "Frontend Engineer", team: "Engineering", email: "david@company.com" },
 ];
 
 function initialsFromName(name: string) {
@@ -29,6 +30,15 @@ function initialsFromName(name: string) {
   if (parts.length === 0) return "??";
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+}
+
+function slugifyName(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 export default function EnterpriseDirectoryPage() {
@@ -63,7 +73,7 @@ export default function EnterpriseDirectoryPage() {
     if (!cleanName || !cleanRole || !cleanTeam) return;
 
     const next: Person = {
-      id: `${Date.now()}`,
+      id: slugifyName(cleanName) || `${Date.now()}`,
       name: cleanName,
       role: cleanRole,
       team: cleanTeam,
@@ -133,8 +143,7 @@ export default function EnterpriseDirectoryPage() {
           </h2>
 
           <p className="mt-3 text-sm leading-6 text-white/70">
-            Type any member name, role, team, and optional email. This makes the
-            directory feel like a real company workspace instead of a static demo.
+            Type any member name, role, team, and optional email.
           </p>
 
           <div className="mt-6 grid gap-4">
@@ -259,6 +268,15 @@ export default function EnterpriseDirectoryPage() {
                   {person.email}
                 </span>
               ) : null}
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link
+                href={`/enterprise/directory/${person.id}?name=${encodeURIComponent(person.name)}&role=${encodeURIComponent(person.role)}&team=${encodeURIComponent(person.team)}&email=${encodeURIComponent(person.email ?? "")}`}
+                className="rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+              >
+                Open profile
+              </Link>
             </div>
           </div>
         ))}
