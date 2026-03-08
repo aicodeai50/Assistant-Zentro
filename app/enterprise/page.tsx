@@ -36,6 +36,26 @@ const SECTORS = [
     subtitle: "Operational insight into progress and output.",
     href: "/enterprise/analytics",
   },
+  {
+    title: "Dashboard",
+    subtitle: "Company-wide operational overview and quick access.",
+    href: "/enterprise/dashboard",
+  },
+  {
+    title: "Directory",
+    subtitle: "Browse company members across roles and teams.",
+    href: "/enterprise/directory",
+  },
+  {
+    title: "Schedule",
+    subtitle: "Track meetings, room sessions, and team coordination.",
+    href: "/enterprise/schedule",
+  },
+  {
+    title: "Company Chat",
+    subtitle: "Internal communication layer for the organization.",
+    href: "/enterprise/chat",
+  },
 ];
 
 export default function EnterprisePage() {
@@ -112,6 +132,16 @@ export default function EnterprisePage() {
                 <div>
                   <div className="text-lg font-semibold text-white">Review analytics</div>
                   <div className="mt-1 text-sm text-white/70">See performance, workload, and progress.</div>
+                </div>
+                <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">→</span>
+              </div>
+            </Link>
+
+            <Link href="/enterprise/dashboard" className="rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-lg font-semibold text-white">Open dashboard</div>
+                  <div className="mt-1 text-sm text-white/70">View company-wide status and shortcuts.</div>
                 </div>
                 <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">→</span>
               </div>
