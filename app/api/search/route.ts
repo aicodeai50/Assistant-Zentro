@@ -1,11 +1,85 @@
-export async function POST(req: Request) {
-  const { query } = await req.json();
+import { NextRequest, NextResponse } from "next/server";
 
-  // Temporary simple response (we’ll upgrade to OpenAI after deployment is stable)
-  const answer =
-    typeof query === "string" && query.trim()
-      ? `Search received: "${query}". (Next: connect AI search.)`
-      : "Please enter a query.";
+const DEFAULT_PATHS = [
+  "/api/public/search",
+  "/public/search",
+  "/api/search",
+  "/search",
+];
 
-  return Response.json({ answer });
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+
+    const baseUrl =
+      process.env.BACKEND_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      process.env.RAILWAY_API_BASE_URL ||
+      "";
+
+    if (!baseUrl) {
+      return NextResponse.json(
+        {
+          error:
+            "Missing backend URL. Add BACKEND_URL or NEXT_PUBLIC_API_URL in Vercel.",
+        },
+        { status: 500 }
+      );
+    }
+
+    const cleanBase = baseUrl.replace(/\/+$/, "");
+    const apiKey = process.env.SH_API_KEY || "";
+    const customPath = process.env.BACKEND_SEARCH_PATH || "";
+    const candidatePaths = customPath
+      ? [customPath.startsWith("/") ? customPath : `/${customPath}`, ...DEFAULT_PATHS]
+      : DEFAULT_PATHS;
+
+    let lastStatus = 500;
+    let lastText = "Endpoint not found";
+
+    for (const path of candidatePaths) {
+      try {
+        const res = await fetch(`${cleanBase}${path}`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            ...(apiKey ? { "x-sh-api-key": apiKey } : {}),
+          },
+          body: JSON.stringify(body),
+          cache: "no-store",
+        });
+
+        const text = await res.text();
+        lastStatus = res.status;
+        lastText = text;
+
+        if (res.ok) {
+          return new NextResponse(text, {
+            status: res.status,
+            headers: {
+              "content-type": res.headers.get("content-type") || "application/json",
+            },
+          });
+        }
+      } catch (err) {
+        lastStatus = 500;
+        lastText = err instanceof Error ? err.message : "Backend request failed";
+      }
+    }
+
+    return NextResponse.json(
+      {
+        error: "Backend search endpoint not found or failed.",
+        details: lastText,
+        tried: candidatePaths,
+      },
+      { status: lastStatus || 500 }
+    );
+  } catch (error) {
+    console.error("Proxy /api/search error:", error);
+    return NextResponse.json(
+      { error: "Failed to reach backend search service." },
+      { status: 500 }
+    );
+  }
 }
