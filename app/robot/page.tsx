@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type MainChoice = "learn" | "build" | "train" | "explore";
@@ -157,6 +157,18 @@ const STATUS_LINES = [
   "Preparing your next path",
 ];
 
+const INITIAL_MESSAGES: Msg[] = [
+  {
+    role: "robot",
+    text:
+      "Welcome to Shynvo Robot World. I can guide you through learning, building, training, or exploration across the Shynvo environments.",
+  },
+  {
+    role: "robot",
+    text: "What would you like to do first?",
+  },
+];
+
 function TypingDots() {
   return (
     <div className="inline-flex items-center gap-1">
@@ -167,23 +179,46 @@ function TypingDots() {
   );
 }
 
+function getRobotReply(input: string): string {
+  const text = input.toLowerCase();
+
+  if (text.includes("learn") || text.includes("study") || text.includes("school") || text.includes("university")) {
+    return "For learning, I recommend University Hub for higher study or Shynvo Academy for junior and senior school learning.";
+  }
+
+  if (text.includes("build") || text.includes("code") || text.includes("program") || text.includes("app")) {
+    return "For building, Frontier Lab is the strongest place to start. It focuses on code, logic, and technical systems.";
+  }
+
+  if (text.includes("train") || text.includes("practice") || text.includes("challenge") || text.includes("game")) {
+    return "For training, Arcade Sim is the best place to begin. It turns skill-building into challenge mode.";
+  }
+
+  if (text.includes("explore") || text.includes("experiment") || text.includes("idea")) {
+    return "For exploration, Experiments is a strong starting point. It is designed for trying concepts, systems, and new worlds.";
+  }
+
+  if (text.includes("enterprise") || text.includes("company") || text.includes("team")) {
+    return "Enterprise Suite is best for companies, teams, coordination, analytics, and structured business workflows.";
+  }
+
+  if (text.includes("os") || text.includes("focus") || text.includes("workflow") || text.includes("mission")) {
+    return "Shynvo OS is best for focus, workflow structure, missions, and personal execution systems.";
+  }
+
+  return "I can help you choose where to begin. You can ask about learning, building, training, exploration, coding, school, university, teams, or experiments.";
+}
+
 export default function RobotWorldPage() {
   const router = useRouter();
-  const [messages, setMessages] = useState<Msg[]>([
-    {
-      role: "robot",
-      text:
-        "Welcome to Shynvo Robot World. I can guide you through learning, building, training, or exploration across the Shynvo environments.",
-    },
-    {
-      role: "robot",
-      text: "What would you like to do first?",
-    },
-  ]);
+  const listRef = useRef<HTMLDivElement | null>(null);
+
+  const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
   const [selectedMain, setSelectedMain] = useState<MainChoice | null>(null);
   const [selectedTarget, setSelectedTarget] = useState<RouteTarget | null>(null);
   const [statusIndex, setStatusIndex] = useState(0);
   const [isThinking, setIsThinking] = useState(false);
+  const [input, setInput] = useState("");
 
   const options = useMemo(
     () => (selectedMain ? GROUP_OPTIONS[selectedMain] : []),
@@ -196,6 +231,12 @@ export default function RobotWorldPage() {
     }, 2600);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  }, [messages, isThinking]);
 
   function pushRobotMessages(next: Msg[]) {
     setIsThinking(true);
@@ -211,6 +252,7 @@ export default function RobotWorldPage() {
 
     setSelectedMain(choice);
     setSelectedTarget(null);
+
     pushRobotMessages([
       { role: "user", text: item.title },
       {
@@ -236,6 +278,7 @@ export default function RobotWorldPage() {
     if (!item) return;
 
     setSelectedTarget(target);
+
     pushRobotMessages([
       { role: "user", text: item.title },
       { role: "robot", text: item.explanation },
@@ -272,17 +315,24 @@ export default function RobotWorldPage() {
     setSelectedMain(null);
     setSelectedTarget(null);
     setIsThinking(false);
-    setMessages([
-      {
-        role: "robot",
-        text:
-          "Welcome to Shynvo Robot World. I can guide you through learning, building, training, or exploration across the Shynvo environments.",
-      },
-      {
-        role: "robot",
-        text: "What would you like to do first?",
-      },
-    ]);
+    setInput("");
+    setMessages(INITIAL_MESSAGES);
+  }
+
+  function sendMessage() {
+    const text = input.trim();
+    if (!text || isThinking) return;
+
+    setMessages((prev) => [...prev, { role: "user", text }]);
+    setInput("");
+
+    const reply = getRobotReply(text);
+
+    setIsThinking(true);
+    setTimeout(() => {
+      setMessages((prev) => [...prev, { role: "robot", text: reply }]);
+      setIsThinking(false);
+    }, 420);
   }
 
   return (
@@ -346,7 +396,7 @@ export default function RobotWorldPage() {
 
           <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-black/20">
             <div className="relative aspect-[4/3] w-full bg-black">
-              <div className="pointer-events-none absolute inset-0 z-10 rounded-none bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.18),transparent_42%)] animate-pulse" />
+              <div className="pointer-events-none absolute inset-0 z-10 animate-pulse bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.18),transparent_42%)]" />
               <video
                 className="h-full w-full object-cover"
                 src="/robot.mp4"
@@ -400,13 +450,16 @@ export default function RobotWorldPage() {
             </button>
           </div>
 
-          <div className="mt-5 h-[420px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4">
+          <div
+            ref={listRef}
+            className="mt-5 h-[420px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4"
+          >
             <div className="space-y-3">
               {messages.map((msg, index) => (
                 <div
                   key={index}
                   className={cx(
-                    "max-w-[92%] rounded-2xl border px-4 py-3 text-sm leading-6 transition duration-300 animate-[fadeIn_.35s_ease]",
+                    "max-w-[92%] rounded-2xl border px-4 py-3 text-sm leading-6 transition duration-300",
                     msg.role === "user"
                       ? "ml-auto border-white/10 bg-white/10 text-white"
                       : "border-white/10 bg-white/5 text-white/85"
@@ -422,6 +475,27 @@ export default function RobotWorldPage() {
                 </div>
               ) : null}
             </div>
+          </div>
+
+          <div className="mt-4 flex gap-3">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") sendMessage();
+              }}
+              placeholder="Ask Shynvo Robot anything..."
+              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+            />
+
+            <button
+              type="button"
+              onClick={sendMessage}
+              disabled={isThinking || !input.trim()}
+              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Send
+            </button>
           </div>
 
           <div className="mt-5 space-y-4">
