@@ -179,34 +179,73 @@ function TypingDots() {
   );
 }
 
-function getRobotReply(input: string): string {
-  const text = input.toLowerCase();
+async function fetchRobotReply(
+  input: string,
+  history: Msg[]
+): Promise<string> {
+  const systemPrompt = `
+You are Shynvo Robot, the multilingual guide and assistant for the Shynvo platform.
 
-  if (text.includes("learn") || text.includes("study") || text.includes("school") || text.includes("university")) {
-    return "For learning, I recommend University Hub for higher study or Shynvo Academy for junior and senior school learning.";
+Your behavior:
+- Answer naturally like a real AI assistant.
+- Answer in the same language the user writes in.
+- Be professional, clear, warm, and concise.
+- You can explain the Shynvo environments and also answer normal user questions.
+- The main Shynvo environments are:
+  - University Hub: higher education, faculties, courses, academic guidance
+  - Shynvo Academy: junior and senior school learning
+  - Shynvo OS: focus, workflow, missions, execution systems
+  - Experiments: concept worlds, simulations, exploration
+  - Enterprise Suite: teams, coordination, analytics, company workflows
+  - Frontier Lab: coding, algorithms, AI bot behavior, logic, engineering
+  - Arcade Sim: drills, interview quests, rankings, gamified skill training
+- If the user asks where to start, guide them to the right environment.
+- If the user asks a general question, answer it normally.
+- Do not mention backend, API, model, routing, infrastructure, or system internals.
+`.trim();
+
+  const payload = {
+    message: input,
+    systemPrompt,
+    messages: history.map((m) => ({
+      role: m.role === "user" ? "user" : "assistant",
+      content: m.text,
+    })),
+  };
+
+  const res = await fetch("/api/public/chat", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const raw = await res.text();
+
+  let data: any = null;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    data = null;
   }
 
-  if (text.includes("build") || text.includes("code") || text.includes("program") || text.includes("app")) {
-    return "For building, Frontier Lab is the strongest place to start. It focuses on code, logic, and technical systems.";
+  if (!res.ok) {
+    const message =
+      data?.error ||
+      data?.details ||
+      raw ||
+      "The robot could not answer right now.";
+    throw new Error(message);
   }
 
-  if (text.includes("train") || text.includes("practice") || text.includes("challenge") || text.includes("game")) {
-    return "For training, Arcade Sim is the best place to begin. It turns skill-building into challenge mode.";
-  }
-
-  if (text.includes("explore") || text.includes("experiment") || text.includes("idea")) {
-    return "For exploration, Experiments is a strong starting point. It is designed for trying concepts, systems, and new worlds.";
-  }
-
-  if (text.includes("enterprise") || text.includes("company") || text.includes("team")) {
-    return "Enterprise Suite is best for companies, teams, coordination, analytics, and structured business workflows.";
-  }
-
-  if (text.includes("os") || text.includes("focus") || text.includes("workflow") || text.includes("mission")) {
-    return "Shynvo OS is best for focus, workflow structure, missions, and personal execution systems.";
-  }
-
-  return "I can help you choose where to begin. You can ask about learning, building, training, exploration, coding, school, university, teams, or experiments.";
+  return (
+    data?.answer ||
+    data?.reply ||
+    data?.message ||
+    raw ||
+    "The robot could not answer right now."
+  );
 }
 
 export default function RobotWorldPage() {
@@ -316,23 +355,37 @@ export default function RobotWorldPage() {
     setSelectedTarget(null);
     setIsThinking(false);
     setInput("");
-    setMessages(INITIAL_MESSAGES);
+    setMessages([...INITIAL_MESSAGES]);
   }
 
-  function sendMessage() {
+  async function sendMessage() {
     const text = input.trim();
     if (!text || isThinking) return;
 
-    setMessages((prev) => [...prev, { role: "user", text }]);
+    const nextHistory = [...messages, { role: "user" as const, text }];
+    setMessages(nextHistory);
     setInput("");
-
-    const reply = getRobotReply(text);
-
     setIsThinking(true);
-    setTimeout(() => {
+
+    try {
+      const reply = await fetchRobotReply(text, nextHistory);
+
       setMessages((prev) => [...prev, { role: "robot", text: reply }]);
+    } catch (error) {
+      const msg =
+        error instanceof Error
+          ? error.message
+          : "The robot could not answer right now.";
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "robot",
+          text: `I could not answer right now. ${msg}`,
+        },
+      ]);
+    } finally {
       setIsThinking(false);
-    }, 420);
+    }
   }
 
   return (
