@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 
 const LINES = [
-  "Welcome to Shynvo Robot. Click to enter the multilingual robot experience.",
-  "AI chamber ready. Open the robot to begin guided conversation.",
-  "Your assistant is online. Tap the chamber to start the robot trial experience.",
+  "Welcome to Shynvo. Your structured intelligence platform.",
+  "Explore University Hub, Shynvo Academy, and Frontier Lab.",
+  "Build systems. Learn knowledge. Train skills.",
+  "Discover Shynvo OS, Experiments, and Enterprise Suite.",
+  "Challenge yourself in Arcade Sim.",
+  "I'm here whenever you're ready. Click to enter the Shynvo Robot world.",
 ];
 
 export default function RobotTypingLine() {
@@ -15,17 +18,16 @@ export default function RobotTypingLine() {
 
   useEffect(() => {
     const fullText = LINES[lineIndex];
-
-    const speed = isDeleting ? 22 : 38;
-    const pauseAtEnd = 1400;
-    const pauseBeforeNext = 250;
+    const typingSpeed = isDeleting ? 18 : 34;
+    const pauseAfterTyping = 1500;
+    const pauseAfterDeleting = 250;
 
     const timer = setTimeout(() => {
       if (!isDeleting) {
         if (displayed.length < fullText.length) {
           setDisplayed(fullText.slice(0, displayed.length + 1));
         } else {
-          setTimeout(() => setIsDeleting(true), pauseAtEnd);
+          setTimeout(() => setIsDeleting(true), pauseAfterTyping);
         }
       } else {
         if (displayed.length > 0) {
@@ -34,18 +36,18 @@ export default function RobotTypingLine() {
           setIsDeleting(false);
           setTimeout(() => {
             setLineIndex((prev) => (prev + 1) % LINES.length);
-          }, pauseBeforeNext);
+          }, pauseAfterDeleting);
         }
       }
-    }, speed);
+    }, typingSpeed);
 
     return () => clearTimeout(timer);
   }, [displayed, isDeleting, lineIndex]);
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/85 min-h-[84px]">
+    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/85 min-h-[92px]">
       {displayed}
-      <span className="ml-1 inline-block h-4 w-[2px] animate-pulse bg-emerald-300 align-middle" />
+      <span className="ml-1 inline-block h-4 w-[2px] animate-pulse rounded bg-emerald-400 align-middle" />
     </div>
   );
 }
