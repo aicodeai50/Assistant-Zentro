@@ -2,68 +2,120 @@
 
 import { useState } from "react";
 
+type SearchResponse = {
+  answer?: string;
+  reply?: string;
+  message?: string;
+  error?: string;
+  details?: string;
+};
+
 export default function SearchPage() {
   const [query, setQuery] = useState("");
-  const [answer, setAnswer] = useState<string>("");
+  const [result, setResult] = useState("Ask anything. Press Enter to send.");
   const [loading, setLoading] = useState(false);
 
-  async function run() {
-    const q = query.trim();
-    if (!q || loading) return;
+  async function runSearch() {
+    const text = query.trim();
+    if (!text || loading) return;
 
     setLoading(true);
-    setAnswer("");
+    setResult("Searching Shynvo...");
 
     try {
-      const res = await fetch("/api/test-ai", {
+      const res = await fetch("/api/search", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: q }),
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          message: text,
+          query: text,
+        }),
       });
 
-      const data = await res.json();
-      setAnswer(data?.reply ?? "No response.");
-    } catch {
-      setAnswer("Error: search request failed.");
+      const raw = await res.text();
+
+      let data: SearchResponse | null = null;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        data = null;
+      }
+
+      if (!res.ok) {
+        setResult(
+          data?.error ||
+            data?.details ||
+            raw ||
+            "Search could not respond right now."
+        );
+        return;
+      }
+
+      setResult(
+        data?.answer ||
+          data?.reply ||
+          data?.message ||
+          raw ||
+          "No result returned."
+      );
+    } catch (error) {
+      setResult(
+        error instanceof Error
+          ? error.message
+          : "Search could not respond right now."
+      );
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="mx-auto max-w-3xl py-14">
-      <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
-        Search
+    <section className="relative py-10 sm:py-14">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_15%_10%,rgba(59,130,246,0.10),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(1000px_560px_at_82%_18%,rgba(16,185,129,0.08),transparent_55%)]" />
       </div>
 
-      <h1 className="mt-2 text-3xl font-semibold text-white">Search Shynvo</h1>
-      <p className="mt-2 text-sm text-white/70">
-        Ask anything. Press Enter to send.
-      </p>
-
-      <div className="mt-6 flex gap-2">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") run();
-          }}
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20"
-          placeholder="Type your question…"
-        />
-        <button
-          onClick={run}
-          className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-        >
-          {loading ? "…" : "Search"}
-        </button>
-      </div>
-
-      {answer ? (
-        <div className="mt-6 whitespace-pre-wrap rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/85">
-          {answer}
+      <div className="mx-auto max-w-5xl">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+          Search
         </div>
-      ) : null}
-    </div>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+          Search Shynvo
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
+          Ask anything. Press Enter to send.
+        </p>
+
+        <div className="mt-8 flex gap-3">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") runSearch();
+            }}
+            placeholder="Environment"
+            className="w-full rounded-2xl border border-white/10 bg-black/20 px-5 py-4 text-sm text-white outline-none placeholder:text-white/45"
+          />
+          <button
+            type="button"
+            onClick={runSearch}
+            disabled={loading || !query.trim()}
+            className="rounded-2xl bg-white px-6 py-4 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? "Searching..." : "Search"}
+          </button>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 px-5 py-4 text-sm leading-7 text-white/85">
+          {result}
+        </div>
+      </div>
+    </section>
   );
 }
