@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function SignUpPage() {
   const { t } = useLanguage();
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -26,24 +29,48 @@ export default function SignUpPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
         },
-      },
-    });
+      });
 
-    if (error) {
-      setMessage(error.message);
+      if (error) {
+        setMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      const user = data.user;
+      const session = data.session;
+
+      if (user) {
+        await supabase.from("profiles").upsert(
+          {
+            id: user.id,
+            email: user.email ?? email,
+            full_name: fullName || null,
+          },
+          { onConflict: "id" }
+        );
+      }
+
+      if (session) {
+        router.push("/");
+        return;
+      }
+
+      setMessage("Account created. Check your email to confirm your account, then sign in.");
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Sign up failed.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setMessage("Account created. Check your email if confirmation is enabled.");
-    setLoading(false);
   }
 
   return (
@@ -119,7 +146,7 @@ export default function SignUpPage() {
           ) : null}
 
           <div className="mt-5 text-sm text-white/65">
-            Already have an account?{" "}
+            {t("auth.alreadyHave")}{" "}
             <Link href="/sign-in" className="text-white underline underline-offset-4">
               {t("nav.signIn")}
             </Link>
