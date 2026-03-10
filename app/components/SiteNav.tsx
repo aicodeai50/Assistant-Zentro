@@ -118,7 +118,7 @@ export default function SiteNav() {
           </div>
 
           <Link
-            href="/signup"
+            href="/sign-up"
             className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
           >
             Create account
@@ -213,7 +213,7 @@ export default function SiteNav() {
           <div className="my-4 border-t border-white/10" />
 
           <Link
-            href="/signup"
+            href="/sign-up"
             onClick={() => setOpen(false)}
             className="mt-2 block rounded-xl bg-white px-4 py-3 text-center text-sm font-semibold text-[#0B0F14]"
           >
