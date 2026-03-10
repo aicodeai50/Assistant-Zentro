@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkAiAccess, recordAiUsage } from "@/app/api/_utils/aiAccess";
+import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
 
 const DEFAULT_PATHS = [
   "/api/public/chat",
