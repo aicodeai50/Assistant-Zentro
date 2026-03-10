@@ -1,6 +1,5 @@
 "use client";
 
-import LanguageSelector from "@/_components/LanguageSelector";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -79,7 +78,6 @@ export default function SiteNav() {
           <Link href="/contact" className="text-sm text-white/80 hover:text-white">
             Contact
           </Link>
-          <LanguageSelector />
 </nav>
 
         {/* Right: actions */}
