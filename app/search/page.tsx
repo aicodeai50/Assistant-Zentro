@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 type SearchResponse = {
   answer?: string;
@@ -12,8 +13,9 @@ type SearchResponse = {
 };
 
 export default function SearchPage() {
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState("Ask anything. Press Enter to send.");
+  const [result, setResult] = useState("{t("search.prompt")}");
   const [loading, setLoading] = useState(false);
 
   async function runSearch() {
@@ -92,10 +94,10 @@ export default function SearchPage() {
           Search
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-          Search Shynvo
+          {t("search.title")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
-          Ask anything. Press Enter to send.
+          {t("search.prompt")}
         </p>
 
         <div className="mt-8 flex gap-3">

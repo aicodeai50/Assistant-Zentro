@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import {
+  const { t } = useLanguage(); useState } from "react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
 export default function SignInPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, set{t("auth.email")}] = useState("");
+  const [password, set{t("auth.password")}] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -25,7 +27,7 @@ export default function SignInPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWith{t("auth.password")}({
       email,
       password,
     });
@@ -68,11 +70,11 @@ export default function SignInPage() {
         >
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-semibold text-white">Email</label>
+              <label className="text-sm font-semibold text-white">{t("auth.email")}</label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => set{t("auth.email")}(e.target.value)}
                 placeholder="you@example.com"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -80,11 +82,11 @@ export default function SignInPage() {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-white">Password</label>
+              <label className="text-sm font-semibold text-white">{t("auth.password")}</label>
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => set{t("auth.password")}(e.target.value)}
                 placeholder="Your password"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -109,7 +111,7 @@ export default function SignInPage() {
           <div className="mt-5 text-sm text-white/65">
             Don’t have an account?{" "}
             <Link href="/sign-up" className="text-white underline underline-offset-4">
-              Create account
+              {t("auth.signUp.title")}
             </Link>
           </div>
         </form>

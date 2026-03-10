@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { useRouter } from "next/navigation";
 
 type MainChoice = "learn" | "build" | "train" | "explore";
@@ -182,7 +183,8 @@ function TypingDots() {
 
 async function fetchRobotReply(
   input: string,
-  history: Msg[]
+  history: Msg[],
+  preferredLanguage: string
 ): Promise<string> {
   const systemPrompt = `
 You are Shynvo Robot, the multilingual guide and assistant for the Shynvo platform.
@@ -190,6 +192,7 @@ You are Shynvo Robot, the multilingual guide and assistant for the Shynvo platfo
 Your behavior:
 - Answer naturally like a real AI assistant.
 - Answer in the same language the user writes in.
+- Strongly prefer this language when possible: ${preferredLanguage}.
 - Be professional, clear, warm, and concise.
 - You can explain the Shynvo environments and also answer normal user questions.
 - The main Shynvo environments are:
@@ -206,6 +209,7 @@ Your behavior:
 `.trim();
 
   const payload = {
+    preferredLanguage,
     message: input,
     systemPrompt,
     messages: history.map((m) => ({
@@ -256,6 +260,7 @@ Your behavior:
 
 export default function RobotWorldPage() {
   const router = useRouter();
+  const { t, language } = useLanguage();
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
@@ -374,7 +379,7 @@ export default function RobotWorldPage() {
     setIsThinking(true);
 
     try {
-      const reply = await fetchRobotReply(text, nextHistory);
+      const reply = await fetchRobotReply(text, nextHistory, language);
 
       setMessages((prev) => [...prev, { role: "robot", text: reply }]);
     } catch (error) {
@@ -543,7 +548,7 @@ export default function RobotWorldPage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") sendMessage();
               }}
-              placeholder="Ask Shynvo Robot anything..."
+              placeholder={t("robot.ask")}
               className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
             />
 

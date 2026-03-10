@@ -1,4 +1,5 @@
 import "./globals.css";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
-      </body>
+      </LanguageProvider></body>
     </html>
   );
 }

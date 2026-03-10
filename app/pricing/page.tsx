@@ -1,24 +1,25 @@
 import Link from "next/link";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const plans = [
   {
-    name: "Free",
+    name: t("pricing.free"),
     price: "$0",
-    subtitle: "For casual users exploring Shynvo.",
+    subtitle: t("pricing.free.subtitle"),
     features: [
       "Basic AI access",
       "Access to environments",
       "Robot guidance",
       "Community-level usage",
     ],
-    cta: "Current plan",
+    cta: t("pricing.free.cta"),
     href: "/sign-up",
     highlighted: false,
   },
   {
-    name: "Pro",
+    name: t("pricing.pro"),
     price: "$20 / month",
-    subtitle: "For serious learners, builders, and creators.",
+    subtitle: t("pricing.pro.subtitle"),
     features: [
       "Higher AI limits",
       "Full Shynvo Robot support",
@@ -26,14 +27,14 @@ const plans = [
       "Advanced environment usage",
       "Priority experience",
     ],
-    cta: "Upgrade to Pro",
+    cta: t("pricing.pro.cta"),
     href: "/sign-up",
     highlighted: true,
   },
   {
-    name: "Enterprise",
+    name: t("pricing.enterprise"),
     price: "$79 / month",
-    subtitle: "For teams, companies, and organizational systems.",
+    subtitle: t("pricing.enterprise.subtitle"),
     features: [
       "Unlimited AI usage",
       "Enterprise Suite access",
@@ -41,13 +42,16 @@ const plans = [
       "Analytics and coordination",
       "Priority support",
     ],
-    cta: "Contact sales",
+    cta: t("pricing.enterprise.cta"),
     href: "/contact",
     highlighted: false,
   },
 ];
 
+"use client";
+
 export default function PricingPage() {
+  const { t } = useLanguage();
   return (
     <section className="relative py-10 sm:py-14">
       <div
@@ -65,12 +69,11 @@ export default function PricingPage() {
         </div>
 
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-          Choose your Shynvo plan
+          {t("pricing.title")}
         </h1>
 
         <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
-          Start free, explore the Shynvo environments, and upgrade when you need
-          more AI power, deeper tools, and full platform access.
+          {t("pricing.subtitle")}
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">

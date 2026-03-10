@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import {
+  const { t } = useLanguage(); useState } from "react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, set{t("auth.email")}] = useState("");
+  const [password, set{t("auth.password")}] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -59,7 +61,7 @@ export default function SignUpPage() {
           Account
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-          Create account
+          {t("auth.signUp.title")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
           Start your Shynvo account and continue into the platform.
@@ -81,11 +83,11 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-white">Email</label>
+              <label className="text-sm font-semibold text-white">{t("auth.email")}</label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => set{t("auth.email")}(e.target.value)}
                 placeholder="you@example.com"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -93,11 +95,11 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-white">Password</label>
+              <label className="text-sm font-semibold text-white">{t("auth.password")}</label>
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => set{t("auth.password")}(e.target.value)}
                 placeholder="Create a password"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -110,7 +112,7 @@ export default function SignUpPage() {
             disabled={loading}
             className="mt-6 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90 disabled:opacity-50"
           >
-            {loading ? "Creating..." : "Create account"}
+            {loading ? "Creating..." : "{t("auth.signUp.title")}"}
           </button>
 
           {message ? (
