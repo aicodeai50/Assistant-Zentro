@@ -4,6 +4,7 @@ import LanguageSelector from "@/_components/LanguageSelector";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { getSupabaseClient } from "@/lib/supabase/client";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -12,6 +13,8 @@ function cx(...classes: Array<string | false | null | undefined>) {
 export default function SiteNav() {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
+  const [displayName, setDisplayName] = useState<string>("");
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -21,6 +24,53 @@ export default function SiteNav() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadUser() {
+      const supabase = getSupabaseClient();
+      if (!supabase) return;
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session?.user) {
+        if (mounted) {
+          setIsSignedIn(false);
+          setDisplayName("");
+        }
+        return;
+      }
+
+      if (mounted) {
+        setIsSignedIn(true);
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name, email")
+        .eq("id", session.user.id)
+        .single();
+
+      const name =
+        (data?.full_name || "").trim() ||
+        session.user.user_metadata?.full_name ||
+        session.user.email ||
+        "Account";
+
+      if (mounted) {
+        setDisplayName(name);
+      }
+    }
+
+    loadUser();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -46,12 +96,22 @@ export default function SiteNav() {
         <div className="hidden items-center gap-2 md:flex">
           <IconButton label={t("search.label")} href="/search" icon="search" />
           <LanguageSelector />
-          <Link
-            href="/sign-up"
-            className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-          >
-            {t("nav.createAccount")}
-          </Link>
+
+          {isSignedIn ? (
+            <Link
+              href="/account"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              {displayName}
+            </Link>
+          ) : (
+            <Link
+              href="/sign-up"
+              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+            >
+              {t("nav.createAccount")}
+            </Link>
+          )}
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -110,13 +170,23 @@ export default function SiteNav() {
             <LanguageSelector />
           </div>
 
-          <Link
-            href="/sign-up"
-            onClick={() => setOpen(false)}
-            className="mt-2 block rounded-xl bg-white px-4 py-3 text-center text-sm font-semibold text-[#0B0F14]"
-          >
-            {t("nav.createAccount")}
-          </Link>
+          {isSignedIn ? (
+            <Link
+              href="/account"
+              onClick={() => setOpen(false)}
+              className="mt-2 block rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white"
+            >
+              {displayName}
+            </Link>
+          ) : (
+            <Link
+              href="/sign-up"
+              onClick={() => setOpen(false)}
+              className="mt-2 block rounded-xl bg-white px-4 py-3 text-center text-sm font-semibold text-[#0B0F14]"
+            >
+              {t("nav.createAccount")}
+            </Link>
+          )}
         </div>
       </div>
     </header>
