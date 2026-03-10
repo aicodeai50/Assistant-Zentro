@@ -1,24 +1,27 @@
 import "./globals.css";
-import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import type { Metadata } from "next";
-import SiteNav from "@/components/SiteNav";
-import SiteFooter from "@/components/SiteFooter";
+import SiteNav from "@/app/components/SiteNav";
+import SiteFooter from "@/app/components/SiteFooter";
+import { LanguageProvider } from "@/app/lib/i18n/LanguageContext";
 
 export const metadata: Metadata = {
   title: "Shynvo",
-  description: "Architecture of Applied Intelligence",
+  description: "Structured intelligence platform",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#0B0F14] text-white">
-        <SiteNav />
-        <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          {children}
-        </main>
-        <SiteFooter />
-              </LanguageProvider>
+      <body>
+        <LanguageProvider>
+          <SiteNav />
+          <main>{children}</main>
+          <SiteFooter />
+        </LanguageProvider>
       </body>
     </html>
   );
