@@ -1,180 +1,76 @@
 "use client";
 
-
+import LanguageSelector from "@/_components/LanguageSelector";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-const LANGS = [
-  { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "es", label: "Español" },
-  { code: "de", label: "Deutsch" },
-  { code: "ar", label: "العربية" },
-  { code: "sw", label: "Kiswahili" },
-];
-
-const LANG_KEY = "shynvo_lang";
-
 export default function SiteNav() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const [lang, setLang] = useState("en");
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(LANG_KEY);
-      if (saved) setLang(saved);
-    } catch {
-      // ignore
-    }
-  }, []);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setOpen(false);
-        setLangOpen(false);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  function setLanguage(code: string) {
-    setLang(code);
-    setLangOpen(false);
-    try {
-      localStorage.setItem(LANG_KEY, code);
-    } catch {
-      // ignore
-    }
-  }
-
-  const currentLangLabel = useMemo(() => {
-    return LANGS.find((l) => l.code === lang)?.label ?? "English";
-  }, [lang]);
-
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0F14]/80 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        {/* Left: Brand */}
         <Link href="/" className="flex items-center gap-2" aria-label="Shynvo home">
           <ShynvoLogo />
           <span className="text-sm font-semibold tracking-wide text-white">Shynvo</span>
         </Link>
 
-        {/* Center nav */}
         <nav className="hidden items-center gap-6 md:flex">
-          <a href="/pricing" className="text-sm text-white/80 hover:text-white">
-            Pricing
-          </a>
+          <Link href="/pricing" className="text-sm text-white/80 hover:text-white">
+            {t("nav.pricing")}
+          </Link>
           <Link href="/docs" className="text-sm text-white/80 hover:text-white">
-            Docs
+            {t("nav.docs")}
           </Link>
           <Link href="/contact" className="text-sm text-white/80 hover:text-white">
-            Contact
+            {t("nav.contact")}
           </Link>
-</nav>
+        </nav>
 
-        {/* Right: actions */}
         <div className="hidden items-center gap-2 md:flex">
-          <IconButton label="Search" href="/search" icon="search" />
-
-          {/* Language dropdown */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setLangOpen((v) => !v)}
-              className="flex items-center gap-2 rounded-xl px-3 py-2 ring-1 ring-white/15 hover:bg-white/5"
-              aria-label="Select language"
-            >
-              <GlobeIcon />
-              <span className="text-sm text-white/85">{currentLangLabel}</span>
-              <ChevronDown />
-            </button>
-
-            {langOpen ? (
-              <div className="absolute right-0 mt-2 w-52 overflow-hidden rounded-2xl border border-white/10 bg-[#0B0F14] shadow-lg">
-                {LANGS.map((l) => (
-                  <button
-                    key={l.code}
-                    onClick={() => setLanguage(l.code)}
-                    className={cx(
-                      "w-full px-4 py-3 text-left text-sm hover:bg-white/5",
-                      l.code === lang ? "text-white" : "text-white/75"
-                    )}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-
+          <IconButton label={t("search.label")} href="/search" icon="search" />
+          <LanguageSelector />
           <Link
             href="/sign-up"
             className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
           >
-            Create account
+            {t("nav.createAccount")}
           </Link>
         </div>
 
-        {/* Mobile: icons + menu */}
         <div className="flex items-center gap-2 md:hidden">
-          <IconButton label="Search" href="/search" icon="search" />
-
-          <button
-            type="button"
-            onClick={() => setLangOpen((v) => !v)}
-            className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5"
-            aria-label="Language"
-            title="Language"
-          >
-            <GlobeIcon />
-          </button>
-
+          <IconButton label={t("search.label")} href="/search" icon="search" />
           <button
             onClick={() => setOpen(true)}
             className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5"
-            aria-label="Open menu"
+            aria-label={t("nav.menu")}
           >
             <MenuIcon />
           </button>
         </div>
       </div>
 
-      {/* Mobile language dropdown */}
-      {langOpen ? (
-        <div className="md:hidden border-t border-white/10 bg-[#0B0F14]">
-          <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 gap-2">
-              {LANGS.map((l) => (
-                <button
-                  key={l.code}
-                  onClick={() => setLanguage(l.code)}
-                  className={cx(
-                    "rounded-xl px-3 py-2 text-left text-sm ring-1 ring-white/10 hover:bg-white/5",
-                    l.code === lang ? "text-white" : "text-white/75"
-                  )}
-                >
-                  {l.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {/* Mobile drawer */}
       <div className={cx("md:hidden", open ? "block" : "hidden")}>
         <div className="fixed inset-0 z-50 bg-black/60" onClick={() => setOpen(false)} aria-hidden="true" />
         <div className="fixed right-0 top-0 z-50 h-full w-[86%] max-w-sm border-l border-white/10 bg-[#0B0F14] p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-white">Menu</span>
+            <span className="text-sm font-semibold text-white">{t("nav.menu")}</span>
             <button
               onClick={() => setOpen(false)}
               className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5"
@@ -185,37 +81,41 @@ export default function SiteNav() {
           </div>
 
           <div className="mt-4 space-y-2">
-            <a
+            <Link
               href="/pricing"
               onClick={() => setOpen(false)}
               className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
             >
-              Pricing
-            </a>
+              {t("nav.pricing")}
+            </Link>
             <Link
               href="/docs"
               onClick={() => setOpen(false)}
               className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
             >
-              Docs
+              {t("nav.docs")}
             </Link>
             <Link
               href="/contact"
               onClick={() => setOpen(false)}
               className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
             >
-              Contact
+              {t("nav.contact")}
             </Link>
           </div>
 
           <div className="my-4 border-t border-white/10" />
+
+          <div className="mb-4">
+            <LanguageSelector />
+          </div>
 
           <Link
             href="/sign-up"
             onClick={() => setOpen(false)}
             className="mt-2 block rounded-xl bg-white px-4 py-3 text-center text-sm font-semibold text-[#0B0F14]"
           >
-            Create account
+            {t("nav.createAccount")}
           </Link>
         </div>
       </div>
@@ -231,8 +131,6 @@ function IconButton({ label, href, icon }: { label: string; href: string; icon: 
   );
 }
 
-/* Logo */
-
 function ShynvoLogo() {
   return (
     <svg width="30" height="30" viewBox="0 0 100 100" fill="none" aria-hidden="true">
@@ -246,8 +144,6 @@ function ShynvoLogo() {
     </svg>
   );
 }
-
-/* Icons */
 
 function SearchIcon() {
   return (
@@ -264,14 +160,6 @@ function GlobeIcon() {
       <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" strokeWidth="1.6" />
       <path d="M2 12h20" stroke="currentColor" strokeWidth="1.6" />
       <path d="M12 2c3 3 3 17 0 20-3-3-3-17 0-20Z" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
-}
-
-function ChevronDown() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

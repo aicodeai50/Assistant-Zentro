@@ -70,10 +70,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("shynvo_language", lang);
 
     try {
+      const supabase = getSupabaseClient();
+      const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+      const token = session.data.session?.access_token || "";
+
       await fetch("/api/language", {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({ language: lang }),
       });
