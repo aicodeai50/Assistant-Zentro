@@ -15,7 +15,7 @@ type SearchResponse = {
 export default function SearchPage() {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState("{t("search.prompt")}");
+  const [result, setResult] = useState(t("search.prompt"));
   const [loading, setLoading] = useState(false);
 
   async function runSearch() {
@@ -116,7 +116,7 @@ export default function SearchPage() {
             disabled={loading || !query.trim()}
             className="rounded-2xl bg-white px-6 py-4 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Searching..." : "Search"}
+            {loading ? t("common.loading") : t("search.button")}
           </button>
         </div>
 

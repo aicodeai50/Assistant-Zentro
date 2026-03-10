@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import {
-  const { t } = useLanguage(); useState } from "react";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function SignUpPage() {
-  const [email, set{t("auth.email")}] = useState("");
-  const [password, set{t("auth.password")}] = useState("");
+  const { t } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -63,9 +63,6 @@ export default function SignUpPage() {
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
           {t("auth.signUp.title")}
         </h1>
-        <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
-          Start your Shynvo account and continue into the platform.
-        </p>
 
         <form
           onSubmit={handleSignUp}
@@ -73,7 +70,7 @@ export default function SignUpPage() {
         >
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-semibold text-white">Full name</label>
+              <label className="text-sm font-semibold text-white">{t("auth.nameOptional")}</label>
               <input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -87,7 +84,7 @@ export default function SignUpPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => set{t("auth.email")}(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -99,7 +96,7 @@ export default function SignUpPage() {
               <input
                 type="password"
                 value={password}
-                onChange={(e) => set{t("auth.password")}(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -112,7 +109,7 @@ export default function SignUpPage() {
             disabled={loading}
             className="mt-6 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90 disabled:opacity-50"
           >
-            {loading ? "Creating..." : "{t("auth.signUp.title")}"}
+            {loading ? t("common.loading") : t("auth.signUp.title")}
           </button>
 
           {message ? (
@@ -124,7 +121,7 @@ export default function SignUpPage() {
           <div className="mt-5 text-sm text-white/65">
             Already have an account?{" "}
             <Link href="/sign-in" className="text-white underline underline-offset-4">
-              Sign in
+              {t("nav.signIn")}
             </Link>
           </div>
         </form>

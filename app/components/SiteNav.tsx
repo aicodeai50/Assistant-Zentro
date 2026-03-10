@@ -1,6 +1,6 @@
 "use client";
 
-import LanguageSelector from "@/app/_components/LanguageSelector";
+import LanguageSelector from "@/_components/LanguageSelector";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";

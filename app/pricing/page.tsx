@@ -1,25 +1,30 @@
+"use client";
+
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const plans = [
   {
-    name: t("pricing.free"),
+    key: "free",
     price: "$0",
-    subtitle: t("pricing.free.subtitle"),
+    subtitleKey: "pricing.free.subtitle",
+    ctaKey: "pricing.free.cta",
+    href: "/sign-up",
+    highlighted: false,
     features: [
       "Basic AI access",
       "Access to environments",
       "Robot guidance",
       "Community-level usage",
     ],
-    cta: t("pricing.free.cta"),
-    href: "/sign-up",
-    highlighted: false,
   },
   {
-    name: t("pricing.pro"),
+    key: "pro",
     price: "$20 / month",
-    subtitle: t("pricing.pro.subtitle"),
+    subtitleKey: "pricing.pro.subtitle",
+    ctaKey: "pricing.pro.cta",
+    href: "/sign-up",
+    highlighted: true,
     features: [
       "Higher AI limits",
       "Full Shynvo Robot support",
@@ -27,14 +32,14 @@ const plans = [
       "Advanced environment usage",
       "Priority experience",
     ],
-    cta: t("pricing.pro.cta"),
-    href: "/sign-up",
-    highlighted: true,
   },
   {
-    name: t("pricing.enterprise"),
+    key: "enterprise",
     price: "$79 / month",
-    subtitle: t("pricing.enterprise.subtitle"),
+    subtitleKey: "pricing.enterprise.subtitle",
+    ctaKey: "pricing.enterprise.cta",
+    href: "/contact",
+    highlighted: false,
     features: [
       "Unlimited AI usage",
       "Enterprise Suite access",
@@ -42,16 +47,12 @@ const plans = [
       "Analytics and coordination",
       "Priority support",
     ],
-    cta: t("pricing.enterprise.cta"),
-    href: "/contact",
-    highlighted: false,
   },
 ];
 
-"use client";
-
 export default function PricingPage() {
   const { t } = useLanguage();
+
   return (
     <section className="relative py-10 sm:py-14">
       <div
@@ -65,7 +66,7 @@ export default function PricingPage() {
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-          Pricing
+          {t("nav.pricing")}
         </div>
 
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
@@ -79,7 +80,7 @@ export default function PricingPage() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {plans.map((plan) => (
             <div
-              key={plan.name}
+              key={plan.key}
               className={[
                 "rounded-3xl border p-6 backdrop-blur-sm",
                 plan.highlighted
@@ -89,7 +90,9 @@ export default function PricingPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-semibold text-white">{plan.name}</h2>
+                  <h2 className="text-xl font-semibold text-white">
+                    {t(`pricing.${plan.key}`)}
+                  </h2>
                   <p className="mt-2 text-3xl font-bold text-white">{plan.price}</p>
                 </div>
 
@@ -100,7 +103,9 @@ export default function PricingPage() {
                 ) : null}
               </div>
 
-              <p className="mt-4 text-sm leading-6 text-white/65">{plan.subtitle}</p>
+              <p className="mt-4 text-sm leading-6 text-white/65">
+                {t(plan.subtitleKey)}
+              </p>
 
               <ul className="mt-6 space-y-3 text-sm text-white/80">
                 {plan.features.map((feature) => (
@@ -120,7 +125,7 @@ export default function PricingPage() {
                     : "border border-white/10 bg-white/5 text-white hover:bg-white/10",
                 ].join(" ")}
               >
-                {plan.cta}
+                {t(plan.ctaKey)}
               </Link>
             </div>
           ))}

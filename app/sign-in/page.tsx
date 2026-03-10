@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import {
-  const { t } = useLanguage(); useState } from "react";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function SignInPage() {
+  const { t } = useLanguage();
   const router = useRouter();
-  const [email, set{t("auth.email")}] = useState("");
-  const [password, set{t("auth.password")}] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -27,7 +27,7 @@ export default function SignInPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signInWith{t("auth.password")}({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -58,11 +58,8 @@ export default function SignInPage() {
           Account
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-          Sign in
+          {t("auth.signIn.title")}
         </h1>
-        <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
-          Enter your account and continue into Shynvo.
-        </p>
 
         <form
           onSubmit={handleSignIn}
@@ -74,7 +71,7 @@ export default function SignInPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => set{t("auth.email")}(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -86,7 +83,7 @@ export default function SignInPage() {
               <input
                 type="password"
                 value={password}
-                onChange={(e) => set{t("auth.password")}(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
@@ -99,7 +96,7 @@ export default function SignInPage() {
             disabled={loading}
             className="mt-6 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90 disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? t("common.loading") : t("auth.signIn.title")}
           </button>
 
           {message ? (
@@ -111,7 +108,7 @@ export default function SignInPage() {
           <div className="mt-5 text-sm text-white/65">
             Don’t have an account?{" "}
             <Link href="/sign-up" className="text-white underline underline-offset-4">
-              {t("auth.signUp.title")}
+              {t("nav.createAccount")}
             </Link>
           </div>
         </form>
