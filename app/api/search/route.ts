@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkAiAccess, recordAiUsage } from "@/app/api/_utils/aiAccess";
 
 const DEFAULT_PATHS = [
   "/api/public/search",
@@ -9,6 +10,15 @@ const DEFAULT_PATHS = [
 
 export async function POST(req: NextRequest) {
   try {
+    const access = await checkAiAccess(req);
+
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: access.message },
+        { status: access.status }
+      );
+    }
+
     const body = await req.json();
 
     const baseUrl =
@@ -19,16 +29,16 @@ export async function POST(req: NextRequest) {
 
     if (!baseUrl) {
       return NextResponse.json(
-        {
-          error:
-            "Missing backend URL. Add BACKEND_URL or NEXT_PUBLIC_API_URL in Vercel.",
-        },
+        { error: "Missing backend URL." },
         { status: 500 }
       );
     }
 
     const cleanBase = baseUrl.replace(/\/+$/, "");
-    const apiKey = process.env.SH_API_KEY || "";
+    const apiKey =
+      process.env.SH_API_KEY ||
+      process.env.NEXT_PUBLIC_SH_API_KEY ||
+      "";
     const customPath = process.env.BACKEND_SEARCH_PATH || "";
     const candidatePaths = customPath
       ? [customPath.startsWith("/") ? customPath : `/${customPath}`, ...DEFAULT_PATHS]
@@ -54,6 +64,8 @@ export async function POST(req: NextRequest) {
         lastText = text;
 
         if (res.ok) {
+          await recordAiUsage(access);
+
           return new NextResponse(text, {
             status: res.status,
             headers: {
@@ -71,7 +83,6 @@ export async function POST(req: NextRequest) {
       {
         error: "Backend search endpoint not found or failed.",
         details: lastText,
-        tried: candidatePaths,
       },
       { status: lastStatus || 500 }
     );

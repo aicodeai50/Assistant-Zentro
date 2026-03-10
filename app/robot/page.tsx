@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 type MainChoice = "learn" | "build" | "train" | "explore";
@@ -213,10 +214,15 @@ Your behavior:
     })),
   };
 
+  const supabase = getSupabaseClient();
+  const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+  const token = session.data.session?.access_token || "";
+
   const res = await fetch("/api/public/chat", {
     method: "POST",
     headers: {
       "content-type": "application/json",
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify(payload),
   });

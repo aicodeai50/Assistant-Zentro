@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getSupabaseClient } from "@/lib/supabase/client";
 
 type SearchResponse = {
   answer?: string;
@@ -23,10 +24,15 @@ export default function SearchPage() {
     setResult("Searching Shynvo...");
 
     try {
+      const supabase = getSupabaseClient();
+      const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+      const token = session.data.session?.access_token || "";
+
       const res = await fetch("/api/search", {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           message: text,
