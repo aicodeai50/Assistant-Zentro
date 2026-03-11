@@ -57,7 +57,7 @@ const plans = [
     price: "Custom",
     period: "",
     bestFor: "Large organizations",
-    href: "/contact",
+    href: "/sign-up",
     highlighted: false,
     features: [
       "Unlimited AI usage",
@@ -146,7 +146,7 @@ export default function PricingPage() {
                     : "border border-white/10 bg-white/5 text-white hover:bg-white/10",
                 ].join(" ")}
               >
-                {plan.key === "enterprise" ? "Contact sales" : "Get started"}
+                "Get started"
               </Link>
             </div>
           ))}
