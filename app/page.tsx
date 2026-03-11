@@ -1,31 +1,81 @@
-"use client";
-
 import Link from "next/link";
 import RobotTypingLine from "@/components/RobotTypingLine";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
 const ENVIRONMENTS = [
-  { key: "university", title: "University Hub", href: "/university" },
-  { key: "academy", title: "Shynvo Academy", href: "/academy" },
-  { key: "os", title: "Shynvo OS", href: "/os" },
-  { key: "experiments", title: "Experiments", href: "/experiments" },
-  { key: "enterprise", title: "Enterprise Suite", href: "/enterprise" },
-  { key: "frontier", title: "Frontier Lab", href: "/frontier" },
-  { key: "arcade", title: "Arcade Sim", href: "/arcade" },
+  {
+    key: "university",
+    title: "University Hub",
+    subtitle: "Structured Academic Campus",
+    desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
+    tags: ["Study", "Exams", "Career"],
+    href: "/university",
+  },
+  {
+    key: "academy",
+    title: "Shynvo Academy",
+    subtitle: "School Learning World",
+    desc: "Junior and senior high school learning, subject rooms, tutors, and classroom workshops.",
+    tags: ["School", "Subjects", "Badges"],
+    href: "/academy",
+  },
+  {
+    key: "os",
+    title: "Shynvo OS",
+    subtitle: "Dimensional Execution Cockpit",
+    desc: "Missions, focus systems, AI agents, and strategic orchestration in one cockpit.",
+    tags: ["Missions", "Focus", "Terminal"],
+    href: "/os",
+  },
+  {
+    key: "experiments",
+    title: "Experiments",
+    subtitle: "AI Exploration Worlds",
+    desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
+    tags: ["Debate", "Simulation", "Concepts"],
+    href: "/experiments",
+  },
+  {
+    key: "enterprise",
+    title: "Enterprise Suite",
+    subtitle: "Organizational Intelligence System",
+    desc: "Admin tools, skill matrices, team missions, and analytics for organizations.",
+    tags: ["Teams", "OKRs", "Analytics"],
+    href: "/enterprise",
+  },
+  {
+    key: "frontier",
+    title: "Frontier Lab",
+    subtitle: "Engineering District",
+    desc: "Code, systems, logic, and build-focused engineering practice for all levels.",
+    tags: ["Code", "Build", "Puzzles"],
+    href: "/frontier",
+  },
+  {
+    key: "arcade",
+    title: "Arcade Sim",
+    subtitle: "Interactive Skill Arena",
+    desc: "Game-based drills, challenge rooms, reflex loops, and simulation-based practice.",
+    tags: ["Games", "Challenge", "Levels"],
+    href: "/arcade",
+  },
 ];
 
 export default function HomePage() {
-  const { t } = useLanguage();
-
   return (
     <main className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 bg-[#070B11]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-20 bg-[#070B11]"
+      />
 
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
         <video
           className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
           autoPlay
@@ -74,19 +124,21 @@ export default function HomePage() {
           <div className="rounded-[2rem] border border-white/10 bg-black/20 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md sm:p-5 lg:p-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
-              {t("home.badge")}
+              Structured Intelligence Platform
             </div>
 
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {t("home.heroTitle")}
+              Shynvo
             </h1>
 
             <p className="mt-3 max-w-3xl text-xl font-medium leading-tight text-white/92 sm:text-2xl lg:text-[2.5rem]">
-              {t("home.heroSubtitle")}
+              Architecture of Applied Intelligence
             </p>
 
             <p className="mt-5 max-w-3xl text-base leading-7 text-white/78 sm:text-lg">
-              {t("home.heroDescription")}
+              A multi-environment intelligence platform for learning, execution,
+              strategy, resilience, organizational growth, coding, and skill
+              development.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -94,18 +146,19 @@ export default function HomePage() {
                 href="#environments"
                 className="inline-flex items-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
               >
-                {t("home.enterPlatform")}
+                Enter Platform
               </Link>
               <Link
                 href="/docs"
                 className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10"
               >
-                {t("home.readDocs")}
+                Read Docs
               </Link>
             </div>
 
             <p className="mt-5 text-sm leading-6 text-white/65">
-              {t("home.trialNote")}
+              Trial: full access for 7 days. Robot is included during trial;
+              upgrade required after.
             </p>
           </div>
 
@@ -132,10 +185,10 @@ export default function HomePage() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-2xl font-semibold text-white">
-                    {t("home.robotTitle")}
+                    Shynvo Robot
                   </div>
                   <div className="mt-1 text-sm text-white/70">
-                    {t("home.robotSubtitle")}
+                    Open multilingual robot experience
                   </div>
                 </div>
 
@@ -149,7 +202,7 @@ export default function HomePage() {
               </div>
 
               <p className="mt-4 text-sm text-white/68">
-                {t("home.robotDescription")}
+                Click the chamber to open the robot trial experience.
               </p>
             </div>
           </Link>
@@ -157,13 +210,14 @@ export default function HomePage() {
 
         <section id="environments" className="mt-10 sm:mt-12">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-            {t("home.environmentsEyebrow")}
+            Environments
           </div>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {t("home.environmentsTitle")}
+            Explore the buildings
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            {t("home.environmentsDescription")}
+            Each building is a purpose-built system with its own departments,
+            identity, and workflows.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -183,27 +237,29 @@ export default function HomePage() {
                 </div>
 
                 <div className="mt-4">
-                  <h3 className="text-2xl font-semibold text-white">{item.title}</h3>
-                  <p className="mt-1 text-sm text-white/62">{t(`home.${item.key}.subtitle`)}</p>
+                  <h3 className="text-2xl font-semibold text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-white/62">{item.subtitle}</p>
                 </div>
 
                 <p className="mt-4 text-base leading-7 text-white/74">
-                  {t(`home.${item.key}.desc`)}
+                  {item.desc}
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {[1, 2, 3].map((n) => (
+                  {item.tags.map((tag) => (
                     <span
-                      key={`${item.key}-${n}`}
+                      key={tag}
                       className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
                     >
-                      {t(`home.${item.key}.tag${n}`)}
+                      {tag}
                     </span>
                   ))}
                 </div>
 
                 <div className="mt-5 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-white">{t("home.open")}</span>
+                  <span className="text-lg font-semibold text-white">Open</span>
                   <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
                     ›
                   </div>

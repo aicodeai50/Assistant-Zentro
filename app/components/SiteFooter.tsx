@@ -1,22 +1,17 @@
-"use client";
-
 import Link from "next/link";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 type FooterLink = {
   label: string;
   href: string;
 };
 
+const LINKS: FooterLink[] = [
+  { label: "Docs", href: "/docs" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Contact", href: "/contact" },
+];
+
 export default function SiteFooter() {
-  const { t } = useLanguage();
-
-  const LINKS: FooterLink[] = [
-    { label: t("nav.docs"), href: "/docs" },
-    { label: t("nav.pricing"), href: "/pricing" },
-    { label: t("nav.contact"), href: "/contact" },
-  ];
-
   return (
     <footer className="mt-14 border-t border-white/10">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -24,7 +19,7 @@ export default function SiteFooter() {
           <div>
             <div className="text-lg font-semibold">Shynvo</div>
             <p className="mt-2 max-w-sm text-sm text-white/70">
-              {t("footer.description")}
+              Multi-environment AI platform for learning, building, and deploying.
             </p>
           </div>
 
@@ -42,7 +37,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="mt-10 text-xs text-white/50">
-          © {new Date().getFullYear()} Shynvo. {t("footer.rights")}
+          © {new Date().getFullYear()} Shynvo. All rights reserved.
         </div>
       </div>
     </footer>
