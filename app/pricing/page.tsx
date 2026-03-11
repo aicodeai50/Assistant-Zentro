@@ -7,20 +7,22 @@ const plans = [
   {
     key: "free",
     price: "$0",
+    period: "/ month",
     subtitleKey: "pricing.free.subtitle",
     ctaKey: "pricing.free.cta",
     href: "/sign-up",
     highlighted: false,
     features: [
       "Basic AI access",
-      "Access to environments",
+      "Access to core environments",
       "Robot guidance",
       "Community-level usage",
     ],
   },
   {
     key: "pro",
-    price: "$20 / month",
+    price: "$25",
+    period: "/ month",
     subtitleKey: "pricing.pro.subtitle",
     ctaKey: "pricing.pro.cta",
     href: "/sign-up",
@@ -34,17 +36,18 @@ const plans = [
     ],
   },
   {
-    key: "enterprise",
-    price: "$79 / month",
-    subtitleKey: "pricing.enterprise.subtitle",
-    ctaKey: "pricing.enterprise.cta",
+    key: "team",
+    price: "$50",
+    period: "/ month",
+    subtitleKey: "pricing.team.subtitle",
+    ctaKey: "pricing.team.cta",
     href: "/contact",
     highlighted: false,
     features: [
-      "Unlimited AI usage",
-      "Enterprise Suite access",
-      "Team collaboration tools",
-      "Analytics and coordination",
+      "Shared team access",
+      "Enterprise environment access",
+      "Team coordination support",
+      "Analytics and collaboration",
       "Priority support",
     ],
   },
@@ -54,7 +57,7 @@ export default function PricingPage() {
   const { t } = useLanguage();
 
   return (
-    <section className="relative py-10 sm:py-14">
+    <section className="relative py-12 sm:py-16">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
@@ -64,53 +67,59 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_50%_100%,rgba(168,85,247,0.08),transparent_55%)]" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-          {t("nav.pricing")}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+            {t("nav.pricing")}
+          </div>
+
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+            {t("pricing.title")}
+          </h1>
+
+          <p className="mt-4 text-sm leading-7 text-white/70 sm:text-base">
+            {t("pricing.subtitle")}
+          </p>
         </div>
 
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-          {t("pricing.title")}
-        </h1>
-
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
-          {t("pricing.subtitle")}
-        </p>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {plans.map((plan) => (
             <div
               key={plan.key}
               className={[
-                "rounded-3xl border p-6 backdrop-blur-sm",
+                "relative rounded-3xl border p-6 backdrop-blur-sm",
                 plan.highlighted
                   ? "border-cyan-400/30 bg-cyan-400/10 shadow-[0_0_0_1px_rgba(56,189,248,0.15)]"
                   : "border-white/10 bg-white/5",
               ].join(" ")}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h2 className="text-xl font-semibold text-white">
-                    {t(`pricing.${plan.key}`)}
-                  </h2>
-                  <p className="mt-2 text-3xl font-bold text-white">{plan.price}</p>
+              {plan.highlighted ? (
+                <div className="mb-5 inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-100">
+                  {t("pricing.mostPopular")}
+                </div>
+              ) : (
+                <div className="mb-5 h-[30px]" />
+              )}
+
+              <div>
+                <h2 className="text-2xl font-semibold text-white">
+                  {t(`pricing.${plan.key}`)}
+                </h2>
+
+                <div className="mt-4 flex items-end gap-2">
+                  <span className="text-4xl font-bold text-white">{plan.price}</span>
+                  <span className="pb-1 text-sm text-white/60">{plan.period}</span>
                 </div>
 
-                {plan.highlighted ? (
-                  <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-100">
-                    Most popular
-                  </span>
-                ) : null}
+                <p className="mt-4 text-sm leading-6 text-white/65">
+                  {t(plan.subtitleKey)}
+                </p>
               </div>
 
-              <p className="mt-4 text-sm leading-6 text-white/65">
-                {t(plan.subtitleKey)}
-              </p>
-
-              <ul className="mt-6 space-y-3 text-sm text-white/80">
+              <ul className="mt-8 space-y-3 text-sm text-white/80">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-cyan-300" />
+                  <li key={feature} className="flex items-start gap-3">
+                    <span className="mt-1.5 h-2 w-2 rounded-full bg-cyan-300" />
                     <span>{feature}</span>
                   </li>
                 ))}
