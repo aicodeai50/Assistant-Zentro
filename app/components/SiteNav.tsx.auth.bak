@@ -2,8 +2,7 @@
 
 import LanguageSelector from "@/_components/LanguageSelector";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
@@ -13,41 +12,25 @@ function cx(...classes: Array<string | false | null | undefined>) {
 
 export default function SiteNav() {
   const { t } = useLanguage();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const accountRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setOpen(false);
-        setAccountOpen(false);
       }
     }
-
-    function onClickOutside(e: MouseEvent) {
-      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
-        setAccountOpen(false);
-      }
-    }
-
     window.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onClickOutside);
-
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onClickOutside);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   useEffect(() => {
     let mounted = true;
-    const supabase = getSupabaseClient();
 
     async function loadUser() {
+      const supabase = getSupabaseClient();
       if (!supabase) return;
 
       const {
@@ -60,6 +43,10 @@ export default function SiteNav() {
           setDisplayName("");
         }
         return;
+      }
+
+      if (mounted) {
+        setIsSignedIn(true);
       }
 
       const { data } = await supabase
@@ -75,43 +62,16 @@ export default function SiteNav() {
         "Account";
 
       if (mounted) {
-        setIsSignedIn(true);
         setDisplayName(name);
       }
     }
 
     loadUser();
 
-    if (!supabase) {
-      return () => {
-        mounted = false;
-      };
-    }
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
-      loadUser();
-    });
-
     return () => {
       mounted = false;
-      subscription.unsubscribe();
     };
   }, []);
-
-  async function handleSignOut() {
-    const supabase = getSupabaseClient();
-    if (!supabase) return;
-
-    await supabase.auth.signOut();
-    setAccountOpen(false);
-    setOpen(false);
-    setIsSignedIn(false);
-    setDisplayName("");
-    router.push("/");
-    router.refresh();
-  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0F14]/80 backdrop-blur">
@@ -138,44 +98,12 @@ export default function SiteNav() {
           <LanguageSelector />
 
           {isSignedIn ? (
-            <div className="relative" ref={accountRef}>
-              <button
-                type="button"
-                onClick={() => setAccountOpen((v) => !v)}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-              >
-                {displayName}
-              </button>
-
-              <div
-                className={cx(
-                  "absolute right-0 mt-2 w-52 rounded-2xl border border-white/10 bg-[#0B0F14] p-2 shadow-2xl",
-                  accountOpen ? "block" : "hidden"
-                )}
-              >
-                <Link
-                  href="/account"
-                  onClick={() => setAccountOpen(false)}
-                  className="block rounded-xl px-3 py-2 text-sm text-white/85 hover:bg-white/5"
-                >
-                  Account
-                </Link>
-                <Link
-                  href="/account"
-                  onClick={() => setAccountOpen(false)}
-                  className="block rounded-xl px-3 py-2 text-sm text-white/85 hover:bg-white/5"
-                >
-                  Profile
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="block w-full rounded-xl px-3 py-2 text-left text-sm text-white/85 hover:bg-white/5"
-                >
-                  Sign out
-                </button>
-              </div>
-            </div>
+            <Link
+              href="/account"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              {displayName}
+            </Link>
           ) : (
             <Link
               href="/sign-up"
@@ -243,29 +171,13 @@ export default function SiteNav() {
           </div>
 
           {isSignedIn ? (
-            <div className="space-y-2">
-              <Link
-                href="/account"
-                onClick={() => setOpen(false)}
-                className="block rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white"
-              >
-                {displayName}
-              </Link>
-              <Link
-                href="/account"
-                onClick={() => setOpen(false)}
-                className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
-              >
-                Profile
-              </Link>
-              <button
-                type="button"
-                onClick={handleSignOut}
-                className="block w-full rounded-xl px-4 py-3 text-left text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
-              >
-                Sign out
-              </button>
-            </div>
+            <Link
+              href="/account"
+              onClick={() => setOpen(false)}
+              className="mt-2 block rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white"
+            >
+              {displayName}
+            </Link>
           ) : (
             <Link
               href="/sign-up"
