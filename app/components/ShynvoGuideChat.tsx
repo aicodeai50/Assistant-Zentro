@@ -17,6 +17,10 @@ function normalize(text: string) {
   return text.toLowerCase().trim();
 }
 
+function hasAny(text: string, words: string[]) {
+  return words.some((word) => text.includes(word));
+}
+
 function detectReply(input: string): IntentReply {
   const q = normalize(input);
 
@@ -27,13 +31,55 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("price") ||
-    q.includes("pricing") ||
-    q.includes("plan") ||
-    q.includes("cost") ||
-    q.includes("subscription") ||
-    q.includes("upgrade") ||
-    q.includes("payment")
+    hasAny(q, [
+      "what is shynvo",
+      "what does shynvo do",
+      "about shynvo",
+      "shynvo platform",
+    ]) ||
+    q === "shynvo"
+  ) {
+    return {
+      reply: "Shynvo is a structured intelligence platform with environments for learning, execution, strategy, and exploration.",
+      href: "/docs",
+      label: "Learn More",
+    };
+  }
+
+  if (
+    hasAny(q, [
+      "environment",
+      "environments",
+      "platform environment",
+      "what environments",
+      "which environments",
+      "how is the environment",
+      "how are the environments",
+      "what is in shynvo",
+      "what do you have",
+      "platform sections",
+    ])
+  ) {
+    return {
+      reply: "Shynvo includes Robot, University Hub, Shynvo Academy, Enterprise Suite, Shynvo OS, Experiments, Frontier Lab, and Arcade Sim.",
+      href: "/docs",
+      label: "Open Docs",
+    };
+  }
+
+  if (
+    hasAny(q, [
+      "price",
+      "pricing",
+      "plan",
+      "plans",
+      "cost",
+      "subscription",
+      "upgrade",
+      "payment",
+      "pay",
+      "pro plan",
+    ])
   ) {
     return {
       reply: "Shynvo has pricing plans for different levels of access. Open Pricing to compare them.",
@@ -43,11 +89,15 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("contact") ||
-    q.includes("support") ||
-    q.includes("email") ||
-    q.includes("help desk") ||
-    q.includes("business")
+    hasAny(q, [
+      "contact",
+      "support",
+      "email",
+      "help desk",
+      "business",
+      "reach you",
+      "reach shynvo",
+    ])
   ) {
     return {
       reply: "You can contact Shynvo through the Contact page or by email at hi@shynvo.app.",
@@ -57,10 +107,13 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("docs") ||
-    q.includes("documentation") ||
-    q.includes("guide") ||
-    q.includes("platform guide")
+    hasAny(q, [
+      "docs",
+      "documentation",
+      "guide",
+      "platform guide",
+      "read docs",
+    ])
   ) {
     return {
       reply: "The Docs page gives you a route map to the main Shynvo environments and sections.",
@@ -70,9 +123,12 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("robot") ||
-    q.includes("chat ai") ||
-    q.includes("assistant")
+    hasAny(q, [
+      "robot",
+      "chat ai",
+      "assistant",
+      "main ai",
+    ])
   ) {
     return {
       reply: "Shynvo Robot is the conversational environment for asking questions and getting guidance across the platform.",
@@ -82,12 +138,16 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("university") ||
-    q.includes("computer science") ||
-    q.includes("medicine") ||
-    q.includes("law") ||
-    q.includes("engineering") ||
-    q.includes("faculty")
+    hasAny(q, [
+      "university",
+      "computer science",
+      "medicine",
+      "law",
+      "engineering",
+      "faculty",
+      "higher education",
+      "department",
+    ])
   ) {
     return {
       reply: "University Hub is for structured higher education with departments, teacher roles, tutors, and assistants.",
@@ -97,10 +157,13 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("academy") ||
-    q.includes("school") ||
-    q.includes("student") ||
-    q.includes("subject")
+    hasAny(q, [
+      "academy",
+      "school",
+      "student",
+      "subject",
+      "classroom",
+    ])
   ) {
     return {
       reply: "Shynvo Academy is the school learning environment for junior and senior students across subjects.",
@@ -110,11 +173,14 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("enterprise") ||
-    q.includes("business") ||
-    q.includes("leadership") ||
-    q.includes("strategy") ||
-    q.includes("operations")
+    hasAny(q, [
+      "enterprise",
+      "leadership",
+      "strategy",
+      "operations",
+      "organization",
+      "business tools",
+    ])
   ) {
     return {
       reply: "Enterprise Suite is for business thinking, strategy, leadership, operations, and organizational systems.",
@@ -124,11 +190,14 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("os") ||
-    q.includes("productivity") ||
-    q.includes("tasks") ||
-    q.includes("focus") ||
-    q.includes("mission")
+    hasAny(q, [
+      "os",
+      "productivity",
+      "tasks",
+      "focus",
+      "mission",
+      "planning",
+    ])
   ) {
     return {
       reply: "Shynvo OS is the personal execution environment for planning, focus, tasks, and progress.",
@@ -138,10 +207,13 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("experiment") ||
-    q.includes("simulation") ||
-    q.includes("creative") ||
-    q.includes("concept")
+    hasAny(q, [
+      "experiment",
+      "experiments",
+      "simulation",
+      "creative",
+      "concept",
+    ])
   ) {
     return {
       reply: "Experiments is where users explore simulations, test ideas, and interact with experimental systems.",
@@ -151,9 +223,13 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("arcade") ||
-    q.includes("game") ||
-    q.includes("challenge")
+    hasAny(q, [
+      "arcade",
+      "game",
+      "games",
+      "challenge",
+      "drill",
+    ])
   ) {
     return {
       reply: "Arcade Sim is the interactive skill arena for game-based drills, challenges, and practice.",
@@ -163,11 +239,14 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("frontier") ||
-    q.includes("coding") ||
-    q.includes("programming") ||
-    q.includes("build") ||
-    q.includes("engineer")
+    hasAny(q, [
+      "frontier",
+      "coding",
+      "programming",
+      "build",
+      "engineer",
+      "code",
+    ])
   ) {
     return {
       reply: "Frontier Lab is the engineering district for code, systems, logic, and build-focused practice.",
@@ -177,30 +256,23 @@ function detectReply(input: string): IntentReply {
   }
 
   if (
-    q.includes("account") ||
-    q.includes("profile") ||
-    q.includes("login") ||
-    q.includes("log in") ||
-    q.includes("sign in") ||
-    q.includes("sign up") ||
-    q.includes("create account")
+    hasAny(q, [
+      "account",
+      "profile",
+      "login",
+      "log in",
+      "sign in",
+      "sign up",
+      "create account",
+      "register",
+      "logout",
+      "log out",
+    ])
   ) {
     return {
-      reply: "You can create an account, sign in, and manage your profile from the account pages in Shynvo.",
+      reply: "You can create an account, sign in, sign out, and manage your profile from the Shynvo account pages.",
       href: "/sign-in",
       label: "Open Sign In",
-    };
-  }
-
-  if (
-    q.includes("what is shynvo") ||
-    q.includes("what does shynvo do") ||
-    q === "shynvo"
-  ) {
-    return {
-      reply: "Shynvo is a structured intelligence platform with multiple environments for learning, execution, strategy, and exploration.",
-      href: "/docs",
-      label: "Learn More",
     };
   }
 
