@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 type Profile = {
   email?: string;
@@ -17,6 +18,7 @@ type Usage = {
 };
 
 export default function AccountPage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -43,7 +45,7 @@ export default function AccountPage() {
 
       if (userError || !user) {
         if (mounted) {
-          setMessage("You are not signed in.");
+          setMessage(t("account.notSignedIn"));
           setLoading(false);
         }
         return;
@@ -78,7 +80,7 @@ export default function AccountPage() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [t]);
 
   const trialActive =
     profile?.trial_ends_at ? new Date(profile.trial_ends_at).getTime() > Date.now() : false;
@@ -89,34 +91,51 @@ export default function AccountPage() {
     <section className="relative py-10 sm:py-14">
       <div className="mx-auto max-w-3xl">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-          Account
+          {t("account.eyebrow")}
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-          Your account
+          {t("account.title")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
-          Trial, plan, and AI access details for your Shynvo account.
+          {t("account.subtitle")}
         </p>
 
         <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           {loading ? (
-            <div className="text-white/75">Loading account...</div>
+            <div className="text-white/75">{t("account.loading")}</div>
           ) : message ? (
             <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
               {message}
             </div>
           ) : profile ? (
             <div className="space-y-4 text-sm text-white/85">
-              <div><span className="font-semibold text-white">Email:</span> {profile.email || "-"}</div>
-              <div><span className="font-semibold text-white">Name:</span> {profile.full_name || "-"}</div>
-              <div><span className="font-semibold text-white">Language:</span> {profile.language || "en"}</div>
-              <div><span className="font-semibold text-white">Plan:</span> {trialActive ? "trial" : (profile.plan || "free")}</div>
-              <div><span className="font-semibold text-white">Trial ends:</span> {profile.trial_ends_at || "-"}</div>
-              <div><span className="font-semibold text-white">AI used today:</span> {trialActive ? "Unlimited during trial" : (usage?.usage_count || 0)}</div>
-              <div><span className="font-semibold text-white">AI remaining today:</span> {trialActive ? "Unlimited during trial" : remaining}</div>
+              <div>
+                <span className="font-semibold text-white">{t("account.email")}:</span> {profile.email || "-"}
+              </div>
+              <div>
+                <span className="font-semibold text-white">{t("account.name")}:</span> {profile.full_name || "-"}
+              </div>
+              <div>
+                <span className="font-semibold text-white">{t("account.language")}:</span> {profile.language || "en"}
+              </div>
+              <div>
+                <span className="font-semibold text-white">{t("account.plan")}:</span>{" "}
+                {trialActive ? t("account.trial") : profile.plan || t("account.free")}
+              </div>
+              <div>
+                <span className="font-semibold text-white">{t("account.trialEnds")}:</span> {profile.trial_ends_at || "-"}
+              </div>
+              <div>
+                <span className="font-semibold text-white">{t("account.aiUsedToday")}:</span>{" "}
+                {trialActive ? t("account.unlimitedTrial") : usage?.usage_count || 0}
+              </div>
+              <div>
+                <span className="font-semibold text-white">{t("account.aiRemainingToday")}:</span>{" "}
+                {trialActive ? t("account.unlimitedTrial") : remaining}
+              </div>
             </div>
           ) : (
-            <div className="text-white/75">No profile found.</div>
+            <div className="text-white/75">{t("account.noProfile")}</div>
           )}
         </div>
       </div>

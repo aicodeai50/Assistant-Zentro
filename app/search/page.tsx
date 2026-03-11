@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
@@ -15,15 +15,21 @@ type SearchResponse = {
 export default function SearchPage() {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState(t("search.prompt"));
+  const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setResult(t("search.prompt"));
+    }
+  }, [t, loading]);
 
   async function runSearch() {
     const text = query.trim();
     if (!text || loading) return;
 
     setLoading(true);
-    setResult("Searching Shynvo...");
+    setResult(t("search.searching"));
 
     try {
       const supabase = getSupabaseClient();
@@ -52,28 +58,13 @@ export default function SearchPage() {
       }
 
       if (!res.ok) {
-        setResult(
-          data?.error ||
-            data?.details ||
-            raw ||
-            "Search could not respond right now."
-        );
+        setResult(data?.error || data?.details || raw || t("search.failed"));
         return;
       }
 
-      setResult(
-        data?.answer ||
-          data?.reply ||
-          data?.message ||
-          raw ||
-          "No result returned."
-      );
+      setResult(data?.answer || data?.reply || data?.message || raw || t("search.noResult"));
     } catch (error) {
-      setResult(
-        error instanceof Error
-          ? error.message
-          : "Search could not respond right now."
-      );
+      setResult(error instanceof Error ? error.message : t("search.failed"));
     } finally {
       setLoading(false);
     }
@@ -91,7 +82,7 @@ export default function SearchPage() {
 
       <div className="mx-auto max-w-5xl">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-          Search
+          {t("search.label")}
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
           {t("search.title")}
@@ -107,7 +98,7 @@ export default function SearchPage() {
             onKeyDown={(e) => {
               if (e.key === "Enter") runSearch();
             }}
-            placeholder="Environment"
+            placeholder={t("search.placeholder")}
             className="w-full rounded-2xl border border-white/10 bg-black/20 px-5 py-4 text-sm text-white outline-none placeholder:text-white/45"
           />
           <button
