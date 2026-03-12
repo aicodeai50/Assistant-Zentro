@@ -3,7 +3,7 @@
 import LanguageSelector from "@/_components/LanguageSelector";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
@@ -18,6 +18,7 @@ type UsageState = {
 export default function SiteNav() {
   const { t } = useLanguage();
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
@@ -47,6 +48,24 @@ export default function SiteNav() {
       document.removeEventListener("mousedown", onClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+    setAccountOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     let mounted = true;
@@ -235,9 +254,9 @@ export default function SiteNav() {
         </div>
       </div>
 
-      <div className={cx("md:hidden", open ? "block" : "hidden")}>
-        <div className="fixed inset-0 z-50 bg-black/60" onClick={() => setOpen(false)} aria-hidden="true" />
-        <div className="fixed right-0 top-0 z-50 h-full w-[86%] max-w-sm border-l border-white/10 bg-[#0B0F14] p-4">
+      <div className={cx("md:hidden", open ? "block" : "hidden")} aria-hidden={!open}>
+        <div className="fixed inset-0 z-[80] bg-black/75 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
+        <div className="fixed inset-y-0 right-0 z-[81] h-dvh w-full overflow-y-auto border-l border-white/10 bg-[#0B0F14] p-4 sm:w-[86%] sm:max-w-sm">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-white">{t("nav.menu")}</span>
             <button
