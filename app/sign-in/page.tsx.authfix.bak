@@ -33,16 +33,7 @@ export default function SignInPage() {
     });
 
     if (error) {
-      const msg = (error.message || "").toLowerCase();
-
-      if (msg.includes("email not confirmed")) {
-        setMessage("Your email is not verified yet. Check your inbox or spam folder, then click the verification link.");
-      } else if (msg.includes("invalid login credentials")) {
-        setMessage("Invalid email or password. If you just created your account, verify your email first before signing in.");
-      } else {
-        setMessage(error.message);
-      }
-
+      setMessage(error.message);
       setLoading(false);
       return;
     }

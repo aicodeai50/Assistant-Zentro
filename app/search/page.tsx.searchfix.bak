@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
@@ -15,8 +15,14 @@ type SearchResponse = {
 export default function SearchPage() {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState(t("search.prompt"));
+  const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setResult(t("search.prompt"));
+    }
+  }, [t, loading]);
 
   async function runSearch() {
     const text = query.trim();
