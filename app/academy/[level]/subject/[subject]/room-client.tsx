@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useRef, useState } from "react";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
 
 type Role = "teacher" | "tutor" | "assistant";
@@ -187,9 +188,16 @@ export default function AcademyRoomClient({
         helpMode
       );
 
+      const supabase = getSupabaseClient();
+      const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+      const token = session.data.session?.access_token || "";
+
       const res = await fetch("/api/public/chat", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           message: text,
           systemPrompt,
