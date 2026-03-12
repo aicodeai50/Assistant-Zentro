@@ -168,12 +168,6 @@ export default function SiteNav() {
           <IconButton label={t("search.label")} href="/search" icon="search" />
           <LanguageSelector />
 
-          {isSignedIn && usage ? (
-            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80">
-              {usage.label}
-            </div>
-          ) : null}
-
           {isSignedIn ? (
             <div className="relative" ref={accountRef}>
               <button
@@ -186,10 +180,16 @@ export default function SiteNav() {
 
               <div
                 className={cx(
-                  "absolute right-0 mt-2 w-52 rounded-2xl border border-white/10 bg-[#0B0F14] p-2 shadow-2xl",
+                  "absolute right-0 mt-2 w-56 rounded-2xl border border-white/10 bg-[#0B0F14] p-2 shadow-2xl",
                   accountOpen ? "block" : "hidden"
                 )}
               >
+                {usage ? (
+                  <div className="mb-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/75">
+                    {usage.label}
+                  </div>
+                ) : null}
+
                 <Link
                   href="/account"
                   onClick={() => setAccountOpen(false)}
@@ -273,12 +273,6 @@ export default function SiteNav() {
             </Link>
           </div>
 
-          {isSignedIn && usage ? (
-            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
-              {usage.label}
-            </div>
-          ) : null}
-
           <div className="my-4 border-t border-white/10" />
 
           <div className="mb-4">
@@ -287,6 +281,12 @@ export default function SiteNav() {
 
           {isSignedIn ? (
             <div className="space-y-2">
+              {usage ? (
+                <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+                  {usage.label}
+                </div>
+              ) : null}
+
               <Link
                 href="/account"
                 onClick={() => setOpen(false)}
