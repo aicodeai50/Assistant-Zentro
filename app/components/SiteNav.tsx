@@ -11,6 +11,10 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+type UsageState = {
+  label: string;
+};
+
 export default function SiteNav() {
   const { t } = useLanguage();
   const router = useRouter();
@@ -18,6 +22,7 @@ export default function SiteNav() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [usage, setUsage] = useState<UsageState | null>(null);
   const accountRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -58,25 +63,50 @@ export default function SiteNav() {
         if (mounted) {
           setIsSignedIn(false);
           setDisplayName("");
+          setUsage(null);
         }
         return;
       }
 
-      const { data } = await supabase
+      const { data: profile } = await supabase
         .from("profiles")
-        .select("full_name, email")
+        .select("full_name, email, plan, trial_ends_at")
         .eq("id", session.user.id)
         .single();
 
       const name =
-        (data?.full_name || "").trim() ||
+        (profile?.full_name || "").trim() ||
         session.user.user_metadata?.full_name ||
         session.user.email ||
         "Account";
 
+      const plan = String(profile?.plan || "trial").toLowerCase();
+      const trialEndsAt = profile?.trial_ends_at ? new Date(profile.trial_ends_at).getTime() : 0;
+      const trialActive = plan === "trial" && trialEndsAt > Date.now();
+      const paid = plan === "plus" || plan === "pro" || plan === "team" || plan === "enterprise";
+
+      let usageLabel = "AI: 0 / 5 today";
+
+      if (trialActive || paid) {
+        usageLabel = "AI: Unlimited";
+      } else {
+        const today = new Date().toISOString().slice(0, 10);
+        const { data: usageRow } = await supabase
+          .from("daily_ai_usage")
+          .select("usage_count")
+          .eq("user_id", session.user.id)
+          .eq("usage_date", today)
+          .single();
+
+        const used = Number(usageRow?.usage_count || 0);
+        const remaining = Math.max(0, 5 - used);
+        usageLabel = `AI: ${remaining} / 5 today`;
+      }
+
       if (mounted) {
         setIsSignedIn(true);
         setDisplayName(name);
+        setUsage({ label: usageLabel });
       }
     }
 
@@ -109,6 +139,7 @@ export default function SiteNav() {
     setOpen(false);
     setIsSignedIn(false);
     setDisplayName("");
+    setUsage(null);
     router.push("/");
     router.refresh();
   }
@@ -136,6 +167,12 @@ export default function SiteNav() {
         <div className="hidden items-center gap-2 md:flex">
           <IconButton label={t("search.label")} href="/search" icon="search" />
           <LanguageSelector />
+
+          {isSignedIn && usage ? (
+            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80">
+              {usage.label}
+            </div>
+          ) : null}
 
           {isSignedIn ? (
             <div className="relative" ref={accountRef}>
@@ -236,6 +273,12 @@ export default function SiteNav() {
             </Link>
           </div>
 
+          {isSignedIn && usage ? (
+            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+              {usage.label}
+            </div>
+          ) : null}
+
           <div className="my-4 border-t border-white/10" />
 
           <div className="mb-4">
@@ -251,17 +294,11 @@ export default function SiteNav() {
               >
                 {displayName}
               </Link>
-              <Link
-                href="/account"
-                onClick={() => setOpen(false)}
-                className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
-              >
-                Profile
-              </Link>
+
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="block w-full rounded-xl px-4 py-3 text-left text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
+                className="block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Sign out
               </button>
