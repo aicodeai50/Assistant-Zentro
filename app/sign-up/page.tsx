@@ -80,7 +80,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <section className="relative py-10 sm:py-14">
+    <section className="relative px-4 py-10 sm:px-6 sm:py-14">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
@@ -89,7 +89,7 @@ export default function SignUpPage() {
         <div className="absolute inset-0 bg-[radial-gradient(1000px_560px_at_82%_18%,rgba(59,130,246,0.08),transparent_55%)]" />
       </div>
 
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto w-full max-w-md">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/70">
           Account
         </div>
