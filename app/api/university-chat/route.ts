@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const base = mustEnv("SH_BACKEND_URL");
+    const base = process.env.SH_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL;
+    if (!base) {
+      throw new Error("Missing backend URL");
+    }
     const key = mustEnv("SH_API_KEY");
     const body = await req.json();
 
