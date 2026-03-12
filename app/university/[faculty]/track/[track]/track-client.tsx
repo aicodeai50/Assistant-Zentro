@@ -266,7 +266,7 @@ export default function TrackPageClient({
         : { data: { session: null } };
       const token = session.data.session?.access_token || "";
 
-      const res = await fetch("/api/university-chat", {
+      const res = await fetch("/api/public/chat", {
         method: "POST",
         headers: {
           "content-type": "application/json",
