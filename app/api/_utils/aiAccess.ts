@@ -126,7 +126,7 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
     return {
       ok: false,
       status: 429,
-      message: "You have reached your free AI limit. Upgrade your plan to continue.",
+      message: "You have reached your AI limit for today. Upgrade to continue using more AI.",
     };
   }
 
