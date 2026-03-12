@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 const FREE_DAILY_LIMIT = 5;
-const GUEST_TOTAL_LIMIT = 2;
 
 type AuthAccessResult =
   | {
@@ -14,12 +13,6 @@ type AuthAccessResult =
       remaining: number | null;
     }
   | {
-      ok: true;
-      mode: "guest";
-      clientKey: string;
-      remaining: number;
-    }
-  | {
       ok: false;
       status: number;
       message: string;
@@ -27,14 +20,6 @@ type AuthAccessResult =
 
 function todayUtc(): string {
   return new Date().toISOString().slice(0, 10);
-}
-
-function buildGuestKey(req: NextRequest): string {
-  const forwarded = req.headers.get("x-forwarded-for") || "";
-  const ip = forwarded.split(",")[0]?.trim() || "unknown-ip";
-  const ua = req.headers.get("user-agent") || "unknown-ua";
-  const acceptLang = req.headers.get("accept-language") || "unknown-lang";
-  return `${ip}::${ua}::${acceptLang}`.slice(0, 500);
 }
 
 export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult> {
@@ -52,30 +37,10 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
   const token = authHeader.replace(/^Bearer\s+/i, "").trim();
 
   if (!token) {
-    const clientKey = buildGuestKey(req);
-
-    const { data: guestRow } = await admin
-      .from("guest_ai_usage")
-      .select("usage_count")
-      .eq("client_key", clientKey)
-      .single();
-
-    const guestCount = Number(guestRow?.usage_count || 0);
-    const remaining = Math.max(0, GUEST_TOTAL_LIMIT - guestCount);
-
-    if (guestCount >= GUEST_TOTAL_LIMIT) {
-      return {
-        ok: false,
-        status: 429,
-        message: "Create a free account to continue your Shynvo trial.",
-      };
-    }
-
     return {
-      ok: true,
-      mode: "guest",
-      clientKey,
-      remaining,
+      ok: false,
+      status: 401,
+      message: "Create an account or sign in to use AI inside Shynvo.",
     };
   }
 
@@ -122,7 +87,7 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
   const plan = String(profile?.plan || "trial").toLowerCase();
   const trialEndsAt = profile?.trial_ends_at ? new Date(profile.trial_ends_at).getTime() : 0;
   const trialActive = plan === "trial" && trialEndsAt > Date.now();
-  const paid = plan === "plus" || plan === "pro" || plan === "enterprise";
+  const paid = plan === "plus" || plan === "pro" || plan === "team" || plan === "enterprise";
 
   if (paid || trialActive) {
     return {
@@ -161,7 +126,7 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
     return {
       ok: false,
       status: 429,
-      message: "Daily AI limit reached. Try again tomorrow or upgrade for more access.",
+      message: "You have reached your free AI limit. Upgrade your plan to continue.",
     };
   }
 
@@ -178,27 +143,6 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
 export async function recordAiUsage(access: Extract<AuthAccessResult, { ok: true }>): Promise<void> {
   const admin = getSupabaseAdmin();
   if (!admin) return;
-
-  if (access.mode === "guest") {
-    const { data: guestRow } = await admin
-      .from("guest_ai_usage")
-      .select("usage_count")
-      .eq("client_key", access.clientKey)
-      .single();
-
-    const nextCount = Number(guestRow?.usage_count || 0) + 1;
-
-    await admin.from("guest_ai_usage").upsert(
-      {
-        client_key: access.clientKey,
-        usage_count: nextCount,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "client_key" }
-    );
-
-    return;
-  }
 
   const usageDate = todayUtc();
 

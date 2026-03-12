@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,8 +10,20 @@ function mustEnv(name: string) {
   return v;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const access = await checkAiAccess(req);
+
+    if (!access.ok) {
+      return NextResponse.json(
+        {
+          answer: access.message,
+          upgradeUrl: "/pricing",
+        },
+        { status: 200 }
+      );
+    }
+
     const base = mustEnv("SH_BACKEND_URL");
     const key = mustEnv("SH_API_KEY");
     const body = await req.json();
@@ -26,6 +39,10 @@ export async function POST(req: Request) {
     });
 
     const data = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      await recordAiUsage(access);
+    }
 
     if (!res.ok) {
       return NextResponse.json(
