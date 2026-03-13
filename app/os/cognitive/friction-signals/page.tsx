@@ -15,6 +15,19 @@ type CognitiveSnapshot = {
 
 const STORAGE_KEY = "shynvo_os_cognitive_snapshot";
 
+function getFrictionMeaning(value: string) {
+  switch (value) {
+    case "Low":
+      return "Low means there are fewer signs of internal resistance interfering with clean execution right now.";
+    case "Moderate":
+      return "Moderate means resistance is present, but manageable. Structure and clarity will matter more than usual.";
+    case "High":
+      return "High means execution resistance is strongly present. Starting, sustaining, or completing work may feel unusually difficult.";
+    default:
+      return "No friction explanation is available yet.";
+  }
+}
+
 export default function Page() {
   const [snapshot, setSnapshot] = useState<CognitiveSnapshot | null>(null);
 
@@ -44,10 +57,16 @@ export default function Page() {
           {snapshot?.friction || "No reading yet"}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
+          {snapshot
+            ? getFrictionMeaning(snapshot.friction)
+            : "Run a mental check in Cognitive to generate a real friction reading."}
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
           {snapshot
             ? `From the latest mental check, friction signals are ${snapshot.friction}. Recommended work intensity: ${snapshot.intensity}.`
-            : "Run a mental check in Cognitive to generate a real friction reading."}
+            : "No detailed friction interpretation is available yet."}
         </div>
       </div>
     </section>

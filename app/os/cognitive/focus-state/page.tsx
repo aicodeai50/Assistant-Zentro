@@ -15,6 +15,21 @@ type CognitiveSnapshot = {
 
 const STORAGE_KEY = "shynvo_os_cognitive_snapshot";
 
+function getFocusMeaning(value: string) {
+  switch (value) {
+    case "Stable":
+      return "Stable means your attention has enough consistency to support meaningful work without immediate instability.";
+    case "Scattered":
+      return "Scattered means attention is present, but it is not settling smoothly. Work may start, stop, or drift more easily.";
+    case "Unstable":
+      return "Unstable means concentration is weakened and may not hold well when pressure or complexity increases.";
+    case "Fragile":
+      return "Fragile means your attention stability is currently weak. Deep work may collapse quickly and strain may rise fast.";
+    default:
+      return "No focus state explanation is available yet.";
+  }
+}
+
 export default function Page() {
   const [snapshot, setSnapshot] = useState<CognitiveSnapshot | null>(null);
 
@@ -44,10 +59,16 @@ export default function Page() {
           {snapshot?.focusState || "No reading yet"}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
+          {snapshot
+            ? getFocusMeaning(snapshot.focusState)
+            : "Run a mental check in Cognitive to generate a real state reading."}
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
           {snapshot
             ? `From the latest mental check, your focus state is ${snapshot.focusState}. ${snapshot.summary}`
-            : "Run a mental check in Cognitive to generate a real state reading."}
+            : "No detailed interpretation is available yet."}
         </div>
       </div>
     </section>

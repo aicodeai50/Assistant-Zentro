@@ -23,6 +23,47 @@ const EXAMPLES = [
   "I feel clear, rested, and ready to execute.",
 ];
 
+function getFocusMeaning(value: string) {
+  switch (value) {
+    case "Stable":
+      return "Attention stability is in a workable condition. Sustained focus is more available right now.";
+    case "Scattered":
+      return "Attention is present, but it is not settling cleanly. Entry into focused work may feel broken or inconsistent.";
+    case "Unstable":
+      return "Attention stability is weakened. You may be able to work, but concentration may not hold well under pressure.";
+    case "Fragile":
+      return "Attention stability is currently weak. Demanding deep work may break down quickly and increase strain.";
+    default:
+      return "Focus stability has not been clearly assessed yet.";
+  }
+}
+
+function getRecoveryMeaning(value: string) {
+  switch (value) {
+    case "Strong":
+      return "Energy restoration appears supportive of meaningful work. Recovery is not the main constraint right now.";
+    case "Moderate":
+      return "Recovery is usable, but not fully strong. Work should stay structured so strain does not build too quickly.";
+    case "Low":
+      return "Recovery is reduced. Energy reserves appear strained, so heavy intensity may worsen instability or exhaustion.";
+    default:
+      return "Recovery condition has not been clearly assessed yet.";
+  }
+}
+
+function getFrictionMeaning(value: string) {
+  switch (value) {
+    case "Low":
+      return "Execution resistance is limited right now. There are fewer signs of internal drag interfering with work.";
+    case "Moderate":
+      return "Some resistance is present. Work is possible, but structure and clarity will matter more than usual.";
+    case "High":
+      return "Execution resistance is strongly present. Starting, sustaining, or completing work may feel unusually difficult right now.";
+    default:
+      return "Friction level has not been clearly assessed yet.";
+  }
+}
+
 function analyzeMentalCheck(input: string): CognitiveSnapshot {
   const text = input.toLowerCase();
 
@@ -203,8 +244,14 @@ export default function CognitivePage() {
         `Mental check: ${text}`,
         ``,
         `Focus State: ${result.focusState}`,
+        `Meaning: ${getFocusMeaning(result.focusState)}`,
+        ``,
         `Recovery Level: ${result.recovery}`,
+        `Meaning: ${getRecoveryMeaning(result.recovery)}`,
+        ``,
         `Friction Signals: ${result.friction}`,
+        `Meaning: ${getFrictionMeaning(result.friction)}`,
+        ``,
         `Work Intensity: ${result.intensity}`,
         ``,
         `Interpretation`,
@@ -266,6 +313,9 @@ export default function CognitivePage() {
         >
           <div className="text-sm text-white/60">Focus State</div>
           <div className="mt-3 text-4xl font-semibold text-white">{focusState}</div>
+          <div className="mt-3 text-sm leading-6 text-white/65">
+            {getFocusMeaning(focusState)}
+          </div>
         </Link>
 
         <Link
@@ -274,6 +324,9 @@ export default function CognitivePage() {
         >
           <div className="text-sm text-white/60">Recovery Level</div>
           <div className="mt-3 text-4xl font-semibold text-white">{recovery}</div>
+          <div className="mt-3 text-sm leading-6 text-white/65">
+            {getRecoveryMeaning(recovery)}
+          </div>
         </Link>
 
         <Link
@@ -282,6 +335,9 @@ export default function CognitivePage() {
         >
           <div className="text-sm text-white/60">Friction Signals</div>
           <div className="mt-3 text-4xl font-semibold text-white">{friction}</div>
+          <div className="mt-3 text-sm leading-6 text-white/65">
+            {getFrictionMeaning(friction)}
+          </div>
         </Link>
       </div>
 

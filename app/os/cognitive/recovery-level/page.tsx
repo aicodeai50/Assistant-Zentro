@@ -15,6 +15,19 @@ type CognitiveSnapshot = {
 
 const STORAGE_KEY = "shynvo_os_cognitive_snapshot";
 
+function getRecoveryMeaning(value: string) {
+  switch (value) {
+    case "Strong":
+      return "Strong means restoration is supportive of meaningful work. Recovery is not the main limiting factor right now.";
+    case "Moderate":
+      return "Moderate means recovery is usable but not full. Work should remain structured so strain does not build too quickly.";
+    case "Low":
+      return "Low means recovery is reduced. Energy reserves appear strained, so heavy work may worsen instability or depletion.";
+    default:
+      return "No recovery explanation is available yet.";
+  }
+}
+
 export default function Page() {
   const [snapshot, setSnapshot] = useState<CognitiveSnapshot | null>(null);
 
@@ -44,10 +57,16 @@ export default function Page() {
           {snapshot?.recovery || "No reading yet"}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
+          {snapshot
+            ? getRecoveryMeaning(snapshot.recovery)
+            : "Run a mental check in Cognitive to generate a real recovery reading."}
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
           {snapshot
             ? `From the latest mental check, your recovery level is ${snapshot.recovery}. ${snapshot.recommendation}`
-            : "Run a mental check in Cognitive to generate a real recovery reading."}
+            : "No detailed recovery interpretation is available yet."}
         </div>
       </div>
     </section>
