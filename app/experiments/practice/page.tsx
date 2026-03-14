@@ -10,6 +10,15 @@ type PracticeType =
   | "Presentation"
   | "Difficult Conversation";
 
+type PracticeResult = {
+  sessionBrief: string;
+  firstChallenge: string;
+  evaluatorFocus: string;
+  strongPattern: string;
+  mistakes: string;
+  nextDrill: string;
+};
+
 const STARTERS: Record<PracticeType, string[]> = {
   Interview: [
     "Prepare me for a junior IT support interview.",
@@ -375,27 +384,26 @@ export default function PracticePage() {
           </div>
         </div>
       ) : (
-        <div className="mt-6 space-y-5">
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-sm font-semibold text-white">Session Brief</div>
-            <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
-              {sessionBrief}
+        <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
+          <div className="space-y-5">
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Session Brief</div>
+              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+                {sessionBrief}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">First Challenge</div>
+              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+                {firstChallenge}
+              </div>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-sm font-semibold text-white">First Challenge</div>
-            <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
-              {firstChallenge}
-            </div>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
+          <div className="space-y-5 lg:sticky lg:top-6 self-start">
             <OutputCard title="Evaluator Focus" body={evaluatorFocus} />
             <OutputCard title="Strong Response Pattern" body={strongPattern} />
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
             <OutputCard title="Common Mistakes" body={mistakes} />
             <OutputCard title="Next Drill" body={nextDrill} />
           </div>
