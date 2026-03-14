@@ -38,72 +38,37 @@ const STARTERS: Record<PracticeType, string[]> = {
   ],
 };
 
-function parsePracticeAnswer(text: string): PracticeResult {
-  const clean = text.trim();
-
-  const findSection = (label: string): string => {
-    const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(
-      `${escaped}\\s*:?\\s*([\\s\\S]*?)(?=\\n[A-Z][A-Za-z ]+\\s*:|$)`,
-      "i"
-    );
-    const match = clean.match(regex);
-    return match?.[1]?.trim() || "";
-  };
-
-  const sessionBrief = findSection("Session Brief");
-  const firstChallenge = findSection("First Challenge");
-  const evaluatorFocus = findSection("Evaluator Focus");
-  const strongPattern = findSection("Strong Response Pattern");
-  const mistakes = findSection("Common Mistakes");
-  const nextDrill = findSection("Next Drill");
-
-  if (
-    sessionBrief ||
-    firstChallenge ||
-    evaluatorFocus ||
-    strongPattern ||
-    mistakes ||
-    nextDrill
-  ) {
-    return {
-      sessionBrief:
-        sessionBrief ||
-        "This session will help you rehearse the scenario in a clearer, more structured way.",
-      firstChallenge:
-        firstChallenge ||
-        "Start by giving your strongest opening response to the scenario.",
-      evaluatorFocus:
-        evaluatorFocus ||
-        "The other side is likely judging clarity, confidence, structure, and relevance.",
-      strongPattern:
-        strongPattern ||
-        "Give a direct answer first, support it with one clear example, and close with confidence.",
-      mistakes:
-        mistakes ||
-        "Avoid rambling, vague language, low confidence, and missing the core question.",
-      nextDrill:
-        nextDrill ||
-        "Repeat the same scenario once more, but tighten the answer and improve clarity.",
-    };
-  }
-
+function normalizePracticeResult(input: Partial<PracticeResult>, prompt: string): PracticeResult {
   return {
     sessionBrief:
-      "Your practice session is ready. Use the guidance below to rehearse the scenario step by step.",
-    firstChallenge: clean,
+      input.sessionBrief?.trim() ||
+      `This practice session is focused on: ${prompt}`,
+    firstChallenge:
+      input.firstChallenge?.trim() ||
+      `Start by responding directly to this scenario: ${prompt}`,
     evaluatorFocus:
-      "Focus on clarity, relevance, calm delivery, and whether your answer matches the situation.",
+      input.evaluatorFocus?.trim() ||
+      "The evaluator is likely judging clarity, relevance, calm delivery, and whether your answer fits the situation.",
     strongPattern:
-      "Start directly, stay structured, support your answer with one strong example, and close clearly.",
+      input.strongPattern?.trim() ||
+      "Answer directly, support it with one strong example, and close with a clear conclusion.",
     mistakes:
-      "Do not over-explain, go off-topic, sound uncertain, or leave your answer without a conclusion.",
+      input.mistakes?.trim() ||
+      "Avoid vague wording, rambling, weak structure, and failing to answer the real question.",
     nextDrill:
-      "Rerun the scenario and give a shorter, sharper second version of your answer.",
+      input.nextDrill?.trim() ||
+      "Repeat the scenario once more and improve clarity, sharpness, and confidence.",
   };
 }
 
-async function fetchPracticeReply(input: string, selected: PracticeType): Promise<string> {
+function extractJsonObject(raw: string): string | null {
+  const start = raw.indexOf("{");
+  const end = raw.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) return null;
+  return raw.slice(start, end + 1);
+}
+
+async function fetchPracticeReply(input: string, selected: PracticeType): Promise<PracticeResult> {
   const systemPrompt = `
 You are Shynvo Practice Arena inside the Experiments environment.
 
@@ -117,34 +82,33 @@ Current practice mode:
 
 Behavior:
 - Be practical, direct, realistic, and structured.
-- Do not be vague.
+- Tailor every field to the user's exact prompt.
+- Do not give generic repeated advice unless the user's prompt is generic.
 - Do not mention backend systems, models, APIs, or infrastructure.
 - Stay fully in the role of Practice Arena.
 
-Output format:
-Session Brief:
-<2-4 sentences explaining what this practice session is preparing the user for>
+You MUST return ONLY valid JSON.
+Do not include markdown.
+Do not include code fences.
+Do not include explanation outside JSON.
 
-First Challenge:
-<give the first question, task, speaking challenge, or opening situation>
+Return this exact JSON shape:
+{
+  "sessionBrief": "string",
+  "firstChallenge": "string",
+  "evaluatorFocus": "string",
+  "strongPattern": "string",
+  "mistakes": "string",
+  "nextDrill": "string"
+}
 
-Evaluator Focus:
-<explain what the interviewer, examiner, audience, or other person is likely evaluating>
-
-Strong Response Pattern:
-<show the best structure or pattern the user should follow in their answer>
-
-Common Mistakes:
-<list the most likely mistakes to avoid in this exact scenario>
-
-Next Drill:
-<give the next practical drill the user should do after the first challenge>
-
-Rules:
-- Tailor the response directly to the user's exact prompt.
-- Make the output feel like a real training session.
-- Be structured and useful.
-- Do not output placeholders.
+Field rules:
+- "sessionBrief": explain what this exact practice session is preparing the user for
+- "firstChallenge": give the first realistic question, challenge, or opening task
+- "evaluatorFocus": explain what the other side is likely judging in this exact situation
+- "strongPattern": show the best answer structure for this exact prompt
+- "mistakes": list the most likely mistakes for this exact prompt
+- "nextDrill": give the next useful drill after the first response
 `.trim();
 
   const payload = {
@@ -200,28 +164,53 @@ Rules:
     throw new Error(raw || "Practice Arena could not respond right now.");
   }
 
+  let text = raw;
+
   try {
     const data = JSON.parse(raw) as {
       answer?: string;
       reply?: string;
       message?: string;
       error?: string;
+      sessionBrief?: string;
+      firstChallenge?: string;
+      evaluatorFocus?: string;
+      strongPattern?: string;
+      mistakes?: string;
+      nextDrill?: string;
     };
 
     if (data.error) {
       throw new Error(data.error);
     }
 
-    return (
-      data.answer ||
-      data.reply ||
-      data.message ||
-      raw ||
-      "Practice Arena could not respond right now."
-    );
+    if (
+      data.sessionBrief ||
+      data.firstChallenge ||
+      data.evaluatorFocus ||
+      data.strongPattern ||
+      data.mistakes ||
+      data.nextDrill
+    ) {
+      return normalizePracticeResult(data, input);
+    }
+
+    text = data.answer || data.reply || data.message || raw;
   } catch {
-    return raw || "Practice Arena could not respond right now.";
+    text = raw;
   }
+
+  const jsonBlock = extractJsonObject(text);
+  if (jsonBlock) {
+    try {
+      const parsed = JSON.parse(jsonBlock) as Partial<PracticeResult>;
+      return normalizePracticeResult(parsed, input);
+    } catch {
+      return normalizePracticeResult({}, input);
+    }
+  }
+
+  return normalizePracticeResult({}, input);
 }
 
 function OutputCard({
@@ -266,40 +255,28 @@ export default function PracticePage() {
 
     setSessionBrief("Preparing your practice session...");
     setFirstChallenge("Generating the first challenge...");
-    setEvaluatorFocus("Analyzing what the other side is likely judging...");
-    setStrongPattern("Preparing your strongest response structure...");
-    setMistakes("Listing mistakes to avoid...");
+    setEvaluatorFocus("Analyzing the evaluator focus...");
+    setStrongPattern("Building the best response pattern...");
+    setMistakes("Listing the likely mistakes...");
     setNextDrill("Preparing the next drill...");
 
     try {
-      const answer = await fetchPracticeReply(text, selected);
-      const parsed = parsePracticeAnswer(answer);
+      const result = await fetchPracticeReply(text, selected);
 
-      setSessionBrief(parsed.sessionBrief);
-      setFirstChallenge(parsed.firstChallenge);
-      setEvaluatorFocus(parsed.evaluatorFocus);
-      setStrongPattern(parsed.strongPattern);
-      setMistakes(parsed.mistakes);
-      setNextDrill(parsed.nextDrill);
+      setSessionBrief(result.sessionBrief);
+      setFirstChallenge(result.firstChallenge);
+      setEvaluatorFocus(result.evaluatorFocus);
+      setStrongPattern(result.strongPattern);
+      setMistakes(result.mistakes);
+      setNextDrill(result.nextDrill);
     } catch {
-      setSessionBrief(
-        "Your practice session could not be prepared right now, but you can retry with a clearer prompt."
-      );
-      setFirstChallenge(
-        "Restate the scenario more specifically so the trainer can prepare a sharper rehearsal."
-      );
-      setEvaluatorFocus(
-        "The evaluator focus could not be generated for this run."
-      );
-      setStrongPattern(
-        "Start directly, stay structured, support your point with one example, and close clearly."
-      );
-      setMistakes(
-        "Avoid vague wording, weak openings, overlong answers, and low-confidence delivery."
-      );
-      setNextDrill(
-        "Retry the session with a clearer exact role, topic, or speaking situation."
-      );
+      const fallback = normalizePracticeResult({}, text);
+      setSessionBrief(fallback.sessionBrief);
+      setFirstChallenge(fallback.firstChallenge);
+      setEvaluatorFocus(fallback.evaluatorFocus);
+      setStrongPattern(fallback.strongPattern);
+      setMistakes(fallback.mistakes);
+      setNextDrill(fallback.nextDrill);
     } finally {
       setLoading(false);
     }
@@ -386,11 +363,11 @@ export default function PracticePage() {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <OutputCard
               title="What happens here"
-              body="Once you start, Practice Arena prepares a structured rehearsal session instead of returning a random paragraph."
+              body="Once you start, Practice Arena prepares a structured rehearsal session based on your exact scenario."
             />
             <OutputCard
               title="What you will receive"
-              body="You will get a session brief, a first challenge, evaluator focus, a strong response pattern, mistakes to avoid, and a next drill."
+              body="You will get a session brief, first challenge, evaluator focus, strong response pattern, common mistakes, and a next drill."
             />
           </div>
         </div>
