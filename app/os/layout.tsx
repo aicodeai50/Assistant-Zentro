@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import OSChrome from "@/components/os/OSChrome";
 
 export default function OsLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +17,7 @@ export default function OsLayout({ children }: { children: ReactNode }) {
         <div className="absolute inset-0 bg-[#07110d]/80" />
       </div>
 
-      {children}
+      <OSChrome>{children}</OSChrome>
     </div>
   );
 }
