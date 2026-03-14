@@ -177,13 +177,7 @@ Rules:
       throw new Error(data.error);
     }
 
-    return (
-      data.answer ||
-      data.reply ||
-      data.message ||
-      raw ||
-      "Simulation Lab could not respond right now."
-    );
+    return data.answer || data.reply || data.message || raw || "Simulation Lab could not respond right now.";
   } catch {
     return raw || "Simulation Lab could not respond right now.";
   }
