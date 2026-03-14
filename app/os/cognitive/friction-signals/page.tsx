@@ -28,6 +28,19 @@ function getFrictionMeaning(value: string) {
   }
 }
 
+function getFrictionImplication(value: string) {
+  switch (value) {
+    case "Low":
+      return "Today, the main barrier is probably not internal resistance. A clear task may be enough to get moving.";
+    case "Moderate":
+      return "Today, you should simplify the task entry point so resistance does not expand into delay or avoidance.";
+    case "High":
+      return "Today, you should lower entry resistance as much as possible. Start with the smallest concrete action instead of forcing full intensity immediately.";
+    default:
+      return "No friction implication is available yet.";
+  }
+}
+
 export default function Page() {
   const [snapshot, setSnapshot] = useState<CognitiveSnapshot | null>(null);
 
@@ -48,25 +61,50 @@ export default function Page() {
 
       <h1 className="mt-4 text-3xl font-semibold">Friction Signals</h1>
       <p className="mt-3 max-w-3xl text-white/70">
-        Friction Signals show how much resistance, instability, or difficulty may be interfering with clean execution.
+        This page explains how much resistance may currently be interfering with clean execution.
       </p>
 
-      <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
-        <div className="text-sm text-white/60">Current Friction Signals</div>
-        <div className="mt-3 text-4xl font-semibold text-white">
-          {snapshot?.friction || "No reading yet"}
+      <div className="mt-8 space-y-4">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="text-sm text-white/60">Current Friction Signals</div>
+          <div className="mt-3 text-4xl font-semibold text-white">
+            {snapshot?.friction || "No reading yet"}
+          </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
-          {snapshot
-            ? getFrictionMeaning(snapshot.friction)
-            : "Run a mental check in Cognitive to generate a real friction reading."}
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="text-sm font-semibold text-white">What you said</div>
+          <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/80">
+            {snapshot?.note || "No mental check recorded yet."}
+          </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/75">
-          {snapshot
-            ? `From the latest mental check, friction signals are ${snapshot.friction}. Recommended work intensity: ${snapshot.intensity}.`
-            : "No detailed friction interpretation is available yet."}
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="text-sm font-semibold text-white">What this level means</div>
+          <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/80">
+            {snapshot ? getFrictionMeaning(snapshot.friction) : "Run a mental check in Cognitive to generate a real friction reading."}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="text-sm font-semibold text-white">Why Cognitive gave this result</div>
+          <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/80">
+            {snapshot ? snapshot.summary : "No interpretation is available yet."}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="text-sm font-semibold text-white">What this means for today</div>
+          <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/80">
+            {snapshot ? getFrictionImplication(snapshot.friction) : "No daily implication is available yet."}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="text-sm font-semibold text-white">Recommended next move</div>
+          <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-white/80">
+            {snapshot ? snapshot.recommendation : "No recommendation is available yet."}
+          </div>
         </div>
       </div>
     </section>
