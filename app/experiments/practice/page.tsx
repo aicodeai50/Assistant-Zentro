@@ -10,15 +10,6 @@ type PracticeType =
   | "Presentation"
   | "Difficult Conversation";
 
-type PracticeResult = {
-  sessionBrief: string;
-  firstChallenge: string;
-  evaluatorFocus: string;
-  strongPattern: string;
-  mistakes: string;
-  nextDrill: string;
-};
-
 const STARTERS: Record<PracticeType, string[]> = {
   Interview: [
     "Prepare me for a junior IT support interview.",
@@ -41,10 +32,114 @@ const STARTERS: Record<PracticeType, string[]> = {
 function cleanOutput(text: string): string {
   return text
     .replace(/```[\s\S]*?```/g, "")
+    .replace(/\r/g, "")
     .replace(/^#+\s*/gm, "")
     .replace(/\*\*/g, "")
-    .replace(/\r/g, "")
     .trim();
+}
+
+function extractSection(text: string, label: string): string {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(
+    `${escaped}\\s*:\\s*([\\s\\S]*?)(?=\\n(?:Session Brief|First Challenge|Evaluator Focus|Strong Response Pattern|Common Mistakes|Next Drill)\\s*:|$)`,
+    "i"
+  );
+  const match = text.match(regex);
+  return match?.[1]?.trim() || "";
+}
+
+function buildDynamicFallbacks(prompt: string, selected: PracticeType) {
+  const text = prompt.trim();
+
+  if (selected === "Interview") {
+    return {
+      evaluatorFocus:
+        `The interviewer will likely judge how clearly and directly you answer "${text}", whether you sound credible, and whether you connect your answer to real work examples.`,
+      strongPattern:
+        `Open with a direct answer to "${text}", explain your reasoning in a structured way, add one concrete example from study, work, or projects, then close with a confident final line.`,
+      mistakes:
+        `Avoid sounding vague, repeating your CV without answering the question, speaking too generally, or giving long answers that do not clearly connect back to "${text}".`,
+      nextDrill:
+        `Answer the same interview prompt again in 60-90 seconds, but make the response sharper, more confident, and more specific to the role.`,
+    };
+  }
+
+  if (selected === "Oral Exam") {
+    return {
+      evaluatorFocus:
+        `The examiner is likely judging whether you actually understand the topic behind "${text}", whether your explanation is logically structured, and whether you can speak with clarity under pressure.`,
+      strongPattern:
+        `Start by defining the topic clearly, explain the main idea in order, support it with one relevant example or concept, and end with a short conclusion that shows understanding.`,
+      mistakes:
+        `Do not memorize without understanding, jump between points without structure, use unclear definitions, or give a long answer that never directly explains the core academic point in "${text}".`,
+      nextDrill:
+        `Repeat the same oral response again, but this time make the explanation more structured and reduce unnecessary wording.`,
+    };
+  }
+
+  if (selected === "Presentation") {
+    return {
+      evaluatorFocus:
+        `The audience will likely judge whether your message around "${text}" is clear, well-organized, easy to follow, and delivered with confidence.`,
+      strongPattern:
+        `Begin with the key message, explain the structure of your talk, develop 2-3 strong points with examples, and end with a memorable closing statement.`,
+      mistakes:
+        `Avoid overloading the audience with too many ideas, speaking without a clear flow, sounding uncertain, or presenting "${text}" without a strong takeaway.`,
+      nextDrill:
+        `Deliver the same presentation again in a shorter version and focus on clarity, pacing, and one stronger final takeaway.`,
+    };
+  }
+
+  return {
+    evaluatorFocus:
+      `The other person will likely judge whether you communicate "${text}" calmly, respectfully, clearly, and in a way that matches the emotional reality of the situation.`,
+    strongPattern:
+      `Start with the core issue, explain how it affects you, stay calm and specific, avoid blame-heavy language, and end with the outcome or boundary you want.`,
+    mistakes:
+      `Avoid sounding accusatory, becoming too indirect, hiding the real issue, over-explaining emotionally, or leaving "${text}" without a clear request or direction.`,
+    nextDrill:
+      `Rehearse the same conversation again using calmer wording, shorter sentences, and a clearer final request or boundary.`,
+  };
+}
+
+function parsePracticeOutput(text: string, prompt: string, selected: PracticeType) {
+  const clean = cleanOutput(text);
+
+  const sessionBrief = extractSection(clean, "Session Brief");
+  const firstChallenge = extractSection(clean, "First Challenge");
+  const evaluatorFocus = extractSection(clean, "Evaluator Focus");
+  const strongPattern = extractSection(clean, "Strong Response Pattern");
+  const mistakes = extractSection(clean, "Common Mistakes");
+  const nextDrill = extractSection(clean, "Next Drill");
+
+  const dynamic = buildDynamicFallbacks(prompt, selected);
+
+  if (
+    sessionBrief ||
+    firstChallenge ||
+    evaluatorFocus ||
+    strongPattern ||
+    mistakes ||
+    nextDrill
+  ) {
+    return {
+      sessionBrief: sessionBrief || `This practice session is built around: ${prompt}`,
+      firstChallenge: firstChallenge || clean,
+      evaluatorFocus: evaluatorFocus || dynamic.evaluatorFocus,
+      strongPattern: strongPattern || dynamic.strongPattern,
+      mistakes: mistakes || dynamic.mistakes,
+      nextDrill: nextDrill || dynamic.nextDrill,
+    };
+  }
+
+  return {
+    sessionBrief: `This practice session is built around: ${prompt}`,
+    firstChallenge: clean || "No answer returned.",
+    evaluatorFocus: dynamic.evaluatorFocus,
+    strongPattern: dynamic.strongPattern,
+    mistakes: dynamic.mistakes,
+    nextDrill: dynamic.nextDrill,
+  };
 }
 
 async function fetchPracticeReply(input: string, selected: PracticeType): Promise<string> {
@@ -74,22 +169,27 @@ First Challenge:
 <a rich, detailed, realistic main response tailored to the user's exact prompt. This should be the biggest and most useful section.>
 
 Evaluator Focus:
-<what the other side is likely judging>
+<what the other side is likely judging in this exact situation>
 
 Strong Response Pattern:
-<how the user should structure their answer or delivery>
+<how the user should structure their answer or delivery for this exact situation>
 
 Common Mistakes:
-<the biggest mistakes likely in this exact situation>
+<the biggest mistakes likely in this specific situation>
 
 Next Drill:
 <the next practice step the user should do after this>
+
+Important:
+- Every section must adapt to the user's exact prompt.
+- Do not reuse generic wording.
+- Do not make Evaluator Focus, Strong Response Pattern, Common Mistakes, or Next Drill sound identical across unrelated questions.
+- The side-panel sections must be prompt-specific.
 
 Rules:
 - Do not mention backend systems, APIs, models, or infrastructure.
 - Do not return JSON.
 - Do not use markdown code fences.
-- Do not write generic textbook filler unless it truly fits the prompt.
 - Make the answer feel human, clear, and professional.
 - The "First Challenge" section must be rich, practical, and adapted to the exact user request.
 `.trim();
@@ -165,58 +265,6 @@ Rules:
   }
 }
 
-function extractSection(text: string, label: string): string {
-  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(
-    `${escaped}\\s*:\\s*([\\s\\S]*?)(?=\\n(?:Session Brief|First Challenge|Evaluator Focus|Strong Response Pattern|Common Mistakes|Next Drill)\\s*:|$)`,
-    "i"
-  );
-  const match = text.match(regex);
-  return match?.[1]?.trim() || "";
-}
-
-function parsePracticeOutput(text: string) {
-  const clean = cleanOutput(text);
-
-  const sessionBrief = extractSection(clean, "Session Brief");
-  const firstChallenge = extractSection(clean, "First Challenge");
-  const evaluatorFocus = extractSection(clean, "Evaluator Focus");
-  const strongPattern = extractSection(clean, "Strong Response Pattern");
-  const mistakes = extractSection(clean, "Common Mistakes");
-  const nextDrill = extractSection(clean, "Next Drill");
-
-  if (
-    sessionBrief ||
-    firstChallenge ||
-    evaluatorFocus ||
-    strongPattern ||
-    mistakes ||
-    nextDrill
-  ) {
-    return {
-      sessionBrief: sessionBrief || "No session brief returned.",
-      firstChallenge: firstChallenge || clean,
-      evaluatorFocus: evaluatorFocus || "No evaluator focus returned.",
-      strongPattern: strongPattern || "No response pattern returned.",
-      mistakes: mistakes || "No mistakes section returned.",
-      nextDrill: nextDrill || "No next drill returned.",
-    };
-  }
-
-  return {
-    sessionBrief: "Practice session prepared from your prompt.",
-    firstChallenge: clean || "No answer returned.",
-    evaluatorFocus:
-      "Focus on clarity, relevance, confidence, and matching the situation properly.",
-    strongPattern:
-      "Start directly, stay structured, support your points with one clear example, and close strongly.",
-    mistakes:
-      "Avoid vague language, over-explaining, weak structure, and drifting away from the real question.",
-    nextDrill:
-      "Repeat the same scenario with a shorter, sharper, more confident version.",
-  };
-}
-
 function OutputCard({
   title,
   body,
@@ -268,7 +316,7 @@ export default function PracticePage() {
 
     try {
       const answer = await fetchPracticeReply(text, selected);
-      const parsed = parsePracticeOutput(answer);
+      const parsed = parsePracticeOutput(answer, text, selected);
 
       setSessionBrief(parsed.sessionBrief);
       setFirstChallenge(parsed.firstChallenge);
@@ -282,16 +330,14 @@ export default function PracticePage() {
           ? error.message
           : "Practice Arena could not respond right now.";
 
-      setSessionBrief("Practice session could not be generated.");
+      const dynamic = buildDynamicFallbacks(text, selected);
+
+      setSessionBrief(`This practice session is built around: ${text}`);
       setFirstChallenge(message);
-      setEvaluatorFocus(
-        "Try again with a clearer practice scenario so the session can be tailored properly."
-      );
-      setStrongPattern(
-        "Use a more specific prompt with role, situation, and what kind of help you want."
-      );
-      setMistakes("Very broad prompts often produce weaker practice sessions.");
-      setNextDrill("Rewrite the scenario more specifically and rerun the practice.");
+      setEvaluatorFocus(dynamic.evaluatorFocus);
+      setStrongPattern(dynamic.strongPattern);
+      setMistakes(dynamic.mistakes);
+      setNextDrill(dynamic.nextDrill);
     } finally {
       setLoading(false);
     }
