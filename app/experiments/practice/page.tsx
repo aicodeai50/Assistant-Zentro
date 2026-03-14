@@ -17,6 +17,7 @@ type PracticeResult = {
   strongPattern: string;
   mistakes: string;
   nextDrill: string;
+  expandedNotes: string;
 };
 
 const STARTERS: Record<PracticeType, string[]> = {
@@ -58,6 +59,9 @@ function normalizePracticeResult(input: Partial<PracticeResult>, prompt: string)
     nextDrill:
       input.nextDrill?.trim() ||
       "Repeat the scenario once more and improve clarity, sharpness, and confidence.",
+    expandedNotes:
+      input.expandedNotes?.trim() ||
+      "Use this session to rehearse carefully. Focus on answering directly, staying relevant, and speaking with calm structure. After your first response, review where you became vague, too broad, or less confident, then improve the second version."
   };
 }
 
@@ -83,7 +87,8 @@ Current practice mode:
 Behavior:
 - Be practical, direct, realistic, and structured.
 - Tailor every field to the user's exact prompt.
-- Do not give generic repeated advice unless the user's prompt is generic.
+- Keep the short sections concise and specific.
+- Also provide one richer long-form coaching section.
 - Do not mention backend systems, models, APIs, or infrastructure.
 - Stay fully in the role of Practice Arena.
 
@@ -99,7 +104,8 @@ Return this exact JSON shape:
   "evaluatorFocus": "string",
   "strongPattern": "string",
   "mistakes": "string",
-  "nextDrill": "string"
+  "nextDrill": "string",
+  "expandedNotes": "string"
 }
 
 Field rules:
@@ -109,17 +115,13 @@ Field rules:
 - "strongPattern": show the best answer structure for this exact prompt
 - "mistakes": list the most likely mistakes for this exact prompt
 - "nextDrill": give the next useful drill after the first response
+- "expandedNotes": provide a richer, longer coaching explanation tailored to this exact prompt, around 120 to 220 words, practical and specific, not generic
 `.trim();
 
   const payload = {
     message: input,
     systemPrompt,
-    messages: [
-      {
-        role: "user",
-        content: input,
-      },
-    ],
+    messages: [{ role: "user", content: input }],
   };
 
   const supabase = getSupabaseClient();
@@ -167,22 +169,14 @@ Field rules:
   let text = raw;
 
   try {
-    const data = JSON.parse(raw) as {
+    const data = JSON.parse(raw) as Partial<PracticeResult> & {
       answer?: string;
       reply?: string;
       message?: string;
       error?: string;
-      sessionBrief?: string;
-      firstChallenge?: string;
-      evaluatorFocus?: string;
-      strongPattern?: string;
-      mistakes?: string;
-      nextDrill?: string;
     };
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    if (data.error) throw new Error(data.error);
 
     if (
       data.sessionBrief ||
@@ -190,7 +184,8 @@ Field rules:
       data.evaluatorFocus ||
       data.strongPattern ||
       data.mistakes ||
-      data.nextDrill
+      data.nextDrill ||
+      data.expandedNotes
     ) {
       return normalizePracticeResult(data, input);
     }
@@ -213,13 +208,7 @@ Field rules:
   return normalizePracticeResult({}, input);
 }
 
-function OutputCard({
-  title,
-  body,
-}: {
-  title: string;
-  body: string;
-}) {
+function OutputCard({ title, body }: { title: string; body: string }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
       <div className="text-sm font-semibold text-white">{title}</div>
@@ -237,6 +226,7 @@ export default function PracticePage() {
   const [strongPattern, setStrongPattern] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [nextDrill, setNextDrill] = useState("");
+  const [expandedNotes, setExpandedNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasRun, setHasRun] = useState(false);
 
@@ -246,9 +236,7 @@ export default function PracticePage() {
     const text = (customText ?? prompt).trim();
     if (!text || loading) return;
 
-    if (customText) {
-      setPrompt(customText);
-    }
+    if (customText) setPrompt(customText);
 
     setHasRun(true);
     setLoading(true);
@@ -259,16 +247,17 @@ export default function PracticePage() {
     setStrongPattern("Building the best response pattern...");
     setMistakes("Listing the likely mistakes...");
     setNextDrill("Preparing the next drill...");
+    setExpandedNotes("Preparing deeper coaching notes...");
 
     try {
       const result = await fetchPracticeReply(text, selected);
-
       setSessionBrief(result.sessionBrief);
       setFirstChallenge(result.firstChallenge);
       setEvaluatorFocus(result.evaluatorFocus);
       setStrongPattern(result.strongPattern);
       setMistakes(result.mistakes);
       setNextDrill(result.nextDrill);
+      setExpandedNotes(result.expandedNotes);
     } catch {
       const fallback = normalizePracticeResult({}, text);
       setSessionBrief(fallback.sessionBrief);
@@ -277,6 +266,7 @@ export default function PracticePage() {
       setStrongPattern(fallback.strongPattern);
       setMistakes(fallback.mistakes);
       setNextDrill(fallback.nextDrill);
+      setExpandedNotes(fallback.expandedNotes);
     } finally {
       setLoading(false);
     }
@@ -367,29 +357,36 @@ export default function PracticePage() {
             />
             <OutputCard
               title="What you will receive"
-              body="You will get a session brief, first challenge, evaluator focus, strong response pattern, common mistakes, and a next drill."
+              body="You will get both short guidance sectors and a richer long-form coaching section."
             />
           </div>
         </div>
       ) : (
-        <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-sm font-semibold text-white">Session Flow</div>
+        <div className="mt-6 space-y-5">
+          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Session Flow</div>
+              <div className="mt-4 space-y-4">
+                <OutputCard title="Session Brief" body={sessionBrief} />
+                <OutputCard title="First Challenge" body={firstChallenge} />
+                <OutputCard title="Evaluator Focus" body={evaluatorFocus} />
+              </div>
+            </div>
 
-            <div className="mt-4 space-y-4">
-              <OutputCard title="Session Brief" body={sessionBrief} />
-              <OutputCard title="First Challenge" body={firstChallenge} />
-              <OutputCard title="Evaluator Focus" body={evaluatorFocus} />
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Performance Guidance</div>
+              <div className="mt-4 space-y-4">
+                <OutputCard title="Strong Response Pattern" body={strongPattern} />
+                <OutputCard title="Common Mistakes" body={mistakes} />
+                <OutputCard title="Next Drill" body={nextDrill} />
+              </div>
             </div>
           </div>
 
           <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-sm font-semibold text-white">Performance Guidance</div>
-
-            <div className="mt-4 space-y-4">
-              <OutputCard title="Strong Response Pattern" body={strongPattern} />
-              <OutputCard title="Common Mistakes" body={mistakes} />
-              <OutputCard title="Next Drill" body={nextDrill} />
+            <div className="text-sm font-semibold text-white">Expanded Coaching Notes</div>
+            <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+              {expandedNotes}
             </div>
           </div>
         </div>
