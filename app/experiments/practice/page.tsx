@@ -17,7 +17,6 @@ type PracticeResult = {
   strongPattern: string;
   mistakes: string;
   nextDrill: string;
-  expandedNotes: string;
 };
 
 const STARTERS: Record<PracticeType, string[]> = {
@@ -43,25 +42,22 @@ function normalizePracticeResult(input: Partial<PracticeResult>, prompt: string)
   return {
     sessionBrief:
       input.sessionBrief?.trim() ||
-      `This practice session is focused on: ${prompt}`,
+      `This session is built around your exact scenario: ${prompt}`,
     firstChallenge:
       input.firstChallenge?.trim() ||
-      `Start by responding directly to this scenario: ${prompt}`,
+      `Respond directly to this scenario: ${prompt}\n\nGive your first real answer as if the situation is happening now. Keep it relevant, calm, and properly structured.`,
     evaluatorFocus:
       input.evaluatorFocus?.trim() ||
-      "The evaluator is likely judging clarity, relevance, calm delivery, and whether your answer fits the situation.",
+      "The evaluator is likely judging clarity, relevance, calm delivery, structure, and whether your answer matches the exact situation.",
     strongPattern:
       input.strongPattern?.trim() ||
-      "Answer directly, support it with one strong example, and close with a clear conclusion.",
+      "Start directly, answer the real question, support your answer with one strong example, and close clearly.",
     mistakes:
       input.mistakes?.trim() ||
-      "Avoid vague wording, rambling, weak structure, and failing to answer the real question.",
+      "Avoid rambling, vague language, going off-topic, weak openings, and ending without a clear point.",
     nextDrill:
       input.nextDrill?.trim() ||
-      "Repeat the scenario once more and improve clarity, sharpness, and confidence.",
-    expandedNotes:
-      input.expandedNotes?.trim() ||
-      "Use this session to rehearse carefully. Focus on answering directly, staying relevant, and speaking with calm structure. After your first response, review where you became vague, too broad, or less confident, then improve the second version."
+      "Rerun the same scenario and give a sharper, shorter second version with stronger clarity and confidence.",
   };
 }
 
@@ -87,14 +83,13 @@ Current practice mode:
 Behavior:
 - Be practical, direct, realistic, and structured.
 - Tailor every field to the user's exact prompt.
-- Keep the short sections concise and specific.
-- Also provide one richer long-form coaching section.
+- The "First Challenge" field MUST be detailed, rich, and useful, not short.
+- Do not repeat generic advice for unrelated prompts.
 - Do not mention backend systems, models, APIs, or infrastructure.
 - Stay fully in the role of Practice Arena.
 
 You MUST return ONLY valid JSON.
-Do not include markdown.
-Do not include code fences.
+Do not include markdown fences.
 Do not include explanation outside JSON.
 
 Return this exact JSON shape:
@@ -104,24 +99,34 @@ Return this exact JSON shape:
   "evaluatorFocus": "string",
   "strongPattern": "string",
   "mistakes": "string",
-  "nextDrill": "string",
-  "expandedNotes": "string"
+  "nextDrill": "string"
 }
 
-Field rules:
-- "sessionBrief": explain what this exact practice session is preparing the user for
-- "firstChallenge": give the first realistic question, challenge, or opening task
-- "evaluatorFocus": explain what the other side is likely judging in this exact situation
+Rules for each field:
+- "sessionBrief": 2-4 sentences explaining what this exact practice session is preparing the user for
+- "firstChallenge": this should be the main long-form section; around 140-260 words; detailed, scenario-specific, rich, practical, and clearly connected to the user's exact prompt
+- "evaluatorFocus": explain what the other side is judging in this exact situation
 - "strongPattern": show the best answer structure for this exact prompt
 - "mistakes": list the most likely mistakes for this exact prompt
 - "nextDrill": give the next useful drill after the first response
-- "expandedNotes": provide a richer, longer coaching explanation tailored to this exact prompt, around 120 to 220 words, practical and specific, not generic
+
+Very important:
+- If the user asks about an interview, the content must sound like interview coaching.
+- If the user asks about an oral exam, it must sound like oral exam coaching.
+- If the user asks about a presentation, it must sound like presentation coaching.
+- If the user asks about a difficult conversation, it must sound like conversation coaching.
+- Never output a generic article unrelated to the exact prompt.
 `.trim();
 
   const payload = {
     message: input,
     systemPrompt,
-    messages: [{ role: "user", content: input }],
+    messages: [
+      {
+        role: "user",
+        content: input,
+      },
+    ],
   };
 
   const supabase = getSupabaseClient();
@@ -176,7 +181,9 @@ Field rules:
       error?: string;
     };
 
-    if (data.error) throw new Error(data.error);
+    if (data.error) {
+      throw new Error(data.error);
+    }
 
     if (
       data.sessionBrief ||
@@ -184,8 +191,7 @@ Field rules:
       data.evaluatorFocus ||
       data.strongPattern ||
       data.mistakes ||
-      data.nextDrill ||
-      data.expandedNotes
+      data.nextDrill
     ) {
       return normalizePracticeResult(data, input);
     }
@@ -196,6 +202,7 @@ Field rules:
   }
 
   const jsonBlock = extractJsonObject(text);
+
   if (jsonBlock) {
     try {
       const parsed = JSON.parse(jsonBlock) as Partial<PracticeResult>;
@@ -208,11 +215,17 @@ Field rules:
   return normalizePracticeResult({}, input);
 }
 
-function OutputCard({ title, body }: { title: string; body: string }) {
+function OutputCard({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
       <div className="text-sm font-semibold text-white">{title}</div>
-      <div className="mt-2 text-sm leading-6 text-white/75">{body}</div>
+      <div className="mt-2 text-sm leading-6 text-white/75 whitespace-pre-wrap">{body}</div>
     </div>
   );
 }
@@ -226,7 +239,6 @@ export default function PracticePage() {
   const [strongPattern, setStrongPattern] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [nextDrill, setNextDrill] = useState("");
-  const [expandedNotes, setExpandedNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasRun, setHasRun] = useState(false);
 
@@ -236,28 +248,29 @@ export default function PracticePage() {
     const text = (customText ?? prompt).trim();
     if (!text || loading) return;
 
-    if (customText) setPrompt(customText);
+    if (customText) {
+      setPrompt(customText);
+    }
 
     setHasRun(true);
     setLoading(true);
 
     setSessionBrief("Preparing your practice session...");
-    setFirstChallenge("Generating the first challenge...");
-    setEvaluatorFocus("Analyzing the evaluator focus...");
-    setStrongPattern("Building the best response pattern...");
-    setMistakes("Listing the likely mistakes...");
-    setNextDrill("Preparing the next drill...");
-    setExpandedNotes("Preparing deeper coaching notes...");
+    setFirstChallenge("Preparing a detailed challenge...");
+    setEvaluatorFocus("Analyzing evaluator focus...");
+    setStrongPattern("Building response pattern...");
+    setMistakes("Listing common mistakes...");
+    setNextDrill("Preparing next drill...");
 
     try {
       const result = await fetchPracticeReply(text, selected);
+
       setSessionBrief(result.sessionBrief);
       setFirstChallenge(result.firstChallenge);
       setEvaluatorFocus(result.evaluatorFocus);
       setStrongPattern(result.strongPattern);
       setMistakes(result.mistakes);
       setNextDrill(result.nextDrill);
-      setExpandedNotes(result.expandedNotes);
     } catch {
       const fallback = normalizePracticeResult({}, text);
       setSessionBrief(fallback.sessionBrief);
@@ -266,7 +279,6 @@ export default function PracticePage() {
       setStrongPattern(fallback.strongPattern);
       setMistakes(fallback.mistakes);
       setNextDrill(fallback.nextDrill);
-      setExpandedNotes(fallback.expandedNotes);
     } finally {
       setLoading(false);
     }
@@ -352,41 +364,60 @@ export default function PracticePage() {
           <div className="text-sm font-semibold text-white">Training Structure</div>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <OutputCard
-              title="What happens here"
-              body="Once you start, Practice Arena prepares a structured rehearsal session based on your exact scenario."
+              title="How this works"
+              body="You describe the situation. Practice Arena turns it into a structured rehearsal with one detailed long-form challenge and supporting coaching panels."
             />
             <OutputCard
-              title="What you will receive"
-              body="You will get both short guidance sectors and a richer long-form coaching section."
+              title="What changes each time"
+              body="The content should adapt to the exact prompt, so different user questions produce different coaching, challenge framing, evaluator focus, mistakes, and next drills."
             />
           </div>
         </div>
       ) : (
         <div className="mt-6 space-y-5">
-          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
-            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-              <div className="text-sm font-semibold text-white">Session Flow</div>
-              <div className="mt-4 space-y-4">
-                <OutputCard title="Session Brief" body={sessionBrief} />
-                <OutputCard title="First Challenge" body={firstChallenge} />
-                <OutputCard title="Evaluator Focus" body={evaluatorFocus} />
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-              <div className="text-sm font-semibold text-white">Performance Guidance</div>
-              <div className="mt-4 space-y-4">
-                <OutputCard title="Strong Response Pattern" body={strongPattern} />
-                <OutputCard title="Common Mistakes" body={mistakes} />
-                <OutputCard title="Next Drill" body={nextDrill} />
-              </div>
+          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+            <div className="text-sm font-semibold text-white">Session Brief</div>
+            <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+              {sessionBrief}
             </div>
           </div>
 
           <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-sm font-semibold text-white">Expanded Coaching Notes</div>
+            <div className="text-sm font-semibold text-white">First Challenge</div>
             <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
-              {expandedNotes}
+              {firstChallenge}
+            </div>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Evaluator Focus</div>
+              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+                {evaluatorFocus}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Strong Response Pattern</div>
+              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+                {strongPattern}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Common Mistakes</div>
+              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+                {mistakes}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
+              <div className="text-sm font-semibold text-white">Next Drill</div>
+              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/75">
+                {nextDrill}
+              </div>
             </div>
           </div>
         </div>
