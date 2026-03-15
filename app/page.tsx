@@ -1,5 +1,13 @@
 import Link from "next/link";
 import RobotTypingLine from "@/components/RobotTypingLine";
+import {
+  BookOpen,
+  GraduationCap,
+  Building2,
+  FlaskConical,
+  Cpu,
+  Gamepad2,
+} from "lucide-react";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -13,6 +21,7 @@ const ENVIRONMENTS = [
     desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
     tags: ["Study", "Exams", "Career"],
     href: "/university",
+    icon: BookOpen,
   },
   {
     key: "academy",
@@ -21,6 +30,7 @@ const ENVIRONMENTS = [
     desc: "Junior and senior high school learning, subject rooms, tutors, and classroom workshops.",
     tags: ["School", "Subjects", "Badges"],
     href: "/academy",
+    icon: GraduationCap,
   },
   {
     key: "enterprise",
@@ -29,6 +39,7 @@ const ENVIRONMENTS = [
     desc: "Missions, teams, analytics, strategy, automation, support, and OS intelligence in one enterprise environment.",
     tags: ["Missions", "Teams", "Analytics"],
     href: "/enterprise",
+    icon: Building2,
   },
   {
     key: "experiments",
@@ -37,6 +48,7 @@ const ENVIRONMENTS = [
     desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
     tags: ["Debate", "Simulation", "Concepts"],
     href: "/experiments",
+    icon: FlaskConical,
   },
   {
     key: "frontier",
@@ -45,6 +57,7 @@ const ENVIRONMENTS = [
     desc: "Code, systems, logic, and build-focused engineering practice for all levels.",
     tags: ["Code", "Build", "Puzzles"],
     href: "/frontier",
+    icon: Cpu,
   },
   {
     key: "arcade",
@@ -53,6 +66,7 @@ const ENVIRONMENTS = [
     desc: "Game-based drills, challenge rooms, reflex loops, and simulation-based practice.",
     tags: ["Games", "Challenge", "Levels"],
     href: "/arcade",
+    icon: Gamepad2,
   },
 ];
 
@@ -224,7 +238,7 @@ export default function HomePage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="h-12 w-12 rounded-full border border-white/10 bg-white/5" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5"><item.icon className="h-5 w-5 text-white/80" strokeWidth={1.8} /></div>
                   </div>
                 </div>
 
