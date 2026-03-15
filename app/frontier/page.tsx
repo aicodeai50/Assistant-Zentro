@@ -8,30 +8,52 @@ const LABS = [
   {
     href: "/frontier/coding",
     title: "Coding Arena",
-    desc: "AI-assisted building space for websites, chatbots, tools, games, and Python projects.",
+    desc: "AI-assisted build workspace for products, websites, tools, games, and Python learning.",
     tags: ["Build", "AI Guidance", "Projects"],
-    status: "Live AI",
+    status: "Adaptive",
+    next: "Generate build direction",
   },
   {
     href: "/frontier/algorithms",
     title: "Algorithm Challenges",
-    desc: "Reason through graphs, scheduling, sorting, and system problems with structured AI support.",
+    desc: "AI reasoning chamber for system problems, graphs, scheduling, and structured engineering logic.",
     tags: ["Graphs", "Logic", "Systems"],
     status: "Reasoning",
+    next: "Detect problem type",
   },
   {
     href: "/frontier/ai-bots",
     title: "AI Bot Lab",
-    desc: "Compare assistant modes, response styles, and prompt behaviour inside a controlled lab.",
+    desc: "Experiment with AI mode, tone, purpose, and response behavior under the same prompt.",
     tags: ["AI", "Modes", "Prompting"],
     status: "Simulation",
+    next: "Compare assistant styles",
   },
   {
     href: "/frontier/puzzles",
     title: "Logic Puzzles",
-    desc: "Train deep reasoning with revealable hints, stepwise thinking, and puzzle progression.",
+    desc: "Train deduction with layered hints, staged reveal, and guided reasoning progression.",
     tags: ["Puzzles", "Hints", "Practice"],
     status: "Training",
+    next: "Reveal next move",
+  },
+];
+
+const SIGNALS = [
+  {
+    title: "AI Guidance",
+    value: "Active",
+    helper: "Every lab route now responds like an interactive AI workspace.",
+  },
+  {
+    title: "User Direction",
+    value: "Improved",
+    helper: "Each area is designed to interpret, guide, and continue the workflow.",
+  },
+  {
+    title: "Lab Feel",
+    value: "Future-facing",
+    helper: "Frontier is being shaped as a living AI environment rather than a static menu.",
   },
 ];
 
@@ -74,61 +96,43 @@ export default function FrontierLabPage() {
             Engineering District
           </h1>
           <p className="mt-3 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-            Frontier Lab is the technical creation environment inside Shynvo. It is not just a
-            gallery of cards. It is where users explore AI-assisted coding, engineering reasoning,
-            algorithm analysis, prompt behaviour, and structured puzzle solving.
+            Frontier Lab is the technical creation environment of Shynvo. It is built for users who
+            want AI guidance while building, reasoning, testing assistant behavior, and solving
+            logic challenges. Each area should continue the user journey, not stop at a card.
           </p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-                Lab State
+            {SIGNALS.map((item) => (
+              <div key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                  {item.title}
+                </div>
+                <div className="mt-2 text-lg font-semibold text-white">{item.value}</div>
+                <div className="mt-1 text-sm text-white/60">{item.helper}</div>
               </div>
-              <div className="mt-2 text-lg font-semibold text-white">Operational</div>
-              <div className="mt-1 text-sm text-white/60">
-                AI-guided engineering workflows are available.
-              </div>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-                Primary Use
-              </div>
-              <div className="mt-2 text-lg font-semibold text-white">Build + Reason</div>
-              <div className="mt-1 text-sm text-white/60">
-                Create, test, compare, and improve technical thinking.
-              </div>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-                AI Presence
-              </div>
-              <div className="mt-2 text-lg font-semibold text-white">Embedded</div>
-              <div className="mt-1 text-sm text-white/60">
-                Each lab route responds like a guided AI work panel.
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-6">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-lime-100/70">
-            AI Lab Routing
+            AI Routing Layer
           </div>
           <h2 className="mt-2 text-2xl font-semibold text-white">
-            Choose how you want Frontier to think with you
+            Frontier now guides instead of only displaying
           </h2>
           <div className="mt-4 space-y-3">
             <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-              Coding Arena helps you turn project ideas into build plans.
+              Coding Arena interprets project goals and shapes build flow.
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-              Algorithm Challenges helps you understand reasoning paths, not just answers.
+              Algorithm Challenges detects reasoning type and recommends the route.
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-              AI Bot Lab compares how assistant modes behave under the same prompt.
+              AI Bot Lab compares how the same prompt behaves under different assistant modes.
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-              Logic Puzzles trains deliberate thinking with hints and staged reveal.
+              Logic Puzzles trains deduction through hints, reveal levels, and progression.
             </div>
           </div>
         </div>
@@ -162,6 +166,13 @@ export default function FrontierLabPage() {
                   {tag}
                 </span>
               ))}
+            </div>
+
+            <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-3">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                AI next action
+              </div>
+              <div className="mt-1 text-sm text-white/80">{lab.next}</div>
             </div>
 
             <div className="mt-5 text-sm font-semibold text-lime-200 group-hover:text-lime-100">

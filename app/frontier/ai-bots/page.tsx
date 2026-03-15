@@ -4,10 +4,18 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 type BotMode = "assistant" | "builder" | "teacher" | "analyst";
+type ToneMode = "concise" | "structured" | "teaching" | "strategic";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
+
+const TONES: Record<ToneMode, { title: string; desc: string }> = {
+  concise: { title: "Concise", desc: "Short and efficient." },
+  structured: { title: "Structured", desc: "Organized and explicit." },
+  teaching: { title: "Teaching", desc: "Explains and guides more." },
+  strategic: { title: "Strategic", desc: "Higher-level and decision-oriented." },
+};
 
 const MODES: Record<
   BotMode,
@@ -56,14 +64,19 @@ const MODES: Record<
 
 export default function FrontierAIBotsPage() {
   const [mode, setMode] = useState<BotMode>("assistant");
+  const [tone, setTone] = useState<ToneMode>("structured");
   const [prompt, setPrompt] = useState(MODES.assistant.starter);
   const [generated, setGenerated] = useState(false);
 
   const active = useMemo(() => MODES[mode], [mode]);
 
   const liveResponse = generated
-    ? `${active.output} Prompt received: "${prompt || active.starter}". Tone selected: ${active.tone}.`
-    : "Choose a mode, write a prompt, then generate a response style.";
+    ? `${active.output} Prompt received: "${prompt || active.starter}". Tone selected: ${TONES[tone].title}.`
+    : "Choose a mode, choose a tone, write a prompt, then generate the response style.";
+
+  const recommendation = generated
+    ? `Recommended operating behavior: ${mode === "analyst" ? "Use this mode for trade-offs and decisions." : mode === "teacher" ? "Use this mode for explanation and learner confidence." : mode === "builder" ? "Use this mode for turning ideas into systems." : "Use this mode for planning and general assistance."}`
+    : "Recommendation will appear after generation.";
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -95,8 +108,8 @@ export default function FrontierAIBotsPage() {
           AI Bot Lab
         </h1>
         <p className="mt-3 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
-          Experiment with AI behaviour models. Choose a mode, type a prompt, and compare how the
-          response changes by purpose and operating style.
+          Experiment with AI behaviour models. Choose a mode, choose a tone, type a prompt, and
+          compare how the response changes by purpose and operating style.
         </p>
       </div>
 
@@ -130,6 +143,28 @@ export default function FrontierAIBotsPage() {
                 <div className="mt-2 text-sm leading-6 text-white/70">{MODES[item].desc}</div>
               </button>
             ))}
+          </div>
+
+          <div className="mt-6">
+            <div className="text-sm font-semibold text-white">Tone layer</div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {(Object.keys(TONES) as ToneMode[]).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setTone(item)}
+                  className={cx(
+                    "rounded-2xl border p-4 text-left transition",
+                    tone === item
+                      ? "border-lime-300/30 bg-lime-400/10 text-white"
+                      : "border-white/10 bg-black/20 text-white/80 hover:bg-white/7"
+                  )}
+                >
+                  <div className="text-sm font-semibold">{TONES[item].title}</div>
+                  <div className="mt-1 text-sm text-white/70">{TONES[item].desc}</div>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="mt-6">
@@ -170,7 +205,12 @@ export default function FrontierAIBotsPage() {
               Live output
             </div>
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-2xl font-semibold text-white">{active.title}</div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-2xl font-semibold text-white">{active.title}</div>
+                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">
+                  {TONES[tone].title}
+                </div>
+              </div>
               <div className="mt-2 text-sm leading-6 text-white/70">{active.desc}</div>
             </div>
 
@@ -194,11 +234,11 @@ export default function FrontierAIBotsPage() {
             </div>
 
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
-              Tone: {active.tone}
+              Tone base: {active.tone}
             </div>
 
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/75">
-              This lab is for behaviour testing. Same prompt, different intelligence mode.
+              {recommendation}
             </div>
           </div>
         </div>

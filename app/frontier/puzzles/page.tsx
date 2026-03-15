@@ -3,34 +3,42 @@
 import Link from "next/link";
 import { useState } from "react";
 
+type SolveMode = "test" | "guided" | "teach";
+
 const PUZZLES = [
   {
     question: "A system has 3 switches. B must come after A, and C cannot be last. Which order can unlock the system?",
-    hint: "Start by testing the valid positions for C.",
+    hint1: "Start by testing the valid positions for C.",
+    hint2: "If C cannot be last, try placing C in the middle and keep B after A.",
     answer: "A, C, B works because B comes after A and C is not last.",
   },
   {
     question: "Three services depend on each other: API before UI, Database before API. What is the safe build order?",
-    hint: "Find the deepest dependency first.",
+    hint1: "Find the deepest dependency first.",
+    hint2: "The system layer that everything else depends on should start first.",
     answer: "Database, API, UI.",
   },
   {
     question: "A robot can move left, right, or forward. It must visit the sensor before the gate and cannot end at the charger. What should you track first?",
-    hint: "Track order rules before path choices.",
+    hint1: "Track order rules before path choices.",
+    hint2: "List the constraints first, then test movement paths against them.",
     answer: "Start with the ordering constraints: sensor before gate, charger not final.",
   },
 ];
 
 export default function FrontierPuzzlesPage() {
   const [index, setIndex] = useState(0);
-  const [showHint, setShowHint] = useState(false);
+  const [mode, setMode] = useState<SolveMode>("guided");
+  const [showHint1, setShowHint1] = useState(false);
+  const [showHint2, setShowHint2] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
 
   const active = PUZZLES[index];
 
   function nextPuzzle() {
     setIndex((prev) => (prev + 1) % PUZZLES.length);
-    setShowHint(false);
+    setShowHint1(false);
+    setShowHint2(false);
     setShowAnswer(false);
   }
 
@@ -64,26 +72,65 @@ export default function FrontierPuzzlesPage() {
           Logic Puzzles
         </h1>
         <p className="mt-3 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
-          Train deep reasoning through interactive logic challenges. Reveal hints, test yourself,
-          then move to the next puzzle without leaving the environment.
+          Train deep reasoning through interactive logic challenges. Reveal hints in layers, switch
+          solve mode, and keep progressing without leaving the environment.
         </p>
       </div>
 
       <div className="mt-8 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-          <div className="text-sm font-semibold text-white">System Lock Puzzle</div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-sm font-semibold text-white">Puzzle chamber</div>
+            <div className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-[11px] text-lime-100">
+              AI Deduction Layer
+            </div>
+          </div>
 
-          <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/90">
+          <div className="mt-4">
+            <div className="text-sm font-semibold text-white">Solve mode</div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {(["test", "guided", "teach"] as SolveMode[]).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setMode(item)}
+                  className={`rounded-2xl border p-4 text-left transition ${
+                    mode === item
+                      ? "border-lime-300/30 bg-lime-400/10 text-white"
+                      : "border-white/10 bg-black/20 text-white/80 hover:bg-white/7"
+                  }`}
+                >
+                  <div className="text-sm font-semibold capitalize">{item}</div>
+                  <div className="mt-1 text-sm text-white/70">
+                    {item === "test"
+                      ? "Minimal help."
+                      : item === "guided"
+                      ? "Hints in stages."
+                      : "More explanation."}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/90">
             {active.question}
           </div>
 
           <div className="mt-5 flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={() => setShowHint(true)}
+              onClick={() => setShowHint1(true)}
               className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10"
             >
-              Show hint
+              Hint 1
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowHint2(true)}
+              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10"
+            >
+              Hint 2
             </button>
             <button
               type="button"
@@ -107,9 +154,16 @@ export default function FrontierPuzzlesPage() {
             <div className="text-sm font-semibold text-white">Puzzle panel</div>
 
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-sm font-semibold text-white">Hint</div>
+              <div className="text-sm font-semibold text-white">Hint 1</div>
               <div className="mt-2 text-sm leading-6 text-white/75">
-                {showHint ? active.hint : "Hint hidden until you reveal it."}
+                {showHint1 ? active.hint1 : mode === "test" ? "Hidden in test mode until you choose it." : "First hint ready when you ask for it."}
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div className="text-sm font-semibold text-white">Hint 2</div>
+              <div className="mt-2 text-sm leading-6 text-white/75">
+                {showHint2 ? active.hint2 : mode === "teach" ? "Second hint is available for deeper explanation." : "Second hint hidden until reveal."}
               </div>
             </div>
 
@@ -122,10 +176,13 @@ export default function FrontierPuzzlesPage() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <div className="text-sm font-semibold text-white">Why this page is different</div>
+            <div className="text-sm font-semibold text-white">Reasoning mode</div>
             <div className="mt-3 text-sm leading-6 text-white/75">
-              This is the reasoning chamber of Frontier Lab. It is not for building like Coding
-              Arena, and not for AI behaviour testing like AI Bot Lab.
+              {mode === "test"
+                ? "Test mode keeps help lighter so you can try solving more independently."
+                : mode === "guided"
+                ? "Guided mode reveals hints in stages and helps you continue."
+                : "Teach mode is more explanatory and helps you understand the logic behind the answer."}
             </div>
           </div>
         </div>

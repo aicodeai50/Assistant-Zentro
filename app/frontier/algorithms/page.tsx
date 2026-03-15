@@ -4,10 +4,17 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 type ChallengeType = "shortest-path" | "sorting" | "scheduling" | "graphs";
+type ReasonMode = "coach" | "solver" | "teacher";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
+
+const MODES: Record<ReasonMode, { title: string; desc: string }> = {
+  coach: { title: "Coach", desc: "Guides the route without giving too much away." },
+  solver: { title: "Solver", desc: "Moves quickly toward the solution path." },
+  teacher: { title: "Teacher", desc: "Explains each reasoning step more slowly." },
+};
 
 const CHALLENGES: Record<
   ChallengeType,
@@ -17,6 +24,7 @@ const CHALLENGES: Record<
     hint: string;
     route: string;
     focus: string[];
+    mistake: string;
   }
 > = {
   "shortest-path": {
@@ -25,6 +33,7 @@ const CHALLENGES: Record<
     hint: "Track the cheapest known path at every step.",
     route: "Model nodes, compare candidate paths, update best cost, then confirm the optimal route.",
     focus: ["Costs", "Nodes", "Updates"],
+    mistake: "Confusing the first visible route with the cheapest route.",
   },
   sorting: {
     title: "Sorting Strategy",
@@ -32,6 +41,7 @@ const CHALLENGES: Record<
     hint: "Ask whether the data is small, random, nearly sorted, or repeated.",
     route: "Inspect the data pattern, choose a sorting family, then compare time and memory trade-offs.",
     focus: ["Scale", "Pattern", "Trade-offs"],
+    mistake: "Choosing a method without checking the data shape first.",
   },
   scheduling: {
     title: "Task Scheduling",
@@ -39,6 +49,7 @@ const CHALLENGES: Record<
     hint: "Look for what can start now and what depends on something else.",
     route: "Map dependencies, identify available tasks, schedule safely, then optimize total flow.",
     focus: ["Dependencies", "Availability", "Flow"],
+    mistake: "Starting tasks before checking dependency order.",
   },
   graphs: {
     title: "Graph Structure",
@@ -46,11 +57,13 @@ const CHALLENGES: Record<
     hint: "Think in nodes, edges, cycles, and reachability.",
     route: "Represent the system as a graph, choose traversal, inspect paths, and reason about structure.",
     focus: ["Traversal", "Reachability", "Cycles"],
+    mistake: "Reasoning informally without a clear graph model.",
   },
 };
 
 export default function FrontierAlgorithmsPage() {
   const [challenge, setChallenge] = useState<ChallengeType>("shortest-path");
+  const [mode, setMode] = useState<ReasonMode>("coach");
   const [problem, setProblem] = useState(
     "A delivery bot must move through connected stations with different costs. How should I reason about the shortest path?"
   );
@@ -59,22 +72,8 @@ export default function FrontierAlgorithmsPage() {
   const active = useMemo(() => CHALLENGES[challenge], [challenge]);
 
   const interpretation = generated
-    ? `Frontier interprets this as a ${active.title.toLowerCase()} problem. Start by identifying the structure, then apply the route below to the exact situation you described.`
-    : "Select a challenge and ask Frontier to interpret the reasoning path.";
-
-  const steps = generated
-    ? [
-        `Problem type detected: ${active.title}.`,
-        `Core hint: ${active.hint}`,
-        `Reasoning route: ${active.route}`,
-        `Applied focus: ${problem || "Use the selected challenge template."}`,
-      ]
-    : [
-        "Problem type will appear here.",
-        "Core hint will appear here.",
-        "Reasoning route will appear here.",
-        "Applied focus will appear here.",
-      ];
+    ? `Frontier identifies this as a ${active.title.toLowerCase()} problem. In ${MODES[mode].title.toLowerCase()} mode, the system will focus on ${active.focus.join(", ").toLowerCase()} before moving to the route.`
+    : "Select a challenge, choose a reasoning mode, and let Frontier classify the problem.";
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -106,8 +105,8 @@ export default function FrontierAlgorithmsPage() {
           Algorithm Challenges
         </h1>
         <p className="mt-3 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
-          This page should reason with the user, not just show a challenge card. Choose a challenge
-          type, write your problem, and let Frontier generate a structured engineering route.
+          This is the AI reasoning workspace of Frontier. Choose the challenge family, choose how
+          much guidance you want, then let the system interpret and route the problem.
         </p>
       </div>
 
@@ -140,6 +139,28 @@ export default function FrontierAlgorithmsPage() {
                 <div className="mt-2 text-sm leading-6 text-white/70">{CHALLENGES[type].desc}</div>
               </button>
             ))}
+          </div>
+
+          <div className="mt-6">
+            <div className="text-sm font-semibold text-white">Reasoning mode</div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {(Object.keys(MODES) as ReasonMode[]).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setMode(item)}
+                  className={cx(
+                    "rounded-2xl border p-4 text-left transition",
+                    mode === item
+                      ? "border-lime-300/30 bg-lime-400/10 text-white"
+                      : "border-white/10 bg-black/20 text-white/80 hover:bg-white/7"
+                  )}
+                >
+                  <div className="text-sm font-semibold">{MODES[item].title}</div>
+                  <div className="mt-1 text-sm text-white/70">{MODES[item].desc}</div>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="mt-6">
@@ -179,7 +200,12 @@ export default function FrontierAlgorithmsPage() {
             <div className="text-sm font-semibold text-white">Selected challenge</div>
 
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-xl font-semibold text-white">{active.title}</div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-xl font-semibold text-white">{active.title}</div>
+                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">
+                  {MODES[mode].title}
+                </div>
+              </div>
               <div className="mt-2 text-sm leading-6 text-white/70">{active.desc}</div>
 
               <div className="mt-4 flex flex-wrap gap-2">
@@ -203,11 +229,18 @@ export default function FrontierAlgorithmsPage() {
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
             <div className="text-sm font-semibold text-white">Reasoning output</div>
             <div className="mt-4 space-y-3">
-              {steps.map((step) => (
-                <div key={step} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-                  {step}
-                </div>
-              ))}
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+                Core hint: {active.hint}
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+                Recommended route: {generated ? active.route : "Generate the route to see Frontier's reasoning flow."}
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+                Common mistake: {active.mistake}
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+                Problem focus: {generated ? (problem || "Use the selected challenge template.") : "Awaiting problem interpretation."}
+              </div>
             </div>
           </div>
         </div>

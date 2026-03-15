@@ -11,9 +11,18 @@ type BuildType =
   | "game"
   | "python";
 
+type GuideMode = "mentor" | "builder" | "reviewer" | "coach";
+
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
+
+const GUIDE_MODES: Record<GuideMode, { title: string; desc: string }> = {
+  mentor: { title: "Mentor", desc: "Step-by-step teaching guidance." },
+  builder: { title: "Builder", desc: "Implementation-focused direction." },
+  reviewer: { title: "Reviewer", desc: "Check structure, clarity, and gaps." },
+  coach: { title: "Project Coach", desc: "Scope, milestones, and momentum." },
+};
 
 const BUILD_OPTIONS: Record<
   BuildType,
@@ -23,7 +32,6 @@ const BUILD_OPTIONS: Record<
     stack: string[];
     steps: string[];
     starterPrompt: string;
-    aiMode: string;
     outputLabel: string;
   }
 > = {
@@ -39,7 +47,6 @@ const BUILD_OPTIONS: Record<
       "Test and deploy",
     ],
     starterPrompt: "I want to build a personal portfolio website with a projects section and contact form.",
-    aiMode: "Frontend Builder",
     outputLabel: "Launch-ready site planning",
   },
   chatbot: {
@@ -54,7 +61,6 @@ const BUILD_OPTIONS: Record<
       "Improve responses",
     ],
     starterPrompt: "I want to build a chatbot that helps students revise for science exams.",
-    aiMode: "Assistant Architect",
     outputLabel: "Conversation system planning",
   },
   business: {
@@ -69,7 +75,6 @@ const BUILD_OPTIONS: Record<
       "Test company usage",
     ],
     starterPrompt: "I want to build an internal dashboard for tracking missions and team progress.",
-    aiMode: "Workflow Engineer",
     outputLabel: "Operational tool planning",
   },
   automation: {
@@ -84,7 +89,6 @@ const BUILD_OPTIONS: Record<
       "Schedule or trigger it",
     ],
     starterPrompt: "I want to automate renaming files and sorting them into folders.",
-    aiMode: "Automation Planner",
     outputLabel: "Repeat-task automation design",
   },
   game: {
@@ -99,7 +103,6 @@ const BUILD_OPTIONS: Record<
       "Polish and test gameplay",
     ],
     starterPrompt: "I want to build a simple browser game where the player avoids obstacles and scores points.",
-    aiMode: "Game Systems Coach",
     outputLabel: "Interactive gameplay planning",
   },
   python: {
@@ -114,13 +117,29 @@ const BUILD_OPTIONS: Record<
       "Improve and refactor",
     ],
     starterPrompt: "I want to learn Python by building a simple expense tracker.",
-    aiMode: "Python Mentor",
     outputLabel: "Beginner-to-project learning path",
   },
 };
 
+function projectBrief(buildTitle: string, idea: string) {
+  return `Project brief: ${buildTitle}. Goal: ${idea}. Frontier translates this into a guided build path with practical milestones and a next-action focus.`;
+}
+
+function nextAction(step: string, mode: GuideMode) {
+  const modeLabel =
+    mode === "mentor"
+      ? "learn the concept slowly"
+      : mode === "builder"
+      ? "implement the core part now"
+      : mode === "reviewer"
+      ? "check structure before coding further"
+      : "set the milestone and keep momentum";
+  return `Next best action: ${step}. Guidance style: ${modeLabel}.`;
+}
+
 export default function FrontierCodingPage() {
   const [buildType, setBuildType] = useState<BuildType>("website");
+  const [guideMode, setGuideMode] = useState<GuideMode>("mentor");
   const [idea, setIdea] = useState(BUILD_OPTIONS.website.starterPrompt);
   const [generated, setGenerated] = useState(false);
 
@@ -132,23 +151,9 @@ export default function FrontierCodingPage() {
     setGenerated(false);
   }
 
-  const aiSummary = generated
-    ? `AI mode: ${active.aiMode}. Project received: "${idea || active.starterPrompt}". Frontier recommends starting with ${active.steps[0].toLowerCase()}, then moving through a structured build sequence with emphasis on ${active.stack.join(", ")}.`
-    : "Choose a build type, describe your idea, then generate an AI build plan.";
-
-  const buildNotes = generated
-    ? [
-        `Primary outcome: ${active.outputLabel}.`,
-        `Best stack match: ${active.stack.join(" • ")}.`,
-        `Suggested first milestone: ${active.steps[0]}.`,
-        `Suggested delivery rhythm: one focused implementation block per step.`,
-      ]
-    : [
-        "Primary outcome will appear here.",
-        "Best stack match will appear here.",
-        "Suggested first milestone will appear here.",
-        "Delivery rhythm will appear here.",
-      ];
+  const milestones = generated
+    ? active.steps.map((step, index) => `Milestone ${index + 1}: ${step}`)
+    : active.steps.map((step, index) => `Milestone ${index + 1}: ${step}`);
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -217,6 +222,28 @@ export default function FrontierCodingPage() {
           </div>
 
           <div className="mt-6">
+            <div className="text-sm font-semibold text-white">AI guide mode</div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {(Object.keys(GUIDE_MODES) as GuideMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setGuideMode(mode)}
+                  className={cx(
+                    "rounded-2xl border p-4 text-left transition",
+                    guideMode === mode
+                      ? "border-lime-300/30 bg-lime-400/10 text-white"
+                      : "border-white/10 bg-black/20 text-white/80 hover:bg-white/7"
+                  )}
+                >
+                  <div className="text-sm font-semibold">{GUIDE_MODES[mode].title}</div>
+                  <div className="mt-1 text-sm text-white/70">{GUIDE_MODES[mode].desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6">
             <label className="text-sm font-semibold text-white">Project idea</label>
             <textarea
               value={idea}
@@ -253,7 +280,7 @@ export default function FrontierCodingPage() {
             <div className="flex items-center justify-between gap-3">
               <div className="text-lg font-semibold text-white">{active.title}</div>
               <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">
-                {active.aiMode}
+                {GUIDE_MODES[guideMode].title}
               </div>
             </div>
             <div className="mt-2 text-sm leading-6 text-white/70">{active.desc}</div>
@@ -270,11 +297,11 @@ export default function FrontierCodingPage() {
               ))}
             </div>
 
-            <div className="mt-5 text-sm font-semibold text-white">AI build sequence</div>
+            <div className="mt-5 text-sm font-semibold text-white">Milestone path</div>
             <div className="mt-3 space-y-3">
-              {active.steps.map((step, index) => (
+              {milestones.map((step) => (
                 <div key={step} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-                  Step {index + 1}: {step}
+                  {step}
                 </div>
               ))}
             </div>
@@ -282,14 +309,25 @@ export default function FrontierCodingPage() {
 
           <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-6">
             <div className="text-sm font-semibold text-lime-100">Live AI output</div>
-            <div className="mt-3 text-sm leading-6 text-lime-50/90">{aiSummary}</div>
+            <div className="mt-3 text-sm leading-6 text-lime-50/90">
+              {generated
+                ? `AI mode: ${GUIDE_MODES[guideMode].title}. Project received: "${idea || active.starterPrompt}". Frontier recommends moving through a structured build sequence with emphasis on ${active.stack.join(", ")}.`
+                : "Choose a build type, select an AI guide mode, and generate the plan."}
+            </div>
 
             <div className="mt-4 space-y-3">
-              {buildNotes.map((note) => (
-                <div key={note} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
-                  {note}
-                </div>
-              ))}
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
+                {projectBrief(active.title, idea || active.starterPrompt)}
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
+                Primary outcome: {active.outputLabel}.
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
+                Best stack match: {active.stack.join(" • ")}.
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
+                {nextAction(active.steps[0], guideMode)}
+              </div>
             </div>
           </div>
         </div>
