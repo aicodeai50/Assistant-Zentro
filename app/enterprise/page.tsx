@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -9,179 +10,32 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 const SECTORS = [
-  {
-    key: "teams",
-    title: "Teams",
-    subtitle: "Departments, members, and role structure.",
-    href: "/enterprise/teams",
-    signal: "Org structure",
-    tags: ["Departments", "Roles", "Members"],
-  },
-  {
-    key: "rooms",
-    title: "Rooms",
-    subtitle: "Team spaces for communication and collaboration.",
-    href: "/enterprise/rooms",
-    signal: "Collaboration layer",
-    tags: ["Meetings", "Workspaces", "Rooms"],
-  },
-  {
-    key: "missions",
-    title: "Missions",
-    subtitle: "Execution flows tied to company goals.",
-    href: "/enterprise/missions",
-    signal: "Execution engine",
-    tags: ["Goals", "Phases", "Delivery"],
-  },
-  {
-    key: "skills",
-    title: "Skill Matrix",
-    subtitle: "Capability mapping and growth visibility.",
-    href: "/enterprise/skills",
-    signal: "Capability mapping",
-    tags: ["Skills", "Growth", "Coverage"],
-  },
-  {
-    key: "strategy",
-    title: "AI Strategy",
-    subtitle: "Structured reasoning for leadership decisions.",
-    href: "/enterprise/strategy",
-    signal: "Decision intelligence",
-    tags: ["Leadership", "Planning", "AI"],
-  },
-  {
-    key: "analytics",
-    title: "Analytics",
-    subtitle: "Operational insight into progress and output.",
-    href: "/enterprise/analytics",
-    signal: "Performance visibility",
-    tags: ["Progress", "Workload", "Output"],
-  },
-  {
-    key: "dashboard",
-    title: "Dashboard",
-    subtitle: "Company-wide operational overview and quick access.",
-    href: "/enterprise/dashboard",
-    signal: "Executive overview",
-    tags: ["Status", "Overview", "Access"],
-  },
-  {
-    key: "directory",
-    title: "Directory",
-    subtitle: "Browse company members across roles and teams.",
-    href: "/enterprise/directory",
-    signal: "People index",
-    tags: ["People", "Roles", "Directory"],
-  },
-  {
-    key: "schedule",
-    title: "Schedule",
-    subtitle: "Track meetings, room sessions, and team coordination.",
-    href: "/enterprise/schedule",
-    signal: "Coordination layer",
-    tags: ["Meetings", "Calendar", "Flow"],
-  },
-  {
-    key: "chat",
-    title: "Company Chat",
-    subtitle: "Internal communication layer for the organization.",
-    href: "/enterprise/chat",
-    signal: "Internal comms",
-    tags: ["Chat", "Messages", "Updates"],
-  },
+  { key: "dashboard", title: "Command Center", subtitle: "Company-wide operational overview and quick access.", href: "/enterprise/dashboard", signal: "Executive overview", tags: ["Status", "Overview", "Access"] },
+  { key: "teams", title: "Teams", subtitle: "Departments, members, and role structure.", href: "/enterprise/teams", signal: "Org structure", tags: ["Departments", "Roles", "Members"] },
+  { key: "rooms", title: "Rooms", subtitle: "Team spaces for communication and collaboration.", href: "/enterprise/rooms", signal: "Collaboration layer", tags: ["Meetings", "Workspaces", "Rooms"] },
+  { key: "missions", title: "Missions", subtitle: "Execution flows tied to company goals.", href: "/enterprise/missions", signal: "Execution engine", tags: ["Goals", "Phases", "Delivery"] },
+  { key: "skills", title: "Skill Matrix", subtitle: "Capability mapping and growth visibility.", href: "/enterprise/skills", signal: "Capability mapping", tags: ["Skills", "Growth", "Coverage"] },
+  { key: "strategy", title: "AI Strategy", subtitle: "Structured reasoning for leadership decisions.", href: "/enterprise/strategy", signal: "Decision intelligence", tags: ["Leadership", "Planning", "AI"] },
+  { key: "analytics", title: "Analytics", subtitle: "Operational insight into progress and output.", href: "/enterprise/analytics", signal: "Performance visibility", tags: ["Progress", "Workload", "Output"] },
+  { key: "directory", title: "Directory", subtitle: "Browse company members across roles and teams.", href: "/enterprise/directory", signal: "People index", tags: ["People", "Roles", "Directory"] },
+  { key: "schedule", title: "Schedule", subtitle: "Track meetings, room sessions, and team coordination.", href: "/enterprise/schedule", signal: "Coordination layer", tags: ["Meetings", "Calendar", "Flow"] },
+  { key: "chat", title: "Company Chat", subtitle: "Internal communication layer for the organization.", href: "/enterprise/chat", signal: "Internal comms", tags: ["Chat", "Messages", "Updates"] },
+  { key: "os", title: "OS Core", subtitle: "Execution systems, robots, timelines, and cognitive flow.", href: "/enterprise/os", signal: "Operating layer", tags: ["Focus", "Robots", "Timeline"] },
 ];
 
 function suggestSector(prompt: string) {
   const text = prompt.toLowerCase();
 
-  if (
-    text.includes("team") ||
-    text.includes("department") ||
-    text.includes("member") ||
-    text.includes("role") ||
-    text.includes("hire")
-  ) {
-    return SECTORS.find((item) => item.key === "teams")!;
-  }
-
-  if (
-    text.includes("room") ||
-    text.includes("meeting") ||
-    text.includes("collaborat") ||
-    text.includes("workshop")
-  ) {
-    return SECTORS.find((item) => item.key === "rooms")!;
-  }
-
-  if (
-    text.includes("mission") ||
-    text.includes("goal") ||
-    text.includes("execute") ||
-    text.includes("delivery") ||
-    text.includes("launch")
-  ) {
-    return SECTORS.find((item) => item.key === "missions")!;
-  }
-
-  if (
-    text.includes("skill") ||
-    text.includes("capability") ||
-    text.includes("growth") ||
-    text.includes("frontend") ||
-    text.includes("ai")
-  ) {
-    return SECTORS.find((item) => item.key === "skills")!;
-  }
-
-  if (
-    text.includes("strategy") ||
-    text.includes("decision") ||
-    text.includes("leader") ||
-    text.includes("planning")
-  ) {
-    return SECTORS.find((item) => item.key === "strategy")!;
-  }
-
-  if (
-    text.includes("analytics") ||
-    text.includes("performance") ||
-    text.includes("workload") ||
-    text.includes("progress")
-  ) {
-    return SECTORS.find((item) => item.key === "analytics")!;
-  }
-
-  if (
-    text.includes("dashboard") ||
-    text.includes("overview") ||
-    text.includes("company status")
-  ) {
-    return SECTORS.find((item) => item.key === "dashboard")!;
-  }
-
-  if (
-    text.includes("directory") ||
-    text.includes("people") ||
-    text.includes("member list")
-  ) {
-    return SECTORS.find((item) => item.key === "directory")!;
-  }
-
-  if (
-    text.includes("schedule") ||
-    text.includes("calendar") ||
-    text.includes("coordination")
-  ) {
-    return SECTORS.find((item) => item.key === "schedule")!;
-  }
-
-  if (
-    text.includes("chat") ||
-    text.includes("message") ||
-    text.includes("communication")
-  ) {
-    return SECTORS.find((item) => item.key === "chat")!;
-  }
+  if (text.includes("team") || text.includes("department") || text.includes("member") || text.includes("role")) return SECTORS.find((item) => item.key === "teams")!;
+  if (text.includes("room") || text.includes("meeting") || text.includes("collaborat") || text.includes("workspace")) return SECTORS.find((item) => item.key === "rooms")!;
+  if (text.includes("mission") || text.includes("goal") || text.includes("deliver") || text.includes("launch")) return SECTORS.find((item) => item.key === "missions")!;
+  if (text.includes("skill") || text.includes("capability") || text.includes("growth")) return SECTORS.find((item) => item.key === "skills")!;
+  if (text.includes("strategy") || text.includes("decision") || text.includes("leader") || text.includes("planning")) return SECTORS.find((item) => item.key === "strategy")!;
+  if (text.includes("analytics") || text.includes("performance") || text.includes("workload") || text.includes("progress")) return SECTORS.find((item) => item.key === "analytics")!;
+  if (text.includes("directory") || text.includes("people")) return SECTORS.find((item) => item.key === "directory")!;
+  if (text.includes("schedule") || text.includes("calendar") || text.includes("coordination")) return SECTORS.find((item) => item.key === "schedule")!;
+  if (text.includes("chat") || text.includes("message") || text.includes("communication")) return SECTORS.find((item) => item.key === "chat")!;
+  if (text.includes("os") || text.includes("focus") || text.includes("robot") || text.includes("timeline") || text.includes("cognitive")) return SECTORS.find((item) => item.key === "os")!;
 
   return SECTORS.find((item) => item.key === "dashboard")!;
 }
@@ -207,6 +61,7 @@ function StatusCard({
 }
 
 export default function EnterprisePage() {
+  const router = useRouter();
   const [command, setCommand] = useState("");
   const [selectedKey, setSelectedKey] = useState("dashboard");
 
@@ -218,17 +73,16 @@ export default function EnterprisePage() {
     return suggestSector(command);
   }, [command, selectedSector]);
 
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    router.push(suggestedSector.href);
+  }
+
   return (
     <section className="py-10 sm:py-14">
       <EnterpriseNav label="Enterprise Layer: Online" />
 
       <div className="relative overflow-hidden rounded-[2rem] border border-emerald-300/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm sm:p-8">
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(900px_420px_at_14%_18%,rgba(16,185,129,0.08),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(760px_360px_at_88%_20%,rgba(148,163,184,0.08),transparent_48%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent)]" />
-        </div>
-
         <div className="relative flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
@@ -236,13 +90,13 @@ export default function EnterprisePage() {
             </div>
 
             <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-              Organizational Intelligence System
+              Unified Enterprise Operating Environment
             </h1>
 
             <p className="mt-4 max-w-5xl text-sm leading-6 text-white/68 sm:text-base">
-              Shynvo Enterprise is the company environment inside Shynvo. It helps
-              organizations coordinate teams, drive execution, structure decisions,
-              monitor capability, and operate with applied intelligence across departments.
+              Shynvo Enterprise combines operational visibility, team coordination,
+              missions, strategy, analytics, support, and OS intelligence into one
+              enterprise workspace.
             </p>
           </div>
 
@@ -261,252 +115,162 @@ export default function EnterprisePage() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Enterprise Command
-            </div>
-
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-              What does the company need next?
-            </h2>
-
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-white/68">
-              Describe what the organization needs to coordinate, review, plan,
-              analyze, or improve. Shynvo Enterprise will route that need toward the
-              most relevant sector.
-            </p>
-
-            <textarea
-              value={command}
-              onChange={(e) => setCommand(e.target.value)}
-              placeholder="Example: I want to review team workload, improve mission sequencing, and prepare a leadership decision."
-              className="mt-5 min-h-[170px] w-full rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white outline-none placeholder:text-white/30"
-            />
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {SECTORS.map((sector) => {
-                const active = selectedKey === sector.key;
-
-                return (
-                  <button
-                    key={sector.key}
-                    type="button"
-                    onClick={() => setSelectedKey(sector.key)}
-                    className={cx(
-                      "rounded-2xl border p-4 text-left transition",
-                      active
-                        ? "border-white/20 bg-white text-[#0B0F14] shadow-[0_10px_30px_rgba(255,255,255,0.08)]"
-                        : "border-white/10 bg-black/25 text-white/85 hover:bg-white/10"
-                    )}
-                  >
-                    <div className="text-lg font-semibold">{sector.title}</div>
-                    <div className="mt-1 text-sm opacity-80">{sector.subtitle}</div>
-                    <div className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] opacity-70">
-                      {sector.signal}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+      <div className="mt-8 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5"
+        >
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+            Enterprise Command
           </div>
 
-          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Suggested Routing
-            </div>
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            What does the company need next?
+          </h2>
 
-            <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <div className="text-lg font-semibold text-white">
-                  {suggestedSector.title}
-                </div>
-                <div className="mt-2 text-sm leading-6 text-white/68">
-                  {suggestedSector.subtitle}
-                </div>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/68">
+            Type a request and press Enter or click Open Suggested Sector.
+          </p>
 
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {suggestedSector.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/65"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          <input
+            value={command}
+            onChange={(e) => setCommand(e.target.value)}
+            placeholder="Example: review team workload and prepare a leadership decision"
+            className="mt-5 h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/35"
+          />
 
-              <Link
-                href={
-                  command.trim()
-                    ? `${suggestedSector.href}?context=${encodeURIComponent(command.trim())}`
-                    : suggestedSector.href
-                }
-                className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button
+              type="submit"
+              className="rounded-xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-[#08110d] transition hover:bg-emerald-300"
+            >
+              Open Suggested Sector
+            </button>
+
+            <Link
+              href="/enterprise/help"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/85 transition hover:bg-white/10"
+            >
+              Get Support
+            </Link>
+          </div>
+        </form>
+
+        <Link
+          href={suggestedSector.href}
+          className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.06]"
+        >
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+            Suggested Routing
+          </div>
+
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            {suggestedSector.title}
+          </h2>
+
+          <p className="mt-3 text-sm leading-6 text-white/68">
+            {suggestedSector.subtitle}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {suggestedSector.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
               >
-                Open Suggested Sector
-              </Link>
-            </div>
+                {tag}
+              </span>
+            ))}
           </div>
 
-          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Enterprise Areas
-            </div>
-
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-              Company sectors
-            </h2>
-
-            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/68">
-              Each sector is a real part of the enterprise environment. Together,
-              they form a more unified operating system for leadership, teams,
-              execution, and organizational growth.
-            </p>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {SECTORS.map((sector) => (
-                <Link
-                  key={sector.key}
-                  href={sector.href}
-                  className={cx(
-                    "group relative overflow-hidden rounded-3xl border p-5 transition",
-                    "border-emerald-300/10 bg-black/25 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-lg font-semibold text-white">
-                        {sector.title}
-                      </div>
-                      <div className="mt-2 text-sm leading-6 text-white/68">
-                        {sector.subtitle}
-                      </div>
-                    </div>
-
-                    <span className="rounded-full border border-emerald-300/15 bg-emerald-400/[0.08] px-3 py-1 text-[11px] font-semibold text-emerald-100/80">
-                      Active
-                    </span>
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {sector.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/65"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-5 flex items-center justify-between">
-                    <span className="text-sm font-semibold text-white/90 group-hover:text-white">
-                      Open sector
-                    </span>
-
-                    <span className="rounded-full border border-white/10 bg-white/[0.04] p-2 text-white/75">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path
-                          d="M10 7 15 12 10 17"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+          <div className="mt-5 text-sm font-semibold text-emerald-100/80">
+            Open suggested sector
           </div>
+        </Link>
+      </div>
+
+      <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {SECTORS.slice(0, 4).map((sector) => (
+          <Link
+            key={sector.key}
+            href={sector.href}
+            onMouseEnter={() => setSelectedKey(sector.key)}
+            className="rounded-[1.5rem] border border-white/10 bg-black/20 p-4 transition hover:bg-white/[0.06]"
+          >
+            <div className="text-lg font-semibold text-white">{sector.title}</div>
+            <div className="mt-1 text-sm text-white/62">{sector.subtitle}</div>
+            <div className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+              {sector.signal}
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-10">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+          Enterprise Areas
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Enterprise Status
-            </div>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          Company sectors
+        </h2>
 
-            <div className="mt-4 space-y-4">
-              <StatusCard
-                label="Mission Coordination"
-                value="Structured"
-                helper="Built for cross-team execution and phased delivery."
-              />
-              <StatusCard
-                label="AI Decision Layer"
-                value="Operational"
-                helper="Supports leadership reasoning, planning, and review."
-              />
-              <StatusCard
-                label="Collaboration Layer"
-                value="Connected"
-                helper="Supports rooms, updates, and company coordination."
-              />
-            </div>
-          </div>
+        <p className="mt-2 max-w-4xl text-sm leading-6 text-white/70">
+          Each sector is a real part of the enterprise environment.
+        </p>
+      </div>
 
-          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Live Focus
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
-              <div className="text-sm font-semibold text-white">Selected Sector</div>
-              <div className="mt-1 text-sm text-white/60">{selectedSector.title}</div>
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
-              <div className="text-sm font-semibold text-white">Signal Type</div>
-              <div className="mt-1 text-sm text-white/60">{selectedSector.signal}</div>
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
-              <div className="text-sm font-semibold text-white">Quick Access</div>
-              <div className="mt-3 grid gap-3">
-                <Link href="/enterprise/dashboard" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
-                  Open Dashboard
-                </Link>
-                <Link href="/enterprise/rooms" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
-                  Open Rooms
-                </Link>
-                <Link href="/enterprise/missions" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
-                  Open Missions
-                </Link>
-                <Link href="/enterprise/strategy" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
-                  Open AI Strategy
-                </Link>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {SECTORS.map((sector) => (
+          <Link
+            key={sector.key}
+            href={sector.href}
+            className={cx(
+              "group relative overflow-hidden rounded-3xl border p-5 transition",
+              "border-emerald-300/15 bg-white/5 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+            )}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-lg font-semibold text-white">{sector.title}</div>
+                <div className="mt-2 text-sm leading-6 text-white/70">{sector.subtitle}</div>
               </div>
-            </div>
-          </div>
 
-          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Operating Flow
+              <span className="rounded-full border border-emerald-300/20 bg-emerald-400/5 px-3 py-1 text-[11px] font-semibold text-emerald-100/85">
+                Active
+              </span>
             </div>
 
-            <div className="mt-4 space-y-3">
-              {[
-                "Build teams and define ownership",
-                "Open rooms for collaboration",
-                "Turn goals into missions",
-                "Review analytics and workload",
-                "Use AI strategy for leadership decisions",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white/72"
+            <div className="mt-4 flex flex-wrap gap-2">
+              {sector.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
                 >
-                  {item}
-                </div>
+                  {tag}
+                </span>
               ))}
             </div>
-          </div>
-        </div>
+
+            <div className="mt-5 flex items-center justify-between">
+              <span className="text-sm font-semibold text-white/90 group-hover:text-white">
+                Open sector
+              </span>
+
+              <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M10 7 15 12 10 17"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
