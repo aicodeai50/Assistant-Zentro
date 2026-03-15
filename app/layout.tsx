@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import ShynvoGuideChat from "@/components/ShynvoGuideChat";
+import ShynvoCommand from "@/components/command/ShynvoCommand";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ShynvoCommand />
         <LanguageProvider>
           <SiteNav />
           <main>{children}</main>
