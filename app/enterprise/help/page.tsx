@@ -1,5 +1,6 @@
 import Link from "next/link";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseAIBriefing from "@/components/enterprise/EnterpriseAIBriefing";
 
 const helpCards = [
   {
@@ -44,6 +45,8 @@ export default function EnterpriseHelpPage() {
           Help users onboard, navigate, understand the product, and get support inside Shynvo Enterprise.
         </p>
       </div>
+
+      <EnterpriseAIBriefing area="help" />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {helpCards.map((item) => (

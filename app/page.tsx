@@ -16,7 +16,7 @@ function cx(...classes: Array<string | false | null | undefined>) {
 const ENVIRONMENTS = [
   {
     key: "university",
-    title: "University Hub",
+    title: "University Hub", icon: "U",
     subtitle: "Structured Academic Campus",
     desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
     tags: ["Study", "Exams", "Career"],
@@ -25,7 +25,7 @@ const ENVIRONMENTS = [
   },
   {
     key: "academy",
-    title: "Shynvo Academy",
+    title: "Shynvo Academy", icon: "A",
     subtitle: "School Learning World",
     desc: "Junior and senior high school learning, subject rooms, tutors, and classroom workshops.",
     tags: ["School", "Subjects", "Badges"],
@@ -34,7 +34,7 @@ const ENVIRONMENTS = [
   },
   {
     key: "enterprise",
-    title: "Shynvo Enterprise",
+    title: "Shynvo Enterprise", icon: "E",
     subtitle: "Unified Operating Environment",
     desc: "Missions, teams, analytics, strategy, automation, support, and OS intelligence in one enterprise environment.",
     tags: ["Missions", "Teams", "Analytics"],
@@ -43,7 +43,7 @@ const ENVIRONMENTS = [
   },
   {
     key: "experiments",
-    title: "Experiments",
+    title: "Experiments", icon: "X",
     subtitle: "AI Exploration Worlds",
     desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
     tags: ["Debate", "Simulation", "Concepts"],
@@ -52,7 +52,7 @@ const ENVIRONMENTS = [
   },
   {
     key: "frontier",
-    title: "Frontier Lab",
+    title: "Frontier Lab", icon: "F",
     subtitle: "Engineering District",
     desc: "Code, systems, logic, and build-focused engineering practice for all levels.",
     tags: ["Code", "Build", "Puzzles"],
@@ -61,7 +61,7 @@ const ENVIRONMENTS = [
   },
   {
     key: "arcade",
-    title: "Arcade Sim",
+    title: "Arcade Sim", icon: "G",
     subtitle: "Interactive Skill Arena",
     desc: "Game-based drills, challenge rooms, reflex loops, and simulation-based practice.",
     tags: ["Games", "Challenge", "Levels"],

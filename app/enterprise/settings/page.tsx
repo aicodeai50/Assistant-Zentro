@@ -1,5 +1,6 @@
 import Link from "next/link";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseAIBriefing from "@/components/enterprise/EnterpriseAIBriefing";
 
 const settingsCards = [
   {
@@ -56,6 +57,8 @@ export default function EnterpriseSettingsPage() {
           Configure workspace defaults, module behavior, AI usage preferences, and enterprise identity settings.
         </p>
       </div>
+
+      <EnterpriseAIBriefing area="settings" />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {settingsCards.map((item) => (

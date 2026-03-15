@@ -1,5 +1,6 @@
 import Link from "next/link";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseAIBriefing from "@/components/enterprise/EnterpriseAIBriefing";
 
 const adminCards = [
   {
@@ -56,6 +57,8 @@ export default function EnterpriseAdminPage() {
           Control workspace structure, permissions, governance, and operational access from one administrative layer.
         </p>
       </div>
+
+      <EnterpriseAIBriefing area="admin" />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {adminCards.map((item) => (

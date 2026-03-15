@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseAIBriefing from "@/components/enterprise/EnterpriseAIBriefing";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -114,6 +115,8 @@ export default function EnterprisePage() {
           </div>
         </div>
       </div>
+
+      <EnterpriseAIBriefing area="dashboard" />
 
       <div className="mt-8 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
         <form
