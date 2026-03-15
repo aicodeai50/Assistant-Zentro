@@ -1,12 +1,13 @@
+import Link from "next/link";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
 
 const securityCards = [
-  "SSO and enterprise sign-in readiness",
-  "Role-based access control",
-  "Audit and activity visibility",
-  "Compliance preparation",
-  "Policy-aware AI usage",
-  "Protected enterprise workflows",
+  { title: "SSO and enterprise sign-in readiness", href: "/enterprise/security/sso" },
+  { title: "Role-based access control", href: "/enterprise/security/access" },
+  { title: "Audit and activity visibility", href: "/enterprise/security/audit" },
+  { title: "Compliance preparation", href: "/enterprise/security/compliance" },
+  { title: "Policy-aware AI usage", href: "/enterprise/security/ai-policy" },
+  { title: "Protected enterprise workflows", href: "/enterprise/security/workflows" },
 ];
 
 export default function EnterpriseSecurityPage() {
@@ -28,15 +29,19 @@ export default function EnterpriseSecurityPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {securityCards.map((item) => (
-          <div
-            key={item}
-            className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5"
+          <Link
+            key={item.title}
+            href={item.href}
+            className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.06]"
           >
-            <h2 className="text-xl font-semibold text-white">{item}</h2>
+            <h2 className="text-xl font-semibold text-white">{item.title}</h2>
             <p className="mt-3 text-sm leading-6 text-white/68">
               Enterprise-grade protection and governance layer for workspace operations.
             </p>
-          </div>
+            <div className="mt-5 text-sm font-semibold text-emerald-100/80">
+              Open
+            </div>
+          </Link>
         ))}
       </div>
     </section>

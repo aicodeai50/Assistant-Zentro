@@ -40,13 +40,21 @@ export default function EnterpriseNav({
   const router = useRouter();
   const pathname = usePathname();
 
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push(hubHref);
+  }
+
   return (
     <div className="mb-6 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={handleBack}
             className="rounded-xl border border-emerald-300/15 bg-white/5 px-3 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
           >
             ← Back

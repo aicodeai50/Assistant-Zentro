@@ -41,7 +41,7 @@ export default async function EnterpriseMemberProfilePage({
 
       <EnterpriseNav
         hubHref="/enterprise"
-        hubTitle="Enterprise Suite"
+        hubTitle="Shynvo Enterprise"
         label="Member Profile"
       />
 
@@ -63,7 +63,7 @@ export default async function EnterpriseMemberProfilePage({
 
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
-                Enterprise Suite
+                Shynvo Enterprise
               </div>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
                 {name}
@@ -112,7 +112,7 @@ export default async function EnterpriseMemberProfilePage({
               <div className="text-sm font-semibold text-white">Enterprise Position</div>
               <div className="mt-2 text-sm leading-6 text-white/70">
                 This profile can later connect to rooms, meetings, tasks, analytics, skills, and
-                mission assignments inside Enterprise Suite.
+                mission assignments inside Shynvo Enterprise.
               </div>
             </div>
 

@@ -28,7 +28,7 @@ export default function CreateCompanyPage() {
 
   <section className="py-10 sm:py-14">
 
-    <EnterpriseNav hubHref="/enterprise" hubTitle="Enterprise Suite" label="Create Company" />
+    <EnterpriseNav hubHref="/enterprise" hubTitle="Shynvo Enterprise" label="Create Company" />
 
     <h1 className="mt-4 text-4xl font-semibold sm:text-6xl">
       Create Company Workspace

@@ -1,12 +1,13 @@
+import Link from "next/link";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
 
 const settingsCards = [
-  "Workspace profile",
-  "Organization identity",
-  "Notification preferences",
-  "Module defaults",
-  "Automation defaults",
-  "AI behavior preferences",
+  { title: "Workspace profile", href: "/enterprise/settings/profile" },
+  { title: "Organization identity", href: "/enterprise/settings/identity" },
+  { title: "Notification preferences", href: "/enterprise/settings/notifications" },
+  { title: "Module defaults", href: "/enterprise/settings/modules" },
+  { title: "Automation defaults", href: "/enterprise/settings/automation" },
+  { title: "AI behavior preferences", href: "/enterprise/settings/ai" },
 ];
 
 export default function EnterpriseSettingsPage() {
@@ -28,15 +29,19 @@ export default function EnterpriseSettingsPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {settingsCards.map((item) => (
-          <div
-            key={item}
-            className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5"
+          <Link
+            key={item.title}
+            href={item.href}
+            className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.06]"
           >
-            <h2 className="text-xl font-semibold text-white">{item}</h2>
+            <h2 className="text-xl font-semibold text-white">{item.title}</h2>
             <p className="mt-3 text-sm leading-6 text-white/68">
               Centralized workspace configuration for a more consistent enterprise experience.
             </p>
-          </div>
+            <div className="mt-5 text-sm font-semibold text-emerald-100/80">
+              Open
+            </div>
+          </Link>
         ))}
       </div>
     </section>

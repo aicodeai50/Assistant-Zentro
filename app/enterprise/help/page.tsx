@@ -2,23 +2,10 @@ import Link from "next/link";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
 
 const helpCards = [
-  {
-    title: "Getting Started",
-    desc: "Learn how to set up your workspace, teams, and enterprise modules.",
-  },
-  {
-    title: "Workspace Support",
-    desc: "Get help with navigation, structure, and platform usage.",
-  },
-  {
-    title: "AI Guidance",
-    desc: "Understand how Enterprise AI and OS Core are used inside the workspace.",
-  },
-  {
-    title: "Documentation",
-    desc: "Open product documentation and support material.",
-    href: "/docs",
-  },
+  { title: "Getting Started", desc: "Learn how to set up your workspace, teams, and enterprise modules.", href: "/enterprise/help/getting-started" },
+  { title: "Workspace Support", desc: "Get help with navigation, structure, and platform usage.", href: "/enterprise/help/workspace-support" },
+  { title: "AI Guidance", desc: "Understand how Enterprise AI and OS Core are used inside the workspace.", href: "/enterprise/help/ai-guidance" },
+  { title: "Documentation", desc: "Open product documentation and support material.", href: "/docs" },
 ];
 
 export default function EnterpriseHelpPage() {
@@ -39,29 +26,19 @@ export default function EnterpriseHelpPage() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
-        {helpCards.map((item) =>
-          item.href ? (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.06]"
-            >
-              <h2 className="text-2xl font-semibold text-white">{item.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-white/68">{item.desc}</p>
-              <div className="mt-5 text-sm font-semibold text-emerald-100/80">
-                Open
-              </div>
-            </Link>
-          ) : (
-            <div
-              key={item.title}
-              className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5"
-            >
-              <h2 className="text-2xl font-semibold text-white">{item.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-white/68">{item.desc}</p>
+        {helpCards.map((item) => (
+          <Link
+            key={item.title}
+            href={item.href}
+            className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.06]"
+          >
+            <h2 className="text-2xl font-semibold text-white">{item.title}</h2>
+            <p className="mt-3 text-sm leading-6 text-white/68">{item.desc}</p>
+            <div className="mt-5 text-sm font-semibold text-emerald-100/80">
+              Open
             </div>
-          )
-        )}
+          </Link>
+        ))}
       </div>
     </section>
   );

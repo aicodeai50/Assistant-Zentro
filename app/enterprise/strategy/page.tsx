@@ -18,10 +18,10 @@ export default function EnterpriseStrategyPage() {
 
   return (
     <section className="py-10 sm:py-14">
-      <EnterpriseNav hubHref="/enterprise" hubTitle="Enterprise Suite" />
+      <EnterpriseNav hubHref="/enterprise" hubTitle="Shynvo Enterprise" />
 
       <div className="text-xs font-semibold uppercase tracking-wider text-emerald-100/70">
-        Enterprise Suite
+        Shynvo Enterprise
       </div>
 
       <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-6xl">

@@ -6,12 +6,26 @@ import { useRouter } from "next/navigation";
 export default function OsNav() {
   const router = useRouter();
 
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push("/enterprise/os");
+  }
+
+  function handleForward() {
+    if (typeof window !== "undefined") {
+      window.history.forward();
+    }
+  }
+
   return (
     <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={handleBack}
           className="rounded-xl border border-emerald-300/15 bg-white/5 px-3 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           ← Back
@@ -19,7 +33,7 @@ export default function OsNav() {
 
         <button
           type="button"
-          onClick={() => window.history.forward()}
+          onClick={handleForward}
           className="rounded-xl border border-emerald-300/15 bg-white/5 px-3 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           Forward →
@@ -30,6 +44,13 @@ export default function OsNav() {
           className="rounded-xl border border-emerald-300/15 bg-white/5 px-3 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           Home
+        </Link>
+
+        <Link
+          href="/enterprise/os"
+          className="rounded-xl border border-cyan-300/15 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-50 transition hover:bg-cyan-400/15"
+        >
+          Enterprise OS Core
         </Link>
 
         <Link

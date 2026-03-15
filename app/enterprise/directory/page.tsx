@@ -106,14 +106,14 @@ export default function EnterpriseDirectoryPage() {
 
       <EnterpriseNav
         hubHref="/enterprise"
-        hubTitle="Enterprise Suite"
+        hubTitle="Shynvo Enterprise"
         label="Member Directory"
       />
 
       <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
-            Enterprise Suite
+            Shynvo Enterprise
           </div>
 
           <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl">

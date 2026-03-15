@@ -25,10 +25,10 @@ export default function EnterpriseChatPage() {
 
   return (
     <section className="py-10 sm:py-14">
-      <EnterpriseNav hubHref="/enterprise" hubTitle="Enterprise Suite" label="Company Chat" />
+      <EnterpriseNav hubHref="/enterprise" hubTitle="Shynvo Enterprise" label="Company Chat" />
 
       <div className="text-xs font-semibold uppercase tracking-wider text-emerald-100/70">
-        Enterprise Suite
+        Shynvo Enterprise
       </div>
 
       <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-6xl">
@@ -36,7 +36,7 @@ export default function EnterpriseChatPage() {
       </h1>
 
       <p className="mt-4 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
-        Chat acts as the lightweight communication layer inside Enterprise Suite for updates, coordination, and fast internal messaging.
+        Chat acts as the lightweight communication layer inside Shynvo Enterprise for updates, coordination, and fast internal messaging.
       </p>
 
       <div className="mt-6 rounded-3xl border border-emerald-300/15 bg-white/5 p-6">

@@ -232,7 +232,7 @@ export default function EnterprisePage() {
         <div className="relative flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Enterprise Suite
+              Shynvo Enterprise
             </div>
 
             <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
@@ -240,7 +240,7 @@ export default function EnterprisePage() {
             </h1>
 
             <p className="mt-4 max-w-5xl text-sm leading-6 text-white/68 sm:text-base">
-              Enterprise Suite is the company environment inside Shynvo. It helps
+              Shynvo Enterprise is the company environment inside Shynvo. It helps
               organizations coordinate teams, drive execution, structure decisions,
               monitor capability, and operate with applied intelligence across departments.
             </p>
@@ -274,7 +274,7 @@ export default function EnterprisePage() {
 
             <p className="mt-3 max-w-3xl text-sm leading-6 text-white/68">
               Describe what the organization needs to coordinate, review, plan,
-              analyze, or improve. Enterprise Suite will route that need toward the
+              analyze, or improve. Shynvo Enterprise will route that need toward the
               most relevant sector.
             </p>
 
