@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Help" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Help & Support
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          workspace-support
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This support route is live and ready for user guidance content.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Help"
+      eyebrow="Help & Support"
+      title="Workspace Support"
+      intro="Help users understand navigation, structure, and the operating logic of Shynvo Enterprise."
+      focusTitle="Support Focus"
+      focusItems=[{'        { title: "Navigation Guidance", desc: "Clarify how users move across modules and enterprise sections." },\n        { title: "Structure Support", desc: "Explain how workspace areas relate to each other." },\n        { title: "Usage Understanding", desc: "Reduce confusion about how the product is meant to be used." },\n        { title: "Operational Flow", desc: "Support smoother movement between overview, control, and execution." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Review navigation flow", desc: "Confirm that users can find key enterprise areas." },\n        { title: "Link support with onboarding", desc: "Use getting-started guidance to reduce confusion." },\n        { title: "Support deeper adoption", desc: "Guide users into settings, missions, and teams." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Help Home", href: "/enterprise/help" },\n        { label: "Getting Started", href: "/enterprise/help/getting-started" },\n        { label: "Overview", href: "/enterprise" }'}]
+    />
   );
 }

@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Help" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Help & Support
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          getting-started
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This support route is live and ready for user guidance content.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Help"
+      eyebrow="Help & Support"
+      title="Getting Started"
+      intro="Guide new enterprise users through workspace setup, team structure, and first-step configuration."
+      focusTitle="Onboarding Focus"
+      focusItems=[{'        { title: "Workspace Setup", desc: "Start with the right enterprise structure and visible operating areas." },\n        { title: "Team Readiness", desc: "Make teams easier to onboard into a shared environment." },\n        { title: "Module Familiarity", desc: "Help users understand what each enterprise area does." },\n        { title: "Adoption Confidence", desc: "Reduce friction during first use." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Review workspace structure", desc: "Start with settings, teams, and permissions." },\n        { title: "Open help overview", desc: "Return to the support center for more guidance." },\n        { title: "Prepare first admin flow", desc: "Move into admin and settings for setup." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Help Home", href: "/enterprise/help" },\n        { label: "Settings", href: "/enterprise/settings" },\n        { label: "Admin", href: "/enterprise/admin" }'}]
+    />
   );
 }

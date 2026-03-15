@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Help" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Help & Support
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          ai-guidance
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This support route is live and ready for user guidance content.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Help"
+      eyebrow="Help & Support"
+      title="AI Guidance"
+      intro="Explain how AI and OS Core support enterprise work across strategy, missions, workflows, and support."
+      focusTitle="AI Guidance Focus"
+      focusItems=[{'        { title: "Enterprise AI Role", desc: "Clarify how AI helps users inside the enterprise environment." },\n        { title: "OS Core Connection", desc: "Show how execution systems and AI layers work together." },\n        { title: "User Understanding", desc: "Reduce uncertainty around how AI should be used." },\n        { title: "Adoption Support", desc: "Make AI feel more useful, trustworthy, and operational." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Review AI settings", desc: "Connect AI guidance with configurable behavior." },\n        { title: "Open strategy", desc: "See how AI reasoning supports decision-making." },\n        { title: "Open OS Core", desc: "Explore how enterprise and execution layers connect." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Help Home", href: "/enterprise/help" },\n        { label: "AI Settings", href: "/enterprise/settings/ai" },\n        { label: "OS Core", href: "/enterprise/os" }'}]
+    />
   );
 }

@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Admin" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Enterprise Admin
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          compliance
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This section is ready as a real route and can now be expanded with live enterprise functionality.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Admin"
+      eyebrow="Administration"
+      title="Compliance Controls"
+      intro="Coordinate governance readiness, policy structure, and operational controls for enterprise customers."
+      focusTitle="Compliance Focus"
+      focusItems=[{'        { title: "Policy Controls", desc: "Shape how rules and governance expectations appear in the workspace." },\n        { title: "Governance Readiness", desc: "Prepare the enterprise environment for stronger control standards." },\n        { title: "Operational Discipline", desc: "Support trustworthy enterprise operations through consistent structure." },\n        { title: "Customer Confidence", desc: "Present a stronger enterprise posture for adoption and scale." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Review governance coverage", desc: "Check whether core admin and security controls are aligned." },\n        { title: "Prepare policy structure", desc: "Use compliance thinking to organize enterprise rules." },\n        { title: "Coordinate with security", desc: "Align compliance posture with access and audit decisions." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Admin Home", href: "/enterprise/admin" },\n        { label: "Security", href: "/enterprise/security" },\n        { label: "Audit", href: "/enterprise/admin/audit" }'}]
+    />
   );
 }

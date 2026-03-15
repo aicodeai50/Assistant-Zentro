@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Security" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Security & Governance
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          ai-policy
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This route is live and ready for detailed enterprise security implementation.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Security"
+      eyebrow="Security & Governance"
+      title="Policy-Aware AI"
+      intro="Guide how AI operates inside the enterprise so support, automation, and reasoning stay aligned with rules."
+      focusTitle="AI Policy Focus"
+      focusItems=[{'        { title: "AI Boundaries", desc: "Define how AI should behave in enterprise workflows." },\n        { title: "Safe Assistance", desc: "Keep AI helpful without making enterprise operations feel risky." },\n        { title: "Operational Alignment", desc: "Match AI behavior to governance and enterprise needs." },\n        { title: "Trustworthy Guidance", desc: "Make AI easier for organizations to accept." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Set AI behavior norms", desc: "Clarify how AI should assist in enterprise workflows." },\n        { title: "Coordinate with settings", desc: "Align AI policy with workspace AI preferences." },\n        { title: "Protect sensitive workflows", desc: "Reduce AI overreach in controlled enterprise areas." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Security Home", href: "/enterprise/security" },\n        { label: "AI Settings", href: "/enterprise/settings/ai" },\n        { label: "Protected Workflows", href: "/enterprise/security/workflows" }'}]
+    />
   );
 }

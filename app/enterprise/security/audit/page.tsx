@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Security" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Security & Governance
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          audit
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This route is live and ready for detailed enterprise security implementation.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Security"
+      eyebrow="Security & Governance"
+      title="Audit"
+      intro="Keep enterprise activity visible and easier to review for safety, accountability, and governance."
+      focusTitle="Audit Focus"
+      focusItems=[{'        { title: "Traceability", desc: "Follow enterprise changes across modules and access controls." },\n        { title: "Activity Review", desc: "Observe meaningful user and admin actions." },\n        { title: "Governance Visibility", desc: "Support enterprise trust through reviewable actions." },\n        { title: "Operational Confidence", desc: "Make the workspace feel safer and more controlled." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Review recent activity", desc: "Look for meaningful admin and security changes." },\n        { title: "Check risky areas", desc: "Watch sensitive actions around permissions and structure." },\n        { title: "Support governance review", desc: "Use audit signals to improve enterprise confidence." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Security Home", href: "/enterprise/security" },\n        { label: "Admin Audit", href: "/enterprise/admin/audit" },\n        { label: "Compliance", href: "/enterprise/security/compliance" }'}]
+    />
   );
 }

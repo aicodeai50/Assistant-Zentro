@@ -1,20 +1,18 @@
-import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
+import EnterpriseDetailPage from "@/components/enterprise/EnterpriseDetailPage";
 
 export default function Page() {
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Settings" />
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-          Workspace Settings
-        </div>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl capitalize">
-          notifications
-        </h1>
-        <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-          This settings route is live and ready for full configuration support.
-        </p>
-      </div>
-    </section>
+    <EnterpriseDetailPage
+      label="Enterprise Settings"
+      eyebrow="Workspace Settings"
+      title="Notifications"
+      intro="Control how the workspace communicates alerts, updates, reminders, and important signals."
+      focusTitle="Notification Focus"
+      focusItems=[{'        { title: "Alerts", desc: "Surface meaningful enterprise activity without creating noise." },\n        { title: "Updates", desc: "Keep teams informed about changes and movement." },\n        { title: "Reminders", desc: "Support follow-through on schedules, missions, and tasks." },\n        { title: "Communication Rhythm", desc: "Make enterprise communication feel more consistent." }'}]
+      actionTitle="Recommended Actions"
+      actionItems=[{'        { title: "Review alert priorities", desc: "Decide what should be emphasized across the workspace." },\n        { title: "Reduce notification overload", desc: "Balance visibility with user attention." },\n        { title: "Align with operations", desc: "Support meetings, missions, and admin actions." }'}]
+      relatedTitle="Related Areas"
+      relatedLinks=[{'        { label: "Settings Home", href: "/enterprise/settings" },\n        { label: "Schedule", href: "/enterprise/schedule" },\n        { label: "Help", href: "/enterprise/help" }'}]
+    />
   );
 }
