@@ -7,12 +7,25 @@ export default function Page() {
       eyebrow="Help & Support"
       title="AI Guidance"
       intro="Explain how AI and OS Core support enterprise work across strategy, missions, workflows, and support."
-      focusTitle="AI Guidance Focus"
-      focusItems=[{'        { title: "Enterprise AI Role", desc: "Clarify how AI helps users inside the enterprise environment." },\n        { title: "OS Core Connection", desc: "Show how execution systems and AI layers work together." },\n        { title: "User Understanding", desc: "Reduce uncertainty around how AI should be used." },\n        { title: "Adoption Support", desc: "Make AI feel more useful, trustworthy, and operational." }'}]
+      focusTitle="Focus Areas"
+      focusItems={[
+        { title: "Enterprise AI Role", desc: "Clarify how AI helps users inside the enterprise environment." },
+        { title: "OS Core Connection", desc: "Show how execution systems and AI layers work together." },
+        { title: "User Understanding", desc: "Reduce uncertainty around how AI should be used." },
+        { title: "Adoption Support", desc: "Make AI feel more useful, trustworthy, and operational." }
+      ]}
       actionTitle="Recommended Actions"
-      actionItems=[{'        { title: "Review AI settings", desc: "Connect AI guidance with configurable behavior." },\n        { title: "Open strategy", desc: "See how AI reasoning supports decision-making." },\n        { title: "Open OS Core", desc: "Explore how enterprise and execution layers connect." }'}]
+      actionItems={[
+        { title: "Review AI settings", desc: "Connect AI guidance with configurable behavior." },
+        { title: "Open strategy", desc: "See how AI reasoning supports decision-making." },
+        { title: "Open OS Core", desc: "Explore how enterprise and execution layers connect." }
+      ]}
       relatedTitle="Related Areas"
-      relatedLinks=[{'        { label: "Help Home", href: "/enterprise/help" },\n        { label: "AI Settings", href: "/enterprise/settings/ai" },\n        { label: "OS Core", href: "/enterprise/os" }'}]
+      relatedLinks={[
+        { label: "Help Home", href: "/enterprise/help" },
+        { label: "AI Settings", href: "/enterprise/settings/ai" },
+        { label: "OS Core", href: "/enterprise/os" }
+      ]}
     />
   );
 }
