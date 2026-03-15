@@ -186,6 +186,26 @@ function suggestSector(prompt: string) {
   return SECTORS.find((item) => item.key === "dashboard")!;
 }
 
+function StatusCard({
+  label,
+  value,
+  helper,
+}: {
+  label: string;
+  value: string;
+  helper: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/25 p-4 backdrop-blur-sm">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+        {label}
+      </div>
+      <div className="mt-2 text-lg font-semibold text-white">{value}</div>
+      <div className="mt-1 text-sm text-white/55">{helper}</div>
+    </div>
+  );
+}
+
 export default function EnterprisePage() {
   const [command, setCommand] = useState("");
   const [selectedKey, setSelectedKey] = useState("dashboard");
@@ -202,16 +222,16 @@ export default function EnterprisePage() {
     <section className="py-10 sm:py-14">
       <EnterpriseNav label="Enterprise Layer: Online" />
 
-      <div className="relative overflow-hidden rounded-[2rem] border border-emerald-300/15 bg-white/5 p-6 sm:p-8">
+      <div className="relative overflow-hidden rounded-[2rem] border border-emerald-300/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm sm:p-8">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(900px_420px_at_12%_18%,rgba(16,185,129,0.12),transparent_52%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(760px_360px_at_88%_20%,rgba(52,211,153,0.10),transparent_48%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(900px_420px_at_14%_18%,rgba(16,185,129,0.08),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(760px_360px_at_88%_20%,rgba(148,163,184,0.08),transparent_48%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent)]" />
         </div>
 
         <div className="relative flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
               Enterprise Suite
             </div>
 
@@ -219,56 +239,50 @@ export default function EnterprisePage() {
               Organizational Intelligence System
             </h1>
 
-            <p className="mt-4 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
-              Enterprise Suite is the Shynvo environment for organizations. It helps
-              companies coordinate teams, run missions, manage collaboration rooms,
-              track skills, analyze performance, and use AI for structured strategy.
+            <p className="mt-4 max-w-5xl text-sm leading-6 text-white/68 sm:text-base">
+              Enterprise Suite is the company environment inside Shynvo. It helps
+              organizations coordinate teams, drive execution, structure decisions,
+              monitor capability, and operate with applied intelligence across departments.
             </p>
           </div>
 
-          <div className="grid gap-3 sm:min-w-[260px]">
-            <div className="rounded-2xl border border-emerald-300/15 bg-black/20 px-4 py-3">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100/60">
-                Workspace Layer
-              </div>
-              <div className="mt-1 text-sm font-semibold text-emerald-50">
-                Ready for organizations
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-emerald-300/15 bg-black/20 px-4 py-3">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100/60">
-                Active Focus
-              </div>
-              <div className="mt-1 text-sm font-semibold text-white">
-                {selectedSector.title}
-              </div>
-            </div>
+          <div className="grid gap-3 sm:min-w-[290px]">
+            <StatusCard
+              label="Workspace Layer"
+              value="Enterprise-ready"
+              helper="Built for company operations, coordination, and leadership flow."
+            />
+            <StatusCard
+              label="Current Focus"
+              value={selectedSector.title}
+              helper={selectedSector.signal}
+            />
           </div>
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
-          <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
               Enterprise Command
             </div>
 
             <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-              What does the organization need next?
+              What does the company need next?
             </h2>
 
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">
-              Describe what you want to coordinate, review, plan, analyze, or
-              organize. Enterprise Suite will point you toward the most relevant sector.
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-white/68">
+              Describe what the organization needs to coordinate, review, plan,
+              analyze, or improve. Enterprise Suite will route that need toward the
+              most relevant sector.
             </p>
 
             <textarea
               value={command}
               onChange={(e) => setCommand(e.target.value)}
-              placeholder="Example: I want to review team workload and make a leadership decision about delivery pressure."
-              className="mt-5 min-h-[170px] w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white outline-none placeholder:text-white/35"
+              placeholder="Example: I want to review team workload, improve mission sequencing, and prepare a leadership decision."
+              className="mt-5 min-h-[170px] w-full rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white outline-none placeholder:text-white/30"
             />
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -283,8 +297,8 @@ export default function EnterprisePage() {
                     className={cx(
                       "rounded-2xl border p-4 text-left transition",
                       active
-                        ? "border-white bg-white text-[#0B0F14]"
-                        : "border-white/10 bg-black/20 text-white/85 hover:bg-white/10"
+                        ? "border-white/20 bg-white text-[#0B0F14] shadow-[0_10px_30px_rgba(255,255,255,0.08)]"
+                        : "border-white/10 bg-black/25 text-white/85 hover:bg-white/10"
                     )}
                   >
                     <div className="text-lg font-semibold">{sector.title}</div>
@@ -298,17 +312,17 @@ export default function EnterprisePage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
               Suggested Routing
             </div>
 
             <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
                 <div className="text-lg font-semibold text-white">
                   {suggestedSector.title}
                 </div>
-                <div className="mt-2 text-sm leading-6 text-white/70">
+                <div className="mt-2 text-sm leading-6 text-white/68">
                   {suggestedSector.subtitle}
                 </div>
 
@@ -316,7 +330,7 @@ export default function EnterprisePage() {
                   {suggestedSector.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
+                      className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/65"
                     >
                       {tag}
                     </span>
@@ -337,18 +351,19 @@ export default function EnterprisePage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
               Enterprise Areas
             </div>
 
             <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-              Working sectors
+              Company sectors
             </h2>
 
-            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/70">
-              Each sector is a working part of the enterprise environment. Together,
-              they form a more unified operational system for leadership, teams, and execution.
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/68">
+              Each sector is a real part of the enterprise environment. Together,
+              they form a more unified operating system for leadership, teams,
+              execution, and organizational growth.
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -358,7 +373,7 @@ export default function EnterprisePage() {
                   href={sector.href}
                   className={cx(
                     "group relative overflow-hidden rounded-3xl border p-5 transition",
-                    "border-emerald-300/15 bg-black/20 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+                    "border-emerald-300/10 bg-black/25 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
                   )}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -366,12 +381,12 @@ export default function EnterprisePage() {
                       <div className="text-lg font-semibold text-white">
                         {sector.title}
                       </div>
-                      <div className="mt-2 text-sm leading-6 text-white/70">
+                      <div className="mt-2 text-sm leading-6 text-white/68">
                         {sector.subtitle}
                       </div>
                     </div>
 
-                    <span className="rounded-full border border-emerald-300/20 bg-emerald-400/5 px-3 py-1 text-[11px] font-semibold text-emerald-100/85">
+                    <span className="rounded-full border border-emerald-300/15 bg-emerald-400/[0.08] px-3 py-1 text-[11px] font-semibold text-emerald-100/80">
                       Active
                     </span>
                   </div>
@@ -380,7 +395,7 @@ export default function EnterprisePage() {
                     {sector.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
+                        className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/65"
                       >
                         {tag}
                       </span>
@@ -392,7 +407,7 @@ export default function EnterprisePage() {
                       Open sector
                     </span>
 
-                    <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
+                    <span className="rounded-full border border-white/10 bg-white/[0.04] p-2 text-white/75">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path
                           d="M10 7 15 12 10 17"
@@ -411,79 +426,80 @@ export default function EnterprisePage() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
               Enterprise Status
             </div>
 
             <div className="mt-4 space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Mission Coordination</div>
-                <div className="mt-1 text-sm text-white/60">Structured for team execution</div>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">AI Decision Layer</div>
-                <div className="mt-1 text-sm text-white/60">Built for planning and insight</div>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Collaboration Layer</div>
-                <div className="mt-1 text-sm text-white/60">Ready for rooms, updates, and coordination</div>
-              </div>
+              <StatusCard
+                label="Mission Coordination"
+                value="Structured"
+                helper="Built for cross-team execution and phased delivery."
+              />
+              <StatusCard
+                label="AI Decision Layer"
+                value="Operational"
+                helper="Supports leadership reasoning, planning, and review."
+              />
+              <StatusCard
+                label="Collaboration Layer"
+                value="Connected"
+                helper="Supports rooms, updates, and company coordination."
+              />
             </div>
           </div>
 
-          <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
+          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
               Live Focus
             </div>
 
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
               <div className="text-sm font-semibold text-white">Selected Sector</div>
-              <div className="mt-1 text-sm text-white/65">{selectedSector.title}</div>
+              <div className="mt-1 text-sm text-white/60">{selectedSector.title}</div>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
               <div className="text-sm font-semibold text-white">Signal Type</div>
-              <div className="mt-1 text-sm text-white/65">{selectedSector.signal}</div>
+              <div className="mt-1 text-sm text-white/60">{selectedSector.signal}</div>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
               <div className="text-sm font-semibold text-white">Quick Access</div>
               <div className="mt-3 grid gap-3">
-                <Link href="/enterprise/dashboard" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 hover:bg-white/10">
+                <Link href="/enterprise/dashboard" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
                   Open Dashboard
                 </Link>
-                <Link href="/enterprise/rooms" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 hover:bg-white/10">
+                <Link href="/enterprise/rooms" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
                   Open Rooms
                 </Link>
-                <Link href="/enterprise/missions" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 hover:bg-white/10">
+                <Link href="/enterprise/missions" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
                   Open Missions
                 </Link>
-                <Link href="/enterprise/strategy" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 hover:bg-white/10">
+                <Link href="/enterprise/strategy" className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80 hover:bg-white/10">
                   Open AI Strategy
                 </Link>
               </div>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-emerald-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
-              Suggested Flow
+          <div className="rounded-3xl border border-emerald-300/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
+              Operating Flow
             </div>
 
             <div className="mt-4 space-y-3">
               {[
-                "Build teams and define structure",
+                "Build teams and define ownership",
                 "Open rooms for collaboration",
                 "Turn goals into missions",
                 "Review analytics and workload",
-                "Use AI strategy for decisions",
+                "Use AI strategy for leadership decisions",
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/75"
+                  className="rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white/72"
                 >
                   {item}
                 </div>
