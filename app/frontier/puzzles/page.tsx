@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import FrontierOutputPanel from "@/app/frontier/_components/FrontierOutputPanel";
-import { buildPuzzleOutput } from "@/app/frontier/_lib/frontierProfessionalCopy";
+import FrontierOutputPanel from "../_components/FrontierOutputPanel";
+import { buildPuzzleOutput } from "../_lib/frontierProfessionalCopy";
 
 type SolveMode = "test" | "guided" | "teach";
 
@@ -40,13 +40,13 @@ export default function FrontierPuzzlesPage() {
   const output = useMemo(
     () =>
       buildPuzzleOutput({
-        modeTitle: mode,
+        mode: mode,
         question: active.question,
-        hint1Visible: showHint1,
-        hint2Visible: showHint2,
-        answerVisible: showAnswer,
+        hint1: active.hint1,
+        hint2: active.hint2,
+        answer: active.answer,
       }),
-    [mode, active, showHint1, showHint2, showAnswer]
+    [mode, active]
   );
 
   function nextPuzzle() {
