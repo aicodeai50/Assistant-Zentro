@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import FrontierOutputPanel from "../_components/FrontierOutputPanel";
-import { buildBotOutput } from "../_lib/frontierProfessionalCopy";
+import { runFrontierLiveEngine } from "../_lib/frontierLiveEngine";
 
 type BotMode = "assistant" | "builder" | "teacher" | "analyst";
 type ToneMode = "concise" | "structured" | "teaching" | "strategic";
@@ -25,7 +25,6 @@ const MODES: Record<
     title: string;
     desc: string;
     tone: string;
-    output: string;
     tags: string[];
     starter: string;
   }
@@ -34,7 +33,6 @@ const MODES: Record<
     title: "AI Assistant",
     desc: "General support, planning help, quick answers, and structured next steps.",
     tone: "Supportive and direct",
-    output: "The assistant mode organizes the request into clear next steps and practical guidance.",
     tags: ["Support", "Planning", "Guidance"],
     starter: "Help me design an AI assistant for students learning coding.",
   },
@@ -42,7 +40,6 @@ const MODES: Record<
     title: "AI Builder",
     desc: "Turns product ideas into features, workflows, and build direction.",
     tone: "Constructive and implementation-focused",
-    output: "The builder mode turns a prompt into structure, modules, scope, and build priorities.",
     tags: ["Product", "Workflow", "Build"],
     starter: "Help me turn an internal knowledge tool idea into a usable product plan.",
   },
@@ -50,7 +47,6 @@ const MODES: Record<
     title: "AI Teacher",
     desc: "Explains ideas step by step for beginners and growing learners.",
     tone: "Clear and educational",
-    output: "The teacher mode slows down, explains terms, and turns complexity into guided understanding.",
     tags: ["Learning", "Explanation", "Clarity"],
     starter: "Explain APIs to a beginner who has never built a web app before.",
   },
@@ -58,30 +54,81 @@ const MODES: Record<
     title: "AI Analyst",
     desc: "Compares options, trade-offs, risks, and strong recommendations.",
     tone: "Structured and evaluative",
-    output: "The analyst mode compares paths, highlights trade-offs, and recommends a direction with reasons.",
     tags: ["Decision", "Trade-offs", "Strategy"],
     starter: "Compare whether a startup should build mobile first or web first.",
   },
+};
+
+type OutputShape = {
+  title: string;
+  summary: string;
+  meaning?: string;
+  nextAction: string;
+  why: string[];
+  deliverables: string[];
+  risk: string;
+  encouragement?: string;
+};
+
+const EMPTY_OUTPUT: OutputShape = {
+  title: "Response Guidance",
+  summary: "Choose a mode, choose a tone, write a prompt, then generate a live Frontier response.",
+  meaning: "This panel becomes live AI output once you generate it.",
+  nextAction: "Select the behavior and define the prompt clearly.",
+  why: ["Frontier needs mode, tone, and prompt to shape the response."],
+  deliverables: ["A live AI-generated behavior interpretation."],
+  risk: "Vague prompts produce weaker output.",
+  encouragement: "Use the same prompt across multiple modes to compare AI behavior properly.",
 };
 
 export default function FrontierAIBotsPage() {
   const [mode, setMode] = useState<BotMode>("assistant");
   const [tone, setTone] = useState<ToneMode>("structured");
   const [prompt, setPrompt] = useState(MODES.assistant.starter);
-  const [generated, setGenerated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [output, setOutput] = useState<OutputShape>(EMPTY_OUTPUT);
 
   const active = useMemo(() => MODES[mode], [mode]);
 
-  const output = useMemo(
-    () =>
-      buildBotOutput({
-        modeTitle: active.title,
-        prompt: prompt || active.starter,
-        toneTitle: TONES[tone].title,
-        tags: active.tags,
-      }),
-    [active, prompt, tone]
-  );
+  async function handleGenerate() {
+    setLoading(true);
+    try {
+      const ai = await runFrontierLiveEngine({
+        workspace: "ai-bots",
+        title: active.title,
+        mode: active.title,
+        tone: TONES[tone].title,
+        focus: active.tags,
+        userInput: prompt || active.starter,
+      });
+
+      setOutput({
+        title: "Response Guidance",
+        summary: ai.summary || EMPTY_OUTPUT.summary,
+        meaning: ai.meaning || EMPTY_OUTPUT.meaning,
+        nextAction: ai.nextAction || EMPTY_OUTPUT.nextAction,
+        why: Array.isArray(ai.why) ? ai.why : EMPTY_OUTPUT.why,
+        deliverables: Array.isArray(ai.deliverables)
+          ? ai.deliverables
+          : EMPTY_OUTPUT.deliverables,
+        risk: ai.risk || EMPTY_OUTPUT.risk,
+        encouragement: ai.encouragement || EMPTY_OUTPUT.encouragement,
+      });
+    } catch (error) {
+      setOutput({
+        title: "Response Guidance",
+        summary: "Frontier AI could not generate a live response right now.",
+        meaning: "The workspace is still connected, but the live engine request did not complete successfully.",
+        nextAction: "Try again with a shorter prompt or verify the public chat route.",
+        why: ["The live AI route may be unavailable or returning an unexpected response."],
+        deliverables: ["A safe fallback response instead of a broken page."],
+        risk: error instanceof Error ? error.message : "Unknown Frontier AI error.",
+        encouragement: "The page is safe. Only the live AI request needs adjustment.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -123,7 +170,7 @@ export default function FrontierAIBotsPage() {
           <div className="flex items-center justify-between gap-3">
             <div className="text-sm font-semibold text-white">Choose bot behaviour</div>
             <div className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-[11px] text-lime-100">
-              Mode Simulation
+              Live AI Simulation
             </div>
           </div>
 
@@ -135,7 +182,6 @@ export default function FrontierAIBotsPage() {
                 onClick={() => {
                   setMode(item);
                   setPrompt(MODES[item].starter);
-                  setGenerated(false);
                 }}
                 className={cx(
                   "rounded-2xl border p-4 text-left transition",
@@ -157,10 +203,7 @@ export default function FrontierAIBotsPage() {
                 <button
                   key={item}
                   type="button"
-                  onClick={() => {
-                    setTone(item);
-                    setGenerated(false);
-                  }}
+                  onClick={() => setTone(item)}
                   className={cx(
                     "rounded-2xl border p-4 text-left transition",
                     tone === item
@@ -179,10 +222,7 @@ export default function FrontierAIBotsPage() {
             <label className="text-sm font-semibold text-white">Prompt</label>
             <textarea
               value={prompt}
-              onChange={(e) => {
-                setPrompt(e.target.value);
-                setGenerated(false);
-              }}
+              onChange={(e) => setPrompt(e.target.value)}
               rows={6}
               placeholder="Type a prompt to test how the mode behaves..."
               className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
@@ -192,20 +232,18 @@ export default function FrontierAIBotsPage() {
           <div className="mt-5 flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={() => setGenerated(true)}
-              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+              onClick={handleGenerate}
+              disabled={loading}
+              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90 disabled:opacity-60"
             >
-              Generate response style
+              {loading ? "Generating..." : "Generate live AI response"}
             </button>
             <button
               type="button"
-              onClick={() => {
-                setPrompt(active.starter);
-                setGenerated(false);
-              }}
+              onClick={() => setPrompt(active.starter)}
               className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
             >
-              Clear prompt
+              Reset prompt
             </button>
           </div>
         </div>
@@ -233,29 +271,19 @@ export default function FrontierAIBotsPage() {
                   </span>
                 ))}
               </div>
-
-              <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
-                Tone base: {active.tone}
-              </div>
             </div>
           </div>
 
-          {generated ? (
-            <FrontierOutputPanel
-              title={output.title}
-              summary={output.summary}
-              meaning={output.meaning}
-              nextAction={output.nextAction}
-              why={output.why}
-              deliverables={output.deliverables}
-              risk={output.risk}
-              encouragement={output.encouragement}
-            />
-          ) : (
-            <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-5 text-sm text-lime-100">
-              Choose a mode, choose a tone, write a prompt, then generate the response style.
-            </div>
-          )}
+          <FrontierOutputPanel
+            title={output.title}
+            summary={output.summary}
+            meaning={output.meaning}
+            nextAction={output.nextAction}
+            why={output.why}
+            deliverables={output.deliverables}
+            risk={output.risk}
+            encouragement={output.encouragement}
+          />
         </div>
       </div>
     </section>
