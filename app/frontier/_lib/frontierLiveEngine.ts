@@ -153,7 +153,7 @@ function buildUserPrompt(req: FrontierEngineRequest) {
 }
 
 export async function runFrontierLiveEngine(req: FrontierEngineRequest) {
-  const res = await fetch("/api/public/chat", {
+  const res = await fetch("/api/robot-chat", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -163,7 +163,6 @@ export async function runFrontierLiveEngine(req: FrontierEngineRequest) {
         { role: "system", content: buildSystemPrompt(req) },
         { role: "user", content: buildUserPrompt(req) },
       ],
-      temperature: 0.8,
     }),
   });
 
