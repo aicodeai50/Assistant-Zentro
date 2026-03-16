@@ -141,22 +141,22 @@ function nextAction(step: string, mode: GuideMode) {
 
 export default function FrontierCodingPage() {
   const [buildType, setBuildType] = useState<BuildType>("website");
-  const [guideMode, setGuideMode] = useState<GuideMode>("mentor");
+  const [guideModeState, setGuideModeState] = useState<GuideMode>("mentor");
   const [idea, setIdea] = useState(BUILD_OPTIONS.website.starterPrompt);
   const [generated, setGenerated] = useState(false);
-  const [guideMode, setGuideMode] = useState<"Mentor" | "Builder" | "Reviewer" | "Project Coach">("Builder");
+  const [guideModeState, setGuideModeState] = useState<"Mentor" | "Builder" | "Reviewer" | "Project Coach">("Builder");
 
   const active = useMemo(() => BUILD_OPTIONS[buildType], [buildType]);
   const output = useMemo(
     () =>
       buildCodingOutput({
         buildTitle: active.title,
-        guideMode,
+        guideModeState,
         idea: idea || active.starterPrompt,
         stack: active.stack,
         firstMilestone: active.steps[0]?.replace(/^Milestone 1:\s*/, "").replace(/^Step 1:\s*/, "") || "define the first milestone",
       }),
-    [active, guideMode, idea]
+    [active, guideModeState, idea]
   );
 
   function handleSelect(type: BuildType) {
@@ -242,10 +242,10 @@ export default function FrontierCodingPage() {
                 <button
                   key={mode}
                   type="button"
-                  onClick={() => setGuideMode(mode)}
+                  onClick={() => setGuideModeState(mode)}
                   className={cx(
                     "rounded-2xl border p-4 text-left transition",
-                    guideMode === mode
+                    guideModeState === mode
                       ? "border-lime-300/30 bg-lime-400/10 text-white"
                       : "border-white/10 bg-black/20 text-white/80 hover:bg-white/7"
                   )}
@@ -340,7 +340,7 @@ export default function FrontierCodingPage() {
                 Best stack match: {active.stack.join(" • ")}.
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
-                {nextAction(active.steps[0], guideMode)}
+                {nextAction(active.steps[0], guideModeState)}
               </div>
             </div>
           </div>
