@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import FrontierOutputPanel from "../_components/FrontierOutputPanel";
 import { buildCodingOutput } from "../_lib/frontierProfessionalCopy";
-import { useMemo, useState } from "react";
 
 type BuildType =
   | "website"
@@ -13,18 +13,11 @@ type BuildType =
   | "game"
   | "python";
 
-type GuideMode = "mentor" | "builder" | "reviewer" | "coach";
+type GuideMode = "Mentor" | "Builder" | "Reviewer" | "Project Coach";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
-
-const GUIDE_MODES: Record<GuideMode, { title: string; desc: string }> = {
-  mentor: { title: "Mentor", desc: "Step-by-step teaching guidance." },
-  builder: { title: "Builder", desc: "Implementation-focused direction." },
-  reviewer: { title: "Reviewer", desc: "Check structure, clarity, and gaps." },
-  coach: { title: "Project Coach", desc: "Scope, milestones, and momentum." },
-};
 
 const BUILD_OPTIONS: Record<
   BuildType,
@@ -34,7 +27,6 @@ const BUILD_OPTIONS: Record<
     stack: string[];
     steps: string[];
     starterPrompt: string;
-    outputLabel: string;
   }
 > = {
   website: {
@@ -48,8 +40,8 @@ const BUILD_OPTIONS: Record<
       "Add interaction",
       "Test and deploy",
     ],
-    starterPrompt: "I want to build a personal portfolio website with a projects section and contact form.",
-    outputLabel: "Launch-ready site planning",
+    starterPrompt:
+      "I want to build a personal portfolio website with a projects section and contact form.",
   },
   chatbot: {
     title: "Build a Chatbot",
@@ -62,8 +54,8 @@ const BUILD_OPTIONS: Record<
       "Handle user messages",
       "Improve responses",
     ],
-    starterPrompt: "I want to build a chatbot that helps students revise for science exams.",
-    outputLabel: "Conversation system planning",
+    starterPrompt:
+      "I want to build a chatbot that helps students revise for science exams.",
   },
   business: {
     title: "Build a Business Tool",
@@ -76,8 +68,8 @@ const BUILD_OPTIONS: Record<
       "Add actions and permissions",
       "Test company usage",
     ],
-    starterPrompt: "I want to build an internal dashboard for tracking missions and team progress.",
-    outputLabel: "Operational tool planning",
+    starterPrompt:
+      "I want to build an internal dashboard for tracking missions and team progress.",
   },
   automation: {
     title: "Build an Automation Tool",
@@ -90,8 +82,8 @@ const BUILD_OPTIONS: Record<
       "Add error handling",
       "Schedule or trigger it",
     ],
-    starterPrompt: "I want to automate renaming files and sorting them into folders.",
-    outputLabel: "Repeat-task automation design",
+    starterPrompt:
+      "I want to automate renaming files and sorting them into folders.",
   },
   game: {
     title: "Build a Game",
@@ -104,8 +96,8 @@ const BUILD_OPTIONS: Record<
       "Add enemies or obstacles",
       "Polish and test gameplay",
     ],
-    starterPrompt: "I want to build a simple browser game where the player avoids obstacles and scores points.",
-    outputLabel: "Interactive gameplay planning",
+    starterPrompt:
+      "I want to build a simple browser game where the player avoids obstacles and scores points.",
   },
   python: {
     title: "Learn Python by Building",
@@ -118,45 +110,36 @@ const BUILD_OPTIONS: Record<
       "Build a small project",
       "Improve and refactor",
     ],
-    starterPrompt: "I want to learn Python by building a simple expense tracker.",
-    outputLabel: "Beginner-to-project learning path",
+    starterPrompt:
+      "I want to learn Python by building a simple expense tracker.",
   },
 };
 
-function projectBrief(buildTitle: string, idea: string) {
-  return `Project brief: ${buildTitle}. Goal: ${idea}. Frontier translates this into a guided build path with practical milestones and a next-action focus.`;
-}
-
-function nextAction(step: string, mode: GuideMode) {
-  const modeLabel =
-    mode === "mentor"
-      ? "learn the concept slowly"
-      : mode === "builder"
-      ? "implement the core part now"
-      : mode === "reviewer"
-      ? "check structure before coding further"
-      : "set the milestone and keep momentum";
-  return `Next best action: ${step}. Guidance style: ${modeLabel}.`;
-}
+const GUIDE_MODE_HELP: Record<GuideMode, string> = {
+  Mentor: "Step-by-step teaching guidance.",
+  Builder: "Implementation-focused direction.",
+  Reviewer: "Check structure, clarity, and gaps.",
+  "Project Coach": "Scope, milestones, and momentum.",
+};
 
 export default function FrontierCodingPage() {
   const [buildType, setBuildType] = useState<BuildType>("website");
-  const [guideModeState, setGuideModeState] = useState<GuideMode>("mentor");
   const [idea, setIdea] = useState(BUILD_OPTIONS.website.starterPrompt);
   const [generated, setGenerated] = useState(false);
-  const [guideModeState, setGuideModeState] = useState<"Mentor" | "Builder" | "Reviewer" | "Project Coach">("Builder");
+  const [guideMode, setGuideMode] = useState<GuideMode>("Builder");
 
   const active = useMemo(() => BUILD_OPTIONS[buildType], [buildType]);
+
   const output = useMemo(
     () =>
       buildCodingOutput({
         buildTitle: active.title,
-        guideModeState,
+        guideMode,
         idea: idea || active.starterPrompt,
         stack: active.stack,
-        firstMilestone: active.steps[0]?.replace(/^Milestone 1:\s*/, "").replace(/^Step 1:\s*/, "") || "define the first milestone",
+        firstStep: active.steps[0] || "Define the first step",
       }),
-    [active, guideModeState, idea]
+    [active, guideMode, idea]
   );
 
   function handleSelect(type: BuildType) {
@@ -164,10 +147,6 @@ export default function FrontierCodingPage() {
     setIdea(BUILD_OPTIONS[type].starterPrompt);
     setGenerated(false);
   }
-
-  const milestones = generated
-    ? active.steps.map((step, index) => `Milestone ${index + 1}: ${step}`)
-    : active.steps.map((step, index) => `Milestone ${index + 1}: ${step}`);
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -180,13 +159,22 @@ export default function FrontierCodingPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <Link href="/frontier" className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white">
+        <Link
+          href="/frontier"
+          className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
+        >
           ← Back
         </Link>
-        <Link href="/" className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white">
+        <Link
+          href="/"
+          className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
+        >
           Home
         </Link>
-        <Link href="/frontier" className="inline-flex items-center rounded-xl border border-lime-400/20 bg-lime-400/10 px-3 py-2 text-sm text-lime-100 hover:bg-lime-400/15">
+        <Link
+          href="/frontier"
+          className="inline-flex items-center rounded-xl border border-lime-400/20 bg-lime-400/10 px-3 py-2 text-sm text-lime-100 hover:bg-lime-400/15"
+        >
           Frontier Lab
         </Link>
       </div>
@@ -199,15 +187,18 @@ export default function FrontierCodingPage() {
           Coding Arena
         </h1>
         <p className="mt-3 max-w-5xl text-sm leading-6 text-white/70 sm:text-base">
-          This is an AI-assisted build workspace. Choose what you want to create, describe the goal,
-          and let Frontier shape the next technical path without changing the environment around you.
+          This is an AI-assisted build workspace. Choose what you want to create,
+          describe the goal, and let Frontier shape the next technical path without
+          changing the environment around you.
         </p>
       </div>
 
       <div className="mt-8 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3">
-            <div className="text-sm font-semibold text-white">What do you want to build?</div>
+            <div className="text-sm font-semibold text-white">
+              What do you want to build?
+            </div>
             <div className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-[11px] text-lime-100">
               AI Build Routing
             </div>
@@ -229,7 +220,9 @@ export default function FrontierCodingPage() {
                   )}
                 >
                   <div className="text-base font-semibold">{item.title}</div>
-                  <div className="mt-2 text-sm leading-6 text-white/70">{item.desc}</div>
+                  <div className="mt-2 text-sm leading-6 text-white/70">
+                    {item.desc}
+                  </div>
                 </button>
               );
             })}
@@ -237,31 +230,43 @@ export default function FrontierCodingPage() {
 
           <div className="mt-6">
             <div className="text-sm font-semibold text-white">AI guide mode</div>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {(Object.keys(GUIDE_MODES) as GuideMode[]).map((mode) => (
+            <div className="mt-3 grid gap-3 md:grid-cols-2">
+              {(
+                ["Mentor", "Builder", "Reviewer", "Project Coach"] as GuideMode[]
+              ).map((mode) => (
                 <button
                   key={mode}
                   type="button"
-                  onClick={() => setGuideModeState(mode)}
+                  onClick={() => {
+                    setGuideMode(mode);
+                    setGenerated(false);
+                  }}
                   className={cx(
                     "rounded-2xl border p-4 text-left transition",
-                    guideModeState === mode
+                    guideMode === mode
                       ? "border-lime-300/30 bg-lime-400/10 text-white"
                       : "border-white/10 bg-black/20 text-white/80 hover:bg-white/7"
                   )}
                 >
-                  <div className="text-sm font-semibold">{GUIDE_MODES[mode].title}</div>
-                  <div className="mt-1 text-sm text-white/70">{GUIDE_MODES[mode].desc}</div>
+                  <div className="text-base font-semibold">{mode}</div>
+                  <div className="mt-1 text-sm leading-6 text-white/70">
+                    {GUIDE_MODE_HELP[mode]}
+                  </div>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="mt-6">
-            <label className="text-sm font-semibold text-white">Project idea</label>
+            <label className="text-sm font-semibold text-white">
+              Project idea
+            </label>
             <textarea
               value={idea}
-              onChange={(e) => setIdea(e.target.value)}
+              onChange={(e) => {
+                setIdea(e.target.value);
+                setGenerated(false);
+              }}
               placeholder="Describe what you want to build..."
               rows={6}
               className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
@@ -291,13 +296,10 @@ export default function FrontierCodingPage() {
 
         <div className="space-y-5">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-lg font-semibold text-white">{active.title}</div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/70">
-                {GUIDE_MODES[guideMode].title}
-              </div>
+            <div className="text-lg font-semibold text-white">{active.title}</div>
+            <div className="mt-2 text-sm leading-6 text-white/70">
+              {active.desc}
             </div>
-            <div className="mt-2 text-sm leading-6 text-white/70">{active.desc}</div>
 
             <div className="mt-5 text-sm font-semibold text-white">Main stack</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -311,39 +313,36 @@ export default function FrontierCodingPage() {
               ))}
             </div>
 
-            <div className="mt-5 text-sm font-semibold text-white">Milestone path</div>
+            <div className="mt-5 text-sm font-semibold text-white">
+              AI build sequence
+            </div>
             <div className="mt-3 space-y-3">
-              {milestones.map((step) => (
-                <div key={step} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+              {active.steps.map((step) => (
+                <div
+                  key={step}
+                  className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80"
+                >
                   {step}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-6">
-            <div className="text-sm font-semibold text-lime-100">Live AI output</div>
-            <div className="mt-3 text-sm leading-6 text-lime-50/90">
-              {generated
-                ? `AI mode: ${GUIDE_MODES[guideMode].title}. Project received: "${idea || active.starterPrompt}". Frontier recommends moving through a structured build sequence with emphasis on ${active.stack.join(", ")}.`
-                : "Choose a build type, select an AI guide mode, and generate the plan."}
+          {generated ? (
+            <FrontierOutputPanel
+              title={output.title}
+              summary={output.summary}
+              nextAction={output.nextAction}
+              why={output.why}
+              deliverables={output.deliverables}
+              risk={output.risk}
+            />
+          ) : (
+            <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-5 text-sm text-lime-100">
+              Choose a build type, choose an AI guide mode, write your idea, then
+              click Generate AI build plan.
             </div>
-
-            <div className="mt-4 space-y-3">
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
-                {projectBrief(active.title, idea || active.starterPrompt)}
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
-                Primary outcome: {active.outputLabel}.
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
-                Best stack match: {active.stack.join(" • ")}.
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
-                {nextAction(active.steps[0], guideModeState)}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
