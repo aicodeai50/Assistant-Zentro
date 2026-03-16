@@ -18,6 +18,32 @@ type FrontierStructuredOutput = {
 };
 
 function fallbackOutput(message: string): FrontierStructuredOutput {
+  const lower = message.toLowerCase();
+
+  if (
+    lower.includes("create an account") ||
+    lower.includes("sign in") ||
+    lower.includes("use ai tools in shynvo")
+  ) {
+    return {
+      summary: "Frontier AI is available, but this live workspace currently requires a signed-in Shynvo account.",
+      meaning: "The Frontier page is functioning correctly. The live AI layer is protected by Shynvo access rules, so guest users receive an access message instead of a generated result.",
+      nextAction: "Sign in to your Shynvo account, then generate the response again from this same workspace.",
+      why: [
+        "The live Frontier engine is connected to a protected Shynvo AI route.",
+        "Protected routes can return an access message instead of a live result when the user is not authenticated.",
+        "The workspace stays stable by showing a guided message instead of crashing."
+      ],
+      deliverables: [
+        "A safe access-state response",
+        "A preserved Frontier workspace",
+        "A clear next step for the user"
+      ],
+      risk: "Live AI generation will stay blocked until the user signs in or Frontier is connected to a public-safe AI route.",
+      encouragement: "You are very close. The Frontier workspace is alive — it just needs authenticated access to unlock live generation.",
+    };
+  }
+
   return {
     summary: message,
     meaning: "The live AI engine returned an unexpected format, so Frontier is showing a safe fallback.",
