@@ -7,30 +7,35 @@ export type FrontierEngineRequest = {
   userInput: string;
 };
 
+type FrontierStructuredOutput = {
+  summary: string;
+  meaning: string;
+  nextAction: string;
+  why: string[];
+  deliverables: string[];
+  risk: string;
+  encouragement: string;
+};
+
+function fallbackOutput(message: string): FrontierStructuredOutput {
+  return {
+    summary: message,
+    meaning: "The live AI engine returned an unexpected format, so Frontier is showing a safe fallback.",
+    nextAction: "Try a shorter, clearer request or switch the selected mode and generate again.",
+    why: ["Frontier protects the page by falling back instead of breaking the workspace."],
+    deliverables: ["A safe response", "A preserved workspace state"],
+    risk: "The live AI route may need a payload or endpoint adjustment.",
+    encouragement: "The workspace is stable. The live engine only needs alignment with the working Shynvo AI route.",
+  };
+}
+
 function buildSystemPrompt(req: FrontierEngineRequest) {
   if (req.workspace === "coding") {
     return `
 You are Shynvo Frontier AI inside the Coding Arena.
-You are not ChatGPT and you are not a generic assistant.
 You are the engineering intelligence layer of Shynvo.
 
-Your role:
-- interpret the user's build goal professionally
-- explain what the selected build path means
-- recommend the best next action
-- explain why that matters
-- define realistic delivery results
-- end with brief encouragement
-
-Rules:
-- sound professional, sharp, and non-repetitive
-- do not repeat headings mechanically
-- avoid generic filler
-- tailor the response to the user's current build type, guide mode, and idea
-- keep the response practical and build-oriented
-- prefer execution clarity over motivational fluff
-
-Return plain JSON with these keys only:
+Return plain JSON only with keys:
 summary
 meaning
 nextAction
@@ -38,6 +43,12 @@ why
 deliverables
 risk
 encouragement
+
+Rules:
+- be professional
+- be specific to the selected build path, mode, and user goal
+- do not sound repetitive
+- do not say you are ChatGPT
 `;
   }
 
@@ -46,23 +57,7 @@ encouragement
 You are Shynvo Frontier AI inside Algorithm Challenges.
 You are the reasoning intelligence layer of Shynvo.
 
-Your role:
-- classify the problem type
-- explain what the challenge means
-- recommend the next reasoning move
-- explain why the reasoning path matters
-- define expected reasoning outcomes
-- warn against the most likely mistake
-- close with concise encouragement
-
-Rules:
-- sound analytical and intelligent
-- do not use repetitive template language
-- adapt to the selected reasoning mode
-- focus on structure, constraints, and thought process
-- do not answer like a generic tutor
-
-Return plain JSON with these keys only:
+Return plain JSON only with keys:
 summary
 meaning
 nextAction
@@ -70,6 +65,11 @@ why
 deliverables
 risk
 encouragement
+
+Rules:
+- classify the reasoning path
+- be analytical
+- do not sound repetitive
 `;
   }
 
@@ -78,23 +78,7 @@ encouragement
 You are Shynvo Frontier AI inside AI Bot Lab.
 You are the AI behavior simulation layer of Shynvo.
 
-Your role:
-- explain the selected AI mode professionally
-- explain what the chosen tone changes
-- interpret the user's prompt through that behavior
-- recommend how to improve the prompt
-- explain why this mode matters
-- describe expected output qualities
-- end with short, confident encouragement
-
-Rules:
-- sound advanced, deliberate, and product-grade
-- avoid repetitive wording
-- do not sound like a generic AI assistant
-- adapt to mode, tone, and prompt
-- focus on AI behavior design, not generic conversation
-
-Return plain JSON with these keys only:
+Return plain JSON only with keys:
 summary
 meaning
 nextAction
@@ -102,6 +86,11 @@ why
 deliverables
 risk
 encouragement
+
+Rules:
+- explain selected mode and tone professionally
+- focus on AI behavior design
+- do not sound repetitive
 `;
   }
 
@@ -109,22 +98,7 @@ encouragement
 You are Shynvo Frontier AI inside Logic Puzzles.
 You are the reasoning training layer of Shynvo.
 
-Your role:
-- explain the puzzle structure
-- explain what the selected solve mode means
-- recommend the next reasoning move
-- explain why this matters for thinking skill
-- define expected learning results
-- warn against weak solving habits
-- end with concise encouragement
-
-Rules:
-- sound thoughtful, calm, and intelligent
-- avoid repetitive template language
-- focus on reasoning growth, not just answers
-- adapt to the current puzzle and solve mode
-
-Return plain JSON with these keys only:
+Return plain JSON only with keys:
 summary
 meaning
 nextAction
@@ -132,6 +106,11 @@ why
 deliverables
 risk
 encouragement
+
+Rules:
+- focus on logic training
+- explain what the puzzle mode means
+- do not sound repetitive
 `;
 }
 
@@ -145,55 +124,129 @@ function buildUserPrompt(req: FrontierEngineRequest) {
       selectedFocus: req.focus || [],
       userInput: req.userInput,
       instruction:
-        "Generate a professional Shynvo Frontier response that is specific to this selection and does not sound repetitive.",
+        "Generate a professional Shynvo Frontier response that is specific to this selection and avoids repetitive phrasing.",
     },
     null,
     2
   );
 }
 
-export async function runFrontierLiveEngine(req: FrontierEngineRequest) {
-  const res = await fetch("/api/robot-chat", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      messages: [
-        { role: "system", content: buildSystemPrompt(req) },
-        { role: "user", content: buildUserPrompt(req) },
-      ],
-    }),
-  });
+function extractRawText(data: any): string {
+  if (typeof data === "string") return data;
 
-  if (!res.ok) {
-    throw new Error(`Frontier AI request failed with ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  const raw =
+  return (
     data?.text ||
     data?.message ||
     data?.output ||
     data?.content ||
-    "";
+    data?.reply ||
+    data?.response ||
+    data?.answer ||
+    data?.result ||
+    data?.choices?.[0]?.message?.content ||
+    data?.choices?.[0]?.text ||
+    ""
+  );
+}
 
-  if (typeof raw !== "string" || !raw.trim()) {
-    throw new Error("Frontier AI returned empty content");
+function normalizeStructured(raw: string): FrontierStructuredOutput {
+  try {
+    const parsed = JSON.parse(raw);
+
+    return {
+      summary: parsed.summary || "Frontier generated a live response.",
+      meaning: parsed.meaning || "The live AI response did not include a full meaning section.",
+      nextAction: parsed.nextAction || "Refine the request and generate again.",
+      why: Array.isArray(parsed.why) ? parsed.why : ["Frontier returned a partial structured response."],
+      deliverables: Array.isArray(parsed.deliverables)
+        ? parsed.deliverables
+        : ["A live AI-generated result."],
+      risk: parsed.risk || "The live route returned partial structured data.",
+      encouragement: parsed.encouragement || "Frontier is active and can continue refining the response.",
+    };
+  } catch {
+    return fallbackOutput(raw || "Frontier generated a live response.");
   }
+}
+
+async function tryRoute(
+  url: string,
+  payload: any
+): Promise<FrontierStructuredOutput | null> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const text = await res.text();
+  let data: any = {};
 
   try {
-    return JSON.parse(raw);
+    data = text ? JSON.parse(text) : {};
   } catch {
-    return {
-      summary: raw,
-      meaning: "The live AI returned a non-JSON response, so the raw response is being shown.",
-      nextAction: "Refine the current selection and try again.",
-      why: ["The AI response could not be structured automatically."],
-      deliverables: ["A live response from the Frontier engine."],
-      risk: "The response format may be inconsistent until the backend prompt is tightened further.",
-      encouragement: "The AI engine is connected. Now it just needs refinement.",
-    };
+    data = { text };
   }
+
+  if (!res.ok) {
+    throw new Error(`${url} -> ${res.status}: ${text || "request failed"}`);
+  }
+
+  const raw = extractRawText(data);
+  if (!raw || !String(raw).trim()) {
+    return fallbackOutput("Frontier AI returned an empty response.");
+  }
+
+  return normalizeStructured(String(raw));
+}
+
+export async function runFrontierLiveEngine(
+  req: FrontierEngineRequest
+): Promise<FrontierStructuredOutput> {
+  const messages = [
+    { role: "system", content: buildSystemPrompt(req) },
+    { role: "user", content: buildUserPrompt(req) },
+  ];
+
+  const attempts: Array<{ url: string; payload: any }> = [
+    {
+      url: "/api/robot-chat",
+      payload: { messages },
+    },
+    {
+      url: "/api/test-ai",
+      payload: { messages },
+    },
+    {
+      url: "/api/university-chat",
+      payload: { messages },
+    },
+    {
+      url: "/api/public/chat",
+      payload: { messages, temperature: 0.8 },
+    },
+  ];
+
+  const errors: string[] = [];
+
+  for (const attempt of attempts) {
+    try {
+      const result = await tryRoute(attempt.url, attempt.payload);
+      if (result) return result;
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  return {
+    summary: "Frontier AI could not generate a live response right now.",
+    meaning: "The workspace is still connected, but none of the available Shynvo AI routes accepted the Frontier request.",
+    nextAction: "Use a simpler prompt now, then align Frontier with the exact working route used by the target environment.",
+    why: errors.length ? errors.slice(0, 3) : ["No working AI route returned a valid response."],
+    deliverables: ["A safe fallback response instead of a broken page."],
+    risk: errors[0] || "Unknown Frontier AI routing issue.",
+    encouragement: "The workspace is safe. Only the Frontier routing layer needs final alignment.",
+  };
 }
