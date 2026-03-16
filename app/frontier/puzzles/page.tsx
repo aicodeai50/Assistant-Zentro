@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import FrontierOutputPanel from "@/app/frontier/_components/FrontierOutputPanel";
+import { buildPuzzleOutput } from "@/app/frontier/_lib/frontierProfessionalCopy";
 
 type SolveMode = "test" | "guided" | "teach";
 
@@ -34,6 +36,18 @@ export default function FrontierPuzzlesPage() {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const active = PUZZLES[index];
+
+  const output = useMemo(
+    () =>
+      buildPuzzleOutput({
+        modeTitle: mode,
+        question: active.question,
+        hint1Visible: showHint1,
+        hint2Visible: showHint2,
+        answerVisible: showAnswer,
+      }),
+    [mode, active, showHint1, showHint2, showAnswer]
+  );
 
   function nextPuzzle() {
     setIndex((prev) => (prev + 1) % PUZZLES.length);
@@ -175,16 +189,14 @@ export default function FrontierPuzzlesPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <div className="text-sm font-semibold text-white">Reasoning mode</div>
-            <div className="mt-3 text-sm leading-6 text-white/75">
-              {mode === "test"
-                ? "Test mode keeps help lighter so you can try solving more independently."
-                : mode === "guided"
-                ? "Guided mode reveals hints in stages and helps you continue."
-                : "Teach mode is more explanatory and helps you understand the logic behind the answer."}
-            </div>
-          </div>
+          <FrontierOutputPanel
+            title={output.title}
+            summary={output.summary}
+            nextAction={output.nextAction}
+            why={output.why}
+            deliverables={output.deliverables}
+            risk={output.risk}
+          />
         </div>
       </div>
     </section>

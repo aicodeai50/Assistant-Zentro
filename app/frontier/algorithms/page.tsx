@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import FrontierOutputPanel from "@/app/frontier/_components/FrontierOutputPanel";
+import { buildAlgorithmOutput } from "@/app/frontier/_lib/frontierProfessionalCopy";
 
 type ChallengeType = "shortest-path" | "sorting" | "scheduling" | "graphs";
 type ReasonMode = "coach" | "solver" | "teacher";
@@ -71,9 +73,19 @@ export default function FrontierAlgorithmsPage() {
 
   const active = useMemo(() => CHALLENGES[challenge], [challenge]);
 
-  const interpretation = generated
-    ? `Frontier identifies this as a ${active.title.toLowerCase()} problem. In ${MODES[mode].title.toLowerCase()} mode, the system will focus on ${active.focus.join(", ").toLowerCase()} before moving to the route.`
-    : "Select a challenge, choose a reasoning mode, and let Frontier classify the problem.";
+  const output = useMemo(
+    () =>
+      buildAlgorithmOutput({
+        challengeTitle: active.title,
+        modeTitle: MODES[mode].title,
+        problem: problem || "Use the selected challenge template.",
+        hint: active.hint,
+        route: active.route,
+        mistake: active.mistake,
+        focus: active.focus,
+      }),
+    [active, mode, problem]
+  );
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -148,7 +160,10 @@ export default function FrontierAlgorithmsPage() {
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setMode(item)}
+                  onClick={() => {
+                    setMode(item);
+                    setGenerated(false);
+                  }}
                   className={cx(
                     "rounded-2xl border p-4 text-left transition",
                     mode === item
@@ -167,7 +182,10 @@ export default function FrontierAlgorithmsPage() {
             <label className="text-sm font-semibold text-white">Custom problem</label>
             <textarea
               value={problem}
-              onChange={(e) => setProblem(e.target.value)}
+              onChange={(e) => {
+                setProblem(e.target.value);
+                setGenerated(false);
+              }}
               rows={7}
               placeholder="Write the engineering or algorithm problem you want to reason through..."
               className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
@@ -219,30 +237,22 @@ export default function FrontierAlgorithmsPage() {
                 ))}
               </div>
             </div>
-
-            <div className="mt-4 rounded-2xl border border-lime-400/20 bg-lime-400/10 p-4">
-              <div className="text-sm font-semibold text-lime-100">AI interpretation</div>
-              <div className="mt-2 text-sm leading-6 text-lime-50/90">{interpretation}</div>
-            </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <div className="text-sm font-semibold text-white">Reasoning output</div>
-            <div className="mt-4 space-y-3">
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-                Core hint: {active.hint}
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-                Recommended route: {generated ? active.route : "Generate the route to see Frontier's reasoning flow."}
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-                Common mistake: {active.mistake}
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-                Problem focus: {generated ? (problem || "Use the selected challenge template.") : "Awaiting problem interpretation."}
-              </div>
+          {generated ? (
+            <FrontierOutputPanel
+              title={output.title}
+              summary={output.summary}
+              nextAction={output.nextAction}
+              why={output.why}
+              deliverables={output.deliverables}
+              risk={output.risk}
+            />
+          ) : (
+            <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-5 text-sm text-lime-100">
+              Select a challenge, choose a reasoning mode, describe the problem, then generate the route.
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

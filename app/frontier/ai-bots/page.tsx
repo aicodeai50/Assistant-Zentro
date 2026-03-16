@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import FrontierOutputPanel from "@/app/frontier/_components/FrontierOutputPanel";
+import { buildBotOutput } from "@/app/frontier/_lib/frontierProfessionalCopy";
 
 type BotMode = "assistant" | "builder" | "teacher" | "analyst";
 type ToneMode = "concise" | "structured" | "teaching" | "strategic";
@@ -70,13 +72,16 @@ export default function FrontierAIBotsPage() {
 
   const active = useMemo(() => MODES[mode], [mode]);
 
-  const liveResponse = generated
-    ? `${active.output} Prompt received: "${prompt || active.starter}". Tone selected: ${TONES[tone].title}.`
-    : "Choose a mode, choose a tone, write a prompt, then generate the response style.";
-
-  const recommendation = generated
-    ? `Recommended operating behavior: ${mode === "analyst" ? "Use this mode for trade-offs and decisions." : mode === "teacher" ? "Use this mode for explanation and learner confidence." : mode === "builder" ? "Use this mode for turning ideas into systems." : "Use this mode for planning and general assistance."}`
-    : "Recommendation will appear after generation.";
+  const output = useMemo(
+    () =>
+      buildBotOutput({
+        modeTitle: active.title,
+        prompt: prompt || active.starter,
+        tone: TONES[tone].title,
+        tags: active.tags,
+      }),
+    [active, prompt, tone]
+  );
 
   return (
     <section className="relative py-10 sm:py-14">
@@ -152,7 +157,10 @@ export default function FrontierAIBotsPage() {
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setTone(item)}
+                  onClick={() => {
+                    setTone(item);
+                    setGenerated(false);
+                  }}
                   className={cx(
                     "rounded-2xl border p-4 text-left transition",
                     tone === item
@@ -171,7 +179,10 @@ export default function FrontierAIBotsPage() {
             <label className="text-sm font-semibold text-white">Prompt</label>
             <textarea
               value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
+              onChange={(e) => {
+                setPrompt(e.target.value);
+                setGenerated(false);
+              }}
               rows={6}
               placeholder="Type a prompt to test how the mode behaves..."
               className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
@@ -201,9 +212,8 @@ export default function FrontierAIBotsPage() {
 
         <div className="space-y-5">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <div className="text-sm font-semibold uppercase tracking-[0.18em] text-white/45">
-              Live output
-            </div>
+            <div className="text-sm font-semibold text-white">Mode profile</div>
+
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-2xl font-semibold text-white">{active.title}</div>
@@ -212,35 +222,38 @@ export default function FrontierAIBotsPage() {
                 </div>
               </div>
               <div className="mt-2 text-sm leading-6 text-white/70">{active.desc}</div>
-            </div>
 
-            <div className="mt-4 rounded-2xl border border-lime-400/20 bg-lime-400/10 p-4">
-              <div className="text-sm font-semibold text-lime-100">Assistant mode</div>
-              <div className="mt-2 text-sm leading-6 text-lime-50/90">{liveResponse}</div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {active.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[12px] text-white/75"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
+                Tone base: {active.tone}
+              </div>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <div className="text-sm font-semibold text-white">Mode properties</div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {active.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[12px] text-white/75"
-                >
-                  {tag}
-                </span>
-              ))}
+          {generated ? (
+            <FrontierOutputPanel
+              title={output.title}
+              summary={output.summary}
+              nextAction={output.nextAction}
+              why={output.why}
+              deliverables={output.deliverables}
+              risk={output.risk}
+            />
+          ) : (
+            <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-5 text-sm text-lime-100">
+              Choose a mode, choose a tone, write a prompt, then generate the response style.
             </div>
-
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
-              Tone base: {active.tone}
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/75">
-              {recommendation}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
