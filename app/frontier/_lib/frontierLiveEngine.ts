@@ -26,8 +26,8 @@ function fallbackOutput(message: string): FrontierStructuredOutput {
     lower.includes("use ai tools in shynvo")
   ) {
     return {
-      summary: "Frontier AI is available, but this live workspace currently requires a signed-in Shynvo account.",
-      meaning: "The Frontier page is functioning correctly. The live AI layer is protected by Shynvo access rules, so guest users receive an access message instead of a generated result.",
+      summary: "This workspace is connected to the Frontier AI engine, but live responses are currently available only to signed-in Shynvo users.",
+      meaning: "The interface is working normally. However, the Frontier AI generation layer requires authentication before it can return a full response.",
       nextAction: "Sign in to your Shynvo account, then generate the response again from this same workspace.",
       why: [
         "The live Frontier engine is connected to a protected Shynvo AI route.",
