@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import FrontierOutputPanel from "../_components/FrontierOutputPanel";
+import { buildCodingOutput } from "../_lib/frontierProfessionalCopy";
 import { useMemo, useState } from "react";
 
 type BuildType =
@@ -142,8 +144,20 @@ export default function FrontierCodingPage() {
   const [guideMode, setGuideMode] = useState<GuideMode>("mentor");
   const [idea, setIdea] = useState(BUILD_OPTIONS.website.starterPrompt);
   const [generated, setGenerated] = useState(false);
+  const [guideMode, setGuideMode] = useState<"Mentor" | "Builder" | "Reviewer" | "Project Coach">("Builder");
 
   const active = useMemo(() => BUILD_OPTIONS[buildType], [buildType]);
+  const output = useMemo(
+    () =>
+      buildCodingOutput({
+        buildTitle: active.title,
+        guideMode,
+        idea: idea || active.starterPrompt,
+        stack: active.stack,
+        firstMilestone: active.steps[0]?.replace(/^Milestone 1:\s*/, "").replace(/^Step 1:\s*/, "") || "define the first milestone",
+      }),
+    [active, guideMode, idea]
+  );
 
   function handleSelect(type: BuildType) {
     setBuildType(type);

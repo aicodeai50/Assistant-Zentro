@@ -1,3 +1,30 @@
+export function buildCodingOutput(args: {
+  buildTitle: string;
+  guideMode: string;
+  idea: string;
+  stack: string[];
+  firstStep: string;
+}) {
+  const { buildTitle, guideMode, idea, stack, firstStep } = args;
+
+  return {
+    title: "Build guidance",
+    summary: `${buildTitle} is active. Frontier is interpreting the goal "${idea}" through ${guideMode.toLowerCase()} mode.`,
+    nextAction: `Start with ${firstStep.toLowerCase()} and keep the first delivery scope narrow and testable.`,
+    why: [
+      `This route matches the selected build type: ${buildTitle}.`,
+      `The current guide mode is ${guideMode}, which changes how the system frames help.`,
+      `The strongest stack fit for this path is ${stack.join(", ")}.`,
+    ],
+    deliverables: [
+      "Working first milestone",
+      "Clear implementation path",
+      `Stack alignment: ${stack.join(", ")}`,
+    ],
+    risk: "Do not try to build the whole project at once. Keep the first milestone small and finishable.",
+  };
+}
+
 export function buildBotOutput(args: {
   modeTitle: string;
   prompt: string;
