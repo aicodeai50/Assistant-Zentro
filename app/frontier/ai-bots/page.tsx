@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import FrontierOutputPanel from "@/app/frontier/_components/FrontierOutputPanel";
-import { buildBotOutput } from "@/app/frontier/_lib/frontierProfessionalCopy";
+import FrontierOutputPanel from "../_components/FrontierOutputPanel";
+import { buildBotOutput } from "../_lib/frontierProfessionalCopy";
 
 type BotMode = "assistant" | "builder" | "teacher" | "analyst";
 type ToneMode = "concise" | "structured" | "teaching" | "strategic";
@@ -77,7 +77,7 @@ export default function FrontierAIBotsPage() {
       buildBotOutput({
         modeTitle: active.title,
         prompt: prompt || active.starter,
-        tone: TONES[tone].title,
+        toneTitle: TONES[tone].title,
         tags: active.tags,
       }),
     [active, prompt, tone]
@@ -244,10 +244,12 @@ export default function FrontierAIBotsPage() {
             <FrontierOutputPanel
               title={output.title}
               summary={output.summary}
+              meaning={output.meaning}
               nextAction={output.nextAction}
               why={output.why}
               deliverables={output.deliverables}
               risk={output.risk}
+              encouragement={output.encouragement}
             />
           ) : (
             <div className="rounded-3xl border border-lime-400/20 bg-lime-400/10 p-5 text-sm text-lime-100">
