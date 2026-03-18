@@ -18,41 +18,34 @@ type FrontierStructuredOutput = {
 };
 
 function fallbackOutput(message: string): FrontierStructuredOutput {
-  const lower = message.toLowerCase();
-
-  if (
-    lower.includes("create an account") ||
-    lower.includes("sign in") ||
-    lower.includes("use ai tools in shynvo")
-  ) {
-    return {
-      summary: "This workspace is connected to the Frontier AI engine, but live responses are currently available only to signed-in Shynvo users.",
-      meaning: "The interface is working normally. However, the Frontier AI generation layer requires authentication before it can return a full response.",
-      nextAction: "Sign in to your Shynvo account, then generate the response again from this same workspace.",
-      why: [
-        "The live Frontier engine is connected to a protected Shynvo AI route.",
-        "Protected routes can return an access message instead of a live result when the user is not authenticated.",
-        "The workspace stays stable by showing a guided message instead of crashing."
-      ],
-      deliverables: [
-        "A safe access-state response",
-        "A preserved Frontier workspace",
-        "A clear next step for the user"
-      ],
-      risk: "Live AI generation will stay blocked until the user signs in or Frontier is connected to a public-safe AI route.",
-      encouragement: "You are very close. The Frontier workspace is alive — it just needs authenticated access to unlock live generation.",
-    };
-  }
-
   return {
     summary: message,
-    meaning: "The live AI engine returned an unexpected format, so Frontier is showing a safe fallback.",
-    nextAction: "Try a shorter, clearer request or switch the selected mode and generate again.",
-    why: ["Frontier protects the page by falling back instead of breaking the workspace."],
+    meaning:
+      "Frontier received a non-standard response, so the workspace is showing a safe fallback instead of failing.",
+    nextAction:
+      "Try again from this workspace, or switch the selected mode and regenerate.",
+    why: [
+      "The workspace is protected from broken output.",
+      "A route may be returning an unexpected response format.",
+    ],
     deliverables: ["A safe response", "A preserved workspace state"],
-    risk: "The live AI route may need a payload or endpoint adjustment.",
-    encouragement: "The workspace is stable. The live engine only needs alignment with the working Shynvo AI route.",
+    risk: "The Frontier AI routing layer may still need alignment with the preferred Shynvo route.",
+    encouragement:
+      "The workspace is stable. Only the route interpretation layer needs refinement.",
   };
+}
+
+function looksLikeAccessMessage(text: string) {
+  const lower = text.toLowerCase();
+  return (
+    lower.includes("create an account") ||
+    lower.includes("sign in") ||
+    lower.includes("signed in") ||
+    lower.includes("use ai tools in shynvo") ||
+    lower.includes("upgradeurl") ||
+    lower.includes('"upgradeurl"') ||
+    lower.includes("pricing")
+  );
 }
 
 function buildSystemPrompt(req: FrontierEngineRequest) {
@@ -169,6 +162,7 @@ function extractRawText(data: any): string {
     data?.response ||
     data?.answer ||
     data?.result ||
+    data?.error ||
     data?.choices?.[0]?.message?.content ||
     data?.choices?.[0]?.text ||
     ""
@@ -181,14 +175,20 @@ function normalizeStructured(raw: string): FrontierStructuredOutput {
 
     return {
       summary: parsed.summary || "Frontier generated a live response.",
-      meaning: parsed.meaning || "The live AI response did not include a full meaning section.",
+      meaning:
+        parsed.meaning ||
+        "The live AI response did not include a full meaning section.",
       nextAction: parsed.nextAction || "Refine the request and generate again.",
-      why: Array.isArray(parsed.why) ? parsed.why : ["Frontier returned a partial structured response."],
+      why: Array.isArray(parsed.why)
+        ? parsed.why
+        : ["Frontier returned a partial structured response."],
       deliverables: Array.isArray(parsed.deliverables)
         ? parsed.deliverables
         : ["A live AI-generated result."],
       risk: parsed.risk || "The live route returned partial structured data.",
-      encouragement: parsed.encouragement || "Frontier is active and can continue refining the response.",
+      encouragement:
+        parsed.encouragement ||
+        "Frontier is active and can continue refining the response.",
     };
   } catch {
     return fallbackOutput(raw || "Frontier generated a live response.");
@@ -198,12 +198,14 @@ function normalizeStructured(raw: string): FrontierStructuredOutput {
 async function tryRoute(
   url: string,
   payload: any
-): Promise<FrontierStructuredOutput | null> {
+): Promise<FrontierStructuredOutput> {
   const res = await fetch(url, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
+    credentials: "include",
+    cache: "no-store",
     body: JSON.stringify(payload),
   });
 
@@ -216,13 +218,18 @@ async function tryRoute(
     data = { text };
   }
 
+  const raw = extractRawText(data);
+
+  if (looksLikeAccessMessage(`${raw} ${text}`)) {
+    throw new Error(`${url} returned access-gated message`);
+  }
+
   if (!res.ok) {
     throw new Error(`${url} -> ${res.status}: ${text || "request failed"}`);
   }
 
-  const raw = extractRawText(data);
   if (!raw || !String(raw).trim()) {
-    return fallbackOutput("Frontier AI returned an empty response.");
+    throw new Error(`${url} returned empty content`);
   }
 
   return normalizeStructured(String(raw));
@@ -237,42 +244,41 @@ export async function runFrontierLiveEngine(
   ];
 
   const attempts: Array<{ url: string; payload: any }> = [
-    {
-      url: "/api/robot-chat",
-      payload: { messages },
-    },
-    {
-      url: "/api/test-ai",
-      payload: { messages },
-    },
-    {
-      url: "/api/university-chat",
-      payload: { messages },
-    },
-    {
-      url: "/api/public/chat",
-      payload: { messages, temperature: 0.8 },
-    },
+    { url: "/api/test-ai", payload: { messages } },
+    { url: "/api/university-chat", payload: { messages } },
+    { url: "/api/robot-chat", payload: { messages } },
+    { url: "/api/public/chat", payload: { messages, temperature: 0.8 } },
   ];
 
   const errors: string[] = [];
 
   for (const attempt of attempts) {
     try {
-      const result = await tryRoute(attempt.url, attempt.payload);
-      if (result) return result;
+      return await tryRoute(attempt.url, attempt.payload);
     } catch (error) {
       errors.push(error instanceof Error ? error.message : String(error));
     }
   }
 
   return {
-    summary: "Frontier AI could not generate a live response right now.",
-    meaning: "The workspace is still connected, but none of the available Shynvo AI routes accepted the Frontier request.",
-    nextAction: "Use a simpler prompt now, then align Frontier with the exact working route used by the target environment.",
-    why: errors.length ? errors.slice(0, 3) : ["No working AI route returned a valid response."],
-    deliverables: ["A safe fallback response instead of a broken page."],
-    risk: errors[0] || "Unknown Frontier AI routing issue.",
-    encouragement: "The workspace is safe. Only the Frontier routing layer needs final alignment.",
+    summary:
+      "Frontier could not obtain a live AI response from the available Shynvo routes.",
+    meaning:
+      "The workspace itself is stable, but the current request did not complete successfully through any of the available AI endpoints.",
+    nextAction:
+      "Try the request again after refreshing the page. If the issue persists, align Frontier to the exact route and payload shape used by the environment that is already working for your signed-in session.",
+    why: errors.length
+      ? errors.slice(0, 3)
+      : ["No available route returned a valid Frontier response."],
+    deliverables: [
+      "A safe fallback instead of a broken workspace",
+      "Preserved user selections",
+      "Diagnostic signal for route alignment",
+    ],
+    risk:
+      errors[0] ||
+      "Unknown Frontier AI routing issue.",
+    encouragement:
+      "Your Frontier UI is in place. The remaining task is route alignment, not a rebuild of the environment.",
   };
 }
