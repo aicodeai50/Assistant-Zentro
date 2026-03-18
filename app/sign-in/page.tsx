@@ -120,7 +120,17 @@ export default function SignInPage() {
               {t("nav.createAccount")}
             </Link>
           </div>
-        </form>
+        
+        <div className="mt-4 text-right">
+          <Link
+            href="/forgot-password"
+            className="text-sm font-medium text-white/75 hover:text-white"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
+      </form>
       </div>
     </section>
   );
