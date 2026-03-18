@@ -59,7 +59,7 @@ const plans = [
     price: "Custom",
     period: "",
     bestFor: "Best for large organizations",
-    href: "/sign-up",
+    href: "/contact",
     highlighted: false,
     cta: "Get started",
     features: [
