@@ -88,12 +88,12 @@ export default function HomePage() {
         </video>
         <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_10%_10%,rgba(59,130,246,0.08),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(800px_420px_at_85%_20%,rgba(16,185,129,0.08),transparent_58%)]" />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/38" />
       </div>
 
       <section className="mx-auto max-w-7xl px-4 pb-12 pt-5 sm:px-6 lg:px-8 lg:pb-16 lg:pt-6">
         <div className="grid items-start gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-[2rem] border border-white/10 bg-black/20 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md sm:p-5 lg:p-6">
+          <div className="rounded-[2rem] border border-white/8 bg-black/10 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.025)] backdrop-blur-sm sm:p-5 lg:p-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
               Structured Intelligence Platform
@@ -131,7 +131,7 @@ export default function HomePage() {
           <div className="space-y-5">
             <Link
               href="/robot"
-              className="group block overflow-hidden rounded-[2rem] border border-white/10 bg-black/20 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md"
+              className="group block overflow-hidden rounded-[2rem] border border-white/8 bg-black/10 shadow-[0_0_0_1px_rgba(255,255,255,0.025)] backdrop-blur-sm"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
                 <video
@@ -163,7 +163,7 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <div className="rounded-[2rem] border border-white/10 bg-black/20 p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md">
+            <div className="rounded-[2rem] border border-white/8 bg-black/10 p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.025)] backdrop-blur-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="text-lg font-semibold text-white">Continue on phone</div>
@@ -209,8 +209,8 @@ export default function HomePage() {
                   key={item.key}
                   href={item.href}
                   className={cx(
-                    "group rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition",
-                    "hover:border-white/20 hover:bg-white/[0.06]"
+                    "group rounded-[1.75rem] border border-white/8 bg-black/10 p-5 transition backdrop-blur-sm",
+                    "hover:border-white/15 hover:bg-white/[0.04]"
                   )}
                 >
                   <div className="flex items-start justify-between gap-4">
