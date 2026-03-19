@@ -91,9 +91,9 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-black/22" />
       </div>
 
-      <section className="mx-auto max-w-7xl px-4 pb-12 pt-5 sm:px-6 lg:px-8 lg:pb-16 lg:pt-6">
+      <section className="mx-auto max-w-7xl px-4 pb-24 pt-5 sm:px-6 lg:px-8 lg:pb-28 lg:pt-6">
         <div className="grid items-start gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-[2rem] border border-white/6 bg-black/0 p-4 shadow-none backdrop-blur-0 sm:p-5 lg:p-6">
+          <div className="rounded-[2rem] border border-white/5 bg-transparent p-4 shadow-none backdrop-blur-0 sm:p-5 lg:p-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
               Structured Intelligence Platform
@@ -131,7 +131,7 @@ export default function HomePage() {
           <div className="space-y-5">
             <Link
               href="/robot"
-              className="group block overflow-hidden rounded-[2rem] border border-white/6 bg-black/0 shadow-none backdrop-blur-0"
+              className="group block overflow-hidden rounded-[2rem] border border-white/5 bg-black/15 shadow-none backdrop-blur-[2px]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
                 <video
@@ -163,7 +163,7 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <div className="rounded-[2rem] border border-white/6 bg-black/0 p-5 shadow-none backdrop-blur-0">
+            <div className="rounded-[2rem] border border-white/5 bg-black/12 p-5 shadow-none backdrop-blur-[2px]">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="text-lg font-semibold text-white">Continue on phone</div>
@@ -209,8 +209,8 @@ export default function HomePage() {
                   key={item.key}
                   href={item.href}
                   className={cx(
-                    "group rounded-[1.75rem] border border-white/6 bg-black/0 p-5 transition",
-                    "hover:border-white/10 hover:bg-white/[0.02]"
+                    "group rounded-[1.75rem] border border-white/5 bg-black/15 p-5 transition backdrop-blur-[2px]",
+                    "hover:border-white/8 hover:bg-white/[0.03]"
                   )}
                 >
                   <div className="flex items-start justify-between gap-4">
