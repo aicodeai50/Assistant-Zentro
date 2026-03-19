@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { useRouter } from "next/navigation";
+import { renderAssistantHtml } from "@/lib/sh-assistant/render";
 
 type MainChoice = "learn" | "build" | "train" | "explore";
 type RouteTarget =
@@ -163,12 +164,11 @@ const INITIAL_MESSAGES: Msg[] = [
   {
     role: "robot",
     text:
-      "Welcome to Shynvo Robot World. I’m Shynvo Robot, your guide across the Shynvo platform.",
+      "Welcome to Shynvo Robot World. I can guide you through learning, building, training, or exploration across the Shynvo environments.",
   },
   {
     role: "robot",
-    text:
-      "I can help you learn, build, train, and explore the right Shynvo environment based on what you want to achieve. What would you like to do first?",
+    text: "What would you like to do first?",
   },
 ];
 
@@ -182,72 +182,31 @@ function TypingDots() {
   );
 }
 
-function normalizeRobotIdentityReply(input: string, raw: string) {
-  const question = input.toLowerCase().trim();
-  const text = raw.trim();
-  const lower = text.toLowerCase();
-
-  const asksIdentity =
-    question.includes("what platform") ||
-    question.includes("what is this platform") ||
-    question.includes("what app is this") ||
-    question.includes("what is shynvo") ||
-    question.includes("what's the name") ||
-    question.includes("whats the name") ||
-    question.includes("who are you");
-
-  const wrongIdentity =
-    lower.includes("openai") ||
-    lower.includes("chatgpt") ||
-    lower.includes("developed by openai");
-
-  if (asksIdentity || wrongIdentity) {
-    return "This is Shynvo, an AI platform for learning, building, training, execution, and exploration. I’m Shynvo Robot, your guide across Shynvo environments like University Hub, Shynvo Academy, Frontier Lab, Enterprise Suite, Shynvo OS, Experiments, and Arcade Sim.";
-  }
-
-  return text;
-}
-
 async function fetchRobotReply(
   input: string,
   history: Msg[],
   preferredLanguage: string
 ): Promise<string> {
   const systemPrompt = `
-You are Shynvo Robot.
+You are Shynvo Robot, the multilingual guide and assistant for the Shynvo platform.
 
-Identity:
-- You are the official AI guide of the Shynvo platform.
-- You are not ChatGPT.
-- You are not a generic OpenAI assistant.
-- Refer to yourself as Shynvo Robot.
-- Refer to the platform as Shynvo.
-
-Behavior:
-- Answer naturally, professionally, warmly, and clearly.
+Your behavior:
+- Answer naturally like a real AI assistant.
 - Answer in the same language the user writes in.
 - Strongly prefer this language when possible: ${preferredLanguage}.
+- Be professional, clear, warm, and concise.
 - You can explain the Shynvo environments and also answer normal user questions.
-- If the user asks what platform this is, answer that this is Shynvo.
-- If the user asks who you are, answer that you are Shynvo Robot.
-- If the user asks where to start, guide them to the right Shynvo environment.
-- If the user asks a general question, answer it normally without breaking Shynvo identity.
-
-The main Shynvo environments are:
-- University Hub: higher education, faculties, courses, academic guidance
-- Shynvo Academy: junior and senior school learning
-- Shynvo OS: focus, workflow, missions, execution systems
-- Experiments: concept worlds, simulations, exploration
-- Enterprise Suite: teams, coordination, analytics, company workflows
-- Frontier Lab: coding, algorithms, AI bot behavior, logic, engineering
-- Arcade Sim: drills, interview quests, rankings, gamified skill training
-- Shynvo Robot World: guided onboarding, navigation, and smart assistance
-
-Rules:
-- Never describe yourself as ChatGPT.
-- Never say this platform was created by OpenAI unless the user explicitly asks about underlying model technology.
-- Never mention backend, API, model, routing, infrastructure, or system internals.
-- Stay platform-aware and non-repetitive.
+- The main Shynvo environments are:
+  - University Hub: higher education, faculties, courses, academic guidance
+  - Shynvo Academy: junior and senior school learning
+  - Shynvo OS: focus, workflow, missions, execution systems
+  - Experiments: concept worlds, simulations, exploration
+  - Enterprise Suite: teams, coordination, analytics, company workflows
+  - Frontier Lab: coding, algorithms, AI bot behavior, logic, engineering
+  - Arcade Sim: drills, interview quests, rankings, gamified skill training
+- If the user asks where to start, guide them to the right environment.
+- If the user asks a general question, answer it normally.
+- Do not mention backend, API, model, routing, infrastructure, or system internals.
 `.trim();
 
   const payload = {
@@ -261,19 +220,10 @@ Rules:
   };
 
   const supabase = getSupabaseClient();
+  const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+  const token = session.data.session?.access_token || "";
 
-  let token = "";
-  if (supabase) {
-    const sessionResult = await supabase.auth.getSession();
-    token = sessionResult.data.session?.access_token || "";
-
-    if (!token) {
-      const refreshed = await supabase.auth.refreshSession();
-      token = refreshed.data.session?.access_token || "";
-    }
-  }
-
-  let res = await fetch("/api/public/chat", {
+  const res = await fetch("/api/public/chat", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -281,20 +231,6 @@ Rules:
     },
     body: JSON.stringify(payload),
   });
-
-  if (res.status === 401 && supabase) {
-    const refreshed = await supabase.auth.refreshSession();
-    const retryToken = refreshed.data.session?.access_token || "";
-
-    res = await fetch("/api/public/chat", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        ...(retryToken ? { authorization: `Bearer ${retryToken}` } : {}),
-      },
-      body: JSON.stringify(payload),
-    });
-  }
 
   const raw = await res.text();
 
@@ -594,7 +530,16 @@ export default function RobotWorldPage() {
                       : "border-white/10 bg-white/5 text-white/85"
                   )}
                 >
-                  {msg.text}
+                  {msg.role === "user" ? (
+                    <div className="whitespace-pre-wrap">{msg.text}</div>
+                  ) : (
+                    <div
+                      className="assistant-html"
+                      dangerouslySetInnerHTML={{
+                        __html: renderAssistantHtml(msg.text),
+                      }}
+                    />
+                  )}
                 </div>
               ))}
 

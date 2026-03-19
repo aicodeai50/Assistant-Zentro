@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { extractReply } from "@/lib/university/extractReply";
+import { renderAssistantHtml } from "@/lib/sh-assistant/render";
 
 type FacultyId =
   | "stem-it"
@@ -273,7 +274,16 @@ Rules:
                       {m.role.toUpperCase()}
                     </div>
                     <div className="mt-1 whitespace-pre-wrap text-white/85">
-                      {m.content}
+                      {m.role === "user" ? (
+                        <div className="whitespace-pre-wrap">{m.content}</div>
+                      ) : (
+                        <div
+                          className="assistant-html"
+                          dangerouslySetInnerHTML={{
+                            __html: renderAssistantHtml(m.content),
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}

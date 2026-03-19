@@ -1,5 +1,7 @@
 "use client";
 
+import { renderAssistantHtml } from "@/lib/sh-assistant/render";
+
 import { useMemo, useRef, useState } from "react";
 import type { RobotMode } from "@/components/RobotModePicker";
 
@@ -220,7 +222,16 @@ export default function RobotPanel({ enabled, mode }: { enabled: boolean; mode: 
             <div className="text-xs uppercase tracking-wide text-neutral-500">
               {m.role === "user" ? "You" : "Robot"}
             </div>
-            <div className="whitespace-pre-wrap text-sm text-neutral-200">{m.content}</div>
+            {m.role === "user" ? (
+              <div className="whitespace-pre-wrap text-sm text-neutral-200">{m.content}</div>
+            ) : (
+              <div
+                className="assistant-html text-sm text-neutral-200"
+                dangerouslySetInnerHTML={{
+                  __html: renderAssistantHtml(m.content),
+                }}
+              />
+            )}
           </div>
         ))}
         {busy && <div className="text-sm text-neutral-400">Thinking…</div>}

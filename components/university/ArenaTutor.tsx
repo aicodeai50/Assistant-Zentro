@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Faculty } from "@/lib/university/faculties";
+import { renderAssistantHtml } from "@/lib/sh-assistant/render";
 
 type ArenaId = "study-lab" | "exam-arena" | "concept-forge" | "career-launchpad";
 
@@ -130,7 +131,16 @@ Rules:
         {messages.map((m, i) => (
           <div key={i} className="mb-3">
             <div className="text-xs text-white/50">{m.role.toUpperCase()}</div>
-            <div className="whitespace-pre-wrap text-white/85">{m.content}</div>
+            {m.role === "user" ? (
+              <div className="whitespace-pre-wrap text-white/85">{m.content}</div>
+            ) : (
+              <div
+                className="assistant-html text-white/85"
+                dangerouslySetInnerHTML={{
+                  __html: renderAssistantHtml(m.content),
+                }}
+              />
+            )}
           </div>
         ))}
         {busy && <div className="text-white/60">Thinking…</div>}
