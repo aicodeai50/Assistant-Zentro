@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RobotTypingLine from "@/components/RobotTypingLine";
+import { QRCodeSVG } from "qrcode.react";
 import {
   BookOpen,
   GraduationCap,
@@ -127,39 +128,66 @@ export default function HomePage() {
             </div>
           </div>
 
-          <Link
-            href="/robot"
-            className="group block overflow-hidden rounded-[2rem] border border-white/10 bg-black/20 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md"
-          >
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
-              <video
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-              >
-                <source src="/robot.mp4" type="video/mp4" />
-              </video>
-            </div>
+          <div className="space-y-5">
+            <Link
+              href="/robot"
+              className="group block overflow-hidden rounded-[2rem] border border-white/10 bg-black/20 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
+                <video
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                >
+                  <source src="/robot.mp4" type="video/mp4" />
+                </video>
+              </div>
 
-            <div className="border-t border-white/10 p-4 sm:p-5">
-              <div className="flex items-start justify-between gap-3">
+              <div className="border-t border-white/10 p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-2xl font-semibold text-white">Shynvo Robot</div>
+                    <div className="mt-1 text-sm text-white/70">Open multilingual robot experience</div>
+                  </div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
+                    →
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <RobotTypingLine />
+                </div>
+              </div>
+            </Link>
+
+            <div className="rounded-[2rem] border border-white/10 bg-black/20 p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md">
+              <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-2xl font-semibold text-white">Shynvo Robot</div>
-                  <div className="mt-1 text-sm text-white/70">Open multilingual robot experience</div>
+                  <div className="text-lg font-semibold text-white">Continue on phone</div>
+                  <p className="mt-2 max-w-xs text-sm leading-6 text-white/70">
+                    Scan to open Shynvo on mobile and continue from anywhere.
+                  </p>
                 </div>
-                <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
-                  →
+
+                <div className="rounded-2xl border border-white/10 bg-white p-3">
+                  <QRCodeSVG
+                    value="https://shynvo-web.vercel.app"
+                    size={112}
+                    bgColor="#ffffff"
+                    fgColor="#0B0F14"
+                    includeMargin={true}
+                  />
                 </div>
               </div>
 
-              <div className="mt-4">
-                <RobotTypingLine />
+              <div className="mt-4 text-xs text-white/45">
+                Opens shynvo-web.vercel.app
               </div>
             </div>
-          </Link>
+          </div>
         </div>
 
         <section id="environments" className="mt-10 sm:mt-12">
