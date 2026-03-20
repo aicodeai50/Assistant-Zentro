@@ -295,12 +295,6 @@ export default function RobotWorldPage() {
     setIsThinking(true);
     setTimeout(() => {
       setMessages((prev) => [...prev, ...next]);
-
-      const spoken = next.find((m) => m.role === "robot")?.text;
-
-      if (mode === "voice" && spoken) {
-        playVoice(spoken);
-      }
       setIsThinking(false);
     }, 380);
   }
@@ -381,7 +375,6 @@ export default function RobotWorldPage() {
 
   async function playVoice(text: string) {
     try {
-      console.log("playVoice called with text length:", text.length);
       const res = await fetch("/api/tts", {
         method: "POST",
         headers: {
@@ -390,24 +383,14 @@ export default function RobotWorldPage() {
         body: JSON.stringify({ text }),
       });
 
-      console.log("TTS response status:", res.status);
-      if (!res.ok) {
-        console.error("TTS request failed");
-        return;
-      }
+      if (!res.ok) return;
 
       const blob = await res.blob();
-      console.log("TTS blob:", blob.type, blob.size);
       const url = URL.createObjectURL(blob);
 
-      if (!audioRef.current) {
-        console.error("audioRef missing");
-        return;
-      }
-
+      if (!audioRef.current) return;
       audioRef.current.src = url;
       await audioRef.current.play();
-      console.log("Audio playback started");
     } catch {
       // ignore voice playback errors
     }
@@ -428,7 +411,10 @@ export default function RobotWorldPage() {
       setMessages((prev) => [...prev, { role: "robot", text: reply }]);
 
       if (mode === "voice") {
-        console.log("Robot voice mode active, speaking reply");
+        await playVoice(reply);
+      }
+
+      if (mode === "voice") {
         await playVoice(reply);
       }
     } catch (error) {
