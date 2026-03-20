@@ -295,6 +295,12 @@ export default function RobotWorldPage() {
     setIsThinking(true);
     setTimeout(() => {
       setMessages((prev) => [...prev, ...next]);
+
+      const spoken = next.find((m) => m.role === "robot")?.text;
+
+      if (mode === "voice" && spoken) {
+        playVoice(spoken);
+      }
       setIsThinking(false);
     }, 380);
   }
