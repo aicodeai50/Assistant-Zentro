@@ -162,7 +162,7 @@ export default function DrillArenaPage() {
               <div className="text-sm font-semibold text-pink-100">Live result</div>
               <div className="mt-2 text-sm leading-6 text-pink-50/90">
                 {started
-                  ? `${active.response} Your answer used: ${prompt || "Default challenge."}`
+                  ? `${active.response} Your answer used: ${answer || "No answer provided yet."}`
                   : "Press Start drill to see your result and reward."}
               </div>
               <div className="mt-3 inline-flex rounded-full border border-pink-300/20 bg-black/20 px-3 py-1 text-xs text-pink-100">
