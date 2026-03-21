@@ -58,6 +58,7 @@ export default function DrillArenaPage() {
 
   function resetDrill() {
     setPrompt("Give me a short logic challenge about prioritizing tasks with limited time.");
+    setAnswer("");
     setStarted(false);
   }
 
