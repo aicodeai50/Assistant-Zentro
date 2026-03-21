@@ -46,7 +46,7 @@ const modeData = {
 
 export default function DrillArenaPage() {
   const [mode, setMode] = useState<DrillMode>("logic");
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState("Give me a short logic challenge about prioritizing tasks with limited time.");
   const [started, setStarted] = useState(false);
 
   const active = useMemo(() => modeData[mode], [mode]);
@@ -56,7 +56,7 @@ export default function DrillArenaPage() {
   }
 
   function resetDrill() {
-    setPrompt("");
+    setPrompt("Give me a short logic challenge about prioritizing tasks with limited time.");
     setStarted(false);
   }
 
@@ -161,7 +161,7 @@ export default function DrillArenaPage() {
               <div className="mt-2 text-sm leading-6 text-pink-50/90">
                 {started
                   ? `${active.response} Prompt used: ${prompt || "Default challenge."}`
-                  : "Press Start drill to generate the round result panel."}
+                  : "Press Start drill to see your result and reward."}
               </div>
               <div className="mt-3 inline-flex rounded-full border border-pink-300/20 bg-black/20 px-3 py-1 text-xs text-pink-100">
                 Reward: {active.xp}
