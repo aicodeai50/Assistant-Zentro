@@ -147,7 +147,7 @@ export default function ArcadeSimPage() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="mt-8 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-pink-300/20 bg-pink-400/10 text-xl font-semibold text-pink-100">
@@ -225,12 +225,38 @@ export default function ArcadeSimPage() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-8 rounded-3xl border border-pink-400/20 bg-pink-400/10 p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="text-sm font-semibold text-pink-100">Start here</div>
+            <div className="mt-2 max-w-2xl text-sm leading-6 text-pink-50/90">
+              New to Arcade Sim? Start with Drill Arena, then move into Interview Quest, and check Score Chamber to track your progress.
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/arcade/drill"
+              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+            >
+              Start Drill Arena
+            </Link>
+            <Link
+              href="/arcade/daily"
+              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
+            >
+              Open Daily Challenge
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {zones.map((zone) => (
           <Link
             key={zone.href}
             href={zone.href}
-            className="group rounded-3xl border border-white/10 bg-white/5 p-5 transition hover:bg-white/10"
+            className="group rounded-3xl border border-white/10 bg-white/[0.07] p-5 transition hover:bg-white/[0.11]"
           >
             <div className="text-xl font-semibold text-white">{zone.title}</div>
             <p className="mt-3 text-sm leading-6 text-white/70">{zone.desc}</p>
