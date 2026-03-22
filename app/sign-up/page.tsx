@@ -81,7 +81,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <section className="relative px-4 py-10 sm:px-6 sm:py-14">
+    <section className="relative min-h-screen bg-[#0B0F14] px-4 py-10 sm:px-6 sm:py-14">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
@@ -100,7 +100,7 @@ export default function SignUpPage() {
 
         <form
           onSubmit={handleSignUp}
-          className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
+          className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-sm"
         >
           <div className="space-y-4">
             <div>
@@ -109,7 +109,7 @@ export default function SignUpPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Your name"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
               />
             </div>
 
@@ -120,7 +120,7 @@ export default function SignUpPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
               />
             </div>
@@ -132,7 +132,7 @@ export default function SignUpPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
               />
 
@@ -155,7 +155,7 @@ export default function SignUpPage() {
           </button>
 
           {message ? (
-            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/85">
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white/85">
               {message}
             </div>
           ) : null}

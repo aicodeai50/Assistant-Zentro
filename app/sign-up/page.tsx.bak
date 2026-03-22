@@ -12,6 +12,7 @@ export default function SignUpPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -30,10 +31,16 @@ export default function SignUpPage() {
     }
 
     try {
+      const redirectTo =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/auth/callback?next=/account`
+          : undefined;
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          emailRedirectTo: redirectTo,
           data: {
             full_name: fullName,
           },
@@ -61,11 +68,11 @@ export default function SignUpPage() {
       }
 
       if (session) {
-        router.push("/");
+        router.push("/account");
         return;
       }
 
-      setMessage("Account created. Check your email to confirm your account, then sign in.");
+      setMessage("Account created. Check your email and click the verification link to activate your account.");
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Sign up failed.");
     } finally {
@@ -74,7 +81,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <section className="relative py-10 sm:py-14">
+    <section className="relative px-4 py-10 sm:px-6 sm:py-14">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
@@ -83,7 +90,7 @@ export default function SignUpPage() {
         <div className="absolute inset-0 bg-[radial-gradient(1000px_560px_at_82%_18%,rgba(59,130,246,0.08),transparent_55%)]" />
       </div>
 
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto w-full max-w-md">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/70">
           Account
         </div>
@@ -121,13 +128,21 @@ export default function SignUpPage() {
             <div>
               <label className="text-sm font-semibold text-white">{t("auth.password")}</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
                 required
               />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="mt-2 text-xs text-white/60 hover:text-white"
+              >
+                {showPassword ? "Hide password" : "Show password"}
+              </button>
             </div>
           </div>
 
