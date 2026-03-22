@@ -11,6 +11,7 @@ const LINKS: FooterLink[] = [
   { label: "Contact", href: "/contact" },
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
+  { label: "Refund", href: "/refund" },
 ];
 
 export default function SiteFooter() {
