@@ -286,7 +286,6 @@ export default function RobotWorldPage() {
   const { t, language } = useLanguage();
   const listRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const isSwitchingThreadRef = useRef(false);
 
   const [threads, setThreads] = useState<ChatThread[]>([]);
   const [activeThreadId, setActiveThreadId] = useState("");
@@ -368,10 +367,6 @@ export default function RobotWorldPage() {
 
   useEffect(() => {
     if (!activeThreadId) return;
-    if (isSwitchingThreadRef.current) {
-      isSwitchingThreadRef.current = false;
-      return;
-    }
 
     setThreads((prev) => {
       const exists = prev.some((thread) => thread.id === activeThreadId);
@@ -407,7 +402,6 @@ export default function RobotWorldPage() {
   }, [messages, activeThreadId]);
 
   function createNewChat() {
-    isSwitchingThreadRef.current = true;
     const newThread = {
       id: makeId(),
       title: "New chat",
@@ -431,7 +425,6 @@ export default function RobotWorldPage() {
   function openThread(threadId: string) {
     const thread = threads.find((t) => t.id === threadId);
     if (!thread) return;
-    isSwitchingThreadRef.current = true;
     setActiveThreadId(threadId);
     setMessages(thread.messages?.length ? thread.messages : INITIAL_MESSAGES);
     setSelectedMain(null);
@@ -466,7 +459,6 @@ export default function RobotWorldPage() {
     setThreads(remaining);
 
     if (activeThreadId === threadId) {
-      isSwitchingThreadRef.current = true;
       setActiveThreadId(remaining[0].id);
       setMessages(remaining[0].messages?.length ? remaining[0].messages : INITIAL_MESSAGES);
       if (typeof window !== "undefined") {
