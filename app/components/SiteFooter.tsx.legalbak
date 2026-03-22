@@ -39,10 +39,7 @@ export default function SiteFooter() {
         <div className="mt-10 text-xs text-white/50">
           © {new Date().getFullYear()} Shynvo. All rights reserved.
         </div>
-        <div className="mt-4 text-xs text-white/50">
-          Contact: <a href="mailto:hi@shynvo.app" className="underline underline-offset-4 hover:text-white">hi@shynvo.app</a>
-        </div>
-</div>
+      </div>
     </footer>
   );
 }
