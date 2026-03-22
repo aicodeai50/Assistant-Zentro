@@ -368,38 +368,34 @@ export default function RobotWorldPage() {
   useEffect(() => {
     if (!activeThreadId) return;
 
-    setThreads((prev) => {
-      const exists = prev.some((thread) => thread.id === activeThreadId);
+    const nextThreads = threads.length
+      ? threads.map((thread) =>
+          thread.id === activeThreadId
+            ? {
+                ...thread,
+                messages,
+                title: buildThreadTitle(messages),
+                updatedAt: Date.now(),
+              }
+            : thread
+        )
+      : [
+          {
+            id: activeThreadId,
+            title: buildThreadTitle(messages),
+            messages,
+            updatedAt: Date.now(),
+          },
+        ];
 
-      const nextThreads = exists
-        ? prev.map((thread) =>
-            thread.id === activeThreadId
-              ? {
-                  ...thread,
-                  messages,
-                  title: buildThreadTitle(messages),
-                  updatedAt: Date.now(),
-                }
-              : thread
-          )
-        : [
-            {
-              id: activeThreadId,
-              title: buildThreadTitle(messages),
-              messages,
-              updatedAt: Date.now(),
-            },
-            ...prev,
-          ];
+    setThreads(nextThreads);
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem(THREADS_STORAGE_KEY, JSON.stringify(nextThreads));
-        localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, activeThreadId);
-      }
-
-      return nextThreads;
-    });
-  }, [messages, activeThreadId]);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(THREADS_STORAGE_KEY, JSON.stringify(nextThreads));
+      localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, activeThreadId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
 
   function createNewChat() {
     const newThread = {
