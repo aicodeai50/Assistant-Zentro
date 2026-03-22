@@ -657,7 +657,7 @@ export default function RobotWorldPage() {
   }
 
   return (
-    <section className="relative mx-auto w-full max-w-[1600px] px-4 py-10 sm:px-6 sm:py-14">
+    <section className="relative py-10 sm:py-14">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
@@ -703,7 +703,7 @@ export default function RobotWorldPage() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-5 xl:grid-cols-[260px_minmax(340px,0.85fr)_minmax(420px,1fr)] 2xl:grid-cols-[280px_minmax(360px,0.82fr)_minmax(460px,0.98fr)]">
+      <div className="mt-8 grid gap-5 xl:grid-cols-[280px_0.95fr_1.05fr]">
         <aside className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -755,7 +755,7 @@ export default function RobotWorldPage() {
           </div>
         </aside>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 xl:p-6 backdrop-blur-sm">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
               Robot Presence
@@ -767,7 +767,7 @@ export default function RobotWorldPage() {
           </div>
 
           <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-black/20">
-            <div className="relative aspect-[4/3] max-h-[420px] w-full bg-black xl:max-h-[380px] 2xl:max-h-[360px]">
+            <div className="relative aspect-[4/3] w-full bg-black">
               <div className="pointer-events-none absolute inset-0 z-10 animate-pulse bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.18),transparent_42%)]" />
               <video
                 className="h-full w-full object-cover"
@@ -831,7 +831,7 @@ export default function RobotWorldPage() {
                 <div
                   key={index}
                   className={cx(
-                    "max-w-[88%] rounded-2xl border px-4 py-3 text-sm leading-6 transition duration-300 xl:max-w-[82%]",
+                    "max-w-[92%] rounded-2xl border px-4 py-3 text-sm leading-6 transition duration-300",
                     msg.role === "user"
                       ? "ml-auto border-white/10 bg-white/10 text-white"
                       : "border-white/10 bg-white/5 text-white/85"
@@ -851,7 +851,7 @@ export default function RobotWorldPage() {
               ))}
 
               {isThinking ? (
-                <div className="max-w-[88%] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/85 xl:max-w-[82%]">
+                <div className="max-w-[92%] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/85">
                   <TypingDots />
                 </div>
               ) : null}
