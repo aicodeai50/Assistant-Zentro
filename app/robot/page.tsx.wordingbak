@@ -341,7 +341,7 @@ export default function RobotWorldPage() {
     setImageFile(file);
     setImagePreview(previewUrl);
     setImageNotice(
-      "Photo attached successfully. You can preview it below. Image analysis will be available soon."
+      "Photo attached. Preview is ready. Visual AI analysis will be enabled when backend image support is connected."
     );
   }
 
@@ -435,7 +435,7 @@ export default function RobotWorldPage() {
     if (!text) {
       if (imageFile) {
         setImageNotice(
-          "Your photo is attached, but I cannot analyze images yet. Please add a short description so I can help."
+          "The photo is attached, but image analysis is not live yet. Add a text question for now."
         );
       }
       return;
@@ -458,7 +458,7 @@ export default function RobotWorldPage() {
         ...prev,
         {
           role: "robot",
-          text: `I couldn’t respond properly right now. Please try again. ${msg}`,
+          text: `I could not answer right now. ${msg}`,
         },
       ]);
     } finally {
@@ -622,7 +622,7 @@ export default function RobotWorldPage() {
               Text
             </span>
             <span className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100">
-              Image upload (preview)
+              Photo preview beta
             </span>
           </div>
 
