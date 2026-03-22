@@ -190,6 +190,128 @@ export default function TrackPageClient({
     reader.readAsDataURL(file);
   }
 
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  function clearImage() {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImageFile(null);
+    setImagePreview("");
+    setImageDataUrl("");
+    setImageNotice("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
+
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (!allowed.includes(file.type)) {
+      clearImage();
+      setImageNotice("Please upload a JPG, PNG, or WEBP image.");
+      return;
+    }
+
+    if (file.size > maxSize) {
+      clearImage();
+      setImageNotice("Please keep the image under 5 MB.");
+      return;
+    }
+
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setImageFile(file);
+    setImagePreview(previewUrl);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === "string" ? reader.result : "";
+      setImageDataUrl(result);
+      setImageNotice("Photo attached successfully. You can preview it below.");
+    };
+    reader.onerror = () => {
+      clearImage();
+      setImageNotice("The image could not be processed. Please try another one.");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  function clearImage() {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImageFile(null);
+    setImagePreview("");
+    setImageDataUrl("");
+    setImageNotice("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
+
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (!allowed.includes(file.type)) {
+      clearImage();
+      setImageNotice("Please upload a JPG, PNG, or WEBP image.");
+      return;
+    }
+
+    if (file.size > maxSize) {
+      clearImage();
+      setImageNotice("Please keep the image under 5 MB.");
+      return;
+    }
+
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setImageFile(file);
+    setImagePreview(previewUrl);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === "string" ? reader.result : "";
+      setImageDataUrl(result);
+      setImageNotice("Photo attached successfully. You can preview it below.");
+    };
+    reader.onerror = () => {
+      clearImage();
+      setImageNotice("The image could not be processed. Please try another one.");
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function playVoice(text: string) {
     try {
       const res = await fetch("/api/tts", {
