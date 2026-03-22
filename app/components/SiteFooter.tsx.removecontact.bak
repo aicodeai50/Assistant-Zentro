@@ -9,8 +9,6 @@ const LINKS: FooterLink[] = [
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
-  { label: "Terms", href: "/terms" },
-  { label: "Privacy", href: "/privacy" },
 ];
 
 export default function SiteFooter() {
@@ -40,6 +38,9 @@ export default function SiteFooter() {
 
         <div className="mt-10 text-xs text-white/50">
           © {new Date().getFullYear()} Shynvo. All rights reserved.
+        </div>
+        <div className="mt-4 text-xs text-white/50">
+          Contact: <a href="mailto:hi@shynvo.app" className="underline underline-offset-4 hover:text-white">hi@shynvo.app</a>
         </div>
 </div>
     </footer>

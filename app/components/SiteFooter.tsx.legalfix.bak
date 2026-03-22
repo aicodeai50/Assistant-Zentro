@@ -9,8 +9,6 @@ const LINKS: FooterLink[] = [
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
-  { label: "Terms", href: "/terms" },
-  { label: "Privacy", href: "/privacy" },
 ];
 
 export default function SiteFooter() {
