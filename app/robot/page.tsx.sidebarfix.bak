@@ -22,26 +22,6 @@ type Msg = {
   text: string;
 };
 
-type ChatThread = {
-  id: string;
-  title: string;
-  messages: Msg[];
-  updatedAt: number;
-};
-
-const THREADS_STORAGE_KEY = "shynvo_robot_threads_v1";
-const ACTIVE_THREAD_STORAGE_KEY = "shynvo_robot_active_thread_v1";
-
-function makeId() {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function buildThreadTitle(messages: Msg[]) {
-  const firstUser = messages.find((m) => m.role === "user")?.text?.trim();
-  if (!firstUser) return "New chat";
-  return firstUser.length > 42 ? `${firstUser.slice(0, 42)}...` : firstUser;
-}
-
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
@@ -287,8 +267,6 @@ export default function RobotWorldPage() {
   const listRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [threads, setThreads] = useState<ChatThread[]>([]);
-  const [activeThreadId, setActiveThreadId] = useState("");
   const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
   const [selectedMain, setSelectedMain] = useState<MainChoice | null>(null);
   const [selectedTarget, setSelectedTarget] = useState<RouteTarget | null>(null);
@@ -305,44 +283,6 @@ export default function RobotWorldPage() {
     () => (selectedMain ? GROUP_OPTIONS[selectedMain] : []),
     [selectedMain]
   );
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    try {
-      const savedThreads = JSON.parse(localStorage.getItem(THREADS_STORAGE_KEY) || "[]");
-      const savedActive = localStorage.getItem(ACTIVE_THREAD_STORAGE_KEY) || "";
-
-      if (Array.isArray(savedThreads) && savedThreads.length > 0) {
-        setThreads(savedThreads);
-        const active =
-          savedThreads.find((t) => t.id === savedActive)?.id || savedThreads[0].id;
-        setActiveThreadId(active);
-        const activeThread = savedThreads.find((t) => t.id === active);
-        if (activeThread?.messages?.length) {
-          setMessages(activeThread.messages);
-        }
-      } else {
-        const starterThread = {
-          id: makeId(),
-          title: "New chat",
-          messages: INITIAL_MESSAGES,
-          updatedAt: Date.now(),
-        };
-        setThreads([starterThread]);
-        setActiveThreadId(starterThread.id);
-      }
-    } catch {
-      const starterThread = {
-        id: makeId(),
-        title: "New chat",
-        messages: INITIAL_MESSAGES,
-        updatedAt: Date.now(),
-      };
-      setThreads([starterThread]);
-      setActiveThreadId(starterThread.id);
-    }
-  }, []);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -364,108 +304,6 @@ export default function RobotWorldPage() {
       }
     };
   }, [imagePreview]);
-
-  useEffect(() => {
-    if (!activeThreadId) return;
-
-    const nextThreads = threads.length
-      ? threads.map((thread) =>
-          thread.id === activeThreadId
-            ? {
-                ...thread,
-                messages,
-                title: buildThreadTitle(messages),
-                updatedAt: Date.now(),
-              }
-            : thread
-        )
-      : [
-          {
-            id: activeThreadId,
-            title: buildThreadTitle(messages),
-            messages,
-            updatedAt: Date.now(),
-          },
-        ];
-
-    setThreads(nextThreads);
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem(THREADS_STORAGE_KEY, JSON.stringify(nextThreads));
-      localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, activeThreadId);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
-
-  function createNewChat() {
-    const newThread = {
-      id: makeId(),
-      title: "New chat",
-      messages: INITIAL_MESSAGES,
-      updatedAt: Date.now(),
-    };
-    const next = [newThread, ...threads];
-    setThreads(next);
-    setActiveThreadId(newThread.id);
-    setMessages(INITIAL_MESSAGES);
-    setSelectedMain(null);
-    setSelectedTarget(null);
-    setInput("");
-    clearImage();
-    if (typeof window !== "undefined") {
-      localStorage.setItem(THREADS_STORAGE_KEY, JSON.stringify(next));
-      localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, newThread.id);
-    }
-  }
-
-  function openThread(threadId: string) {
-    const thread = threads.find((t) => t.id === threadId);
-    if (!thread) return;
-    setActiveThreadId(threadId);
-    setMessages(thread.messages?.length ? thread.messages : INITIAL_MESSAGES);
-    setSelectedMain(null);
-    setSelectedTarget(null);
-    setInput("");
-    clearImage();
-    if (typeof window !== "undefined") {
-      localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, threadId);
-    }
-  }
-
-  function deleteThread(threadId: string) {
-    const remaining = threads.filter((t) => t.id !== threadId);
-
-    if (remaining.length === 0) {
-      const starterThread = {
-        id: makeId(),
-        title: "New chat",
-        messages: INITIAL_MESSAGES,
-        updatedAt: Date.now(),
-      };
-      setThreads([starterThread]);
-      setActiveThreadId(starterThread.id);
-      setMessages(INITIAL_MESSAGES);
-      if (typeof window !== "undefined") {
-        localStorage.setItem(THREADS_STORAGE_KEY, JSON.stringify([starterThread]));
-        localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, starterThread.id);
-      }
-      return;
-    }
-
-    setThreads(remaining);
-
-    if (activeThreadId === threadId) {
-      setActiveThreadId(remaining[0].id);
-      setMessages(remaining[0].messages?.length ? remaining[0].messages : INITIAL_MESSAGES);
-      if (typeof window !== "undefined") {
-        localStorage.setItem(ACTIVE_THREAD_STORAGE_KEY, remaining[0].id);
-      }
-    }
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem(THREADS_STORAGE_KEY, JSON.stringify(remaining));
-    }
-  }
 
   function clearImage() {
     if (imagePreview) {
@@ -691,58 +529,7 @@ export default function RobotWorldPage() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-5 xl:grid-cols-[280px_0.95fr_1.05fr]">
-        <aside className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <div className="text-sm font-semibold text-white">Chats</div>
-              <div className="text-xs text-white/60">Robot history on this device</div>
-            </div>
-            <button
-              type="button"
-              onClick={createNewChat}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/85 hover:bg-white/10"
-            >
-              New chat
-            </button>
-          </div>
-
-          <div className="mt-4 space-y-2">
-            {threads
-              .slice()
-              .sort((a, b) => b.updatedAt - a.updatedAt)
-              .map((thread) => (
-                <div
-                  key={thread.id}
-                  className={cx(
-                    "rounded-2xl border p-3 transition",
-                    activeThreadId === thread.id
-                      ? "border-cyan-400/30 bg-cyan-400/10"
-                      : "border-white/10 bg-black/20"
-                  )}
-                >
-                  <button
-                    type="button"
-                    onClick={() => openThread(thread.id)}
-                    className="w-full text-left"
-                  >
-                    <div className="text-sm font-medium text-white">
-                      {thread.title || "New chat"}
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => deleteThread(thread.id)}
-                    className="mt-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/75 hover:bg-white/10"
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))}
-          </div>
-        </aside>
-
+      <div className="mt-8 grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
