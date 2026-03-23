@@ -184,7 +184,7 @@ const INITIAL_MESSAGES: Msg[] = [
   {
     role: "robot",
     text:
-      "Welcome to Shynvo Robot World. I can guide you through learning, building, training, or exploration across the Shynvo environments.",
+      "Welcome to Shynvo Robot. I can guide you through learning, building, training, and exploration across the Shynvo environments.",
   },
   {
     role: "robot",
@@ -681,20 +681,20 @@ export default function RobotWorldPage() {
           Home
         </Link>
         <span className="inline-flex items-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-100">
-          Shynvo Robot World
+          Shynvo Robot
         </span>
       </div>
 
       <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">
-            Meet the Shynvo Robot
+            Platform Guide
           </div>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-            Shynvo Robot World
+            Shynvo Robot
           </h1>
           <p className="mt-3 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-            Meet the Shynvo Robot — your guide through the Shynvo platform.
+            Your guide across the Shynvo platform.
           </p>
         </div>
 
