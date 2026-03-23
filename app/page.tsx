@@ -189,6 +189,50 @@ export default function HomePage() {
           </div>
         </div>
 
+        <section className="mt-10 grid gap-4 lg:grid-cols-3">
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              What you can do
+            </div>
+            <h2 className="mt-3 text-xl font-semibold text-white">
+              Start with real use cases
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+              <li>Learn through guided academic and school environments.</li>
+              <li>Practice skills with structured drills, challenges, and simulations.</li>
+              <li>Explore focused AI environments for coding, strategy, and digital work.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Product status
+            </div>
+            <h2 className="mt-3 text-xl font-semibold text-white">
+              Available now and still evolving
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+              <li>Available now: Shynvo Robot, University Hub, Academy, Frontier Lab, and core platform navigation.</li>
+              <li>In development: deeper simulations, expanded environment tools, and more advanced training flows.</li>
+              <li>Shynvo is actively improving as new sections, workflows, and features are added.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Trust
+            </div>
+            <h2 className="mt-3 text-xl font-semibold text-white">
+              Built and actively maintained
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+              <li>Secure access on the official Shynvo domain.</li>
+              <li>Direct support through <a href="mailto:hi@shynvo.app" className="underline hover:opacity-80">hi@shynvo.app</a> and <a href="mailto:support@shynvo.app" className="underline hover:opacity-80">support@shynvo.app</a>.</li>
+              <li>Terms, Privacy, Refund, and Contact pages are available in the footer for transparency.</li>
+            </ul>
+          </div>
+        </section>
+
         <section id="environments" className="mt-10 sm:mt-12">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
             Environments
