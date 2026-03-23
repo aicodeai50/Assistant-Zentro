@@ -154,7 +154,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">11. Contact</h2>
             <p className="mt-2">
-              For questions about these Terms, contact:
+              For general questions about these Terms, contact:
             </p>
             <p className="mt-2">
               <a
@@ -162,6 +162,17 @@ export default function TermsPage() {
                 className="text-white underline underline-offset-4"
               >
                 hi@shynvo.app
+              </a>
+            </p>
+            <p className="mt-2">
+              For support-related issues, contact:
+            </p>
+            <p className="mt-2">
+              <a
+                href="mailto:support@shynvo.app"
+                className="text-white underline underline-offset-4"
+              >
+                support@shynvo.app
               </a>
             </p>
             <p className="mt-2">

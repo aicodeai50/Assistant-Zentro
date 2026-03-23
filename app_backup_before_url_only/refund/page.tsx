@@ -50,9 +50,11 @@ export default function RefundPage() {
             <p className="mt-2">
               <a
                 href="mailto:hi@shynvo.app"
+                href="mailto:support@shynvo.app"
                 className="text-white underline underline-offset-4"
               >
                 hi@shynvo.app
+                support@shynvo.app
               </a>
             </p>
             <p className="mt-2">

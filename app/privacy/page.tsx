@@ -29,7 +29,18 @@ export default function PrivacyPage() {
 
       <h2 className="mt-6 font-semibold">4. Contact</h2>
       <p className="text-white/70">
-        Contact: hi@shynvo.app
+        For privacy questions, contact{" "}
+        <a className="underline hover:opacity-80" href="mailto:hi@shynvo.app">
+          hi@shynvo.app
+        </a>
+        .
+      </p>
+      <p className="text-white/70 mt-2">
+        For support issues, contact{" "}
+        <a className="underline hover:opacity-80" href="mailto:support@shynvo.app">
+          support@shynvo.app
+        </a>
+        .
       </p>
     </div>
   );
