@@ -22,7 +22,7 @@ export default function SiteFooter() {
           <div>
             <div className="text-lg font-semibold">Shynvo</div>
             <p className="mt-2 max-w-sm text-sm text-white/70">
-              Multi-environment AI platform for learning, building, and deploying.
+              Structured AI platform for learning, building, and skill development.
             </p>
           </div>
 

@@ -96,7 +96,7 @@ export default function HomePage() {
           <div className="rounded-[2rem] border border-white/5 bg-transparent p-4 shadow-none backdrop-blur-0 sm:p-5 lg:p-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
-              Structured Intelligence Platform
+              Structured AI Platform
             </div>
 
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -104,12 +104,11 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-3 max-w-3xl text-xl font-medium leading-tight text-white/92 sm:text-2xl lg:text-[2.5rem]">
-              Architecture of Applied Intelligence
+              Structured environments for learning, building, and skill growth
             </p>
 
             <p className="mt-5 max-w-3xl text-base leading-7 text-white/78 sm:text-lg">
-              A multi-environment intelligence platform for learning, execution,
-              strategy, resilience, organizational growth, coding, and skill development.
+              A structured AI platform designed to help people learn, build, practice skills, and explore focused digital environments with clarity and guidance.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -150,7 +149,7 @@ export default function HomePage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="text-2xl font-semibold text-white">Shynvo Robot</div>
-                    <div className="mt-1 text-sm text-white/70">Open multilingual robot experience</div>
+                    <div className="mt-1 text-sm text-white/70">Your multilingual guide across the Shynvo platform</div>
                   </div>
                   <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
                     →
@@ -166,9 +165,9 @@ export default function HomePage() {
             <div className="rounded-[2rem] border border-white/5 bg-black/12 p-5 shadow-none backdrop-blur-[2px]">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-lg font-semibold text-white">Continue on phone</div>
+                  <div className="text-lg font-semibold text-white">Continue on mobile</div>
                   <p className="mt-2 max-w-xs text-sm leading-6 text-white/70">
-                    Scan to open Shynvo on mobile and continue from anywhere.
+                    Scan to open Shynvo securely on your phone and continue from anywhere.
                   </p>
                 </div>
 
@@ -184,7 +183,7 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 text-xs text-white/45">
-                Opens www.shynvo.app
+                Secure link: www.shynvo.app
               </div>
             </div>
           </div>
@@ -195,10 +194,10 @@ export default function HomePage() {
             Environments
           </div>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Explore the buildings
+            Explore Shynvo environments
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Each building is a purpose-built system with its own departments, identity, and workflows.
+            Each environment is built for a specific kind of work, learning, practice, or exploration.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
