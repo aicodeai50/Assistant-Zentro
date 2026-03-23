@@ -12,35 +12,54 @@ export default function PrivacyPage() {
         This Privacy Policy explains how Shynvo collects, uses, and protects your information.
       </p>
 
-      <h2 className="mt-6 font-semibold">1. Data We Collect</h2>
+      <h2 className="mt-6 font-semibold">1. Operator</h2>
       <p className="text-white/70">
-        We may collect basic usage data, account details, and interactions with the platform.
+        Shynvo is operated from Norway.
       </p>
 
-      <h2 className="mt-6 font-semibold">2. How We Use Data</h2>
+      <h2 className="mt-6 font-semibold">2. Data We Collect</h2>
       <p className="text-white/70">
-        Data is used to operate, improve, and secure the platform.
+        We may collect basic account information such as email address and minimal technical data
+        required to operate the platform (such as device and usage information).
       </p>
 
-      <h2 className="mt-6 font-semibold">3. Storage</h2>
+      <h2 className="mt-6 font-semibold">3. AI Interactions</h2>
       <p className="text-white/70">
-        Data is stored securely and only retained as necessary.
+        Shynvo does not store your chat conversations permanently.
+        Inputs may be processed temporarily to generate responses and improve system safety.
       </p>
 
-      <h2 className="mt-6 font-semibold">4. Contact</h2>
+      <h2 className="mt-6 font-semibold">4. How We Use Data</h2>
       <p className="text-white/70">
-        For privacy questions, contact{" "}
-        <a className="underline hover:opacity-80" href="mailto:hi@shynvo.app">
-          hi@shynvo.app
-        </a>
-        .
+        Data is used only to operate, maintain, and improve the platform, including providing AI responses
+        and ensuring security and proper usage.
       </p>
-      <p className="text-white/70 mt-2">
-        For support issues, contact{" "}
-        <a className="underline hover:opacity-80" href="mailto:support@shynvo.app">
-          support@shynvo.app
-        </a>
-        .
+
+      <h2 className="mt-6 font-semibold">5. Third-Party Services</h2>
+      <p className="text-white/70">
+        Shynvo uses trusted third-party providers for infrastructure, payments, and AI processing.
+        These providers only process data as necessary to deliver the service.
+      </p>
+
+      <h2 className="mt-6 font-semibold">6. Data Retention</h2>
+      <p className="text-white/70">
+        We retain data only for as long as necessary to provide the service and meet legal obligations.
+      </p>
+
+      <h2 className="mt-6 font-semibold">7. Your Rights</h2>
+      <p className="text-white/70">
+        You may request access, correction, or deletion of your data by contacting us.
+      </p>
+
+      <h2 className="mt-6 font-semibold">8. Security</h2>
+      <p className="text-white/70">
+        We take reasonable measures to protect your data from unauthorized access or misuse.
+      </p>
+
+      <h2 className="mt-6 font-semibold">9. Contact</h2>
+      <p className="text-white/70">
+        hi@shynvo.app<br />
+        support@shynvo.app
       </p>
     </div>
   );

@@ -41,22 +41,12 @@ export default function RefundPage() {
             </p>
           </section>
 
-          
           <section>
             <h2 className="text-lg font-semibold text-white">3. Refunds</h2>
             <p className="mt-2">
-              Refunds are handled fairly and reviewed on a case-by-case basis.
+              If you believe you were charged incorrectly or need billing help,
+              contact us at:
             </p>
-            <ul className="mt-3 list-disc space-y-2 pl-5">
-              <li>Duplicate or incorrect charges may be eligible for a refund.</li>
-              <li>If you experience a technical issue that prevents access, we will review your case.</li>
-              <li>Refunds are generally not provided for unused time or forgotten cancellations.</li>
-            </ul>
-
-            <p className="mt-2">
-              To request a refund, contact:
-            </p>
-
             <p className="mt-2">
               <a
                 href="mailto:support@shynvo.app"
@@ -65,8 +55,10 @@ export default function RefundPage() {
                 support@shynvo.app
               </a>
             </p>
+            <p className="mt-2">
+              Refund requests are reviewed on a case-by-case basis.
+            </p>
           </section>
-
 
           <section>
             <h2 className="text-lg font-semibold text-white">4. Billing questions</h2>
