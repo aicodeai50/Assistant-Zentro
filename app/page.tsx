@@ -75,58 +75,222 @@ export default function HomePage() {
   return (
     <main className="relative overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 bg-[#070B11]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <video
+          className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/shynvo-wallpaper.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_10%_10%,rgba(59,130,246,0.08),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(800px_420px_at_85%_20%,rgba(16,185,129,0.08),transparent_58%)]" />
+        <div className="absolute inset-0 bg-black/22" />
+      </div>
 
       <section className="mx-auto max-w-7xl px-4 pb-24 pt-5 sm:px-6 lg:px-8 lg:pb-28 lg:pt-6">
         <div className="grid items-start gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-
-          {/* HERO LEFT */}
-          <div className="rounded-[2rem] border border-white/5 p-4 sm:p-5 lg:p-6">
-
+          <div className="rounded-[2rem] border border-white/5 bg-transparent p-4 shadow-none backdrop-blur-0 sm:p-5 lg:p-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
               Structured AI Platform
             </div>
 
-            <h1 className="mt-4 text-4xl font-semibold text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
               Shynvo
             </h1>
 
-            <p className="mt-3 max-w-4xl text-xl text-white/92 sm:text-2xl lg:text-[2.5rem]">
-              Structured AI environments for learning, training, and team execution
+            <p className="mt-3 max-w-3xl text-xl font-medium leading-tight text-white/92 sm:text-2xl lg:text-[2.5rem]">
+              Structured environments for learning, building, and skill growth
             </p>
 
-            <p className="mt-5 max-w-3xl text-base text-white/78 sm:text-lg">
-              Shynvo turns AI into guided environments with workflows, drills, simulations, and real outcomes for students, educators, and teams.
+            <p className="mt-5 max-w-3xl text-base leading-7 text-white/78 sm:text-lg">
+              A structured AI platform designed to help people learn, build, practice skills, and explore focused digital environments with clarity and guidance.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/university" className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-black">
-                For Students
+              <Link
+                href="#environments"
+                className="inline-flex items-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
+              >
+                Enter Platform
               </Link>
-
-              <Link href="/academy" className="rounded-2xl border border-white/10 px-6 py-3 text-sm text-white">
-                For Teachers
-              </Link>
-
-              <Link href="/enterprise" className="rounded-2xl border border-white/10 px-6 py-3 text-sm text-white">
-                For Teams & Enterprise
-              </Link>
-            </div>
-
-            <div className="mt-4">
-              <Link href="/robot" className="text-sm text-white/70 underline">
-                Watch 60s demo
+              <Link
+                href="/docs"
+                className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10"
+              >
+                Read Docs
               </Link>
             </div>
-
           </div>
 
-          {/* KEEP YOUR RIGHT SIDE (ROBOT) */}
-          <div>
-            <RobotTypingLine />
-          </div>
+          <div className="space-y-5">
+            <Link
+              href="/robot"
+              className="group block overflow-hidden rounded-[2rem] border border-white/5 bg-black/15 shadow-none backdrop-blur-[2px]"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
+                <video
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                >
+                  <source src="/robot.mp4" type="video/mp4" />
+                </video>
+              </div>
 
+              <div className="border-t border-white/10 p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-2xl font-semibold text-white">Shynvo Robot</div>
+                    <div className="mt-1 text-sm text-white/70">Your multilingual guide across the Shynvo platform</div>
+                  </div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
+                    →
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <RobotTypingLine />
+                </div>
+              </div>
+            </Link>
+
+            <div className="rounded-[2rem] border border-white/5 bg-black/12 p-5 shadow-none backdrop-blur-[2px]">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-lg font-semibold text-white">Continue on mobile</div>
+                  <p className="mt-2 max-w-xs text-sm leading-6 text-white/70">
+                    Scan to open Shynvo securely on your phone and continue from anywhere.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white p-3">
+                  <QRCodeSVG
+                    value="https://www.shynvo.app"
+                    size={112}
+                    bgColor="#ffffff"
+                    fgColor="#0B0F14"
+                    includeMargin={true}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4 text-xs text-white/45">
+                Secure link: www.shynvo.app
+              </div>
+            </div>
+          </div>
         </div>
+
+        <section className="mt-10 grid gap-4 lg:grid-cols-3">
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              What you can do
+            </div>
+            <h2 className="mt-3 text-xl font-semibold text-white">
+              Start with real use cases
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+              <li>Learn through guided academic and school environments.</li>
+              <li>Practice skills with structured drills, challenges, and simulations.</li>
+              <li>Explore focused AI environments for coding, strategy, and digital work.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Product status
+            </div>
+            <h2 className="mt-3 text-xl font-semibold text-white">
+              Available now and still evolving
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+              <li>Available now: Shynvo Robot, University Hub, Academy, Frontier Lab, and core platform navigation.</li>
+              <li>In development: deeper simulations, expanded environment tools, and more advanced training flows.</li>
+              <li>Shynvo is actively improving as new sections, workflows, and features are added.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Trust
+            </div>
+            <h2 className="mt-3 text-xl font-semibold text-white">
+              Built and actively maintained
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+              <li>Secure access on the official Shynvo domain.</li>
+              <li>Direct support through <a href="mailto:hi@shynvo.app" className="underline hover:opacity-80">hi@shynvo.app</a> and <a href="mailto:support@shynvo.app" className="underline hover:opacity-80">support@shynvo.app</a>.</li>
+              <li>Terms, Privacy, Refund, and Contact pages are available in the footer for transparency.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="environments" className="mt-10 sm:mt-12">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
+            Environments
+          </div>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Explore Shynvo environments
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
+            Each environment is built for a specific kind of work, learning, practice, or exploration.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {ENVIRONMENTS.map((item) => {
+              const Icon = item.Icon;
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className={cx(
+                    "group rounded-[1.75rem] border border-white/5 bg-black/15 p-5 transition backdrop-blur-[2px]",
+                    "hover:border-white/8 hover:bg-white/[0.03]"
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                      <Icon className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <h3 className="text-2xl font-semibold text-white">{item.title}</h3>
+                    <p className="mt-1 text-sm text-white/62">{item.subtitle}</p>
+                  </div>
+
+                  <p className="mt-4 text-base leading-7 text-white/74">{item.desc}</p>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {item.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 flex items-center justify-between">
+                    <span className="text-lg font-semibold text-white">Open</span>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
+                      ›
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
       </section>
     </main>
   );
