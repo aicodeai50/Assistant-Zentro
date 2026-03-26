@@ -17,6 +17,7 @@ import {
   Bot,
   Layers3,
 } from "lucide-react";
+import PreviewCardVisual from "./components/PreviewCardVisual";
 
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -485,7 +486,7 @@ export default function HomePage() {
 
                 <div className="mt-5 flex items-center justify-between">
                   <span className="text-sm font-semibold text-white/90 group-hover:text-white">
-                    Open preview path
+                    Open preview path • DEPLOY-CHECK-20260326
                   </span>
                   <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
                     Live
