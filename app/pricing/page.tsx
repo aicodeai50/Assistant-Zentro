@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ShieldCheck, Rocket, Users, Sparkles } from "lucide-react";
 
 const plans = [
   {
@@ -72,6 +73,30 @@ const plans = [
   },
 ];
 
+const billingSteps = [
+  {
+    title: "Create your account",
+    desc: "Start with secure access to Shynvo and begin using the platform.",
+    Icon: Sparkles,
+  },
+  {
+    title: "Start with trial access",
+    desc: "New users can begin with a free starting path before choosing a paid plan.",
+    Icon: Rocket,
+  },
+  {
+    title: "Upgrade when ready",
+    desc: "Choose Pro or Team when you need more AI usage, deeper access, or collaboration.",
+    Icon: Users,
+  },
+];
+
+const trustPoints = [
+  "Secure checkout for paid plans",
+  "Transparent pricing by plan level",
+  "Contact available for enterprise and support questions",
+];
+
 export default function PricingPage() {
   return (
     <section className="relative py-12 sm:py-16">
@@ -98,7 +123,35 @@ export default function PricingPage() {
             Start free, upgrade to Pro for deeper individual use, move to Team for collaboration,
             or choose Enterprise for large-scale structured access.
           </p>
+
+          <div className="mt-6 rounded-3xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-left text-sm leading-6 text-white/85">
+            <div className="font-semibold text-white">Start path</div>
+            <p className="mt-2 text-white/78">
+              New users can start by creating an account and exploring Shynvo before moving into paid access.
+              Pro and Team plans take you directly into secure checkout when you are ready.
+            </p>
+          </div>
         </div>
+
+        <section className="mt-10">
+          <div className="grid gap-4 md:grid-cols-3">
+            {billingSteps.map((item) => {
+              const Icon = item.Icon;
+              return (
+                <div
+                  key={item.title}
+                  className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <Icon className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+                  </div>
+                  <h2 className="mt-4 text-xl font-semibold text-white">{item.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-white/72">{item.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => (
@@ -151,6 +204,71 @@ export default function PricingPage() {
             </div>
           ))}
         </div>
+
+        <section className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+              Plan guidance
+            </div>
+            <h2 className="mt-3 text-2xl font-semibold text-white">
+              Which plan should you choose?
+            </h2>
+
+            <div className="mt-5 space-y-4 text-sm leading-7 text-white/74">
+              <p>
+                <span className="font-semibold text-white">Free</span> is best if you want to enter the platform,
+                explore the environments, and understand how Shynvo works.
+              </p>
+              <p>
+                <span className="font-semibold text-white">Pro</span> is best for individual users who want stronger AI usage,
+                deeper environment access, and a more advanced experience.
+              </p>
+              <p>
+                <span className="font-semibold text-white">Team</span> is best for multiple people working together with shared access and collaboration.
+              </p>
+              <p>
+                <span className="font-semibold text-white">Enterprise</span> is best for organizations that need custom scale,
+                security, and structured rollout support.
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                <ShieldCheck className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+              </div>
+              <div>
+                <div className="text-lg font-semibold text-white">Trust and clarity</div>
+                <div className="text-sm text-white/60">Before checkout</div>
+              </div>
+            </div>
+
+            <ul className="mt-5 space-y-3 text-sm text-white/78">
+              {trustPoints.map((point) => (
+                <li key={point} className="flex items-start gap-3">
+                  <span className="mt-1.5 h-2 w-2 rounded-full bg-emerald-300" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/docs"
+                className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Read docs
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Contact us
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
   );

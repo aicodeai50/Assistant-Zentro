@@ -12,6 +12,9 @@ import {
   ShieldCheck,
   Workflow,
   Rocket,
+  Users,
+  Bot,
+  Layers3,
 } from "lucide-react";
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -22,7 +25,6 @@ const ENVIRONMENTS = [
   {
     key: "university",
     title: "University Hub",
-    icon: "U",
     subtitle: "Structured Academic Campus",
     desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
     tags: ["Study", "Exams", "Career"],
@@ -32,7 +34,6 @@ const ENVIRONMENTS = [
   {
     key: "academy",
     title: "Shynvo Academy",
-    icon: "A",
     subtitle: "School Learning World",
     desc: "Junior and senior high school learning, subject rooms, tutors, and classroom workshops.",
     tags: ["School", "Subjects", "Badges"],
@@ -42,7 +43,6 @@ const ENVIRONMENTS = [
   {
     key: "enterprise",
     title: "Shynvo Enterprise",
-    icon: "E",
     subtitle: "Unified Operating Environment",
     desc: "Missions, teams, analytics, strategy, automation, support, and OS intelligence in one enterprise environment.",
     tags: ["Missions", "Teams", "Analytics"],
@@ -52,7 +52,6 @@ const ENVIRONMENTS = [
   {
     key: "experiments",
     title: "Experiments",
-    icon: "X",
     subtitle: "AI Exploration Worlds",
     desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
     tags: ["Debate", "Simulation", "Concepts"],
@@ -62,7 +61,6 @@ const ENVIRONMENTS = [
   {
     key: "frontier",
     title: "Frontier Lab",
-    icon: "F",
     subtitle: "Engineering District",
     desc: "Code, systems, logic, and build-focused engineering practice for all levels.",
     tags: ["Code", "Build", "Puzzles"],
@@ -72,7 +70,6 @@ const ENVIRONMENTS = [
   {
     key: "arcade",
     title: "Arcade Sim",
-    icon: "G",
     subtitle: "Interactive Skill Arena",
     desc: "Game-based drills, challenge rooms, reflex loops, and simulation-based practice.",
     tags: ["Games", "Challenge", "Levels"],
@@ -81,64 +78,82 @@ const ENVIRONMENTS = [
   },
 ];
 
-const HOW_IT_WORKS = [
+const VALUE_POINTS = [
   {
-    step: "Step 1",
-    title: "Create your account",
-    desc: "Start with a secure Shynvo account to unlock guided tools and environments.",
+    title: "For learners",
+    desc: "Study with structure instead of scattered AI chats and random resources.",
+    Icon: GraduationCap,
   },
   {
-    step: "Step 2",
-    title: "Start your 7-day trial",
-    desc: "Every new user gets a 7-day trial with full access across the platform.",
+    title: "For builders",
+    desc: "Use guided environments for coding, workflows, experiments, and execution.",
+    Icon: Layers3,
   },
   {
-    step: "Step 3",
-    title: "Choose your environment",
-    desc: "Enter the area that matches your goal: learn, build, train, or explore.",
-  },
-  {
-    step: "Step 4",
-    title: "Use AI and structured tools",
-    desc: "Get help from Shynvo Robot and use focused workflows inside each environment.",
+    title: "For teams",
+    desc: "Coordinate missions, analytics, and organized work inside focused systems.",
+    Icon: Users,
   },
 ];
 
-const PLATFORM_OVERVIEW = [
+const HOW_IT_WORKS = [
   {
-    title: "Guided AI support",
-    desc: "Use Shynvo Robot for multilingual guidance, direction, and platform help.",
-    Icon: Sparkles,
+    step: "01",
+    title: "Create your account",
+    desc: "Start with secure platform access across Shynvo.",
   },
   {
-    title: "Structured workflows",
-    desc: "Move through clear paths instead of random tools and disconnected screens.",
+    step: "02",
+    title: "Begin your 7-day trial",
+    desc: "Every new user gets full access during the trial period.",
+  },
+  {
+    step: "03",
+    title: "Choose your environment",
+    desc: "Learn, build, train, or explore inside the area that fits your goal.",
+  },
+  {
+    step: "04",
+    title: "Use AI and structured tools",
+    desc: "Get guidance from Shynvo Robot and work inside focused systems.",
+  },
+];
+
+const INSIDE_SHYNVO = [
+  {
+    title: "Guided AI support",
+    desc: "Use Shynvo Robot to understand where to start, what to do next, and how to move through the platform.",
+    Icon: Bot,
+  },
+  {
+    title: "Focused environments",
+    desc: "Each environment is built around a real purpose: learning, building, simulation, strategy, or training.",
     Icon: Workflow,
   },
   {
-    title: "Secure platform access",
-    desc: "Use your account, trial, and upgrade path with trusted access across Shynvo.",
-    Icon: ShieldCheck,
+    title: "Structured progression",
+    desc: "Move through clear paths instead of trying to build everything from scratch with no direction.",
+    Icon: Sparkles,
   },
 ];
 
 const PRICING_PREVIEW = [
   {
-    name: "Trial",
+    title: "7-day trial",
     subtitle: "Start free",
     points: [
-      "7-day free trial",
-      "Full access during trial",
+      "Create your account",
+      "Get full platform access",
       "Explore all core environments",
     ],
   },
   {
-    name: "Upgrade",
+    title: "Upgrade after trial",
     subtitle: "Continue with access",
     points: [
-      "Keep using Shynvo after trial",
-      "Continue AI tools and environments",
-      "Best for active learners and builders",
+      "Keep using Shynvo tools",
+      "Continue AI-assisted workflows",
+      "Best for active users and teams",
     ],
   },
 ];
@@ -164,8 +179,8 @@ export default function HomePage() {
       </div>
 
       <section className="mx-auto max-w-7xl px-4 pb-24 pt-5 sm:px-6 lg:px-8 lg:pb-28 lg:pt-6">
-        <div className="grid items-start gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-[2rem] border border-white/5 bg-transparent p-4 shadow-none backdrop-blur-0 sm:p-5 lg:p-6">
+        <div className="grid items-start gap-5 xl:grid-cols-[1.08fr_0.92fr]">
+          <div className="rounded-[2rem] border border-white/5 bg-transparent p-4 sm:p-5 lg:p-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
               Structured AI Platform
@@ -175,21 +190,21 @@ export default function HomePage() {
               Shynvo
             </h1>
 
-            <p className="mt-3 max-w-3xl text-xl font-medium leading-tight text-white/92 sm:text-2xl lg:text-[2.5rem]">
+            <p className="mt-3 max-w-4xl text-xl font-medium leading-tight text-white/92 sm:text-2xl lg:text-[2.5rem]">
               Learn, build, train, and explore inside guided AI environments
             </p>
 
             <p className="mt-5 max-w-3xl text-base leading-7 text-white/78 sm:text-lg">
-              Shynvo helps people learn, build skills, practice with AI tools, and work inside focused digital environments with clarity and structure.
+              Shynvo is a structured AI platform for learners, builders, and teams who want guided environments instead of scattered tools, random prompts, and unclear workflows.
             </p>
 
             <div className="mt-6 rounded-[1.5rem] border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-6 text-white/85">
-              <div className="text-sm font-semibold text-white">Start here</div>
+              <div className="text-sm font-semibold text-white">Start clearly</div>
               <ul className="mt-2 space-y-1 text-white/78">
                 <li>Create an account to use Shynvo.</li>
-                <li>Every new user gets a 7-day free trial.</li>
-                <li>You get full access during the 7-day trial.</li>
-                <li>After the trial, you can upgrade to continue.</li>
+                <li>Every new user starts with a 7-day free trial.</li>
+                <li>You get full access during the trial.</li>
+                <li>Upgrade after the trial to continue using the platform.</li>
               </ul>
             </div>
 
@@ -214,8 +229,8 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <p className="mt-4 text-sm text-white/60">
-              Account required for AI tools, platform access, and guided environments.
+            <p className="mt-4 text-sm text-white/58">
+              Account required for AI tools, guided environments, and platform access.
             </p>
           </div>
 
@@ -281,6 +296,36 @@ export default function HomePage() {
           </div>
         </div>
 
+        <section className="mt-10 sm:mt-12">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
+            What Shynvo is
+          </div>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            One platform for learning, building, and AI-guided work
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
+            Shynvo helps people move from confusion to structured progress by giving them clear environments, guided AI help, and focused digital workflows.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {VALUE_POINTS.map((item) => {
+              const Icon = item.Icon;
+              return (
+                <div
+                  key={item.title}
+                  className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <Icon className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+                  </div>
+                  <h3 className="mt-4 text-xl font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/72">{item.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
         <section className="mt-10 grid gap-4 lg:grid-cols-3">
           <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
@@ -339,10 +384,10 @@ export default function HomePage() {
             How it works
           </div>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Start clearly inside Shynvo
+            A simple path from signup to progress
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Shynvo gives users a clear path from account creation to trial access, guided exploration, and continued use across structured AI environments.
+            Shynvo is designed so new users can start clearly instead of trying to figure out everything alone.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -363,17 +408,17 @@ export default function HomePage() {
 
         <section className="mt-10 sm:mt-12">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-            Platform overview
+            Inside Shynvo
           </div>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            What Shynvo actually gives you
+            What users actually get inside the platform
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Shynvo combines guided AI help, focused environments, and structured workflows so users can do more than just chat with AI.
+            Shynvo is more than a homepage. It is a system of guided environments, AI support, and structured progress tools.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {PLATFORM_OVERVIEW.map((item) => {
+            {INSIDE_SHYNVO.map((item) => {
               const Icon = item.Icon;
               return (
                 <div
@@ -461,19 +506,19 @@ export default function HomePage() {
             Start free, upgrade when ready
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Shynvo starts with a 7-day free trial so users can explore the platform before choosing to continue.
+            Start with a 7-day free trial and use the platform before deciding to continue.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {PRICING_PREVIEW.map((plan) => (
               <div
-                key={plan.name}
+                key={plan.title}
                 className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
               >
                 <div className="flex items-center gap-3">
                   <Rocket className="h-5 w-5 text-white/80" strokeWidth={1.8} />
                   <div>
-                    <div className="text-xl font-semibold text-white">{plan.name}</div>
+                    <div className="text-xl font-semibold text-white">{plan.title}</div>
                     <div className="text-sm text-white/65">{plan.subtitle}</div>
                   </div>
                 </div>
@@ -498,6 +543,40 @@ export default function HomePage() {
         </section>
 
         <section className="mt-10 sm:mt-12">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                <ShieldCheck className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-white">Security and trust</h3>
+              <p className="mt-2 text-sm leading-6 text-white/72">
+                Terms, Privacy, Refund, and Contact links are visible for transparency and support.
+              </p>
+            </div>
+
+            <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                <Users className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-white">Built for real users</h3>
+              <p className="mt-2 text-sm leading-6 text-white/72">
+                Shynvo is designed for students, independent learners, builders, and organized teams.
+              </p>
+            </div>
+
+            <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                <BookOpen className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-white">Documentation and support</h3>
+              <p className="mt-2 text-sm leading-6 text-white/72">
+                Use docs for platform understanding and contact support when you need help.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10 sm:mt-12">
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-[2px] sm:p-8">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
               Start now
@@ -506,7 +585,7 @@ export default function HomePage() {
               Enter Shynvo with a clear starting path
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-              Create your account, start your 7-day free trial, and explore all environments with full access before upgrading.
+              Create your account, begin your 7-day free trial, and explore all core environments with full access before upgrading.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
