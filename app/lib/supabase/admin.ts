@@ -7,6 +7,7 @@ export function getSupabaseAdmin(): SupabaseClient | null {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {
+    console.error("❌ Supabase admin env missing");
     return null;
   }
 

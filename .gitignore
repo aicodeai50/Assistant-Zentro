@@ -44,3 +44,7 @@ next-env.d.ts
 .env*.local
 
 backups/
+.env.local
+*.bak
+*.swp
+.next

@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const baseUrl =
+      process.env.SH_BACKEND_URL ||
       process.env.BACKEND_URL ||
       process.env.NEXT_PUBLIC_API_URL ||
       process.env.RAILWAY_API_BASE_URL ||
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
       process.env.SH_API_KEY ||
       process.env.NEXT_PUBLIC_SH_API_KEY ||
       "";
+
     const customPath = process.env.BACKEND_CHAT_PATH || "";
     const candidatePaths = customPath
       ? [customPath.startsWith("/") ? customPath : `/${customPath}`, ...DEFAULT_PATHS]
@@ -53,7 +55,13 @@ export async function POST(req: NextRequest) {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            ...(apiKey ? { "x-sh-api-key": apiKey } : {}),
+            ...(apiKey
+              ? {
+                  "x-sh-api-key": apiKey,
+                  "x-api-key": apiKey,
+                  "x-sh-key": apiKey,
+                }
+              : {}),
           },
           body: JSON.stringify(body),
           cache: "no-store",
@@ -62,6 +70,12 @@ export async function POST(req: NextRequest) {
         const text = await res.text();
         lastStatus = res.status;
         lastText = text;
+
+        console.error("Backend response:", {
+          url: `${cleanBase}${path}`,
+          status: res.status,
+          body: text,
+        });
 
         if (res.ok) {
           await recordAiUsage(access);
@@ -76,6 +90,11 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         lastStatus = 500;
         lastText = err instanceof Error ? err.message : "Backend request failed";
+
+        console.error("Backend fetch error:", {
+          url: `${cleanBase}${path}`,
+          error: lastText,
+        });
       }
     }
 
@@ -88,6 +107,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("Proxy /api/public/chat error:", error);
+
     return NextResponse.json(
       { error: "Failed to reach backend chat service." },
       { status: 500 }
