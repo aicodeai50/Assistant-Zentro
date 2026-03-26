@@ -16,8 +16,11 @@ import {
   Bot,
   Layers3,
 } from "lucide-react";
-import PreviewCardVisual from "@/app/components/PreviewCardVisual";
+import PreviewCardVisual from "./components/PreviewCardVisual";
 
+<PreviewCardVisual type="robot" />
+<PreviewCardVisual type="university" />
+<PreviewCardVisual type="frontier" />
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -165,19 +168,16 @@ const PLATFORM_PREVIEWS = [
     title: "Shynvo Robot",
     desc: "AI guide that helps users navigate the platform, choose a direction, and get started faster.",
     href: "/robot",
-    previewType: "robot" as const,
   },
   {
     title: "University Hub",
     desc: "Structured academic learning space for guided study, faculties, and higher education paths.",
     href: "/university",
-    previewType: "university" as const,
   },
   {
     title: "Frontier Lab",
     desc: "Technical environment for coding, systems, engineering workflows, and build-focused practice.",
     href: "/frontier",
-    previewType: "frontier" as const,
   },
 ];
 
@@ -481,7 +481,8 @@ export default function HomePage() {
                 <p className="mt-2 text-sm leading-6 text-white/70">{item.desc}</p>
 
                <div className="mt-4">
-                                </div>
+                <PreviewCardVisual type="robot" />
+                </div>
 
                 <div className="mt-5 flex items-center justify-between">
                   <span className="text-sm font-semibold text-white/90 group-hover:text-white">
