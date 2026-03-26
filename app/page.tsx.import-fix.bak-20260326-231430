@@ -1,4 +1,3 @@
-import PreviewTypingLoop from "./components/PreviewTypingLoop";
 import Link from "next/link";
 import RobotTypingLine from "@/components/RobotTypingLine";
 import { QRCodeSVG } from "qrcode.react";
@@ -17,7 +16,7 @@ import {
   Bot,
   Layers3,
 } from "lucide-react";
-import PreviewCardVisual from "./components/PreviewCardVisual";
+import PreviewCardVisual from "@/app/components/PreviewCardVisual";
 
 
 function cx(...classes: Array<string | false | null | undefined>) {

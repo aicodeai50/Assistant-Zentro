@@ -1,4 +1,3 @@
-import PreviewTypingLoop from "./components/PreviewTypingLoop";
 import Link from "next/link";
 import RobotTypingLine from "@/components/RobotTypingLine";
 import { QRCodeSVG } from "qrcode.react";
