@@ -24,7 +24,7 @@ export default function PreviewTypingLoop({ lines }: { lines: string[] }) {
       setDisplay("");
       setCharIndex(0);
       setLineIndex((i) => (i + 1) % lines.length);
-    }, 1200);
+    }, 1300);
 
     return () => clearTimeout(t);
   }, [charIndex, lineIndex, lines]);
