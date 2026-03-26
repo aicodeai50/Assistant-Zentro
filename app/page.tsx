@@ -8,6 +8,10 @@ import {
   FlaskConical,
   Cpu,
   Gamepad2,
+  Sparkles,
+  ShieldCheck,
+  Workflow,
+  Rocket,
 } from "lucide-react";
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -17,7 +21,8 @@ function cx(...classes: Array<string | false | null | undefined>) {
 const ENVIRONMENTS = [
   {
     key: "university",
-    title: "University Hub", icon: "U",
+    title: "University Hub",
+    icon: "U",
     subtitle: "Structured Academic Campus",
     desc: "Guided study systems, exam preparation, and faculty-based learning environments.",
     tags: ["Study", "Exams", "Career"],
@@ -26,7 +31,8 @@ const ENVIRONMENTS = [
   },
   {
     key: "academy",
-    title: "Shynvo Academy", icon: "A",
+    title: "Shynvo Academy",
+    icon: "A",
     subtitle: "School Learning World",
     desc: "Junior and senior high school learning, subject rooms, tutors, and classroom workshops.",
     tags: ["School", "Subjects", "Badges"],
@@ -35,7 +41,8 @@ const ENVIRONMENTS = [
   },
   {
     key: "enterprise",
-    title: "Shynvo Enterprise", icon: "E",
+    title: "Shynvo Enterprise",
+    icon: "E",
     subtitle: "Unified Operating Environment",
     desc: "Missions, teams, analytics, strategy, automation, support, and OS intelligence in one enterprise environment.",
     tags: ["Missions", "Teams", "Analytics"],
@@ -44,7 +51,8 @@ const ENVIRONMENTS = [
   },
   {
     key: "experiments",
-    title: "Experiments", icon: "X",
+    title: "Experiments",
+    icon: "X",
     subtitle: "AI Exploration Worlds",
     desc: "Standalone worlds for thinking, debate, simulation, and concept development.",
     tags: ["Debate", "Simulation", "Concepts"],
@@ -53,7 +61,8 @@ const ENVIRONMENTS = [
   },
   {
     key: "frontier",
-    title: "Frontier Lab", icon: "F",
+    title: "Frontier Lab",
+    icon: "F",
     subtitle: "Engineering District",
     desc: "Code, systems, logic, and build-focused engineering practice for all levels.",
     tags: ["Code", "Build", "Puzzles"],
@@ -62,12 +71,75 @@ const ENVIRONMENTS = [
   },
   {
     key: "arcade",
-    title: "Arcade Sim", icon: "G",
+    title: "Arcade Sim",
+    icon: "G",
     subtitle: "Interactive Skill Arena",
     desc: "Game-based drills, challenge rooms, reflex loops, and simulation-based practice.",
     tags: ["Games", "Challenge", "Levels"],
     href: "/arcade",
     Icon: Gamepad2,
+  },
+];
+
+const HOW_IT_WORKS = [
+  {
+    step: "Step 1",
+    title: "Create your account",
+    desc: "Start with a secure Shynvo account to unlock guided tools and environments.",
+  },
+  {
+    step: "Step 2",
+    title: "Start your 7-day trial",
+    desc: "Every new user gets a 7-day trial with full access across the platform.",
+  },
+  {
+    step: "Step 3",
+    title: "Choose your environment",
+    desc: "Enter the area that matches your goal: learn, build, train, or explore.",
+  },
+  {
+    step: "Step 4",
+    title: "Use AI and structured tools",
+    desc: "Get help from Shynvo Robot and use focused workflows inside each environment.",
+  },
+];
+
+const PLATFORM_OVERVIEW = [
+  {
+    title: "Guided AI support",
+    desc: "Use Shynvo Robot for multilingual guidance, direction, and platform help.",
+    Icon: Sparkles,
+  },
+  {
+    title: "Structured workflows",
+    desc: "Move through clear paths instead of random tools and disconnected screens.",
+    Icon: Workflow,
+  },
+  {
+    title: "Secure platform access",
+    desc: "Use your account, trial, and upgrade path with trusted access across Shynvo.",
+    Icon: ShieldCheck,
+  },
+];
+
+const PRICING_PREVIEW = [
+  {
+    name: "Trial",
+    subtitle: "Start free",
+    points: [
+      "7-day free trial",
+      "Full access during trial",
+      "Explore all core environments",
+    ],
+  },
+  {
+    name: "Upgrade",
+    subtitle: "Continue with access",
+    points: [
+      "Keep using Shynvo after trial",
+      "Continue AI tools and environments",
+      "Best for active learners and builders",
+    ],
   },
 ];
 
@@ -104,19 +176,35 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-3 max-w-3xl text-xl font-medium leading-tight text-white/92 sm:text-2xl lg:text-[2.5rem]">
-              Structured environments for learning, building, and skill growth
+              Learn, build, train, and explore inside guided AI environments
             </p>
 
             <p className="mt-5 max-w-3xl text-base leading-7 text-white/78 sm:text-lg">
-              A structured AI platform designed to help people learn, build, practice skills, and explore focused digital environments with clarity and guidance.
+              Shynvo helps people learn, build skills, practice with AI tools, and work inside focused digital environments with clarity and structure.
             </p>
+
+            <div className="mt-6 rounded-[1.5rem] border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-6 text-white/85">
+              <div className="text-sm font-semibold text-white">Start here</div>
+              <ul className="mt-2 space-y-1 text-white/78">
+                <li>Create an account to use Shynvo.</li>
+                <li>Every new user gets a 7-day free trial.</li>
+                <li>You get full access during the 7-day trial.</li>
+                <li>After the trial, you can upgrade to continue.</li>
+              </ul>
+            </div>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="#environments"
+                href="/sign-up"
                 className="inline-flex items-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
               >
-                Enter Platform
+                Start for free
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10"
+              >
+                How it works
               </Link>
               <Link
                 href="/docs"
@@ -125,6 +213,10 @@ export default function HomePage() {
                 Read Docs
               </Link>
             </div>
+
+            <p className="mt-4 text-sm text-white/60">
+              Account required for AI tools, platform access, and guided environments.
+            </p>
           </div>
 
           <div className="space-y-5">
@@ -149,7 +241,9 @@ export default function HomePage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="text-2xl font-semibold text-white">Shynvo Robot</div>
-                    <div className="mt-1 text-sm text-white/70">Your multilingual guide across the Shynvo platform</div>
+                    <div className="mt-1 text-sm text-white/70">
+                      Your multilingual guide across the Shynvo platform
+                    </div>
                   </div>
                   <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
                     →
@@ -182,9 +276,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-4 text-xs text-white/45">
-                Secure link: www.shynvo.app
-              </div>
+              <div className="mt-4 text-xs text-white/45">Secure link: www.shynvo.app</div>
             </div>
           </div>
         </div>
@@ -227,9 +319,75 @@ export default function HomePage() {
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
               <li>Secure access on the official Shynvo domain.</li>
-              <li>Direct support through <a href="mailto:hi@shynvo.app" className="underline hover:opacity-80">hi@shynvo.app</a> and <a href="mailto:support@shynvo.app" className="underline hover:opacity-80">support@shynvo.app</a>.</li>
+              <li>
+                Direct support through{" "}
+                <a href="mailto:hi@shynvo.app" className="underline hover:opacity-80">
+                  hi@shynvo.app
+                </a>{" "}
+                and{" "}
+                <a href="mailto:support@shynvo.app" className="underline hover:opacity-80">
+                  support@shynvo.app
+                </a>.
+              </li>
               <li>Terms, Privacy, Refund, and Contact pages are available in the footer for transparency.</li>
             </ul>
+          </div>
+        </section>
+
+        <section id="how-it-works" className="mt-10 sm:mt-12">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
+            How it works
+          </div>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Start clearly inside Shynvo
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
+            Shynvo gives users a clear path from account creation to trial access, guided exploration, and continued use across structured AI environments.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {HOW_IT_WORKS.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
+              >
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+                  {item.step}
+                </div>
+                <h3 className="mt-3 text-lg font-semibold text-white">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-white/72">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-10 sm:mt-12">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
+            Platform overview
+          </div>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            What Shynvo actually gives you
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
+            Shynvo combines guided AI help, focused environments, and structured workflows so users can do more than just chat with AI.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {PLATFORM_OVERVIEW.map((item) => {
+              const Icon = item.Icon;
+              return (
+                <div
+                  key={item.title}
+                  className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <Icon className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+                  </div>
+                  <h3 className="mt-4 text-xl font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/72">{item.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -242,6 +400,9 @@ export default function HomePage() {
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
             Each environment is built for a specific kind of work, learning, practice, or exploration.
+          </p>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-emerald-300/90">
+            All environments are available during your 7-day full-access trial.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -289,6 +450,79 @@ export default function HomePage() {
                 </Link>
               );
             })}
+          </div>
+        </section>
+
+        <section className="mt-10 sm:mt-12">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
+            Pricing
+          </div>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Start free, upgrade when ready
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
+            Shynvo starts with a 7-day free trial so users can explore the platform before choosing to continue.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {PRICING_PREVIEW.map((plan) => (
+              <div
+                key={plan.name}
+                className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
+              >
+                <div className="flex items-center gap-3">
+                  <Rocket className="h-5 w-5 text-white/80" strokeWidth={1.8} />
+                  <div>
+                    <div className="text-xl font-semibold text-white">{plan.name}</div>
+                    <div className="text-sm text-white/65">{plan.subtitle}</div>
+                  </div>
+                </div>
+
+                <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
+                  {plan.points.map((point) => (
+                    <li key={point}>• {point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10"
+            >
+              View pricing
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-10 sm:mt-12">
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-[2px] sm:p-8">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Start now
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              Enter Shynvo with a clear starting path
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
+              Create your account, start your 7-day free trial, and explore all environments with full access before upgrading.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
+              >
+                Create account
+              </Link>
+              <Link
+                href="/robot"
+                className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10"
+              >
+                Meet Shynvo Robot
+              </Link>
+            </div>
           </div>
         </section>
       </section>
