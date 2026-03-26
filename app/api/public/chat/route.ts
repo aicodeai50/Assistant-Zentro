@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
 
         if (res.ok) {
           try {
-            if (access?.userId !== "public-preview") {
+            if (access?.ok && access.userId !== "public-preview") {
               await recordAiUsage(access as any);
             }
           } catch {
