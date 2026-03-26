@@ -16,7 +16,7 @@ import {
   Bot,
   Layers3,
 } from "lucide-react";
-import PreviewCardVisual from "@/app/components/PreviewCardVisual";
+import PreviewCardVisual from "./components/PreviewCardVisual";
 
 
 function cx(...classes: Array<string | false | null | undefined>) {
