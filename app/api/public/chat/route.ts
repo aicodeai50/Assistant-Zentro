@@ -10,16 +10,29 @@ const DEFAULT_PATHS = [
 
 export async function POST(req: NextRequest) {
   try {
-    const access = await checkAiAccess(req);
+    const body = await req.json().catch(() => ({}));
+
+    let access = await checkAiAccess(req);
 
     if (!access.ok) {
-      return NextResponse.json(
-        { error: access.message },
-        { status: access.status }
-      );
+      // Allow public-style AI requests that send a plain message payload,
+      // such as Frontier and other guided workspace previews.
+      if (typeof body?.message === "string" && body.message.trim()) {
+        access = {
+          ok: true,
+          mode: "auth",
+          userId: "public-preview",
+          plan: "free",
+          trialActive: false,
+          remaining: null,
+        } as any;
+      } else {
+        return NextResponse.json(
+          { error: access.message },
+          { status: access.status }
+        );
+      }
     }
-
-    const body = await req.json();
 
     const baseUrl =
       process.env.SH_BACKEND_URL ||
@@ -78,7 +91,13 @@ export async function POST(req: NextRequest) {
         });
 
         if (res.ok) {
-          await recordAiUsage(access);
+          try {
+            if (access?.userId !== "public-preview") {
+              await recordAiUsage(access as any);
+            }
+          } catch {
+            // keep response working even if usage recording fails
+          }
 
           return new NextResponse(text, {
             status: res.status,

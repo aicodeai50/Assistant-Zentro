@@ -1,5 +1,3 @@
-import { getSupabaseClient } from "@/lib/supabase/client";
-
 export type FrontierEngineRequest = {
   workspace: "coding" | "algorithms" | "ai-bots" | "puzzles";
   title: string;
@@ -82,6 +80,21 @@ Be specific to:
 `.trim();
 }
 
+function buildUserPrompt(req: FrontierEngineRequest) {
+  return JSON.stringify(
+    {
+      workspace: req.workspace,
+      selectedTitle: req.title,
+      selectedMode: req.mode || "",
+      selectedTone: req.tone || "",
+      selectedFocus: req.focus || [],
+      userInput: req.userInput,
+    },
+    null,
+    2
+  );
+}
+
 function tryParseStructured(raw: string): FrontierStructuredOutput | null {
   const text = raw.trim();
   const candidates = [text];
@@ -155,30 +168,31 @@ export async function runFrontierLiveEngine(
   req: FrontierEngineRequest
 ): Promise<FrontierStructuredOutput> {
   try {
-    const supabase = getSupabaseClient();
-    const session = supabase
-      ? await supabase.auth.getSession()
-      : { data: { session: null } };
+    const message = `${buildSystemPrompt(req)}\n\nUser context:\n${buildUserPrompt(req)}`;
 
-    const token = session.data.session?.access_token || "";
-
-    const res = await fetch("/api/public/chat", {
+    const res = await fetch("/api/robot-chat", {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        ...(token ? { authorization: `Bearer ${token}` } : {}),
       },
       credentials: "include",
       cache: "no-store",
       body: JSON.stringify({
-        preferredLanguage: "en",
-        message: req.userInput,
-        systemPrompt: buildSystemPrompt(req),
-        messages: [],
+        message,
+        prompt: req.userInput,
+        workspace: req.workspace,
+        mode: req.mode || "",
+        tone: req.tone || "",
+        focus: req.focus || [],
+        title: req.title,
       }),
     });
 
     const text = await res.text();
+
+    if (!res.ok) {
+      return finalFallback(`/api/robot-chat -> ${res.status}: ${text || "request failed"}`);
+    }
 
     let data: any = {};
     try {
@@ -187,16 +201,13 @@ export async function runFrontierLiveEngine(
       data = { reply: text };
     }
 
-    if (!res.ok) {
-      return finalFallback(`/api/public/chat -> ${res.status}: ${text || "request failed"}`);
-    }
-
     const raw =
-      data?.answer ||
       data?.reply ||
+      data?.text ||
       data?.message ||
       data?.output ||
       data?.content ||
+      data?.answer ||
       (typeof data === "string" ? data : "") ||
       text ||
       "";
