@@ -18,15 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="relative min-h-screen overflow-x-hidden bg-[#04070d] text-white">
+      <body>
         <LanguageProvider>
-          <div className="relative z-10">
           <SiteNav />
           <main className="relative z-10"><AIBackground />
 {children}</main>
           <SiteFooter />
           <ShynvoGuideChat />
-                  </div>
         </LanguageProvider>
       </body>
     </html>
