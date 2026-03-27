@@ -500,7 +500,6 @@ export default function HomePage() {
                     <div className="rounded-2xl border border-white/10 bg-black/25 p-3 backdrop-blur-sm">
                       {item.title === "Shynvo Robot" && (
                         <PreviewTypingLoop
-                          variant="robot"
                           lines={[
                             "Analyzing your direction...",
                             "Recommended route: Shynvo Robot",
@@ -510,7 +509,6 @@ export default function HomePage() {
                       )}
                       {item.title === "University Hub" && (
                         <PreviewTypingLoop
-                          variant="university"
                           lines={[
                             "Loading academic pathways...",
                             "Faculty ready: Computer Science",
@@ -520,7 +518,6 @@ export default function HomePage() {
                       )}
                       {item.title === "Frontier Lab" && (
                         <PreviewTypingLoop
-                          variant="frontier"
                           lines={[
                             "Booting Frontier systems...",
                             "Mode active: AI Builder",
