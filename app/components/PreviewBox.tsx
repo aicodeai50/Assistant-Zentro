@@ -1,31 +1,93 @@
 import Link from "next/link";
+import PreviewTypingLoop from "./PreviewTypingLoop";
+
+const items = [
+  {
+    title: "Shynvo Robot",
+    desc: "AI guide that helps users navigate the platform and choose a direction.",
+    variant: "robot" as const,
+    lines: [
+      "Analyzing your direction...",
+      "Recommended route: Shynvo Robot",
+      "Next step: choose where to begin",
+    ],
+    tag: "Guide",
+  },
+  {
+    title: "University Hub",
+    desc: "Structured academic learning for guided study and higher education paths.",
+    variant: "university" as const,
+    lines: [
+      "Loading academic pathways...",
+      "Faculty ready: Computer Science",
+      "Next lesson: Algorithms fundamentals",
+    ],
+    tag: "Learning",
+  },
+  {
+    title: "Frontier Lab",
+    desc: "Technical environment for coding, systems, and engineering workflows.",
+    variant: "frontier" as const,
+    lines: [
+      "Booting Frontier systems...",
+      "Mode active: AI Builder",
+      "Preparing engineering workflow...",
+    ],
+    tag: "Build",
+  },
+];
 
 export default function PreviewBox() {
   return (
-    <div className="mt-10 sm:mt-12">
+    <section className="mt-10 sm:mt-12">
       <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
         Preview
       </div>
 
-      <div className="mt-3 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 sm:p-8 backdrop-blur">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-white">
-          See inside Shynvo
-        </h2>
+      <div className="mt-3 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 sm:p-8 backdrop-blur-[2px]">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold text-white sm:text-3xl">
+              See inside Shynvo
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/72 sm:text-base">
+              Preview how Shynvo looks and feels before you enter. These are live-style
+              mini previews of guided platform experiences.
+            </p>
+          </div>
 
-        <p className="mt-3 max-w-2xl text-sm sm:text-base text-white/70 leading-6">
-          Explore what the platform looks like before you enter. Preview real
-          environments, flows, and guided AI experiences.
-        </p>
+          <div className="shrink-0">
+            <Link
+              href="/preview"
+              className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/88 transition hover:bg-white/10 hover:text-white"
+            >
+              Open full preview →
+            </Link>
+          </div>
+        </div>
 
-        <div className="mt-5">
-          <Link
-            href="/preview"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition"
-          >
-            Open preview →
-          </Link>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {items.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-[1.4rem] border border-white/10 bg-black/20 p-4"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-white">{item.title}</div>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-white/60">
+                  {item.tag}
+                </span>
+              </div>
+
+              <p className="mt-2 text-xs leading-5 text-white/65">{item.desc}</p>
+
+              <div className="mt-4">
+                <PreviewTypingLoop variant={item.variant} lines={item.lines} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
