@@ -321,8 +321,6 @@ export default function HomePage() {
 
         <section className="mt-10 sm:mt-12">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-            <ContinueSection />
-          <StartPathSection />
 
           What Shynvo is
           </div>
