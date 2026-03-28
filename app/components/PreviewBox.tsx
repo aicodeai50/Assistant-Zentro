@@ -58,7 +58,7 @@ export default function PreviewBox() {
 
           <div className="shrink-0">
             <Link
-              href="/"
+              href="/preview"
               className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/88 transition hover:bg-white/10 hover:text-white"
             >
               Open full preview →
