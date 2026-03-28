@@ -17,6 +17,7 @@ import {
   Bot,
   Layers3,
 } from "lucide-react";
+import StartPathSection from "./components/StartPathSection";
 
 
 function cx(...classes: Array<string | false | null | undefined>) {
