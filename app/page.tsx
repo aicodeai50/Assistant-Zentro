@@ -563,68 +563,6 @@ export default function HomePage() {
 
         <ExploreWorldsCard />
 
-        <section id="environments" className="mt-10 sm:mt-12">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-            Environments
-          </div>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Explore Shynvo environments
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Each environment is built for a specific kind of work, learning, practice, or exploration.
-          </p>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-emerald-300/90">
-            All environments are available during your 7-day full-access trial.
-          </p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {ENVIRONMENTS.map((item) => {
-              const Icon = item.Icon;
-              return (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className={cx(
-                    "group rounded-[1.75rem] border border-white/5 bg-black/15 p-4 sm:p-5 transition backdrop-blur-[2px]",
-                    "hover:border-white/8 hover:bg-white/[0.03]"
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
-                      <Icon className="h-5 w-5 text-white/80" strokeWidth={1.8} />
-                    </div>
-                  </div>
-
-                  <div className="mt-4">
-                    <h3 className="text-2xl font-semibold text-white">{item.title}</h3>
-                    <p className="mt-1 text-sm text-white/62">{item.subtitle}</p>
-                  </div>
-
-                  <p className="mt-4 text-base leading-7 text-white/74">{item.desc}</p>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-5 flex items-center justify-between">
-                    <span className="text-lg font-semibold text-white">Open</span>
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
-                      ›
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
         <section className="mt-10 sm:mt-12">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
             Pricing
