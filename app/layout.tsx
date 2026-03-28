@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="relative min-h-screen overflow-x-hidden bg-[#04070d] text-white">
+      <body onClick={() => localStorage.setItem("shynvo_last_path", window.location.pathname)} className="relative min-h-screen overflow-x-hidden bg-[#04070d] text-white">
         <LanguageProvider>
           <div className="relative z-10">
           <SiteNav />
