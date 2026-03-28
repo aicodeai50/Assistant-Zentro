@@ -17,6 +17,7 @@ import {
   Bot,
   Layers3,
 } from "lucide-react";
+import ProofWithoutScreenshots from "./components/ProofWithoutScreenshots";
 import ContinueSection from "./components/ContinueSection";
 import StartPathSection from "./components/StartPathSection";
 
@@ -461,6 +462,8 @@ export default function HomePage() {
             })}
           </div>
         </section>
+
+        <ProofWithoutScreenshots />
 
         <section className="mt-10 sm:mt-12">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
