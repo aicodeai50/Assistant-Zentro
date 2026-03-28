@@ -262,42 +262,6 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-4 sm:space-y-5">
-            <Link
-              href="/robot"
-              className="group block overflow-hidden rounded-[2rem] border border-white/5 bg-black/15 shadow-none backdrop-blur-[2px]"
-            >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
-                <video
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                >
-                  <source src="/robot.mp4" type="video/mp4" />
-                </video>
-              </div>
-
-              <div className="border-t border-white/10 p-4 sm:p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-2xl font-semibold text-white">Shynvo Robot</div>
-                    <div className="mt-1 text-sm text-white/70">
-                      Your multilingual guide across the Shynvo platform
-                    </div>
-                  </div>
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white/80 transition group-hover:bg-white group-hover:text-[#0B0F14]">
-                    →
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <RobotTypingLine />
-                </div>
-              </div>
-            </Link>
-
             <div className="rounded-[2rem] border border-white/5 bg-black/12 p-5 shadow-none backdrop-blur-[2px]">
               <div className="flex items-start justify-between gap-4">
                 <div>
