@@ -528,50 +528,6 @@ export default function HomePage() {
         <ExploreWorldsCard />
 
         <section className="mt-10 sm:mt-12">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-            Pricing
-          </div>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Start free, upgrade when ready
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Start with a 7-day free trial and use the platform before deciding to continue.
-          </p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {PRICING_PREVIEW.map((plan) => (
-              <div
-                key={plan.title}
-                className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
-              >
-                <div className="flex items-center gap-3">
-                  <Rocket className="h-5 w-5 text-white/80" strokeWidth={1.8} />
-                  <div>
-                    <div className="text-xl font-semibold text-white">{plan.title}</div>
-                    <div className="text-sm text-white/65">{plan.subtitle}</div>
-                  </div>
-                </div>
-
-                <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
-                  {plan.points.map((point) => (
-                    <li key={point}>• {point}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6">
-            <Link
-              href="/pricing"
-              className="inline-flex items-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10"
-            >
-              View pricing
-            </Link>
-          </div>
-        </section>
-
-        <section className="mt-10 sm:mt-12">
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]">
               <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
