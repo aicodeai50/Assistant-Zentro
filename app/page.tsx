@@ -219,8 +219,8 @@ export default function HomePage() {
                 Shynvo
               </h1>
 
-              <div className="max-w-6xl text-2xl font-medium leading-tight text-white/92 sm:text-3xl lg:text-5xl lg:leading-[1.08]">
-                Learn, build, train, and explore inside guided AI environments
+              <div className="w-full text-2xl font-medium leading-tight text-white/92 sm:text-3xl lg:text-5xl lg:leading-[1.08] whitespace-nowrap overflow-hidden text-ellipsis">
+                Learn, build, train, and explore inside guided AI environments.
               </div>
 
               <p className="max-w-5xl text-base leading-8 text-white/78 sm:text-lg lg:text-xl">
