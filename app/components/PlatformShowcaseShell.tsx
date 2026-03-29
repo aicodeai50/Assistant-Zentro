@@ -1,75 +1,58 @@
-import Link from "next/link";
+import type { ReactNode } from "react";
 
 type PlatformShowcaseShellProps = {
-  title: string;
-  desc: string;
-  href: string;
-  badge: string;
-  footerLabel?: string;
-  children: React.ReactNode;
+  hero: ReactNode;
+  cards: ReactNode;
+  lower: ReactNode;
 };
 
 export default function PlatformShowcaseShell({
-  title,
-  desc,
-  href,
-  badge,
-  footerLabel = "Live",
-  children,
+  hero,
+  cards,
+  lower,
 }: PlatformShowcaseShellProps) {
   return (
-    <div className="rounded-[2rem] border border-[#22324a] bg-[#07101c]/90 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-5">
-      <div className="rounded-[1.6rem] border border-white/10 bg-[#08111d]/95 p-3 sm:p-4">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-white/10" />
-            <span className="h-3 w-3 rounded-full bg-white/10" />
-            <span className="h-3 w-3 rounded-full bg-white/10" />
-          </div>
+    <section className="mt-16 sm:mt-20 lg:mt-24">
+      <div className="relative overflow-hidden rounded-[2.2rem] border border-[#23324a] bg-[#050b16]/95 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_30px_120px_rgba(0,0,0,0.45)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(36,92,255,0.16),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.14),transparent_22%),radial-gradient(circle_at_20%_80%,rgba(34,197,94,0.08),transparent_22%)]" />
+        <div className="absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(120,160,255,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(120,160,255,0.16)_1px,transparent_1px)] [background-size:38px_38px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(6,10,18,0.20),rgba(6,10,18,0.78))]" />
 
-          <div className="flex-1 px-2">
-            <div className="mx-auto max-w-[18rem] rounded-[1rem] border border-[#22324a] bg-[#06101b] px-4 py-2 text-center text-sm font-medium text-white/92 sm:max-w-[22rem] sm:text-base">
-              {title}
+        <div className="relative z-10 p-4 sm:p-6 lg:p-8">
+          <div className="rounded-[1.9rem] border border-[#31415d] bg-[#040912]/78 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:px-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-[#1a2436]" />
+                <span className="h-3 w-3 rounded-full bg-[#1a2436]" />
+                <span className="h-3 w-3 rounded-full bg-[#1a2436]" />
+              </div>
+              <div className="flex-1 rounded-[1rem] border border-[#1f2b3f] bg-[#02070f] px-4 py-3 text-center text-lg text-white/88 sm:text-2xl">
+                shynvo.app/
+              </div>
+              <div className="hidden h-11 w-11 items-center justify-center rounded-[1rem] border border-[#1f2b3f] bg-[#02070f] text-white/30 sm:flex">
+                ↗
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-[1.4rem] border border-[#1e2b40] bg-[#030812]/80 p-4 sm:p-6 lg:p-8">
+              {hero}
+
+              <div className="mt-10">
+                <div className="text-xl font-semibold text-white sm:text-2xl">
+                  What Shynvo Is
+                </div>
+                <div className="mt-5 grid gap-4 md:grid-cols-3">
+                  {cards}
+                </div>
+              </div>
+
+              <div className="mt-12">
+                {lower}
+              </div>
             </div>
           </div>
-
-          <Link
-            href={href}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/35 transition hover:text-white/80"
-            aria-label={`Open ${title}`}
-          >
-            ↗
-          </Link>
-        </div>
-
-        <div className="overflow-hidden rounded-[1.25rem] border border-white/10 bg-black/30">
-          {children}
-        </div>
-
-        <div className="mt-4 flex items-start justify-between gap-4">
-          <div>
-            <div className="text-base font-semibold text-white">{title}</div>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-white/68">{desc}</p>
-          </div>
-
-          <div className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/70">
-            {badge}
-          </div>
-        </div>
-
-        <div className="mt-4 flex items-center justify-between">
-          <Link
-            href={href}
-            className="inline-flex items-center rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white/88 transition hover:bg-white/[0.08] hover:text-white"
-          >
-            Open preview path
-          </Link>
-
-          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/70">
-            {footerLabel}
-          </span>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
