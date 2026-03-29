@@ -371,33 +371,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="how-it-works" className="mt-10 sm:mt-12">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-            How it works
-          </div>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            A simple path from signup to progress
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">
-            Shynvo is designed so new users can start clearly instead of trying to figure out everything alone.
-          </p>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {HOW_IT_WORKS.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-[2px]"
-              >
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
-                  {item.step}
-                </div>
-                <h3 className="mt-3 text-lg font-semibold text-white">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-white/72">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <ProofWithoutScreenshots />
 
         <section className="mt-10 sm:mt-12">
