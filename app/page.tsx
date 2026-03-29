@@ -262,28 +262,6 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-4 sm:space-y-5">
-            <div className="rounded-[2rem] border border-white/5 bg-black/12 p-5 shadow-none backdrop-blur-[2px]">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="text-lg font-semibold text-white">Continue on mobile</div>
-                  <p className="mt-2 max-w-xs text-sm leading-6 text-white/70">
-                    Scan to open Shynvo securely on your phone and continue from anywhere.
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white p-3">
-                  <QRCodeSVG
-                    value="https://www.shynvo.app"
-                    size={112}
-                    bgColor="#ffffff"
-                    fgColor="#0B0F14"
-                    includeMargin={true}
-                  />
-                </div>
-              </div>
-
-              <div className="mt-4 text-xs text-white/45">Secure link: www.shynvo.app</div>
-            </div>
           </div>
         </div>
 
@@ -370,6 +348,7 @@ export default function HomePage() {
             </ul>
           </div>
         </section>
+
 
         <ProofWithoutScreenshots />
 
@@ -503,6 +482,30 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+
+            <div className="rounded-[2rem] border border-white/5 bg-black/12 p-5 shadow-none backdrop-blur-[2px]">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-lg font-semibold text-white">Continue on mobile</div>
+                  <p className="mt-2 max-w-xs text-sm leading-6 text-white/70">
+                    Scan to open Shynvo securely on your phone and continue from anywhere.
+                  </p>
+                </div>
+
+                <a href="https://shynvo.app" target="_blank" rel="noopener noreferrer" className="rounded-2xl border border-white/10 bg-white p-3 block">
+                  <QRCodeSVG
+                    value="https://shynvo.app"
+                    size={112}
+                    bgColor="#ffffff"
+                    fgColor="#0B0F14"
+                    includeMargin={true}
+                  />
+                </a>
+              </div>
+
+              <div className="mt-4 text-xs text-white/45">Secure link: shynvo.app</div>
+            </div>
 
         <section className="mt-10 sm:mt-12">
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-[2px] sm:p-8">
