@@ -19,11 +19,13 @@ export default function SiteNav() {
   const { t } = useLanguage();
   const router = useRouter();
   const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [usage, setUsage] = useState<UsageState | null>(null);
+
   const accountRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -100,9 +102,15 @@ export default function SiteNav() {
         "Account";
 
       const plan = String(profile?.plan || "trial").toLowerCase();
-      const trialEndsAt = profile?.trial_ends_at ? new Date(profile.trial_ends_at).getTime() : 0;
+      const trialEndsAt = profile?.trial_ends_at
+        ? new Date(profile.trial_ends_at).getTime()
+        : 0;
       const trialActive = plan === "trial" && trialEndsAt > Date.now();
-      const paid = plan === "plus" || plan === "pro" || plan === "team" || plan === "enterprise";
+      const paid =
+        plan === "plus" ||
+        plan === "pro" ||
+        plan === "team" ||
+        plan === "enterprise";
 
       let usageLabel = "AI: 0 / 5 today";
 
@@ -164,89 +172,106 @@ export default function SiteNav() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0F14]/80 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" aria-label="Shynvo home">
+    <header className="sticky top-0 z-50 border-b border-white/6 bg-[#070b14]/88 backdrop-blur-md">
+      <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2.5" aria-label="Shynvo home">
           <ShynvoLogo />
-          <span className="text-sm font-semibold tracking-wide text-white">Shynvo</span>
+          <span className="text-sm font-semibold tracking-[0.02em] text-white">
+            Shynvo
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link href="/pricing" className="text-sm text-white/80 hover:text-white">
-            {t("nav.pricing")}
-          </Link>
-          <Link href="/docs" className="text-sm text-white/80 hover:text-white">
-            {t("nav.docs")}
-          </Link>
-          <Link href="/contact" className="text-sm text-white/80 hover:text-white">
-            {t("nav.contact")}
-          </Link>
-        </nav>
+        <div className="hidden items-center gap-8 md:flex">
+          <nav className="flex items-center gap-6">
+            <NavLink href="/pricing">{t("nav.pricing")}</NavLink>
+            <NavLink href="/docs">{t("nav.docs")}</NavLink>
+            <NavLink href="/contact">{t("nav.contact")}</NavLink>
+            <NavLink href="/search">Search</NavLink>
+          </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <IconButton label={t("search.label")} href="/search" icon="search" />
-          <LanguageSelector />
+          <div className="flex items-center gap-3">
+            {isSignedIn ? (
+              <>
+                <div className="relative" ref={accountRef}>
+                  <button
+                    type="button"
+                    onClick={() => setAccountOpen((prev) => !prev)}
+                    className="text-sm font-medium text-white/82 transition hover:text-white"
+                  >
+                    {displayName}
+                  </button>
 
-          {isSignedIn ? (
-            <div className="relative" ref={accountRef}>
-              <button
-                type="button"
-                onClick={() => setAccountOpen((v) => !v)}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-              >
-                {displayName}
-              </button>
+                  <div
+                    className={cx(
+                      "absolute right-0 mt-3 w-60 rounded-2xl border border-white/10 bg-[#0b101a] p-2 shadow-[0_18px_40px_rgba(0,0,0,0.42)]",
+                      accountOpen ? "block" : "hidden"
+                    )}
+                  >
+                    {usage ? (
+                      <div className="mb-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-medium text-white/72">
+                        {usage.label}
+                      </div>
+                    ) : null}
 
-              <div
-                className={cx(
-                  "absolute right-0 mt-2 w-56 rounded-2xl border border-white/10 bg-[#0B0F14] p-2 shadow-2xl",
-                  accountOpen ? "block" : "hidden"
-                )}
-              >
-                {usage ? (
-                  <div className="mb-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/75">
-                    {usage.label}
+                    <Link
+                      href="/account"
+                      onClick={() => setAccountOpen(false)}
+                      className="block rounded-xl px-3 py-2 text-sm text-white/85 transition hover:bg-white/[0.05]"
+                    >
+                      Account
+                    </Link>
+
+                    <Link
+                      href="/account"
+                      onClick={() => setAccountOpen(false)}
+                      className="block rounded-xl px-3 py-2 text-sm text-white/85 transition hover:bg-white/[0.05]"
+                    >
+                      Profile
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="block w-full rounded-xl px-3 py-2 text-left text-sm text-white/85 transition hover:bg-white/[0.05]"
+                    >
+                      Sign out
+                    </button>
                   </div>
-                ) : null}
+                </div>
 
                 <Link
-                  href="/account"
-                  onClick={() => setAccountOpen(false)}
-                  className="block rounded-xl px-3 py-2 text-sm text-white/85 hover:bg-white/5"
+                  href="/docs"
+                  className="inline-flex items-center justify-center rounded-lg bg-[linear-gradient(180deg,#5f74ff_0%,#485ce7_100%)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(72,92,231,0.32)] transition hover:brightness-110"
                 >
-                  Account
+                  Open App
                 </Link>
+              </>
+            ) : (
+              <>
                 <Link
-                  href="/account"
-                  onClick={() => setAccountOpen(false)}
-                  className="block rounded-xl px-3 py-2 text-sm text-white/85 hover:bg-white/5"
+                  href="/sign-in"
+                  className="text-sm font-medium text-white/72 transition hover:text-white"
                 >
-                  Profile
+                  Sign in
                 </Link>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="block w-full rounded-xl px-3 py-2 text-left text-sm text-white/85 hover:bg-white/5"
+
+                <Link
+                  href="/docs"
+                  className="inline-flex items-center justify-center rounded-lg bg-[linear-gradient(180deg,#5f74ff_0%,#485ce7_100%)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(72,92,231,0.32)] transition hover:brightness-110"
                 >
-                  Sign out
-                </button>
-              </div>
-            </div>
-          ) : (
-            <Link
-              href="/sign-up"
-              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-            >
-              {t("nav.createAccount")}
-            </Link>
-          )}
+                  Get Started
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <IconButton label={t("search.label")} href="/search" icon="search" />
           <button
+            type="button"
             onClick={() => setOpen(true)}
-            className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5"
+            className="rounded-xl p-2 ring-1 ring-white/15 transition hover:bg-white/5"
             aria-label={t("nav.menu")}
           >
             <MenuIcon />
@@ -255,13 +280,19 @@ export default function SiteNav() {
       </div>
 
       <div className={cx("md:hidden", open ? "block" : "hidden")} aria-hidden={!open}>
-        <div className="fixed inset-0 z-[80] bg-black/75 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
-        <div className="fixed inset-y-0 right-0 z-[81] h-dvh w-full overflow-y-auto border-l border-white/10 bg-[#0B0F14] p-4 sm:w-[86%] sm:max-w-sm">
+        <div
+          className="fixed inset-0 z-[80] bg-black/75 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+
+        <div className="fixed inset-y-0 right-0 z-[81] h-dvh w-full overflow-y-auto border-l border-white/10 bg-[#0b101a] p-4 sm:w-[86%] sm:max-w-sm">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-white">{t("nav.menu")}</span>
             <button
+              type="button"
               onClick={() => setOpen(false)}
-              className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5"
+              className="rounded-xl p-2 ring-1 ring-white/15 transition hover:bg-white/5"
               aria-label="Close menu"
             >
               <CloseIcon />
@@ -269,27 +300,21 @@ export default function SiteNav() {
           </div>
 
           <div className="mt-4 space-y-2">
-            <Link
-              href="/pricing"
-              onClick={() => setOpen(false)}
-              className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
-            >
+            <MobileNavLink href="/pricing" onClick={() => setOpen(false)}>
               {t("nav.pricing")}
-            </Link>
-            <Link
-              href="/docs"
-              onClick={() => setOpen(false)}
-              className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
-            >
+            </MobileNavLink>
+
+            <MobileNavLink href="/docs" onClick={() => setOpen(false)}>
               {t("nav.docs")}
-            </Link>
-            <Link
-              href="/contact"
-              onClick={() => setOpen(false)}
-              className="block rounded-xl px-4 py-3 text-sm text-white/85 ring-1 ring-white/10 hover:bg-white/5"
-            >
+            </MobileNavLink>
+
+            <MobileNavLink href="/contact" onClick={() => setOpen(false)}>
               {t("nav.contact")}
-            </Link>
+            </MobileNavLink>
+
+            <MobileNavLink href="/search" onClick={() => setOpen(false)}>
+              Search
+            </MobileNavLink>
           </div>
 
           <div className="my-4 border-t border-white/10" />
@@ -301,7 +326,7 @@ export default function SiteNav() {
           {isSignedIn ? (
             <div className="space-y-2">
               {usage ? (
-                <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80">
                   {usage.label}
                 </div>
               ) : null}
@@ -309,27 +334,45 @@ export default function SiteNav() {
               <Link
                 href="/account"
                 onClick={() => setOpen(false)}
-                className="block rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white"
+                className="block rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 {displayName}
+              </Link>
+
+              <Link
+                href="/docs"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg bg-[linear-gradient(180deg,#5f74ff_0%,#485ce7_100%)] px-4 py-3 text-center text-sm font-semibold text-white"
+              >
+                Open App
               </Link>
 
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white"
+                className="block w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Sign out
               </button>
             </div>
           ) : (
-            <Link
-              href="/sign-up"
-              onClick={() => setOpen(false)}
-              className="mt-2 block rounded-xl bg-white px-4 py-3 text-center text-sm font-semibold text-[#0B0F14]"
-            >
-              {t("nav.createAccount")}
-            </Link>
+            <div className="space-y-2">
+              <Link
+                href="/sign-in"
+                onClick={() => setOpen(false)}
+                className="block rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-center text-sm font-semibold text-white"
+              >
+                Sign in
+              </Link>
+
+              <Link
+                href="/docs"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg bg-[linear-gradient(180deg,#5f74ff_0%,#485ce7_100%)] px-4 py-3 text-center text-sm font-semibold text-white"
+              >
+                Get Started
+              </Link>
+            </div>
           )}
         </div>
       </div>
@@ -337,9 +380,59 @@ export default function SiteNav() {
   );
 }
 
-function IconButton({ label, href, icon }: { label: string; href: string; icon: "search" | "globe" }) {
+function NavLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
-    <Link href={href} className="rounded-xl p-2 ring-1 ring-white/15 hover:bg-white/5" aria-label={label} title={label}>
+    <Link
+      href={href}
+      className="text-sm font-medium text-white/70 transition hover:text-white"
+    >
+      {children}
+    </Link>
+  );
+}
+
+function MobileNavLink({
+  href,
+  onClick,
+  children,
+}: {
+  href: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className="block rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/85 transition hover:bg-white/[0.05]"
+    >
+      {children}
+    </Link>
+  );
+}
+
+function IconButton({
+  label,
+  href,
+  icon,
+}: {
+  label: string;
+  href: string;
+  icon: "search" | "globe";
+}) {
+  return (
+    <Link
+      href={href}
+      className="rounded-xl p-2 ring-1 ring-white/15 transition hover:bg-white/5"
+      aria-label={label}
+      title={label}
+    >
       {icon === "search" ? <SearchIcon /> : <GlobeIcon />}
     </Link>
   );
@@ -362,8 +455,17 @@ function ShynvoLogo() {
 function SearchIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M16.5 16.5 21 21" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path
+        d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M16.5 16.5 21 21"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -371,9 +473,17 @@ function SearchIcon() {
 function GlobeIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
       <path d="M2 12h20" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M12 2c3 3 3 17 0 20-3-3-3-17 0-20Z" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M12 2c3 3 3 17 0 20-3-3-3-17 0-20Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
     </svg>
   );
 }
