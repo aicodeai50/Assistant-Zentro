@@ -9,14 +9,20 @@ export default function SiteFooter() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
       />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(700px_220px_at_15%_0%,rgba(95,116,255,0.08),transparent_60%),radial-gradient(600px_220px_at_85%_0%,rgba(45,183,109,0.05),transparent_60%)]"
+      />
 
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
+          {/* BRAND */}
           <div>
             <div className="flex items-center gap-3">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2 shadow-[0_10px_30px_rgba(0,0,0,0.22)] transition duration-300 hover:border-white/20 hover:bg-white/[0.05]">
                 <ShynvoLogo />
               </div>
+
               <span className="text-sm font-semibold tracking-[0.02em] text-white">
                 Shynvo
               </span>
@@ -27,13 +33,14 @@ export default function SiteFooter() {
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <FooterBadge>AI-guided</FooterBadge>
-              <FooterBadge>Modular</FooterBadge>
-              <FooterBadge>Structured</FooterBadge>
+              <Badge>AI-guided</Badge>
+              <Badge>Modular</Badge>
+              <Badge>Structured</Badge>
             </div>
           </div>
 
-          <FooterColumn
+          {/* PRODUCT */}
+          <Column
             title="Product"
             links={[
               { label: "Docs", href: "/docs" },
@@ -42,7 +49,8 @@ export default function SiteFooter() {
             ]}
           />
 
-          <FooterColumn
+          {/* PLATFORM */}
+          <Column
             title="Platform"
             links={[
               { label: "University Hub", href: "/university" },
@@ -52,18 +60,17 @@ export default function SiteFooter() {
             ]}
           />
 
-          <FooterColumn
+          {/* COMPANY */}
+          <Column
             title="Company"
             links={[
               { label: "Contact", href: "/contact" },
-              { label: "Terms", href: "/terms" },
-              { label: "Privacy", href: "/privacy" },
-              { label: "Refund", href: "/refund" },
             ]}
           />
         </div>
 
-        <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 backdrop-blur-[2px] sm:px-5">
+        {/* BOTTOM BAR */}
+        <div className="mt-12 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 backdrop-blur-[2px] sm:px-5">
           <div className="flex flex-col gap-3 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
             <div>© {new Date().getFullYear()} Shynvo. All rights reserved.</div>
 
@@ -85,7 +92,7 @@ export default function SiteFooter() {
   );
 }
 
-function FooterColumn({
+function Column({
   title,
   links,
 }: {
@@ -112,9 +119,9 @@ function FooterColumn({
   );
 }
 
-function FooterBadge({ children }: { children: React.ReactNode }) {
+function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-white/65">
+    <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-white/65 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white/80">
       {children}
     </span>
   );
