@@ -704,7 +704,7 @@ export default function RobotWorldPage() {
       </div>
 
       <div className="mt-8 grid gap-5 xl:grid-cols-[260px_minmax(340px,0.85fr)_minmax(420px,1fr)] 2xl:grid-cols-[280px_minmax(360px,0.82fr)_minmax(460px,0.98fr)]">
-        <aside className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+        <aside className="order-2 rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm xl:order-1">
           <div className="flex items-center justify-between gap-3">
             <div>
               <div className="text-sm font-semibold text-white">Chats</div>
@@ -755,7 +755,7 @@ export default function RobotWorldPage() {
           </div>
         </aside>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 xl:p-6 backdrop-blur-sm">
+        <div className="order-3 rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm xl:order-2 xl:p-6">
           <div className="flex items-center justify-between gap-3">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
               Robot Presence
@@ -804,7 +804,7 @@ export default function RobotWorldPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+        <div className="order-1 flex min-h-[75dvh] flex-col rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm xl:order-3 xl:min-h-0">
           <div className="flex items-center justify-between gap-3">
             <div>
               <div className="text-sm font-semibold text-white">Robot channel</div>
@@ -824,7 +824,7 @@ export default function RobotWorldPage() {
 
           <div
             ref={listRef}
-            className="mt-5 h-[420px] overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4"
+            className="mt-5 min-h-0 flex-1 overflow-auto rounded-2xl border border-white/10 bg-black/20 p-4 h-[42dvh] sm:h-[420px]"
           >
             <div className="space-y-3">
               {messages.map((msg, index) => (
@@ -857,6 +857,7 @@ export default function RobotWorldPage() {
               ) : null}
             </div>
           </div>
+
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
               Text
@@ -866,8 +867,8 @@ export default function RobotWorldPage() {
             </span>
           </div>
 
-          <div className="mt-4 flex flex-col gap-3">
-            <div className="flex flex-wrap gap-3">
+          <div className="sticky bottom-0 z-10 mt-4 flex flex-col gap-3 border-t border-white/10 bg-[#0B0F14]/95 pt-4 backdrop-blur-xl">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -891,7 +892,7 @@ export default function RobotWorldPage() {
                   if (e.key === "Enter") sendMessage();
                 }}
                 placeholder={t("robot.ask")}
-                className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+                className="w-full min-w-0 flex-1 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
               />
 
               <button

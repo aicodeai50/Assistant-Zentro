@@ -311,69 +311,78 @@ export default function ShynvoGuideChat() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-[90]">
+    <div className="fixed bottom-3 right-3 z-[90] sm:bottom-5 sm:right-5">
       {open ? (
-        <div className="w-[340px] overflow-hidden rounded-3xl border border-white/10 bg-[#0B0F14]/95 shadow-2xl backdrop-blur-xl">
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-            <div>
-              <div className="text-sm font-semibold text-white">Shynvo Guide</div>
-              <div className="text-xs text-white/55">Short platform answers</div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-2 py-1 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-[1px] sm:hidden"
+            onClick={() => setOpen(false)}
+          />
 
-          <div className="max-h-[360px] space-y-3 overflow-y-auto px-4 py-4">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={[
-                  "max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-6",
-                  msg.role === "user"
-                    ? "ml-auto bg-white text-[#0B0F14]"
-                    : "bg-white/5 text-white/85",
-                ].join(" ")}
-              >
-                {msg.text}
+          <div className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[85dvh] flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-[#0B0F14]/95 shadow-2xl backdrop-blur-xl sm:inset-auto sm:bottom-5 sm:right-5 sm:w-[340px] sm:max-h-none sm:rounded-3xl">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+              <div>
+                <div className="text-sm font-semibold text-white">Shynvo Guide</div>
+                <div className="text-xs text-white/55">Short platform answers</div>
               </div>
-            ))}
-
-            {lastReply?.href && messages[messages.length - 1]?.role === "bot" ? (
-              <a
-                href={lastReply.href}
-                className="inline-flex rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/85 hover:bg-white/10"
-              >
-                {lastReply.label || "Open"}
-              </a>
-            ) : null}
-          </div>
-
-          <div className="border-t border-white/10 p-3">
-            <div className="flex gap-2">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") sendMessage();
-                }}
-                placeholder="Ask about Shynvo..."
-                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
-              />
               <button
                 type="button"
-                onClick={sendMessage}
-                className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-2 py-1 text-sm text-white/70 hover:bg-white/5 hover:text-white"
               >
-                Send
+                ✕
               </button>
             </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:max-h-[360px]">
+              <div className="space-y-3">
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={[
+                      "max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-6",
+                      msg.role === "user"
+                        ? "ml-auto bg-white text-[#0B0F14]"
+                        : "bg-white/5 text-white/85",
+                    ].join(" ")}
+                  >
+                    {msg.text}
+                  </div>
+                ))}
+
+                {lastReply?.href && messages[messages.length - 1]?.role === "bot" ? (
+                  <a
+                    href={lastReply.href}
+                    className="inline-flex rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/85 hover:bg-white/10"
+                  >
+                    {lastReply.label || "Open"}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+              <div className="flex gap-2">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") sendMessage();
+                  }}
+                  placeholder="Ask about Shynvo..."
+                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+                />
+                <button
+                  type="button"
+                  onClick={sendMessage}
+                  className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         <button
           type="button"

@@ -20,12 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative min-h-screen overflow-x-hidden bg-[#04070d] text-white">
+      <body className="relative min-h-[100dvh] overflow-x-hidden bg-[#04070d] text-white">
         <LanguageProvider>
           <PathTracker />
           <UltraPremiumEffects />
 
-          <div className="relative z-10 flex min-h-screen flex-col">
+          <div className="relative z-10 flex min-h-[100dvh] flex-col">
             <SiteNav />
 
             <main className="relative z-10 flex-1">
