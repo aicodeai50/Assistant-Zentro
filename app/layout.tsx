@@ -7,10 +7,20 @@ import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import AIBackground from "./components/AIBackground";
 import PathTracker from "./components/PathTracker";
 import UltraPremiumEffects from "./components/UltraPremiumEffects";
+import CapacitorKeyboardFix from "@/components/CapacitorKeyboardFix";
 
 export const metadata: Metadata = {
   title: "Shynvo",
   description: "Structured intelligence platform",
+  applicationName: "Shynvo",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Shynvo",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -22,6 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="relative min-h-[100dvh] overflow-x-hidden bg-[#04070d] text-white">
         <LanguageProvider>
+          <CapacitorKeyboardFix />
           <PathTracker />
           <UltraPremiumEffects />
 
