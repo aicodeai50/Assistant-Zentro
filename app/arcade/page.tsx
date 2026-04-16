@@ -1,664 +1,131 @@
 "use client";
-
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "shynvo_arcade_player_name";
-const MODE_STORAGE_KEY = "shynvo_arcade_mode";
-const XP_STORAGE_KEY = "shynvo_arcade_xp";
-const STREAK_STORAGE_KEY = "shynvo_arcade_streak";
+const C = "#f59e0b";
+const mono:React.CSSProperties={fontFamily:"var(--font-space-mono,monospace)"};
+const sans:React.CSSProperties={fontFamily:"var(--font-syne,sans-serif)"};
 
-const quickStatsBase = [
-  { label: "Rank", value: "Silver Engineer" },
-  { label: "Season", value: "Arcade S1" },
+const STORAGE_KEY="shynvo_arcade_player_name";
+const XP_KEY="shynvo_arcade_xp";
+const STREAK_KEY="shynvo_arcade_streak";
+
+const ZONES = [
+  { href:"/arcade/drill",         title:"Drill Arena",       desc:"Fast challenge rounds for focus, reflex, and logic training.",             tags:["Drills","Speed","Practice"]   },
+  { href:"/arcade/interview",     title:"Interview Quest",   desc:"Gamified interview practice with progress-style challenge flow.",          tags:["Interview","Questions","XP"]  },
+  { href:"/arcade/score",         title:"Score Chamber",     desc:"Track performance, streaks, levels, and XP flow.",                        tags:["Scores","Levels","Ranking"]   },
+  { href:"/arcade/achievements",  title:"Achievements Hall", desc:"Unlock badges, milestones, trophies, and visible player progress.",       tags:["Badges","Milestones","XP"]    },
+  { href:"/arcade/ranks",         title:"Rank Ladder",       desc:"See your current rank and climb the challenge ladder.",                   tags:["Bronze","Silver","Gold"]      },
+  { href:"/arcade/daily",         title:"Daily Challenge",   desc:"Rotating daily quests for bonus XP, streak growth, and rewards.",         tags:["Daily","Bonus","Rewards"]     },
 ];
 
-const zones = [
-  {
-    href: "/arcade/drill",
-    title: "Drill Arena",
-    desc: "Fast challenge rounds for focus, reflex, logic, and performance training.",
-    tags: ["Drills", "Speed", "Practice"],
-  },
-  {
-    href: "/arcade/interview",
-    title: "Interview Quest",
-    desc: "Gamified interview and oral-response practice with progress-style challenge flow.",
-    tags: ["Interview", "Questions", "Progress"],
-  },
-  {
-    href: "/arcade/score",
-    title: "Score Chamber",
-    desc: "Track performance, streaks, levels, challenge scores, and XP flow.",
-    tags: ["Scores", "Levels", "Ranking"],
-  },
-  {
-    href: "/arcade/achievements",
-    title: "Achievements Hall",
-    desc: "Unlock badges, milestones, trophies, and visible player progress.",
-    tags: ["Badges", "Milestones", "XP"],
-  },
-  {
-    href: "/arcade/ranks",
-    title: "Rank Ladder",
-    desc: "See your current rank, climb the ladder, and compare challenge progress.",
-    tags: ["Bronze", "Silver", "Gold"],
-  },
-  {
-    href: "/arcade/daily",
-    title: "Daily Challenge",
-    desc: "Complete rotating daily quests for bonus XP, streak growth, and reward boosts.",
-    tags: ["Daily", "Bonus", "Rewards"],
-  },
-];
+const BADGES = ["Logic Rookie","Speed Thinker","Quest Starter","Daily Streak"];
 
-const badges = ["Logic Rookie", "Speed Thinker", "Quest Starter", "Daily Streak"];
+function getLevelFromXp(xp:number){return Math.max(1,Math.floor(xp/150)+1);}
+function getXpProgress(xp:number){return xp%150;}
 
-const modes = [
-  {
-    id: "reflex",
-    title: "Reflex Mode",
-    desc: "Fast decision rounds with time pressure and combo streaks.",
-    accent: "from-pink-400 via-fuchsia-400 to-violet-400",
-    targetTime: 18,
-    rewardXp: 70,
-  },
-  {
-    id: "memory",
-    title: "Memory Mode",
-    desc: "Pattern retention, repetition, and recall challenge flow.",
-    accent: "from-cyan-400 via-sky-400 to-blue-500",
-    targetTime: 30,
-    rewardXp: 55,
-  },
-  {
-    id: "interview",
-    title: "Interview Mode",
-    desc: "Think, structure, and respond under a clear timed prompt.",
-    accent: "from-emerald-400 via-teal-400 to-cyan-400",
-    targetTime: 45,
-    rewardXp: 85,
-  },
-];
+export default function ArcadePage() {
+  const [name,setName]=useState("Operator");
+  const [xp,setXp]=useState(0);
+  const [streak,setStreak]=useState(0);
 
-const challengePrompts = [
-  "You have 30 seconds: name 3 ways to improve focus before an interview.",
-  "Explain one technical concept simply, as if teaching a beginner.",
-  "Choose the best next step: speed, accuracy, or review — and say why.",
-  "Give a fast answer: what makes a system feel reliable to a user?",
-  "State one goal, one obstacle, and one next action in one sentence.",
-];
+  useEffect(()=>{
+    setName(localStorage.getItem(STORAGE_KEY)||"Operator");
+    setXp(Number(localStorage.getItem(XP_KEY)||0));
+    setStreak(Number(localStorage.getItem(STREAK_KEY)||0));
+  },[]);
 
-function getLevelFromXp(xp: number) {
-  return Math.max(1, Math.floor(xp / 150) + 1);
-}
-
-function getXpProgress(xp: number) {
-  return xp % 150;
-}
-
-function formatSeconds(value: number) {
-  return value.toString().padStart(2, "0");
-}
-
-export default function ArcadeSimPage() {
-  const [playerName, setPlayerName] = useState("Shynvo Player");
-  const [draftName, setDraftName] = useState("Shynvo Player");
-
-  const [xp, setXp] = useState(840);
-  const [streak, setStreak] = useState(12);
-
-  const [selectedModeId, setSelectedModeId] = useState("reflex");
-  const [activePromptIndex, setActivePromptIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(18);
-  const [isRunning, setIsRunning] = useState(false);
-  const [roundFinished, setRoundFinished] = useState(false);
-  const [roundScore, setRoundScore] = useState<number | null>(null);
-
-  const selectedMode =
-    modes.find((mode) => mode.id === selectedModeId) ?? modes[0];
-
-  const level = getLevelFromXp(xp);
-  const xpProgress = getXpProgress(xp);
-  const xpGoal = 150;
-  const xpPercent = Math.min(100, (xpProgress / xpGoal) * 100);
-
-  useEffect(() => {
-    try {
-      const savedName = localStorage.getItem(STORAGE_KEY);
-      const savedMode = localStorage.getItem(MODE_STORAGE_KEY);
-      const savedXp = localStorage.getItem(XP_STORAGE_KEY);
-      const savedStreak = localStorage.getItem(STREAK_STORAGE_KEY);
-
-      if (savedName?.trim()) {
-        setPlayerName(savedName);
-        setDraftName(savedName);
-      }
-
-      if (savedMode && modes.some((mode) => mode.id === savedMode)) {
-        setSelectedModeId(savedMode);
-      }
-
-      if (savedXp && !Number.isNaN(Number(savedXp))) {
-        setXp(Number(savedXp));
-      }
-
-      if (savedStreak && !Number.isNaN(Number(savedStreak))) {
-        setStreak(Number(savedStreak));
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
-    setTimeLeft(selectedMode.targetTime);
-    setRoundFinished(false);
-    setRoundScore(null);
-    setIsRunning(false);
-
-    try {
-      localStorage.setItem(MODE_STORAGE_KEY, selectedModeId);
-    } catch {
-      // ignore
-    }
-  }, [selectedModeId, selectedMode.targetTime]);
-
-  useEffect(() => {
-    if (!isRunning) return;
-
-    const timer = window.setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          window.clearInterval(timer);
-          setIsRunning(false);
-          setRoundFinished(true);
-          setRoundScore(68);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => window.clearInterval(timer);
-  }, [isRunning]);
-
-  const quickStats = useMemo(
-    () => [
-      { label: "Level", value: String(level) },
-      { label: "XP", value: `${xpProgress} / ${xpGoal}` },
-      ...quickStatsBase,
-      { label: "Streak", value: `${streak} rounds` },
-    ],
-    [level, xpProgress, streak]
-  );
-
-  function saveName() {
-    const next = draftName.trim() || "Shynvo Player";
-    setPlayerName(next);
-    setDraftName(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // ignore
-    }
-  }
-
-  function startRound() {
-    setTimeLeft(selectedMode.targetTime);
-    setRoundFinished(false);
-    setRoundScore(null);
-    setIsRunning(true);
-  }
-
-  function pauseRound() {
-    setIsRunning(false);
-  }
-
-  function resetRound() {
-    setIsRunning(false);
-    setRoundFinished(false);
-    setRoundScore(null);
-    setTimeLeft(selectedMode.targetTime);
-  }
-
-  function nextPrompt() {
-    setActivePromptIndex((prev) => (prev + 1) % challengePrompts.length);
-    setRoundFinished(false);
-    setRoundScore(null);
-    setTimeLeft(selectedMode.targetTime);
-    setIsRunning(false);
-  }
-
-  function claimReward() {
-    const nextXp = xp + selectedMode.rewardXp;
-    const nextStreak = streak + 1;
-
-    setXp(nextXp);
-    setStreak(nextStreak);
-    setRoundFinished(false);
-    setRoundScore(null);
-    setTimeLeft(selectedMode.targetTime);
-
-    try {
-      localStorage.setItem(XP_STORAGE_KEY, String(nextXp));
-      localStorage.setItem(STREAK_STORAGE_KEY, String(nextStreak));
-    } catch {
-      // ignore
-    }
-  }
+  const level=getLevelFromXp(xp);
+  const xpProgress=getXpProgress(xp);
+  const xpPct=Math.round((xpProgress/150)*100);
 
   return (
-    <section className="relative py-10 sm:py-14">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[2rem]"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(900px_480px_at_15%_10%,rgba(244,114,182,0.12),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(900px_480px_at_85%_14%,rgba(168,85,247,0.12),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(900px_540px_at_50%_100%,rgba(59,130,246,0.08),transparent_55%)]" />
-      </div>
+    <section style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 80px",position:"relative",zIndex:1}}>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <Link
-          href="/"
-          className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
-        >
-          ← Back
-        </Link>
-        <Link
-          href="/"
-          className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
-        >
-          Home
-        </Link>
-        <span className="inline-flex items-center rounded-xl border border-pink-400/20 bg-pink-400/10 px-3 py-2 text-sm text-pink-100">
-          Arcade Sim
-        </span>
-      </div>
-
-      <div className="mt-6 flex flex-wrap gap-2">
-        {[
-          { href: "/arcade/drill", label: "Drills" },
-          { href: "/arcade/interview", label: "Interviews" },
-          { href: "/arcade/score", label: "Scores" },
-          { href: "/arcade/achievements", label: "Achievements" },
-          { href: "/arcade/ranks", label: "Ranks" },
-          { href: "/arcade/daily", label: "Daily" },
-        ].map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/70 transition hover:bg-white/10 hover:text-white"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </div>
-
-      <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-pink-200/70">
-            Competitive Skill Arena
-          </div>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-            Arcade Sim
-          </h1>
-          <p className="mt-3 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-            Arcade Sim turns practice into challenge mode. Train through timed drills,
-            interview quests, XP loops, score systems, rank ladders, and daily reward flow.
-          </p>
-        </div>
-
-        <div className="rounded-full border border-pink-400/20 bg-pink-400/10 px-4 py-2 text-sm text-pink-100">
-          Game Layer: Active
-        </div>
-      </div>
-
-      <div className="mt-8 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-pink-300/20 bg-pink-400/10 text-xl font-semibold text-pink-100">
-              {playerName.slice(0, 2).toUpperCase()}
+      {/* Header */}
+      <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+        <div style={{display:"flex",flexWrap:"wrap",alignItems:"flex-start",justifyContent:"space-between",gap:16}}>
+          <div style={{maxWidth:480}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:12}}>
+              <span style={{width:5,height:5,borderRadius:"50%",background:C,boxShadow:`0 0 8px ${C}`,display:"inline-block",flexShrink:0}}/>
+              <span style={{...mono,fontSize:9,color:C,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.75}}>Arcade Sim · Challenge Layer</span>
             </div>
-
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
-                Player Profile
-              </div>
-              <div className="mt-1 text-2xl font-semibold text-white">{playerName}</div>
-              <div className="mt-1 text-sm text-white/65">
-                Silver Engineer • Level {level}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
-            <input
-              value={draftName}
-              onChange={(e) => setDraftName(e.target.value)}
-              placeholder="Type player name"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
-            />
-            <button
-              type="button"
-              onClick={saveName}
-              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-            >
-              Save name
-            </button>
-          </div>
-
-          <div className="mt-6">
-            <div className="mb-2 flex items-center justify-between text-sm text-white/70">
-              <span>XP Progress</span>
-              <span>
-                {xpProgress} / {xpGoal}
-              </span>
-            </div>
-            <div className="h-3 rounded-full bg-white/10">
-              <div
-                className="h-3 rounded-full bg-gradient-to-r from-pink-400 via-fuchsia-400 to-violet-400 transition-all duration-500"
-                style={{ width: `${xpPercent}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {quickStats.map((item) => (
-              <div
-                key={item.label}
-                className="rounded-2xl border border-white/10 bg-black/20 p-4"
-              >
-                <div className="text-sm text-white/60">{item.label}</div>
-                <div className="mt-2 text-xl font-semibold text-white">
-                  {item.value}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-            Active Badges
-          </div>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-            Recent unlocked identity
-          </h2>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {badges.map((badge) => (
-              <div
-                key={badge}
-                className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4"
-              >
-                <div className="text-sm font-semibold text-white">{badge}</div>
-                <div className="mt-1 text-xs text-white/55">Achievement active</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-5 rounded-2xl border border-pink-400/20 bg-pink-400/10 p-4">
-            <div className="text-sm font-semibold text-pink-100">Next unlock</div>
-            <div className="mt-2 text-sm leading-6 text-pink-50/90">
-              Reach the next XP threshold to unlock a new player level and move closer
-              to Gold Strategist.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-              Live Mode Selector
-            </div>
-            <h2 className="mt-2 text-2xl font-semibold text-white">
-              Choose the challenge style
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65">
-              Pick a mode, launch a timed round, score XP, and rotate through prompts.
-              This makes Arcade Sim feel like a real arena, not just a route page.
+            <h1 style={{...sans,fontWeight:800,fontSize:"clamp(1.4rem,2.5vw,2rem)",color:"#fff",margin:"0 0 10px",letterSpacing:"-0.02em"}}>
+              Arcade Sim
+            </h1>
+            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.48)",lineHeight:1.75}}>
+              Skill training through challenge mode. Drills, interview quests, rankings, and gamified progression.
             </p>
           </div>
 
-          <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-100">
-            Active Mode: {selectedMode.title}
-          </div>
-        </div>
-
-        <div className="mt-6 grid gap-4 lg:grid-cols-3">
-          {modes.map((mode) => {
-            const active = selectedModeId === mode.id;
-
-            return (
-              <button
-                key={mode.id}
-                type="button"
-                onClick={() => setSelectedModeId(mode.id)}
-                className={`rounded-3xl border p-5 text-left transition ${
-                  active
-                    ? "border-white/20 bg-white/[0.11]"
-                    : "border-white/10 bg-black/20 hover:bg-white/[0.06]"
-                }`}
-              >
-                <div
-                  className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold text-white bg-gradient-to-r ${mode.accent}`}
-                >
-                  {mode.title}
+          {/* Player card */}
+          <div style={{background:"rgba(245,158,11,0.05)",border:"1px solid rgba(245,158,11,0.15)",borderRadius:6,padding:14,minWidth:200}}>
+            <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:10,opacity:0.7}}>Player Profile</div>
+            <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:10}}>{name}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              {[{l:"Level",v:`${level}`},{l:"XP",v:`${xp}`},{l:"Streak",v:`${streak} days`},{l:"Rank",v:"Silver Engineer"}].map(x=>(
+                <div key={x.l} style={{display:"flex",justifyContent:"space-between"}}>
+                  <span style={{...mono,fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:"0.08em",textTransform:"uppercase"}}>{x.l}</span>
+                  <span style={{...mono,fontSize:10,color:C}}>{x.v}</span>
                 </div>
-                <p className="mt-4 text-sm leading-6 text-white/72">{mode.desc}</p>
-                <div className="mt-4 text-xs text-white/50">
-                  Target time: {mode.targetTime}s · Reward: +{mode.rewardXp} XP
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="mt-8 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-                Live Challenge
-              </div>
-              <h2 className="mt-2 text-2xl font-semibold text-white">
-                {selectedMode.title}
-              </h2>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
-                Timer
-              </div>
-              <div className="mt-1 text-2xl font-semibold text-white">
-                00:{formatSeconds(timeLeft)}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 rounded-3xl border border-white/10 bg-black/20 p-5">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-              Prompt
-            </div>
-            <p className="mt-3 text-base leading-7 text-white/85">
-              {challengePrompts[activePromptIndex]}
-            </p>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-4">
-            <button
-              type="button"
-              onClick={startRound}
-              className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-            >
-              Start
-            </button>
-            <button
-              type="button"
-              onClick={pauseRound}
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
-            >
-              Pause
-            </button>
-            <button
-              type="button"
-              onClick={resetRound}
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              onClick={nextPrompt}
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
-            >
-              Next prompt
-            </button>
-          </div>
-
-          <div className="mt-5 rounded-2xl border border-pink-400/20 bg-pink-400/10 p-4">
-            {!roundFinished ? (
-              <div className="text-sm leading-6 text-pink-50/90">
-                {isRunning
-                  ? "Round active. Focus, answer fast, and beat the timer."
-                  : "Press start when you are ready. Touch the prompt flow, then claim reward after finishing."}
-              </div>
-            ) : (
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <div className="text-sm font-semibold text-pink-100">
-                    Round finished
-                  </div>
-                  <div className="mt-1 text-sm text-pink-50/90">
-                    Score: {roundScore ?? 68} · Claim +{selectedMode.rewardXp} XP and grow your streak.
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={claimReward}
-                  className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-                >
-                  Claim reward
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-            Progress Dashboard
-          </div>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            Your arena state
-          </h2>
-
-          <div className="mt-5 grid gap-4">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-sm text-white/60">Current mode reward</div>
-              <div className="mt-2 text-2xl font-semibold text-white">
-                +{selectedMode.rewardXp} XP
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-sm text-white/60">Suggested next action</div>
-              <div className="mt-2 text-base font-semibold text-white">
-                Finish one {selectedMode.title.toLowerCase()} round, then open Score Chamber.
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-sm text-white/60">Today’s objective</div>
-              <div className="mt-2 text-base font-semibold text-white">
-                Complete 3 challenge rounds to extend your streak.
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-sm text-white/60">Current prompt position</div>
-              <div className="mt-2 text-base font-semibold text-white">
-                Prompt {activePromptIndex + 1} of {challengePrompts.length}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              href="/arcade/score"
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
-            >
-              Open Score Chamber
-            </Link>
-            <Link
-              href="/arcade/daily"
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
-            >
-              Open Daily Challenge
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8 rounded-3xl border border-pink-400/20 bg-pink-400/10 p-5">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="text-sm font-semibold text-pink-100">Start here</div>
-            <div className="mt-2 max-w-2xl text-sm leading-6 text-pink-50/90">
-              New to Arcade Sim? Start with Drill Arena, move into Interview Quest,
-              and use Score Chamber to track your growth.
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/arcade/drill"
-              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] hover:bg-white/90"
-            >
-              Start Drill Arena
-            </Link>
-            <Link
-              href="/arcade/daily"
-              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
-            >
-              Open Daily Challenge
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {zones.map((zone) => (
-          <Link
-            key={zone.href}
-            href={zone.href}
-            className="group rounded-3xl border border-white/10 bg-white/[0.07] p-5 transition hover:bg-white/[0.11]"
-          >
-            <div className="text-xl font-semibold text-white">{zone.title}</div>
-            <p className="mt-3 text-sm leading-6 text-white/70">{zone.desc}</p>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {zone.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
-                >
-                  {tag}
-                </span>
               ))}
             </div>
-
-            <div className="mt-5 text-sm font-semibold text-white/90 group-hover:text-white">
-              Enter →
+            {/* XP bar */}
+            <div style={{marginTop:10}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+                <span style={{...mono,fontSize:8,color:"rgba(255,255,255,0.3)",letterSpacing:"0.08em",textTransform:"uppercase"}}>XP to next level</span>
+                <span style={{...mono,fontSize:8,color:C}}>{xpProgress}/150</span>
+              </div>
+              <div style={{height:3,background:"rgba(255,255,255,0.08)",borderRadius:2,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${xpPct}%`,background:C,borderRadius:2,transition:"width 0.3s"}}/>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Badges */}
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",margin:"14px 0"}}>
+        {BADGES.map(b=>(
+          <span key={b} style={{...mono,fontSize:9,color:C,border:`1px solid rgba(245,158,11,0.25)`,borderRadius:3,padding:"4px 10px",letterSpacing:"0.08em",textTransform:"uppercase",background:"rgba(245,158,11,0.04)"}}>{b}</span>
+        ))}
+      </div>
+
+      {/* Zones */}
+      <div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 12px"}}>
+        <div style={{flex:1,height:1,background:`linear-gradient(90deg,rgba(245,158,11,0.25),transparent)`}}/>
+        <span style={{...mono,fontSize:9,color:C,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6}}>Challenge Zones</span>
+        <div style={{flex:1,height:1,background:`linear-gradient(270deg,rgba(245,158,11,0.25),transparent)`}}/>
+      </div>
+      <div style={{display:"grid",gap:10,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,220px),1fr))"}}>
+        {ZONES.map(z=>(
+          <Link key={z.href} href={z.href} className="env-card" style={{textDecoration:"none"}}>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${C},transparent)`,opacity:0.22,pointerEvents:"none"}}/>
+            <div style={{...sans,fontSize:13,fontWeight:700,color:"#fff",marginBottom:6}}>{z.title}</div>
+            <p style={{...mono,fontSize:10,color:"rgba(255,255,255,0.44)",lineHeight:1.65,marginBottom:10}}>{z.desc}</p>
+            <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:12}}>
+              {z.tags.map(t=><span key={t} className="env-tag">{t}</span>)}
+            </div>
+            <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.08em",textTransform:"uppercase"}}>Enter Zone →</div>
           </Link>
         ))}
+      </div>
+
+      {/* Start CTA */}
+      <div className="env-panel" style={{"--env-color":C,marginTop:14} as React.CSSProperties}>
+        <div style={{display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:16}}>
+          <div>
+            <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:6}}>Start Here</div>
+            <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:4}}>New to Arcade Sim?</div>
+            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",maxWidth:380,lineHeight:1.7}}>
+              Start with Drill Arena, move into Interview Quest, use Score Chamber to track growth.
+            </p>
+          </div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            <Link href="/arcade/drill" style={{...mono,fontSize:10,fontWeight:700,color:"#020508",background:C,padding:"9px 16px",borderRadius:3,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:`0 0 16px rgba(245,158,11,0.3)`}}>Start Drill Arena</Link>
+            <Link href="/arcade/daily" style={{...mono,fontSize:10,color:C,border:`1px solid rgba(245,158,11,0.28)`,padding:"9px 14px",borderRadius:3,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase"}}>Daily Challenge</Link>
+          </div>
+        </div>
       </div>
     </section>
   );
