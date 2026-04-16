@@ -23,7 +23,7 @@ const plans = [
   {
     key: "pro",
     name: "Pro",
-    price: "$25",
+    price: "$19",
     period: "/ month",
     bestFor: "Best for individuals",
     href: "/checkout/pro",
@@ -40,7 +40,7 @@ const plans = [
   {
     key: "team",
     name: "Team",
-    price: "$50",
+    price: "$40",
     period: "/ month",
     bestFor: "Best for teams",
     href: "/checkout/team",
