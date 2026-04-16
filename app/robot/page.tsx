@@ -92,9 +92,9 @@ const bdim = "rgba(255,255,255,0.06)";
 const bg2 = "#060c14";
 const bg3 = "#0a1220";
 
-function Panel({children,style}:{children:React.ReactNode;style?:React.CSSProperties}) {
+function Panel({children,style,className}:{children:React.ReactNode;style?:React.CSSProperties;className?:string}) {
   return (
-    <div style={{background:bg2,border:"1px solid rgba(0,229,255,0.14)",borderRadius:4,position:"relative",overflow:"hidden",...style}}>
+    <div className={className} style={{background:bg2,border:"1px solid rgba(0,229,255,0.14)",borderRadius:4,position:"relative",overflow:"hidden",...style}}>
       <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.5),transparent)",pointerEvents:"none"}}/>
       {[[{top:4,left:4},{borderTop:"1px solid rgba(0,229,255,0.5)",borderLeft:"1px solid rgba(0,229,255,0.5)"}],[{top:4,right:4},{borderTop:"1px solid rgba(0,229,255,0.5)",borderRight:"1px solid rgba(0,229,255,0.5)"}],[{bottom:4,left:4},{borderBottom:"1px solid rgba(0,229,255,0.5)",borderLeft:"1px solid rgba(0,229,255,0.5)"}],[{bottom:4,right:4},{borderBottom:"1px solid rgba(0,229,255,0.5)",borderRight:"1px solid rgba(0,229,255,0.5)"}]].map(([p,b],i)=>(
         <div key={i} aria-hidden style={{position:"absolute",width:10,height:10,opacity:0.55,...p as any,...b as any}}/>
