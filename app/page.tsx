@@ -122,48 +122,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile robot — only on small screens, single instance */}
-        <div style={{marginTop:28,display:"flex",justifyContent:"center"}} className="lg:hidden">
-          <div style={{maxWidth:260,width:"100%",background:"rgba(6,12,20,0.75)",border:"1px solid rgba(0,229,255,0.15)",borderRadius:8,padding:12}}>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,paddingBottom:7,borderBottom:"1px solid rgba(0,229,255,0.07)"}}>
-              <span style={{...mono,fontSize:8,color:CYAN,opacity:0.5,letterSpacing:"0.1em",textTransform:"uppercase"}}>SH-ROBOT · UNIT-01</span>
-              <div style={{display:"flex",alignItems:"center",gap:4}}>
-                <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-                <span style={{...mono,fontSize:8,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase"}}>Standby</span>
-              </div>
-            </div>
-            <WelcomeRobot/>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ WHAT SHYNVO IS ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 24px 80px",position:"relative",zIndex:1}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:32}}>
-          <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
-          <span style={{...mono,fontSize:9,color:CYAN,letterSpacing:"0.2em",textTransform:"uppercase",opacity:0.6}}>What Shynvo Is</span>
-          <div style={{flex:1,height:1,background:"linear-gradient(270deg,rgba(0,229,255,0.25),transparent)"}}/>
-        </div>
-        <div style={{display:"grid",gap:14,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,280px),1fr))"}}>
-          {VALUES.map(item=>(
-            <Link key={item.tag} href={item.href} className="shv-card"
-              onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor=`${item.color}50`;}}
-              onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor="rgba(0,229,255,0.1)";}}
-            >
-              <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${item.color},transparent)`,opacity:0.3,pointerEvents:"none"}}/>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
-                <span style={{...mono,fontSize:9,color:item.color,opacity:0.5,letterSpacing:"0.12em"}}>_{item.tag}</span>
-                <span style={{fontSize:20,color:item.color,opacity:0.5}}>{item.glyph}</span>
-              </div>
-              <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:10,lineHeight:1.35}}>{item.title}</div>
-              <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.75,marginBottom:16}}>{item.desc}</p>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <span style={{...mono,fontSize:9,color:item.color,letterSpacing:"0.1em",textTransform:"uppercase"}}>Learn more</span>
-                <span style={{color:item.color,fontSize:13}}>›</span>
-              </div>
-            </Link>
-          ))}
-        </div>
       </section>
 
       {/* ══ PLATFORM PREVIEW ══ */}
