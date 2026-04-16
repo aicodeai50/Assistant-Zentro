@@ -62,7 +62,7 @@ export default function HomePage() {
 
       {/* ══ HERO ══ */}
       <section className="sh-page" style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 56px",position:"relative",zIndex:1}}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr",gap:32,alignItems:"center"}} className="lg:grid-cols-[1fr_320px]">
+        <div style={{display:"grid",gridTemplateColumns:"1fr",gap:32,alignItems:"flex-start"}} className="lg:grid-cols-[1fr_320px]">
 
           {/* LEFT */}
           <div>
@@ -150,7 +150,7 @@ export default function HomePage() {
           </div>
 
           {/* RIGHT — robot, desktop only */}
-          <div className="hidden lg:flex" style={{justifyContent:"flex-end",alignItems:"center"}}>
+          <div className="hidden lg:flex" style={{justifyContent:"flex-end",alignItems:"flex-start",paddingTop:0}}>
             <div style={{width:300,position:"relative"}}>
               <div aria-hidden style={{position:"absolute",inset:-40,background:"radial-gradient(circle at 50% 45%,rgba(0,229,255,0.1),transparent 60%)",pointerEvents:"none",zIndex:0}}/>
               <div style={{position:"relative",zIndex:1,background:"rgba(6,12,20,0.75)",border:"1px solid rgba(0,229,255,0.16)",borderRadius:10,padding:"12px 12px 8px",backdropFilter:"blur(12px)"}}>
