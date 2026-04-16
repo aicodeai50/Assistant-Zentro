@@ -243,18 +243,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ FEATURE STRIP ══ */}
-      <section style={{position:"relative",zIndex:1,margin:"0 0 64px",borderTop:"1px solid rgba(0,229,255,0.06)",borderBottom:"1px solid rgba(0,229,255,0.06)",background:"rgba(0,229,255,0.015)",padding:"22px 20px"}}>
-        <div style={{maxWidth:960,margin:"0 auto",display:"flex",flexWrap:"wrap",justifyContent:"space-around",gap:16}}>
-          {[{l:"Multi-environment",d:"One login, every world"},{l:"AI-native",d:"Guided from first click"},{l:"Modular by design",d:"Only what you need"},{l:"Structured paths",d:"Always know next step"},{l:"Mobile-ready",d:"iOS & Android apps"}].map(f=>(
-            <div key={f.l} style={{textAlign:"center",minWidth:120}}>
-              <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:12,fontWeight:600,color:"#fff",marginBottom:2}}>{f.l}</div>
-              <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:10,color:"rgba(255,255,255,0.28)"}}>{f.d}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ══ QR ══ */}
       <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
         <div style={{background:"#060c14",border:"1px solid rgba(0,229,255,0.12)",borderRadius:6,padding:"28px 24px",position:"relative",overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",gap:20,textAlign:"center"}} className="md:flex-row md:text-left md:justify-between">
