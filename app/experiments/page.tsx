@@ -1,436 +1,158 @@
 "use client";
-
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import ExperimentsNav from "@/components/experiments/ExperimentsNav";
 
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
-}
+const C = "#00e5ff";
+const mono:React.CSSProperties={fontFamily:"var(--font-space-mono,monospace)"};
+const sans:React.CSSProperties={fontFamily:"var(--font-syne,sans-serif)"};
 
 const LABS = [
-  {
-    key: "debate",
-    title: "Debate Lab",
-    subtitle:
-      "Challenge decisions, assumptions, and arguments from multiple perspectives.",
-    href: "/experiments/debate",
-    tags: ["Arguments", "Reasoning", "Counterpoints"],
-    signal: "Decision intelligence",
-    prompts: [
-      "Should I choose one path over another?",
-      "What is the strongest case against my decision?",
-      "Am I thinking clearly or emotionally?",
-    ],
-  },
-  {
-    key: "simulation",
-    title: "Simulation Lab",
-    subtitle:
-      "Explore likely futures, trade-offs, and outcomes before acting.",
-    href: "/experiments/simulation",
-    tags: ["Scenarios", "Risk", "Forecast"],
-    signal: "Scenario modeling",
-    prompts: [
-      "What happens if I go all in now?",
-      "What happens if I delay this move?",
-      "What risks am I still not seeing?",
-    ],
-  },
-  {
-    key: "concept",
-    title: "Concept Forge",
-    subtitle:
-      "Turn vague ideas into clearer concepts, value, and next steps.",
-    href: "/experiments/concept",
-    tags: ["Ideas", "Strategy", "Innovation"],
-    signal: "Concept development",
-    prompts: [
-      "I have an idea but it feels too vague.",
-      "Who is this really for?",
-      "What should this become in practical terms?",
-    ],
-  },
-  {
-    key: "practice",
-    title: "Practice Arena",
-    subtitle:
-      "Rehearse interviews, presentations, oral exams, and difficult conversations.",
-    href: "/experiments/practice",
-    tags: ["Interviews", "Speaking", "Preparation"],
-    signal: "Performance rehearsal",
-    prompts: [
-      "Help me prepare for an interview.",
-      "Help me practice an oral exam.",
-      "Help me rehearse a difficult conversation.",
-    ],
-  },
-  {
-    key: "rooms",
-    title: "Experiment Rooms",
-    subtitle:
-      "Create collaborative rooms for group testing, debate, and guided sessions.",
-    href: "/experiments/rooms",
-    tags: ["Rooms", "Collaboration", "AI Moderation"],
-    signal: "Collaborative sessions",
-    prompts: [
-      "Create a shared experiment session.",
-      "Run a group debate or practice room.",
-      "Join a guided collaborative room.",
-    ],
-  },
+  { key:"debate",     title:"Debate Lab",        signal:"Decision intelligence",   subtitle:"Challenge decisions and arguments from multiple angles.",      href:"/experiments/debate",     tags:["Arguments","Reasoning","Counterpoints"] },
+  { key:"simulation", title:"Simulation Lab",     signal:"Scenario modeling",       subtitle:"Explore likely futures and trade-offs before acting.",         href:"/experiments/simulation", tags:["Scenarios","Risk","Forecast"] },
+  { key:"concept",    title:"Concept Forge",      signal:"Concept development",     subtitle:"Turn vague ideas into clear concepts and next steps.",         href:"/experiments/concept",    tags:["Ideas","Strategy","Innovation"] },
+  { key:"practice",   title:"Practice Arena",     signal:"Performance rehearsal",   subtitle:"Rehearse interviews, presentations, and hard conversations.",  href:"/experiments/practice",   tags:["Interviews","Speaking","Preparation"] },
+  { key:"rooms",      title:"Experiment Rooms",   signal:"Collaborative sessions",  subtitle:"Group testing, debate, and guided AI sessions.",              href:"/experiments/rooms",      tags:["Rooms","Collaboration","AI"] },
 ];
 
-function chooseSuggestedLab(prompt: string) {
-  const text = prompt.toLowerCase();
-
-  if (
-    text.includes("interview") ||
-    text.includes("oral exam") ||
-    text.includes("presentation") ||
-    text.includes("conversation") ||
-    text.includes("rehearse") ||
-    text.includes("practice")
-  ) {
-    return LABS.find((lab) => lab.key === "practice")!;
-  }
-
-  if (
-    text.includes("idea") ||
-    text.includes("product") ||
-    text.includes("startup") ||
-    text.includes("business") ||
-    text.includes("concept") ||
-    text.includes("platform") ||
-    text.includes("build")
-  ) {
-    return LABS.find((lab) => lab.key === "concept")!;
-  }
-
-  if (
-    text.includes("what if") ||
-    text.includes("risk") ||
-    text.includes("future") ||
-    text.includes("outcome") ||
-    text.includes("scenario") ||
-    text.includes("simulate")
-  ) {
-    return LABS.find((lab) => lab.key === "simulation")!;
-  }
-
-  if (
-    text.includes("team") ||
-    text.includes("friends") ||
-    text.includes("classmates") ||
-    text.includes("room") ||
-    text.includes("group") ||
-    text.includes("together")
-  ) {
-    return LABS.find((lab) => lab.key === "rooms")!;
-  }
-
-  return LABS.find((lab) => lab.key === "debate")!;
+function suggestLab(p:string){
+  const t=p.toLowerCase();
+  if(t.includes("interview")||t.includes("practice")||t.includes("rehearse")) return LABS.find(l=>l.key==="practice")!;
+  if(t.includes("idea")||t.includes("concept")||t.includes("build")) return LABS.find(l=>l.key==="concept")!;
+  if(t.includes("risk")||t.includes("future")||t.includes("scenario")) return LABS.find(l=>l.key==="simulation")!;
+  if(t.includes("team")||t.includes("group")||t.includes("room")) return LABS.find(l=>l.key==="rooms")!;
+  return LABS.find(l=>l.key==="debate")!;
 }
 
 export default function ExperimentsPage() {
-  const [prompt, setPrompt] = useState("");
-  const [selectedKey, setSelectedKey] = useState<string>("debate");
-  const [recent] = useState<string[]>([
-    "Debate session • exam focus vs startup focus",
-    "Simulation run • launch now vs delay 3 months",
-    "Concept session • AI focus app for students",
-  ]);
-
-  const selectedLab =
-    LABS.find((lab) => lab.key === selectedKey) ?? LABS[0];
-
-  const suggestedLab = useMemo(() => {
-    if (!prompt.trim()) return selectedLab;
-    return chooseSuggestedLab(prompt);
-  }, [prompt, selectedLab]);
+  const [prompt,setPrompt]=useState("");
+  const [selected,setSelected]=useState("debate");
+  const selectedLab=LABS.find(l=>l.key===selected)??LABS[0];
+  const suggested=useMemo(()=>prompt.trim()?suggestLab(prompt):selectedLab,[prompt,selectedLab]);
 
   return (
-    <section className="py-10 sm:py-14">
-      <ExperimentsNav />
+    <section style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 80px",position:"relative",zIndex:1}}>
+      <style>{`:root{--env-color:${C}}`}</style>
+      <ExperimentsNav/>
 
-      <div className="relative overflow-hidden rounded-[2rem] border border-cyan-300/15 bg-white/5 p-6 sm:p-8">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(900px_420px_at_15%_18%,rgba(34,211,238,0.10),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(760px_360px_at_88%_20%,rgba(59,130,246,0.10),transparent_48%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.025),transparent)]" />
-        </div>
-
-        <div className="relative flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              Experiments
+      {/* Header */}
+      <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+        <div style={{display:"flex",flexWrap:"wrap",alignItems:"flex-start",justifyContent:"space-between",gap:16}}>
+          <div style={{maxWidth:520}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:12}}>
+              <span className="env-dot" style={{background:C,boxShadow:`0 0 6px ${C}`,animation:"sh-pulse-c 2s ease-in-out infinite"}}/>
+              <span className="env-label" style={{color:C}}>Experiments · AI Exploration Layer</span>
             </div>
-
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-              AI Experiment Command Center
+            <h1 style={{...sans,fontWeight:800,fontSize:"clamp(1.4rem,2.5vw,2rem)",color:"#fff",margin:"0 0 10px",letterSpacing:"-0.02em"}}>
+              Experiment Command Center
             </h1>
-
-            <p className="mt-4 max-w-4xl text-sm leading-6 text-white/70 sm:text-base">
-              This is the Shynvo environment for testing ideas before commitment.
-              Users can challenge decisions, simulate outcomes, shape concepts,
-              rehearse real situations, and open collaborative experiment rooms with
-              clearer AI guidance.
+            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.48)",lineHeight:1.75}}>
+              Test ideas before committing. Challenge decisions, simulate outcomes, shape concepts, rehearse real situations.
             </p>
           </div>
-
-          <div className="grid gap-3 sm:min-w-[260px]">
-            <div className="rounded-2xl border border-cyan-300/15 bg-black/20 px-4 py-3">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100/60">
-                Experiment Layer
+          <div style={{display:"flex",flexDirection:"column",gap:8,minWidth:200}}>
+            {[{l:"Layer",v:"Experiment"},{l:"Active Lab",v:selectedLab.title},{l:"Status",v:"Online"}].map(x=>(
+              <div key={x.l} style={{background:"rgba(0,229,255,0.04)",border:"1px solid rgba(0,229,255,0.1)",borderRadius:4,padding:"8px 12px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{...mono,fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:"0.1em",textTransform:"uppercase"}}>{x.l}</span>
+                <span style={{...mono,fontSize:10,color:C}}>{x.v}</span>
               </div>
-              <div className="mt-1 text-sm font-semibold text-cyan-50">
-                Online
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-cyan-300/15 bg-black/20 px-4 py-3">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100/60">
-                Active Lab
-              </div>
-              <div className="mt-1 text-sm font-semibold text-white">
-                {selectedLab.title}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              Experiment Command
-            </div>
+      {/* Main grid */}
+      <div style={{display:"grid",gap:14,marginTop:14}} className="xl:grid-cols-[1.3fr_0.7fr]">
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
 
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-              What do you want to test?
-            </h2>
-
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">
-              Describe what you want to debate, simulate, rehearse, develop, or
-              test. The system will suggest the most relevant lab.
+          {/* Command input */}
+          <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div className="env-label" style={{color:C,marginBottom:8}}>Experiment Command</div>
+            <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:6}}>What do you want to test?</div>
+            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.7,marginBottom:14}}>
+              Describe your goal. The system routes you to the right lab.
             </p>
-
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Example: I want to decide whether to focus on exams first or continue building my app."
-              className="mt-5 min-h-[170px] w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white outline-none placeholder:text-white/35"
+            <textarea value={prompt} onChange={e=>setPrompt(e.target.value)}
+              placeholder="Example: I want to decide whether to focus on exams or continue building my app."
+              style={{...mono,width:"100%",minHeight:100,background:"rgba(0,0,0,0.3)",border:"1px solid rgba(0,229,255,0.1)",borderRadius:4,padding:"10px 12px",fontSize:11,color:"rgba(255,255,255,0.85)",outline:"none",resize:"vertical",lineHeight:1.7}}
             />
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {LABS.map((lab) => {
-                const active = selectedKey === lab.key;
-
-                return (
-                  <button
-                    key={lab.key}
-                    type="button"
-                    onClick={() => setSelectedKey(lab.key)}
-                    className={cx(
-                      "rounded-2xl border p-4 text-left transition",
-                      active
-                        ? "border-white bg-white text-[#0B0F14]"
-                        : "border-white/10 bg-black/20 text-white/85 hover:bg-white/10"
-                    )}
-                  >
-                    <div className="text-lg font-semibold">{lab.title}</div>
-                    <div className="mt-1 text-sm opacity-80">{lab.subtitle}</div>
-                    <div className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] opacity-70">
-                      {lab.signal}
-                    </div>
-                  </button>
-                );
-              })}
+            <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:12}}>
+              {LABS.map(l=>(
+                <button key={l.key} onClick={()=>setSelected(l.key)}
+                  style={{...mono,fontSize:9,letterSpacing:"0.08em",textTransform:"uppercase",padding:"6px 12px",borderRadius:3,cursor:"pointer",border:`1px solid ${selected===l.key?C:"rgba(255,255,255,0.1)"}`,background:selected===l.key?`rgba(0,229,255,0.1)`:"transparent",color:selected===l.key?C:"rgba(255,255,255,0.5)",transition:"all 0.15s"}}
+                >{l.title}</button>
+              ))}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              Suggested Routing
-            </div>
-
-            <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-lg font-semibold text-white">
-                  {suggestedLab.title}
-                </div>
-                <div className="mt-2 text-sm leading-6 text-white/70">
-                  {suggestedLab.subtitle}
-                </div>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {suggestedLab.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+          {/* Suggested routing */}
+          <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div className="env-label" style={{color:C,marginBottom:8}}>Suggested Routing</div>
+            <div style={{display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:12}}>
+              <div>
+                <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:4}}>{suggested.title}</div>
+                <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.65,maxWidth:340}}>{suggested.subtitle}</p>
+                <div style={{display:"flex",gap:5,flexWrap:"wrap",marginTop:8}}>
+                  {suggested.tags.map(t=><span key={t} className="env-tag">{t}</span>)}
                 </div>
               </div>
-
-              <Link
-                href={
-                  prompt.trim()
-                    ? `${suggestedLab.href}?prompt=${encodeURIComponent(prompt.trim())}`
-                    : suggestedLab.href
-                }
-                className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#0B0F14] transition hover:bg-white/90"
-              >
-                Enter Suggested Lab
-              </Link>
+              <Link href={prompt.trim()?`${suggested.href}?prompt=${encodeURIComponent(prompt)}`:`${suggested.href}`}
+                style={{...mono,fontSize:10,fontWeight:700,color:"#020508",background:C,padding:"9px 16px",borderRadius:3,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase",whiteSpace:"nowrap",boxShadow:`0 0 16px rgba(0,229,255,0.25)`}}
+              >Enter Lab →</Link>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              Experiment Labs
-            </div>
-
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-              Available AI workspaces
-            </h2>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {LABS.map((lab) => (
-                <Link
-                  key={lab.key}
-                  href={lab.href}
-                  className={cx(
-                    "group relative overflow-hidden rounded-3xl border p-5 transition",
-                    "border-cyan-300/15 bg-black/20 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-lg font-semibold text-white">
-                        {lab.title}
-                      </div>
-                      <div className="mt-2 text-sm leading-6 text-white/70">
-                        {lab.subtitle}
-                      </div>
-                    </div>
-
-                    <span className="rounded-full border border-cyan-300/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-semibold text-cyan-100/85">
-                      Active
-                    </span>
+          {/* Labs grid */}
+          <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div className="env-label" style={{color:C,marginBottom:12}}>Available Labs</div>
+            <div style={{display:"grid",gap:10,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,220px),1fr))"}}>
+              {LABS.map(l=>(
+                <Link key={l.key} href={l.href} className="env-card">
+                  <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${C},transparent)`,opacity:0.2,pointerEvents:"none"}}/>
+                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+                    <div style={{...sans,fontSize:13,fontWeight:700,color:"#fff"}}>{l.title}</div>
+                    <span style={{...mono,fontSize:8,color:C,border:`1px solid rgba(0,229,255,0.2)`,borderRadius:3,padding:"2px 6px",letterSpacing:"0.08em",textTransform:"uppercase"}}>Active</span>
                   </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {lab.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  <p style={{...mono,fontSize:10,color:"rgba(255,255,255,0.42)",lineHeight:1.65,marginBottom:10}}>{l.subtitle}</p>
+                  <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10}}>
+                    {l.tags.map(t=><span key={t} className="env-tag">{t}</span>)}
                   </div>
-
-                  <div className="mt-5 flex items-center justify-between">
-                    <span className="text-sm font-semibold text-white/90 group-hover:text-white">
-                      Enter Lab
-                    </span>
-
-                    <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path
-                          d="M10 7 15 12 10 17"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </div>
+                  <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.08em",textTransform:"uppercase"}}>Enter Lab →</div>
                 </Link>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              Live Context
-            </div>
-
-            <div className="mt-4 space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Selected Lab</div>
-                <div className="mt-1 text-sm text-white/65">{selectedLab.title}</div>
+        {/* Right sidebar */}
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div className="env-label" style={{color:C,marginBottom:12}}>Live Context</div>
+            {[{l:"Selected Lab",v:selectedLab.title},{l:"Signal Type",v:selectedLab.signal},{l:"Layer",v:"Experiment"},{l:"Status",v:"Online"}].map(x=>(
+              <div key={x.l} style={{borderBottom:"1px solid rgba(255,255,255,0.04)",padding:"8px 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{...mono,fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:"0.08em",textTransform:"uppercase"}}>{x.l}</span>
+                <span style={{...mono,fontSize:10,color:"rgba(255,255,255,0.75)"}}>{x.v}</span>
               </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Signal Type</div>
-                <div className="mt-1 text-sm text-white/65">{selectedLab.signal}</div>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Best Used For</div>
-                <div className="mt-2 space-y-2 text-sm text-white/70">
-                  {selectedLab.prompts.map((item) => (
-                    <div key={item}>• {item}</div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              Recent Activity
-            </div>
-
-            <div className="mt-4 space-y-3">
-              {recent.map((item, index) => (
-                <div
-                  key={`${item}-${index}`}
-                  className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/75"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
+          <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div className="env-label" style={{color:C,marginBottom:12}}>System Layers</div>
+            {[{l:"Reasoning Layer",v:"Ready"},{l:"Scenario Layer",v:"Ready"},{l:"Practice Layer",v:"Ready"},{l:"Collaboration",v:"Available"}].map(x=>(
+              <div key={x.l} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,0.04)"}}>
+                <span style={{...mono,fontSize:10,color:"rgba(255,255,255,0.55)"}}>{x.l}</span>
+                <span style={{...mono,fontSize:9,color:C,opacity:0.7,letterSpacing:"0.08em",textTransform:"uppercase"}}>{x.v}</span>
+              </div>
+            ))}
           </div>
 
-          <div className="rounded-3xl border border-cyan-300/15 bg-white/5 p-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/70">
-              System View
-            </div>
-
-            <div className="mt-4 grid gap-3">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Reasoning Layer</div>
-                <div className="mt-1 text-sm text-white/65">Ready</div>
+          <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div className="env-label" style={{color:C,marginBottom:12}}>Best Used For</div>
+            {selectedLab.tags.map((t,i)=>(
+              <div key={i} style={{...mono,fontSize:10,color:"rgba(255,255,255,0.5)",padding:"6px 0",borderBottom:"1px solid rgba(255,255,255,0.04)"}}>
+                <span style={{color:C,marginRight:6}}>›</span>{t}
               </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Scenario Layer</div>
-                <div className="mt-1 text-sm text-white/65">Ready</div>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Practice Layer</div>
-                <div className="mt-1 text-sm text-white/65">Ready</div>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-sm font-semibold text-white">Collaboration Layer</div>
-                <div className="mt-1 text-sm text-white/65">Available</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

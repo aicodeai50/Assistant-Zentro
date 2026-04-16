@@ -1,279 +1,139 @@
 "use client";
-
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import EnterpriseNav from "@/components/enterprise/EnterpriseNav";
-import EnterpriseAIBriefing from "@/components/enterprise/EnterpriseAIBriefing";
 
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
-}
+const C = "#00ff88";
+const mono:React.CSSProperties={fontFamily:"var(--font-space-mono,monospace)"};
+const sans:React.CSSProperties={fontFamily:"var(--font-syne,sans-serif)"};
 
 const SECTORS = [
-  { key: "dashboard", title: "Command Center", subtitle: "Company-wide operational overview and quick access.", href: "/enterprise/dashboard", signal: "Executive overview", tags: ["Status", "Overview", "Access"] },
-  { key: "teams", title: "Teams", subtitle: "Departments, members, and role structure.", href: "/enterprise/teams", signal: "Org structure", tags: ["Departments", "Roles", "Members"] },
-  { key: "rooms", title: "Rooms", subtitle: "Team spaces for communication and collaboration.", href: "/enterprise/rooms", signal: "Collaboration layer", tags: ["Meetings", "Workspaces", "Rooms"] },
-  { key: "missions", title: "Missions", subtitle: "Execution flows tied to company goals.", href: "/enterprise/missions", signal: "Execution engine", tags: ["Goals", "Phases", "Delivery"] },
-  { key: "skills", title: "Skill Matrix", subtitle: "Capability mapping and growth visibility.", href: "/enterprise/skills", signal: "Capability mapping", tags: ["Skills", "Growth", "Coverage"] },
-  { key: "strategy", title: "AI Strategy", subtitle: "Structured reasoning for leadership decisions.", href: "/enterprise/strategy", signal: "Decision intelligence", tags: ["Leadership", "Planning", "AI"] },
-  { key: "analytics", title: "Analytics", subtitle: "Operational insight into progress and output.", href: "/enterprise/analytics", signal: "Performance visibility", tags: ["Progress", "Workload", "Output"] },
-  { key: "directory", title: "Directory", subtitle: "Browse company members across roles and teams.", href: "/enterprise/directory", signal: "People index", tags: ["People", "Roles", "Directory"] },
-  { key: "schedule", title: "Schedule", subtitle: "Track meetings, room sessions, and team coordination.", href: "/enterprise/schedule", signal: "Coordination layer", tags: ["Meetings", "Calendar", "Flow"] },
-  { key: "chat", title: "Company Chat", subtitle: "Internal communication layer for the organization.", href: "/enterprise/chat", signal: "Internal comms", tags: ["Chat", "Messages", "Updates"] },
-  { key: "os", title: "OS Core", subtitle: "Execution systems, robots, timelines, and cognitive flow.", href: "/enterprise/os", signal: "Operating layer", tags: ["Focus", "Robots", "Timeline"] },
+  { key:"dashboard", title:"Command Center",  signal:"Executive overview",      subtitle:"Company-wide operational overview and quick access.",        href:"/enterprise/dashboard", tags:["Status","Overview","Access"] },
+  { key:"teams",     title:"Teams",            signal:"Org structure",           subtitle:"Departments, members, and role structure.",                  href:"/enterprise/teams",     tags:["Departments","Roles","Members"] },
+  { key:"rooms",     title:"Rooms",            signal:"Collaboration layer",     subtitle:"Team spaces for communication and collaboration.",           href:"/enterprise/rooms",     tags:["Meetings","Workspaces","Rooms"] },
+  { key:"missions",  title:"Missions",         signal:"Execution engine",        subtitle:"Execution flows tied to company goals.",                    href:"/enterprise/missions",  tags:["Goals","Phases","Delivery"] },
+  { key:"skills",    title:"Skill Matrix",     signal:"Capability mapping",      subtitle:"Capability mapping and growth visibility.",                 href:"/enterprise/skills",    tags:["Skills","Growth","Coverage"] },
+  { key:"strategy",  title:"AI Strategy",      signal:"Decision intelligence",   subtitle:"Structured reasoning for leadership decisions.",            href:"/enterprise/strategy",  tags:["Leadership","Planning","AI"] },
+  { key:"analytics", title:"Analytics",        signal:"Performance visibility",  subtitle:"Operational insight into progress and output.",             href:"/enterprise/analytics", tags:["Progress","Workload","Output"] },
+  { key:"directory", title:"Directory",        signal:"People index",            subtitle:"Browse company members across roles and teams.",            href:"/enterprise/directory", tags:["People","Roles","Directory"] },
+  { key:"schedule",  title:"Schedule",         signal:"Coordination layer",      subtitle:"Track meetings, room sessions, and team coordination.",     href:"/enterprise/schedule",  tags:["Meetings","Calendar","Flow"] },
+  { key:"chat",      title:"Company Chat",     signal:"Internal comms",          subtitle:"Internal communication layer for the organization.",        href:"/enterprise/chat",      tags:["Chat","Messages","Updates"] },
+  { key:"os",        title:"OS Core",          signal:"Operating layer",         subtitle:"Execution systems, robots, timelines, and cognitive flow.", href:"/enterprise/os",        tags:["Focus","Robots","Timeline"] },
 ];
 
-function suggestSector(prompt: string) {
-  const text = prompt.toLowerCase();
-
-  if (text.includes("team") || text.includes("department") || text.includes("member") || text.includes("role")) return SECTORS.find((item) => item.key === "teams")!;
-  if (text.includes("room") || text.includes("meeting") || text.includes("collaborat") || text.includes("workspace")) return SECTORS.find((item) => item.key === "rooms")!;
-  if (text.includes("mission") || text.includes("goal") || text.includes("deliver") || text.includes("launch")) return SECTORS.find((item) => item.key === "missions")!;
-  if (text.includes("skill") || text.includes("capability") || text.includes("growth")) return SECTORS.find((item) => item.key === "skills")!;
-  if (text.includes("strategy") || text.includes("decision") || text.includes("leader") || text.includes("planning")) return SECTORS.find((item) => item.key === "strategy")!;
-  if (text.includes("analytics") || text.includes("performance") || text.includes("workload") || text.includes("progress")) return SECTORS.find((item) => item.key === "analytics")!;
-  if (text.includes("directory") || text.includes("people")) return SECTORS.find((item) => item.key === "directory")!;
-  if (text.includes("schedule") || text.includes("calendar") || text.includes("coordination")) return SECTORS.find((item) => item.key === "schedule")!;
-  if (text.includes("chat") || text.includes("message") || text.includes("communication")) return SECTORS.find((item) => item.key === "chat")!;
-  if (text.includes("os") || text.includes("focus") || text.includes("robot") || text.includes("timeline") || text.includes("cognitive")) return SECTORS.find((item) => item.key === "os")!;
-
-  return SECTORS.find((item) => item.key === "dashboard")!;
-}
-
-function StatusCard({
-  label,
-  value,
-  helper,
-}: {
-  label: string;
-  value: string;
-  helper: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-black/25 p-4 backdrop-blur-sm">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-        {label}
-      </div>
-      <div className="mt-2 text-lg font-semibold text-white">{value}</div>
-      <div className="mt-1 text-sm text-white/55">{helper}</div>
-    </div>
-  );
+function suggestSector(p:string){
+  const t=p.toLowerCase();
+  if(t.includes("team")||t.includes("department")) return SECTORS.find(s=>s.key==="teams")!;
+  if(t.includes("room")||t.includes("meeting")) return SECTORS.find(s=>s.key==="rooms")!;
+  if(t.includes("mission")||t.includes("goal")) return SECTORS.find(s=>s.key==="missions")!;
+  if(t.includes("skill")||t.includes("capability")) return SECTORS.find(s=>s.key==="skills")!;
+  if(t.includes("strategy")||t.includes("decision")) return SECTORS.find(s=>s.key==="strategy")!;
+  if(t.includes("analytics")||t.includes("performance")) return SECTORS.find(s=>s.key==="analytics")!;
+  return SECTORS.find(s=>s.key==="dashboard")!;
 }
 
 export default function EnterprisePage() {
   const router = useRouter();
-  const [command, setCommand] = useState("");
-  const [selectedKey, setSelectedKey] = useState("dashboard");
-
-  const selectedSector =
-    SECTORS.find((sector) => sector.key === selectedKey) ?? SECTORS[0];
-
-  const suggestedSector = useMemo(() => {
-    if (!command.trim()) return selectedSector;
-    return suggestSector(command);
-  }, [command, selectedSector]);
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    router.push(suggestedSector.href);
-  }
+  const [command,setCommand]=useState("");
+  const [selected,setSelected]=useState("dashboard");
+  const selectedSector=SECTORS.find(s=>s.key===selected)??SECTORS[0];
+  const suggested=useMemo(()=>command.trim()?suggestSector(command):selectedSector,[command,selectedSector]);
 
   return (
-    <section className="py-10 sm:py-14">
-      <EnterpriseNav label="Enterprise Layer: Online" />
+    <section style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 80px",position:"relative",zIndex:1}}>
+      <EnterpriseNav label="Enterprise Layer: Online"/>
 
-      <div className="relative overflow-hidden rounded-[2rem] border border-emerald-300/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm sm:p-8">
-        <div className="relative flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/65">
-              Shynvo Enterprise
+      {/* Header */}
+      <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+        <div style={{display:"flex",flexWrap:"wrap",alignItems:"flex-start",justifyContent:"space-between",gap:16}}>
+          <div style={{maxWidth:520}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:12}}>
+              <span className="env-dot" style={{background:C,boxShadow:`0 0 6px ${C}`,animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
+              <span className="env-label" style={{color:C}}>Shynvo Enterprise · Operating Layer</span>
             </div>
-
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-              Unified Enterprise Operating Environment
+            <h1 style={{...sans,fontWeight:800,fontSize:"clamp(1.4rem,2.5vw,2rem)",color:"#fff",margin:"0 0 10px",letterSpacing:"-0.02em"}}>
+              Unified Enterprise Environment
             </h1>
-
-            <p className="mt-4 max-w-5xl text-sm leading-6 text-white/68 sm:text-base">
-              Shynvo Enterprise combines operational visibility, team coordination,
-              missions, strategy, analytics, support, and OS intelligence into one
-              enterprise workspace.
+            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.48)",lineHeight:1.75}}>
+              Team coordination, missions, strategy, analytics, and OS intelligence in one enterprise workspace.
             </p>
           </div>
-
-          <div className="grid gap-3 sm:min-w-[290px]">
-            <StatusCard
-              label="Workspace Layer"
-              value="Enterprise-ready"
-              helper="Built for company operations, coordination, and leadership flow."
-            />
-            <StatusCard
-              label="Current Focus"
-              value={selectedSector.title}
-              helper={selectedSector.signal}
-            />
+          <div style={{display:"flex",flexDirection:"column",gap:8,minWidth:200}}>
+            {[{l:"Workspace",v:"Enterprise"},{l:"Current Sector",v:selectedSector.title},{l:"Status",v:"Ready"}].map(x=>(
+              <div key={x.l} style={{background:"rgba(0,255,136,0.04)",border:"1px solid rgba(0,255,136,0.1)",borderRadius:4,padding:"8px 12px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{...mono,fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:"0.1em",textTransform:"uppercase"}}>{x.l}</span>
+                <span style={{...mono,fontSize:10,color:C}}>{x.v}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <EnterpriseAIBriefing area="dashboard" />
-
-      <div className="mt-8 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <form
-          onSubmit={handleSubmit}
-          className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5"
-        >
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-            Enterprise Command
-          </div>
-
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            What does the company need next?
-          </h2>
-
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/68">
-            Type a request and press Enter or click Open Suggested Sector.
-          </p>
-
-          <input
-            value={command}
-            onChange={(e) => setCommand(e.target.value)}
+      {/* Command + routing */}
+      <div style={{display:"grid",gap:14,marginTop:14}} className="lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+          <div className="env-label" style={{color:C,marginBottom:8}}>Enterprise Command</div>
+          <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:6}}>What does the company need next?</div>
+          <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.7,marginBottom:12}}>Type a request and the system routes you to the right sector.</p>
+          <input value={command} onChange={e=>setCommand(e.target.value)}
             placeholder="Example: review team workload and prepare a leadership decision"
-            className="mt-5 h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/35"
+            style={{...mono,width:"100%",height:42,background:"rgba(0,0,0,0.3)",border:"1px solid rgba(0,255,136,0.1)",borderRadius:4,padding:"0 12px",fontSize:11,color:"rgba(255,255,255,0.85)",outline:"none"}}
           />
-
-          <div className="mt-5 flex flex-wrap gap-3">
-            <button
-              type="submit"
-              className="rounded-xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-[#08110d] transition hover:bg-emerald-300"
-            >
-              Open Suggested Sector
-            </button>
-
-            <Link
-              href="/enterprise/help"
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/85 transition hover:bg-white/10"
-            >
-              Get Support
-            </Link>
+          <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
+            <button onClick={()=>router.push(suggested.href)}
+              style={{...mono,fontSize:10,fontWeight:700,color:"#020508",background:C,padding:"8px 16px",borderRadius:3,border:"none",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase"}}
+            >Open Suggested Sector</button>
+            <Link href="/enterprise/help" style={{...mono,fontSize:10,color:"rgba(255,255,255,0.55)",border:"1px solid rgba(255,255,255,0.1)",padding:"8px 14px",borderRadius:3,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase"}}>Support</Link>
           </div>
-        </form>
+        </div>
 
-        <Link
-          href={suggestedSector.href}
-          className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.06]"
-        >
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-            Suggested Routing
+        <Link href={suggested.href} className="env-panel" style={{"--env-color":C,textDecoration:"none",display:"block"} as React.CSSProperties}>
+          <div className="env-label" style={{color:C,marginBottom:8}}>Suggested Routing</div>
+          <div style={{...sans,fontSize:14,fontWeight:700,color:"#fff",marginBottom:6}}>{suggested.title}</div>
+          <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.65,marginBottom:10}}>{suggested.subtitle}</p>
+          <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:12}}>
+            {suggested.tags.map(t=><span key={t} className="env-tag">{t}</span>)}
           </div>
-
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            {suggestedSector.title}
-          </h2>
-
-          <p className="mt-3 text-sm leading-6 text-white/68">
-            {suggestedSector.subtitle}
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {suggestedSector.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-5 text-sm font-semibold text-emerald-100/80">
-            Open suggested sector
-          </div>
+          <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.08em",textTransform:"uppercase"}}>Open sector →</div>
         </Link>
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {SECTORS.slice(0, 4).map((sector) => (
-          <Link
-            key={sector.key}
-            href={sector.href}
-            onMouseEnter={() => setSelectedKey(sector.key)}
-            className="rounded-[1.5rem] border border-white/10 bg-black/20 p-4 transition hover:bg-white/[0.06]"
-          >
-            <div className="text-lg font-semibold text-white">{sector.title}</div>
-            <div className="mt-1 text-sm text-white/62">{sector.subtitle}</div>
-            <div className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
-              {sector.signal}
-            </div>
+      {/* Quick sectors */}
+      <div style={{display:"grid",gap:10,marginTop:14,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,200px),1fr))"}}>
+        {SECTORS.slice(0,4).map(s=>(
+          <Link key={s.key} href={s.href} className="env-card" onMouseEnter={()=>setSelected(s.key)}>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${C},transparent)`,opacity:0.2,pointerEvents:"none"}}/>
+            <div style={{...sans,fontSize:13,fontWeight:700,color:"#fff",marginBottom:4}}>{s.title}</div>
+            <div style={{...mono,fontSize:10,color:"rgba(255,255,255,0.42)",marginBottom:6}}>{s.subtitle}</div>
+            <div style={{...mono,fontSize:8,color:C,letterSpacing:"0.1em",textTransform:"uppercase"}}>{s.signal}</div>
           </Link>
         ))}
       </div>
 
-      <div className="mt-10">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/70">
-          Enterprise Areas
+      {/* All sectors */}
+      <div style={{marginTop:28}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+          <div style={{flex:1,height:1,background:`linear-gradient(90deg,rgba(0,255,136,0.25),transparent)`}}/>
+          <span style={{...mono,fontSize:9,color:C,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.65}}>All Enterprise Sectors</span>
+          <div style={{flex:1,height:1,background:`linear-gradient(270deg,rgba(0,255,136,0.25),transparent)`}}/>
         </div>
-
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-          Company sectors
-        </h2>
-
-        <p className="mt-2 max-w-4xl text-sm leading-6 text-white/70">
-          Each sector is a real part of the enterprise environment.
-        </p>
-      </div>
-
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {SECTORS.map((sector) => (
-          <Link
-            key={sector.key}
-            href={sector.href}
-            className={cx(
-              "group relative overflow-hidden rounded-3xl border p-5 transition",
-              "border-emerald-300/15 bg-white/5 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
-            )}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="text-lg font-semibold text-white">{sector.title}</div>
-                <div className="mt-2 text-sm leading-6 text-white/70">{sector.subtitle}</div>
+        <div style={{display:"grid",gap:10,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,240px),1fr))"}}>
+          {SECTORS.map(s=>(
+            <Link key={s.key} href={s.href} className="env-card">
+              <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${C},transparent)`,opacity:0.15,pointerEvents:"none"}}/>
+              <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:8}}>
+                <div style={{...sans,fontSize:13,fontWeight:700,color:"#fff"}}>{s.title}</div>
+                <span style={{...mono,fontSize:8,color:C,border:`1px solid rgba(0,255,136,0.2)`,borderRadius:3,padding:"2px 6px",letterSpacing:"0.06em",textTransform:"uppercase",flexShrink:0}}>Active</span>
               </div>
-
-              <span className="rounded-full border border-emerald-300/20 bg-emerald-400/5 px-3 py-1 text-[11px] font-semibold text-emerald-100/85">
-                Active
-              </span>
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {sector.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-5 flex items-center justify-between">
-              <span className="text-sm font-semibold text-white/90 group-hover:text-white">
-                Open sector
-              </span>
-
-              <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M10 7 15 12 10 17"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </div>
-          </Link>
-        ))}
+              <p style={{...mono,fontSize:10,color:"rgba(255,255,255,0.42)",lineHeight:1.6,marginBottom:8}}>{s.subtitle}</p>
+              <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:8}}>
+                {s.tags.map(t=><span key={t} className="env-tag">{t}</span>)}
+              </div>
+              <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.08em",textTransform:"uppercase"}}>Open sector →</div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

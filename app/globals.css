@@ -106,3 +106,12 @@ section {
   padding-left: clamp(16px, 4vw, 24px);
   padding-right: clamp(16px, 4vw, 24px);
 }
+
+/* ── Environment shared styles ── */
+.env-panel{background:#060c14;border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:20px;position:relative;overflow:hidden;}
+.env-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--env-color,#00e5ff),transparent);opacity:0.35;pointer-events:none;}
+.env-card{background:#060c14;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:16px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;display:block;text-decoration:none;}
+.env-card:hover{border-color:rgba(255,255,255,0.14);transform:translateY(-2px);}
+.env-tag{font-family:var(--font-space-mono,monospace);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 7px;color:rgba(255,255,255,0.45);display:inline-block;}
+.env-label{font-family:var(--font-space-mono,monospace);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.55;}
+.env-dot{width:5px;height:5px;border-radius:50%;display:inline-block;flex-shrink:0;}
