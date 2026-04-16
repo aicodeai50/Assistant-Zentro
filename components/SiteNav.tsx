@@ -150,9 +150,11 @@ export default function SiteNav() {
               textDecoration: "none",
               letterSpacing: "0.07em",
               textTransform: "uppercase",
-              padding: "6px 10px",
+              padding: "7px 12px",
               whiteSpace: "nowrap",
               lineHeight: 1,
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: 3,
             }}>
               Sign in
             </Link>
