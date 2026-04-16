@@ -2,88 +2,77 @@ import Link from "next/link";
 import UniversityNav from "@/components/university/UniversityNav";
 import { FACULTIES } from "@/_lib/university/data";
 
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
-}
+const C = "#3b82f6";
+const mono:React.CSSProperties={fontFamily:"var(--font-space-mono,monospace)"};
+const sans:React.CSSProperties={fontFamily:"var(--font-syne,sans-serif)"};
 
 export default function UniversityHubPage() {
   return (
-    <section className="py-10 sm:py-14">
-      <UniversityNav />
+    <section style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 80px",position:"relative",zIndex:1}}>
+      <UniversityNav/>
 
-      <div className="flex flex-col gap-3">
-        <div className="text-xs font-semibold uppercase tracking-wider text-cyan-100/70">
-          University Hub
+      {/* Header */}
+      <div className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+        <div style={{display:"flex",flexWrap:"wrap",alignItems:"flex-start",justifyContent:"space-between",gap:16}}>
+          <div style={{maxWidth:520}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:12}}>
+              <span style={{width:5,height:5,borderRadius:"50%",background:C,boxShadow:`0 0 6px ${C}`,display:"inline-block",flexShrink:0}}/>
+              <span style={{...mono,fontSize:9,color:C,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.75}}>University Hub · Academic Layer</span>
+            </div>
+            <h1 style={{...sans,fontWeight:800,fontSize:"clamp(1.4rem,2.5vw,2rem)",color:"#fff",margin:"0 0 10px",letterSpacing:"-0.02em"}}>
+              Select a Faculty
+            </h1>
+            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.48)",lineHeight:1.75}}>
+              A structured academic environment. Each faculty has its own AI teacher, tutor, and assistant — and only answers its domain.
+            </p>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:8,minWidth:180}}>
+            {[{l:"Environment",v:"University Hub"},{l:"Mode",v:"Academic"},{l:"Status",v:"Online"},{l:"Faculties",v:`${FACULTIES.length} Active`}].map(x=>(
+              <div key={x.l} style={{background:"rgba(59,130,246,0.04)",border:"1px solid rgba(59,130,246,0.12)",borderRadius:4,padding:"7px 12px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{...mono,fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:"0.1em",textTransform:"uppercase"}}>{x.l}</span>
+                <span style={{...mono,fontSize:10,color:C}}>{x.v}</span>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Select a faculty
-        </h1>
-
-        <p className="max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
-          A professional education environment. Choose a faculty to access its
-          fields and dedicated Teacher, Tutor, and Assistant. Each faculty is
-          strict: it only answers its own domain.
-        </p>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {FACULTIES.map((f) => (
-          <Link
-            key={f.key}
-            href={`/university/${f.key}`}
-            className={cx(
-              "group relative overflow-hidden rounded-3xl border p-5 transition",
-              "border-cyan-300/15 bg-white/5 hover:bg-white/[0.08] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
-            )}
-            aria-label={`Open ${f.title}`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="text-base font-semibold text-white">
-                  {f.title}
-                </div>
-                <div className="mt-1 text-sm text-white/70">{f.subtitle}</div>
-              </div>
+      {/* Section divider */}
+      <div style={{display:"flex",alignItems:"center",gap:12,margin:"20px 0 14px"}}>
+        <div style={{flex:1,height:1,background:`linear-gradient(90deg,rgba(59,130,246,0.25),transparent)`}}/>
+        <span style={{...mono,fontSize:9,color:C,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6}}>Available Faculties</span>
+        <div style={{flex:1,height:1,background:`linear-gradient(270deg,rgba(59,130,246,0.25),transparent)`}}/>
+      </div>
 
-              <span className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M10 7 15 12 10 17"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
+      {/* Faculty grid */}
+      <div style={{display:"grid",gap:10,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))"}}>
+        {FACULTIES.map(f=>(
+          <Link key={f.key} href={`/university/${f.key}`} className="env-card" style={{textDecoration:"none"}} aria-label={`Open ${f.title}`}>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${C},transparent)`,opacity:0.2,pointerEvents:"none"}}/>
+            <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:10,gap:8}}>
+              <div style={{...sans,fontSize:13,fontWeight:700,color:"#fff"}}>{f.title}</div>
+              <span style={{...mono,fontSize:8,color:C,border:`1px solid rgba(59,130,246,0.22)`,borderRadius:3,padding:"2px 6px",letterSpacing:"0.06em",textTransform:"uppercase",flexShrink:0,whiteSpace:"nowrap"}}>Faculty</span>
             </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {f.areas.slice(0, 5).map((a) => (
-                <span
-                  key={a}
-                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
-                >
-                  {a}
-                </span>
-              ))}
+            <p style={{...mono,fontSize:10,color:"rgba(255,255,255,0.44)",lineHeight:1.65,marginBottom:10}}>{f.subtitle}</p>
+            <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:12}}>
+              {f.areas.slice(0,4).map((a:string)=><span key={a} className="env-tag">{a}</span>)}
             </div>
-
-            <div className="mt-5 text-sm font-semibold text-white/90 group-hover:text-white">
-              Open faculty
-            </div>
-
-            <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100">
-              <div className="absolute inset-0 bg-[radial-gradient(900px_240px_at_50%_0%,rgba(56,189,248,0.10),transparent_60%)]" />
-            </div>
+            <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.08em",textTransform:"uppercase"}}>Open faculty →</div>
           </Link>
+        ))}
+      </div>
+
+      {/* Info strip */}
+      <div style={{marginTop:14,display:"grid",gap:10,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,200px),1fr))"}}>
+        {[
+          {l:"Academic AI",v:"Strict domain answers only — no cross-faculty bleed."},
+          {l:"Tutor Mode",v:"Each faculty has a dedicated Teacher, Tutor, and Assistant."},
+          {l:"Progression",v:"Structured paths with clear steps from beginner to advanced."},
+        ].map(s=>(
+          <div key={s.l} className="env-panel" style={{"--env-color":C} as React.CSSProperties}>
+            <div style={{...mono,fontSize:9,color:C,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6,opacity:0.7}}>{s.l}</div>
+            <p style={{...mono,fontSize:10,color:"rgba(255,255,255,0.44)",lineHeight:1.65}}>{s.v}</p>
+          </div>
         ))}
       </div>
     </section>
