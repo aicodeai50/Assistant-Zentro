@@ -89,7 +89,7 @@ export default function SiteNav() {
 
         {/* ── MAIN NAV ROW — everything in one flex line, no wrap ── */}
         <nav style={{
-          maxWidth: 1320,
+          maxWidth: 960,
           margin: "0 auto",
           padding: "0 24px",
           height: 50,

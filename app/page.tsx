@@ -61,7 +61,7 @@ export default function HomePage() {
       <div aria-hidden style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,background:"radial-gradient(ellipse 90% 55% at 5% 0%,rgba(0,229,255,0.07),transparent 60%),radial-gradient(ellipse 70% 45% at 95% 5%,rgba(0,255,136,0.05),transparent 55%),radial-gradient(ellipse 80% 50% at 50% 105%,rgba(124,58,237,0.06),transparent 55%)"}}/>
 
       {/* ══ HERO ══ */}
-      <section className="sh-page" style={{maxWidth:1320,margin:"0 auto",padding:"48px 20px 64px",position:"relative",zIndex:1}}>
+      <section className="sh-page" style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 56px",position:"relative",zIndex:1}}>
         <div style={{display:"grid",gridTemplateColumns:"1fr",gap:32,alignItems:"center"}} className="lg:grid-cols-[1fr_320px]">
 
           {/* LEFT */}
@@ -78,7 +78,7 @@ export default function HomePage() {
             <h1 style={{
               fontFamily:"var(--font-syne,sans-serif)",
               fontWeight:800,
-              fontSize:"clamp(1.6rem,3vw,2.8rem)",
+              fontSize:"clamp(1.3rem,2.2vw,2.2rem)",
               lineHeight:1.12,
               letterSpacing:"-0.02em",
               color:"#fff",
@@ -169,7 +169,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ WHAT SHYNVO IS ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
+      <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:28}}>
           <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
           <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6,whiteSpace:"nowrap"}}>What Shynvo Is</span>
@@ -198,13 +198,13 @@ export default function HomePage() {
       </section>
 
       {/* ══ PLATFORM PREVIEW ══ */}
-      <section id="platform-preview" style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
+      <section id="platform-preview" style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
           <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
           <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6,whiteSpace:"nowrap"}}>Platform Environments</span>
           <div style={{flex:1,height:1,background:"linear-gradient(270deg,rgba(0,229,255,0.25),transparent)"}}/>
         </div>
-        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.3rem,2.5vw,2rem)",letterSpacing:"-0.02em",textAlign:"center",color:"#fff",marginBottom:24}}>
+        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.1rem,2vw,1.6rem)",letterSpacing:"-0.02em",textAlign:"center",color:"#fff",marginBottom:24}}>
           What the platform looks like
         </h2>
         <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:20,flexWrap:"wrap"}}>
@@ -245,7 +245,7 @@ export default function HomePage() {
 
       {/* ══ FEATURE STRIP ══ */}
       <section style={{position:"relative",zIndex:1,margin:"0 0 64px",borderTop:"1px solid rgba(0,229,255,0.06)",borderBottom:"1px solid rgba(0,229,255,0.06)",background:"rgba(0,229,255,0.015)",padding:"22px 20px"}}>
-        <div style={{maxWidth:1320,margin:"0 auto",display:"flex",flexWrap:"wrap",justifyContent:"space-around",gap:16}}>
+        <div style={{maxWidth:960,margin:"0 auto",display:"flex",flexWrap:"wrap",justifyContent:"space-around",gap:16}}>
           {[{l:"Multi-environment",d:"One login, every world"},{l:"AI-native",d:"Guided from first click"},{l:"Modular by design",d:"Only what you need"},{l:"Structured paths",d:"Always know next step"},{l:"Mobile-ready",d:"iOS & Android apps"}].map(f=>(
             <div key={f.l} style={{textAlign:"center",minWidth:120}}>
               <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:12,fontWeight:600,color:"#fff",marginBottom:2}}>{f.l}</div>
@@ -256,12 +256,12 @@ export default function HomePage() {
       </section>
 
       {/* ══ QR ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
+      <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
         <div style={{background:"#060c14",border:"1px solid rgba(0,229,255,0.12)",borderRadius:6,padding:"28px 24px",position:"relative",overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",gap:20,textAlign:"center"}} className="md:flex-row md:text-left md:justify-between">
           <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.38),transparent)",pointerEvents:"none"}}/>
           <div>
             <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.5,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:8}}>Mobile Access</div>
-            <div style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.1rem,2vw,1.5rem)",color:"#fff",marginBottom:6}}>Scan to explore Shynvo</div>
+            <div style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1rem,1.8vw,1.3rem)",color:"#fff",marginBottom:6}}>Scan to explore Shynvo</div>
             <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:280,lineHeight:1.7}}>Continue on mobile. Same environments, same AI guidance.</p>
           </div>
           <div style={{background:"#fff",padding:10,borderRadius:4,boxShadow:"0 0 28px rgba(0,229,255,0.12)",flexShrink:0}}>
@@ -271,9 +271,9 @@ export default function HomePage() {
       </section>
 
       {/* ══ FINAL CTA ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 96px",position:"relative",zIndex:1,textAlign:"center"}}>
+      <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 96px",position:"relative",zIndex:1,textAlign:"center"}}>
         <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.4,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:12}}>Begin Now</div>
-        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.4rem,3vw,2.4rem)",letterSpacing:"-0.02em",color:"#fff",marginBottom:10,lineHeight:1.1}}>
+        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.2rem,2.2vw,2rem)",letterSpacing:"-0.02em",color:"#fff",marginBottom:10,lineHeight:1.1}}>
           Hello! Welcome to Shynvo.
         </h2>
         <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:320,margin:"0 auto 24px",lineHeight:1.8}}>

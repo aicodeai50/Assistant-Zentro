@@ -12,7 +12,7 @@ export default function SiteFooter() {
   return (
     <footer style={{position:"relative",borderTop:"1px solid rgba(0,229,255,0.08)",background:"#010306"}}>
       <div style={{position:"absolute",top:0,left:"15%",right:"15%",height:1,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.35),transparent)",pointerEvents:"none"}}/>
-      <div style={{maxWidth:1320,margin:"0 auto",padding:"48px 20px 0"}}>
+      <div style={{maxWidth:960,margin:"0 auto",padding:"48px 20px 0"}}>
 
         {/* Grid */}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:32,marginBottom:36}}>
