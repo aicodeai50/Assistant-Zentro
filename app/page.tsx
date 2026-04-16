@@ -17,8 +17,6 @@ const ENVS = [
   { id:"frontier", title:"Frontier Lab", sub:"System live", desc:"Innovative tech and engineering workflows.", href:"/frontier", color:"#a855f7", variant:"frontier" as const, lines:["Booting Frontier Lab...","Engineering mode active...","Research workflow ready..."] },
 ];
 
-const mono:React.CSSProperties = {fontFamily:"var(--font-space-mono,monospace)"};
-const sans:React.CSSProperties = {fontFamily:"var(--font-syne,sans-serif)"};
 const CYAN="#00e5ff", GREEN="#00ff88";
 
 function Counter({to,suffix=""}:{to:number;suffix?:string}) {
@@ -50,70 +48,117 @@ export default function HomePage() {
     <main style={{position:"relative",overflow:"hidden",color:"#fff"}}>
       <style>{`
         @keyframes sh-pulse-g{0%,100%{opacity:1;box-shadow:0 0 8px #00ff88,0 0 18px rgba(0,255,136,.28)}50%{opacity:.6;box-shadow:0 0 4px #00ff88}}
-        @keyframes sh-pulse-c{0%,100%{opacity:1;box-shadow:0 0 8px #00e5ff,0 0 18px rgba(0,229,255,.28)}50%{opacity:.6;box-shadow:0 0 4px #00e5ff}}
-        .shv-card{background:#060c14;border:1px solid rgba(0,229,255,0.1);border-radius:6px;padding:22px;height:100%;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;display:block;text-decoration:none;}
-        .shv-card:hover{transform:translateY(-3px);}
-        .she-card{background:#060c14;border-radius:6px;padding:18px;position:relative;overflow:hidden;transition:all 0.2s;display:block;text-decoration:none;}
-        .sht-btn{font-family:var(--font-space-mono,monospace);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;border-radius:3px;padding:7px 14px;cursor:pointer;transition:all 0.2s;border:1px solid;}
+        @keyframes sh-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        .sh-page *{word-break:normal;overflow-wrap:normal;white-space:normal;}
+        .sh-val-card{background:#060c14;border:1px solid rgba(0,229,255,0.1);border-radius:6px;padding:20px;height:100%;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;display:block;text-decoration:none;}
+        .sh-val-card:hover{transform:translateY(-3px);}
+        .sh-env-card{background:#060c14;border-radius:6px;padding:18px;position:relative;overflow:hidden;transition:all 0.2s;display:block;text-decoration:none;}
+        .sh-tab{font-family:var(--font-space-mono,monospace);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;border-radius:3px;padding:7px 14px;cursor:pointer;transition:all 0.2s;border:1px solid;white-space:nowrap;}
+        .sh-cta-primary{font-family:var(--font-space-mono,monospace);font-size:11px;font-weight:700;color:#020508;background:#00e5ff;padding:11px 20px;border-radius:4px;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;display:inline-block;}
+        .sh-cta-secondary{font-family:var(--font-space-mono,monospace);font-size:11px;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);padding:11px 16px;border-radius:4px;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;display:inline-block;}
       `}</style>
 
       <div aria-hidden style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,background:"radial-gradient(ellipse 90% 55% at 5% 0%,rgba(0,229,255,0.07),transparent 60%),radial-gradient(ellipse 70% 45% at 95% 5%,rgba(0,255,136,0.05),transparent 55%),radial-gradient(ellipse 80% 50% at 50% 105%,rgba(124,58,237,0.06),transparent 55%)"}}/>
 
       {/* ══ HERO ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"52px 24px 68px",position:"relative",zIndex:1}}>
+      <section className="sh-page" style={{maxWidth:1320,margin:"0 auto",padding:"48px 20px 64px",position:"relative",zIndex:1}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr",gap:32,alignItems:"center"}} className="lg:grid-cols-[1fr_320px]">
 
-        {/* TWO COLUMN: left=copy, right=robot */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 340px",gap:40,alignItems:"center"}} className="max-lg:grid-cols-1">
-
-          {/* LEFT — copy only */}
-          <div style={{maxWidth:580}}>
-            <div style={{display:"inline-flex",alignItems:"center",gap:8,border:"1px solid rgba(0,229,255,0.18)",borderRadius:20,padding:"5px 14px",marginBottom:22,background:"rgba(0,229,255,0.04)"}}>
-              <span style={{width:6,height:6,borderRadius:"50%",background:GREEN,boxShadow:`0 0 8px ${GREEN}`,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-              <span style={{...mono,fontSize:10,color:GREEN,letterSpacing:"0.12em",textTransform:"uppercase"}}>Structured AI Platform · Online</span>
+          {/* LEFT */}
+          <div>
+            {/* Status pill — nowrap, small font */}
+            <div style={{display:"inline-flex",alignItems:"center",gap:6,border:"1px solid rgba(0,229,255,0.18)",borderRadius:20,padding:"4px 12px",marginBottom:20,background:"rgba(0,229,255,0.04)",flexShrink:0}}>
+              <span style={{width:6,height:6,borderRadius:"50%",background:GREEN,flexShrink:0,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
+              <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase",whiteSpace:"nowrap"}}>
+                Structured AI Platform · Online
+              </span>
             </div>
 
-            <h1 style={{...sans,fontWeight:800,fontSize:"clamp(1.6rem,2.8vw,2.8rem)",lineHeight:1.12,letterSpacing:"-0.025em",color:"#fff",margin:"0 0 16px"}}>
-              One platform for <span style={{color:CYAN}}>learning,</span>{" "}
-              building, and <span style={{color:GREEN}}>AI-guided</span> work
+            {/* Headline */}
+            <h1 style={{
+              fontFamily:"var(--font-syne,sans-serif)",
+              fontWeight:800,
+              fontSize:"clamp(1.6rem,3vw,2.8rem)",
+              lineHeight:1.12,
+              letterSpacing:"-0.02em",
+              color:"#fff",
+              margin:"0 0 14px",
+              wordBreak:"normal",
+              overflowWrap:"normal",
+            }}>
+              One platform for{" "}
+              <span style={{color:CYAN}}>learning,</span>{" "}
+              building, and{" "}
+              <span style={{color:GREEN}}>AI-guided</span>{" "}
+              work
             </h1>
 
-            <p style={{...mono,fontSize:12,color:"rgba(255,255,255,0.5)",lineHeight:1.85,marginBottom:28,maxWidth:420}}>
+            <p style={{
+              fontFamily:"var(--font-space-mono,monospace)",
+              fontSize:12,
+              color:"rgba(255,255,255,0.52)",
+              lineHeight:1.8,
+              marginBottom:24,
+              maxWidth:440,
+            }}>
               Clear environments. Guided AI. Structured progress.
             </p>
 
-            <div style={{display:"flex",flexWrap:"wrap",gap:10,marginBottom:16}}>
-              <Link href="/docs" style={{...mono,fontSize:11,fontWeight:700,color:"#020508",background:CYAN,padding:"11px 22px",borderRadius:4,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:`0 0 24px rgba(0,229,255,0.3)`}}>
-                Start Your Journey →
-              </Link>
-              <Link href="#platform-preview" style={{...mono,fontSize:11,color:"rgba(255,255,255,0.6)",border:"1px solid rgba(255,255,255,0.12)",padding:"11px 18px",borderRadius:4,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase",background:"rgba(255,255,255,0.03)"}}>
-                Explore Worlds
-              </Link>
+            {/* CTAs — flex row, nowrap */}
+            <div style={{display:"flex",flexWrap:"wrap",gap:10,marginBottom:14,alignItems:"center"}}>
+              <Link href="/docs" className="sh-cta-primary">Start Your Journey →</Link>
+              <Link href="#platform-preview" className="sh-cta-secondary">Explore Worlds</Link>
             </div>
 
-            <p style={{...mono,fontSize:9,color:"rgba(255,255,255,0.2)",letterSpacing:"0.1em",marginBottom:28}}>
-              NO SETUP REQUIRED · START INSTANTLY · ALL ENVIRONMENTS
+            <p style={{
+              fontFamily:"var(--font-space-mono,monospace)",
+              fontSize:9,
+              color:"rgba(255,255,255,0.2)",
+              letterSpacing:"0.06em",
+              marginBottom:24,
+              whiteSpace:"normal",
+            }}>
+              No setup required · Start instantly · All environments
             </p>
 
-            <div style={{display:"flex",gap:28,flexWrap:"wrap"}}>
+            {/* Stats — flex row */}
+            <div style={{display:"flex",gap:24,flexWrap:"wrap",alignItems:"flex-start"}}>
               {[{to:7,s:"",l:"Environments"},{to:4,s:" plans",l:"Pricing tiers"},{to:100,s:"%",l:"AI-guided"}].map(x=>(
-                <div key={x.l}>
-                  <div style={{...sans,fontWeight:800,fontSize:22,color:CYAN,lineHeight:1}}><Counter to={x.to} suffix={x.s}/></div>
-                  <div style={{...mono,fontSize:9,color:"rgba(255,255,255,0.3)",marginTop:3,letterSpacing:"0.1em",textTransform:"uppercase"}}>{x.l}</div>
+                <div key={x.l} style={{minWidth:60}}>
+                  <div style={{
+                    fontFamily:"var(--font-syne,sans-serif)",
+                    fontWeight:800,
+                    fontSize:20,
+                    color:CYAN,
+                    lineHeight:1,
+                    whiteSpace:"nowrap",
+                  }}>
+                    <Counter to={x.to} suffix={x.s}/>
+                  </div>
+                  <div style={{
+                    fontFamily:"var(--font-space-mono,monospace)",
+                    fontSize:9,
+                    color:"rgba(255,255,255,0.3)",
+                    marginTop:3,
+                    letterSpacing:"0.06em",
+                    textTransform:"uppercase",
+                    whiteSpace:"nowrap",
+                  }}>{x.l}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* RIGHT — robot only, single instance */}
-          <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center"}} className="max-lg:hidden">
-            <div style={{width:320,position:"relative"}}>
-              <div aria-hidden style={{position:"absolute",inset:-48,background:"radial-gradient(circle at 50% 45%,rgba(0,229,255,0.12),transparent 60%)",pointerEvents:"none",zIndex:0}}/>
-              <div style={{position:"relative",zIndex:1,background:"rgba(6,12,20,0.75)",border:"1px solid rgba(0,229,255,0.16)",borderRadius:10,padding:"14px 14px 10px",backdropFilter:"blur(12px)"}}>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10,paddingBottom:8,borderBottom:"1px solid rgba(0,229,255,0.08)"}}>
-                  <span style={{...mono,fontSize:8,color:CYAN,opacity:0.55,letterSpacing:"0.12em",textTransform:"uppercase"}}>SH-ROBOT · UNIT-01</span>
-                  <div style={{display:"flex",alignItems:"center",gap:5}}>
-                    <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,boxShadow:`0 0 6px ${GREEN}`,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-                    <span style={{...mono,fontSize:8,color:GREEN,letterSpacing:"0.1em",textTransform:"uppercase"}}>Standby</span>
+          {/* RIGHT — robot, desktop only */}
+          <div className="hidden lg:flex" style={{justifyContent:"flex-end",alignItems:"center"}}>
+            <div style={{width:300,position:"relative"}}>
+              <div aria-hidden style={{position:"absolute",inset:-40,background:"radial-gradient(circle at 50% 45%,rgba(0,229,255,0.1),transparent 60%)",pointerEvents:"none",zIndex:0}}/>
+              <div style={{position:"relative",zIndex:1,background:"rgba(6,12,20,0.75)",border:"1px solid rgba(0,229,255,0.16)",borderRadius:10,padding:"12px 12px 8px",backdropFilter:"blur(12px)"}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,paddingBottom:7,borderBottom:"1px solid rgba(0,229,255,0.08)"}}>
+                  <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:CYAN,opacity:0.55,letterSpacing:"0.1em",textTransform:"uppercase"}}>SH-ROBOT · UNIT-01</span>
+                  <div style={{display:"flex",alignItems:"center",gap:4}}>
+                    <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
+                    <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase"}}>Standby</span>
                   </div>
                 </div>
                 <WelcomeRobot/>
@@ -121,51 +166,76 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </section>
 
+      {/* ══ WHAT SHYNVO IS ══ */}
+      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:28}}>
+          <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
+          <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6,whiteSpace:"nowrap"}}>What Shynvo Is</span>
+          <div style={{flex:1,height:1,background:"linear-gradient(270deg,rgba(0,229,255,0.25),transparent)"}}/>
+        </div>
+        <div style={{display:"grid",gap:12,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))"}}>
+          {VALUES.map(item=>(
+            <Link key={item.tag} href={item.href} className="sh-val-card"
+              onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor=`${item.color}50`;}}
+              onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor="rgba(0,229,255,0.1)";}}
+            >
+              <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${item.color},transparent)`,opacity:0.3,pointerEvents:"none"}}/>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:item.color,opacity:0.5,letterSpacing:"0.1em"}}>_{item.tag}</span>
+                <span style={{fontSize:18,color:item.color,opacity:0.5}}>{item.glyph}</span>
+              </div>
+              <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:14,fontWeight:700,color:"#fff",marginBottom:8,lineHeight:1.35}}>{item.title}</div>
+              <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.72,marginBottom:14}}>{item.desc}</p>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:item.color,letterSpacing:"0.08em",textTransform:"uppercase"}}>Learn more</span>
+                <span style={{color:item.color,fontSize:13}}>›</span>
+              </div>
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* ══ PLATFORM PREVIEW ══ */}
-      <section id="platform-preview" style={{maxWidth:1320,margin:"0 auto",padding:"0 24px 80px",position:"relative",zIndex:1}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:12}}>
+      <section id="platform-preview" style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
           <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
-          <span style={{...mono,fontSize:9,color:CYAN,letterSpacing:"0.2em",textTransform:"uppercase",opacity:0.6}}>Platform Environments</span>
+          <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6,whiteSpace:"nowrap"}}>Platform Environments</span>
           <div style={{flex:1,height:1,background:"linear-gradient(270deg,rgba(0,229,255,0.25),transparent)"}}/>
         </div>
-        <h2 style={{...sans,fontWeight:800,fontSize:"clamp(1.3rem,2.5vw,2.2rem)",letterSpacing:"-0.02em",textAlign:"center",color:"#fff",marginBottom:28}}>
+        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.3rem,2.5vw,2rem)",letterSpacing:"-0.02em",textAlign:"center",color:"#fff",marginBottom:24}}>
           What the platform looks like
         </h2>
-        <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:20,flexWrap:"wrap"}}>
+        <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:20,flexWrap:"wrap"}}>
           {ENVS.map((env,i)=>(
-            <button key={env.id} onClick={()=>setActiveEnv(i)} className="sht-btn"
+            <button key={env.id} onClick={()=>setActiveEnv(i)} className="sh-tab"
               style={{color:activeEnv===i?"#020508":"rgba(255,255,255,0.5)",background:activeEnv===i?env.color:"transparent",borderColor:activeEnv===i?env.color:"rgba(255,255,255,0.1)",boxShadow:activeEnv===i?`0 0 16px ${env.color}40`:"none"}}
             >{env.title}</button>
           ))}
         </div>
-        <div style={{display:"grid",gap:14,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))"}}>
+        <div style={{display:"grid",gap:12,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))"}}>
           {ENVS.map((env,i)=>(
-            <Link key={env.id} href={env.href} className="she-card"
+            <Link key={env.id} href={env.href} className="sh-env-card"
               style={{border:`1px solid ${activeEnv===i?env.color+"40":"rgba(0,229,255,0.08)"}`,transform:activeEnv===i?"translateY(-3px)":"none",boxShadow:activeEnv===i?`0 6px 24px rgba(0,0,0,0.4),0 0 0 1px ${env.color}16`:"none"}}
             >
               <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${env.color},transparent)`,opacity:activeEnv===i?0.5:0.12,pointerEvents:"none"}}/>
-              {[{top:5,left:5,borderTop:`1px solid ${env.color}`,borderLeft:`1px solid ${env.color}`},{top:5,right:5,borderTop:`1px solid ${env.color}`,borderRight:`1px solid ${env.color}`},{bottom:5,left:5,borderBottom:`1px solid ${env.color}`,borderLeft:`1px solid ${env.color}`},{bottom:5,right:5,borderBottom:`1px solid ${env.color}`,borderRight:`1px solid ${env.color}`}].map((s,ci)=>(
-                <div key={ci} aria-hidden style={{position:"absolute",width:8,height:8,opacity:activeEnv===i?0.6:0.15,...s as any}}/>
-              ))}
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-                <div style={{...sans,fontSize:13,fontWeight:700,color:"#fff"}}>{env.title}</div>
+                <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:13,fontWeight:700,color:"#fff"}}>{env.title}</div>
                 <div style={{display:"flex",alignItems:"center",gap:4}}>
-                  <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,boxShadow:`0 0 5px ${GREEN}`,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-                  <span style={{...mono,fontSize:8,color:GREEN,letterSpacing:"0.1em",textTransform:"uppercase"}}>System Live</span>
+                  <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
+                  <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase",whiteSpace:"nowrap"}}>System Live</span>
                 </div>
               </div>
-              <div style={{...mono,fontSize:9,color:env.color,opacity:0.6,marginBottom:7,letterSpacing:"0.08em"}}>{env.sub}</div>
-              <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.65,marginBottom:11}}>{env.desc}</p>
+              <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:env.color,opacity:0.6,marginBottom:7,letterSpacing:"0.06em"}}>{env.sub}</div>
+              <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.65,marginBottom:11}}>{env.desc}</p>
               <div style={{background:"#020508",border:"1px solid rgba(0,229,255,0.06)",borderRadius:3,padding:9,position:"relative",overflow:"hidden"}}>
                 {activeEnv===i&&<div aria-hidden style={{position:"absolute",left:0,right:0,height:2,top:`${scanY}%`,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.25),transparent)",pointerEvents:"none",zIndex:5}}/>}
-                <div style={{...mono,fontSize:8,color:env.color,opacity:0.4,marginBottom:4,letterSpacing:"0.1em"}}>local loop ▌</div>
+                <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:env.color,opacity:0.4,marginBottom:4,letterSpacing:"0.08em"}}>local loop ▌</div>
                 <PreviewTypingLoop variant={env.variant} lines={env.lines}/>
               </div>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:11}}>
-                <span style={{...mono,fontSize:9,color:"rgba(255,255,255,0.3)",letterSpacing:"0.07em",textTransform:"uppercase"}}>Open preview</span>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10}}>
+                <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:"rgba(255,255,255,0.3)",letterSpacing:"0.06em",textTransform:"uppercase"}}>Open preview</span>
                 <span style={{color:env.color,fontSize:12}}>›</span>
               </div>
             </Link>
@@ -174,48 +244,44 @@ export default function HomePage() {
       </section>
 
       {/* ══ FEATURE STRIP ══ */}
-      <section style={{position:"relative",zIndex:1,margin:"0 0 64px",borderTop:"1px solid rgba(0,229,255,0.06)",borderBottom:"1px solid rgba(0,229,255,0.06)",background:"rgba(0,229,255,0.015)",padding:"24px 24px"}}>
-        <div style={{maxWidth:1320,margin:"0 auto",display:"flex",flexWrap:"wrap",justifyContent:"space-around",gap:8}}>
+      <section style={{position:"relative",zIndex:1,margin:"0 0 64px",borderTop:"1px solid rgba(0,229,255,0.06)",borderBottom:"1px solid rgba(0,229,255,0.06)",background:"rgba(0,229,255,0.015)",padding:"22px 20px"}}>
+        <div style={{maxWidth:1320,margin:"0 auto",display:"flex",flexWrap:"wrap",justifyContent:"space-around",gap:16}}>
           {[{l:"Multi-environment",d:"One login, every world"},{l:"AI-native",d:"Guided from first click"},{l:"Modular by design",d:"Only what you need"},{l:"Structured paths",d:"Always know next step"},{l:"Mobile-ready",d:"iOS & Android apps"}].map(f=>(
-            <div key={f.l} style={{textAlign:"center",padding:"6px 12px"}}>
-              <div style={{...sans,fontSize:12,fontWeight:600,color:"#fff",marginBottom:2}}>{f.l}</div>
-              <div style={{...mono,fontSize:10,color:"rgba(255,255,255,0.28)"}}>{f.d}</div>
+            <div key={f.l} style={{textAlign:"center",minWidth:120}}>
+              <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:12,fontWeight:600,color:"#fff",marginBottom:2}}>{f.l}</div>
+              <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:10,color:"rgba(255,255,255,0.28)"}}>{f.d}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ══ QR ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 24px 72px",position:"relative",zIndex:1}}>
-        <div style={{background:"#060c14",border:"1px solid rgba(0,229,255,0.12)",borderRadius:6,padding:"32px 28px",position:"relative",overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",gap:24,textAlign:"center"}} className="md:flex-row md:text-left md:justify-between">
+      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
+        <div style={{background:"#060c14",border:"1px solid rgba(0,229,255,0.12)",borderRadius:6,padding:"28px 24px",position:"relative",overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",gap:20,textAlign:"center"}} className="md:flex-row md:text-left md:justify-between">
           <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.38),transparent)",pointerEvents:"none"}}/>
           <div>
-            <div style={{...mono,fontSize:9,color:CYAN,opacity:0.5,letterSpacing:"0.16em",textTransform:"uppercase",marginBottom:8}}>Mobile Access</div>
-            <div style={{...sans,fontWeight:800,fontSize:"clamp(1.1rem,2.2vw,1.6rem)",color:"#fff",marginBottom:7}}>Scan to explore Shynvo</div>
-            <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:280,lineHeight:1.7}}>Continue your journey on mobile. Same environments, same AI guidance.</p>
+            <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.5,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:8}}>Mobile Access</div>
+            <div style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.1rem,2vw,1.5rem)",color:"#fff",marginBottom:6}}>Scan to explore Shynvo</div>
+            <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:280,lineHeight:1.7}}>Continue on mobile. Same environments, same AI guidance.</p>
           </div>
-          <div style={{background:"#fff",padding:11,borderRadius:4,boxShadow:"0 0 28px rgba(0,229,255,0.12)",flexShrink:0}}>
-            <QRCodeSVG value="https://shynvo.app" size={90} bgColor="#ffffff" fgColor="#020508"/>
+          <div style={{background:"#fff",padding:10,borderRadius:4,boxShadow:"0 0 28px rgba(0,229,255,0.12)",flexShrink:0}}>
+            <QRCodeSVG value="https://shynvo.app" size={88} bgColor="#ffffff" fgColor="#020508"/>
           </div>
         </div>
       </section>
 
       {/* ══ FINAL CTA ══ */}
-      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 24px 96px",position:"relative",zIndex:1,textAlign:"center"}}>
-        <div style={{...mono,fontSize:9,color:CYAN,opacity:0.4,letterSpacing:"0.2em",textTransform:"uppercase",marginBottom:12}}>Begin Now</div>
-        <h2 style={{...sans,fontWeight:800,fontSize:"clamp(1.4rem,3vw,2.6rem)",letterSpacing:"-0.02em",color:"#fff",marginBottom:10,lineHeight:1.1}}>
+      <section style={{maxWidth:1320,margin:"0 auto",padding:"0 20px 96px",position:"relative",zIndex:1,textAlign:"center"}}>
+        <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.4,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:12}}>Begin Now</div>
+        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.4rem,3vw,2.4rem)",letterSpacing:"-0.02em",color:"#fff",marginBottom:10,lineHeight:1.1}}>
           Hello! Welcome to Shynvo.
         </h2>
-        <p style={{...mono,fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:340,margin:"0 auto 24px",lineHeight:1.8}}>
-          Choose your starting environment and let the Robot guide you from there.
+        <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:320,margin:"0 auto 24px",lineHeight:1.8}}>
+          Choose your environment and let the Robot guide you.
         </p>
         <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-          <Link href="/docs" style={{...mono,fontSize:11,fontWeight:700,color:"#020508",background:CYAN,padding:"11px 24px",borderRadius:4,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:`0 0 28px rgba(0,229,255,0.32)`}}>
-            Start Your Journey
-          </Link>
-          <Link href="/robot" style={{...mono,fontSize:11,color:CYAN,border:"1px solid rgba(0,229,255,0.25)",padding:"11px 18px",borderRadius:4,textDecoration:"none",letterSpacing:"0.08em",textTransform:"uppercase",background:"rgba(0,229,255,0.03)"}}>
-            Open Robot
-          </Link>
+          <Link href="/docs" className="sh-cta-primary" style={{boxShadow:`0 0 28px rgba(0,229,255,0.32)`}}>Start Your Journey</Link>
+          <Link href="/robot" style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:CYAN,border:`1px solid rgba(0,229,255,0.25)`,padding:"11px 18px",borderRadius:4,textDecoration:"none",letterSpacing:"0.06em",textTransform:"uppercase",display:"inline-block",background:"rgba(0,229,255,0.03)"}}>Open Robot</Link>
         </div>
       </section>
     </main>
