@@ -147,8 +147,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-
-
+        </div>
       </section>
 
       {/* ══ WHAT SHYNVO IS ══ */}
