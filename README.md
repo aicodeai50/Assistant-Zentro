@@ -1,37 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shynvo Web
 
-## Getting Started
+Primary customer-facing frontend for the Shynvo platform.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Domain strategy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Primary canonical domain: `https://shynvo.app`
+- Secondary domain: `https://www.shynvo.app` (redirects to primary)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Canonical metadata and host redirects are configured in:
 
-## Learn More
+- `app/layout.tsx`
+- `next.config.ts`
 
-To learn more about Next.js, take a look at the following resources:
+## Railway deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Use this as the production frontend service.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Service settings
 
-## Deploy on Vercel
+- **Service name:** `shynvo-web`
+- **Root directory:** this repository root
+- **Build command:** `npm run build`
+- **Start command:** `npm run start`
+- **Environment:** Production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Domains
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Attach both:
+
+- `shynvo.app`
+- `www.shynvo.app`
+
+The app-level redirect ensures all `www` traffic resolves to `shynvo.app`.
+
+## Platform transformation plan
+
+Current architecture keeps services separate while presenting one platform:
+
+- `shynvo-web`: flagship frontend experience
+- `sh-backend-api`: AI reasoning backend (Railway service)
+- `Robot_backend`: execution/generation backend (Railway service)
+
+Next step is a unified repo named `shynvo-platform` with:
+
+- `apps/web` (this frontend)
+- `services/sh-backend-api`
+- `services/robot-backend`
 # force redeploy Thu, Apr 16, 2026  8:55:02 PM
