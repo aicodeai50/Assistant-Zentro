@@ -46,8 +46,8 @@ export default function SiteNav() {
       <header style={{
         position:"sticky",top:0,zIndex:80,
         borderBottom:scrolled?"1px solid rgba(0,229,255,0.1)":"1px solid transparent",
-        background:scrolled?"rgba(2,5,8,0.96)":"rgba(2,5,8,0.8)",
-        backdropFilter:"blur(20px)",
+        background:scrolled?"rgba(2,5,8,0.75)":"transparent",
+        backdropFilter:scrolled?"blur(20px)":"none",
         transition:"background 0.3s,border-color 0.3s",
       }}>
         {/* HUD strip */}
@@ -75,7 +75,7 @@ export default function SiteNav() {
             display:"flex",alignItems:"center",gap:7,
             flexShrink:0,marginRight:32,whiteSpace:"nowrap",
           }}>
-            <span style={{width:7,height:7,borderRadius:"50%",background:"#00e5ff",boxShadow:"0 0 9px rgba(0,229,255,0.9)",display:"inline-block",flexShrink:0}}/>
+            <span style={{width:22,height:22,borderRadius:"50%",background:"#020508",border:"1.5px solid #00e5ff",boxShadow:"0 0 8px rgba(0,229,255,0.5)",display:"inline-flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:10,fontWeight:700,color:"#00e5ff",fontFamily:"var(--font-syne,sans-serif)"}}>S</span>
             Shynvo
           </Link>
 
