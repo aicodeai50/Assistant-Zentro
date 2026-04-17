@@ -1,242 +1,117 @@
-"use client";
 import Link from "next/link";
-import { QRCodeSVG } from "qrcode.react";
-import { useEffect, useRef, useState } from "react";
-import PreviewTypingLoop from "./components/PreviewTypingLoop";
 
-const VALUES = [
-  { tag:"01", title:"AI-Guided Intelligence Layer", desc:"Shynvo understands your intent and adapts to you. It recommends the right direction, adjusts guidance as you progress, and gives you clarity instead of chaos.", href:"/ai-guided-intelligence", glyph:"◈", color:"#00e5ff" },
-  { tag:"02", title:"Modular Environment Architecture", desc:"Purpose-built environments for learning, building, and exploration — all connected through unified workflows.", href:"/modular-architecture", glyph:"⬡", color:"#00ff88" },
-  { tag:"03", title:"Structured Progression System", desc:"Clear steps, guided paths, and AI-supported progression so users always know what to do next.", href:"/structured-progression", glyph:"◎", color:"#a855f7" },
+const modules = [
+  {
+    title: "Incident Copilot",
+    description:
+      "Triage incidents faster with contextual AI summaries, likely causes, and next safe steps.",
+    href: "/docs",
+  },
+  {
+    title: "Automation Engine",
+    description:
+      "Turn repeated IT tasks into guarded workflows with approvals, logs, and rollback plans.",
+    href: "/platform",
+  },
+  {
+    title: "Runbook Intelligence",
+    description:
+      "Make internal SOPs searchable and actionable so your team can execute with confidence.",
+    href: "/search",
+  },
 ];
 
-const ENVS = [
-  { id:"robot", title:"Shynvo Robot", sub:"Guide ready", desc:"AI guidance to navigate the platform.", href:"/robot", color:"#00e5ff", variant:"robot" as const, lines:["Analyzing your path...","Shynvo Robot ready...","Choose where to begin..."] },
-  { id:"university", title:"University Hub", sub:"Faculty ready", desc:"Advanced learning and study areas.", href:"/university", color:"#00ff88", variant:"university" as const, lines:["Opening University Hub...","Study systems online...","Learning environments ready..."] },
-  { id:"frontier", title:"Frontier Lab", sub:"System live", desc:"Innovative tech and engineering workflows.", href:"/frontier", color:"#a855f7", variant:"frontier" as const, lines:["Booting Frontier Lab...","Engineering mode active...","Research workflow ready..."] },
+const outcomes = [
+  { label: "Faster triage", value: "60%" },
+  { label: "Lower toil", value: "40%" },
+  { label: "Audit-ready actions", value: "100%" },
 ];
-
-const CYAN="#00e5ff", GREEN="#00ff88";
-
-function Counter({to,suffix=""}:{to:number;suffix?:string}) {
-  const [val,setVal]=useState(0);
-  const ref=useRef<HTMLSpanElement>(null);
-  useEffect(()=>{
-    const obs=new IntersectionObserver(([e])=>{
-      if(!e.isIntersecting)return;obs.disconnect();
-      let n=0;const step=()=>{n+=Math.ceil(to/40);if(n>=to){setVal(to);return;}setVal(n);requestAnimationFrame(step);};
-      requestAnimationFrame(step);
-    },{threshold:0.5});
-    if(ref.current)obs.observe(ref.current);
-    return()=>obs.disconnect();
-  },[to]);
-  return <span ref={ref}>{val}{suffix}</span>;
-}
 
 export default function HomePage() {
-  const [activeEnv,setActiveEnv]=useState(0);
-  const [scanY,setScanY]=useState(0);
-  useEffect(()=>{
-    let f:number,s:number|null=null;
-    const r=(ts:number)=>{if(!s)s=ts;setScanY(((ts-s)%3200)/3200*100);f=requestAnimationFrame(r);};
-    f=requestAnimationFrame(r);
-    return()=>cancelAnimationFrame(f);
-  },[]);
-
   return (
-    <main style={{position:"relative",overflow:"hidden",color:"#fff"}}>
-      <style>{`
-        @keyframes sh-pulse-g{0%,100%{opacity:1;box-shadow:0 0 8px #00ff88,0 0 18px rgba(0,255,136,.28)}50%{opacity:.6;box-shadow:0 0 4px #00ff88}}
-        @keyframes sh-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-        .sh-page *{word-break:normal;overflow-wrap:normal;white-space:normal;}
-        .sh-val-card{background:#060c14;border:1px solid rgba(0,229,255,0.1);border-radius:6px;padding:20px;height:100%;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;display:block;text-decoration:none;}
-        .sh-val-card:hover{transform:translateY(-3px);}
-        .sh-env-card{background:#060c14;border-radius:6px;padding:18px;position:relative;overflow:hidden;transition:all 0.2s;display:block;text-decoration:none;}
-        .sh-tab{font-family:var(--font-space-mono,monospace);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;border-radius:3px;padding:7px 14px;cursor:pointer;transition:all 0.2s;border:1px solid;white-space:nowrap;}
-        .sh-cta-primary{font-family:var(--font-space-mono,monospace);font-size:11px;font-weight:700;color:#020508;background:#00e5ff;padding:11px 20px;border-radius:4px;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;display:inline-block;}
-        .sh-cta-secondary{font-family:var(--font-space-mono,monospace);font-size:11px;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);padding:11px 16px;border-radius:4px;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;display:inline-block;}
-      `}</style>
+    <main className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20 pt-14 sm:px-8">
+      <section className="grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:items-center">
+        <div>
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs uppercase tracking-[0.16em] text-cyan-200">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_16px_#34d399]" />
+            Shynvo Platform Live
+          </div>
+          <h1 className="mb-5 text-4xl font-extrabold leading-tight text-white sm:text-5xl">
+            A new frontend for reliable
+            <span className="text-cyan-300"> AI operations</span>
+          </h1>
+          <p className="mb-8 max-w-2xl text-base text-white/70 sm:text-lg">
+            Shynvo unifies your AI backend and automation backend into one clean command center
+            built for IT teams that need speed, safety, and accountability.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/docs"
+              className="rounded-md bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-slate-950 transition hover:bg-cyan-200"
+            >
+              Launch Platform
+            </Link>
+            <Link
+              href="/pricing"
+              className="rounded-md border border-white/20 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white/85 transition hover:border-cyan-300/60 hover:text-cyan-200"
+            >
+              View Plans
+            </Link>
+          </div>
+        </div>
 
-      <div aria-hidden style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,background:"radial-gradient(ellipse 90% 55% at 5% 0%,rgba(0,229,255,0.07),transparent 60%),radial-gradient(ellipse 70% 45% at 95% 5%,rgba(0,255,136,0.05),transparent 55%),radial-gradient(ellipse 80% 50% at 50% 105%,rgba(124,58,237,0.06),transparent 55%)"}}/>
-
-      {/* ══ HERO ══ */}
-      <section className="sh-page" style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 56px",position:"relative",zIndex:1}}>
-        <div style={{display:"block"}}>
-
-          {/* LEFT */}
-          <div>
-            {/* Status pill — nowrap, small font */}
-            <div style={{display:"inline-flex",alignItems:"center",gap:6,border:"1px solid rgba(0,229,255,0.18)",borderRadius:20,padding:"4px 12px",marginBottom:20,background:"rgba(0,229,255,0.04)",flexShrink:0}}>
-              <span style={{width:6,height:6,borderRadius:"50%",background:GREEN,flexShrink:0,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-              <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase",whiteSpace:"nowrap"}}>
-                Structured AI Platform · Online
-              </span>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+          <div className="mb-4 flex items-center justify-between text-xs uppercase tracking-[0.14em] text-white/45">
+            <span>Live Command Feed</span>
+            <span className="text-emerald-300">Operational</span>
+          </div>
+          <div className="space-y-3 font-mono text-xs text-white/80">
+            <div className="rounded-md border border-cyan-400/20 bg-cyan-400/10 px-3 py-2">
+              Incident #9381 detected on API gateway latency.
             </div>
-
-            {/* Headline */}
-            <h1 style={{
-              fontFamily:"var(--font-syne,sans-serif)",
-              fontWeight:800,
-              fontSize:"clamp(1.3rem,2.2vw,2.2rem)",
-              lineHeight:1.12,
-              letterSpacing:"-0.02em",
-              color:"#fff",
-              margin:"0 0 14px",
-              wordBreak:"normal",
-              overflowWrap:"normal",
-            }}>
-              One platform for{" "}
-              <span style={{color:CYAN}}>learning,</span>{" "}
-              building, and{" "}
-              <span style={{color:GREEN}}>AI-guided</span>{" "}
-              work
-            </h1>
-
-            <p style={{
-              fontFamily:"var(--font-space-mono,monospace)",
-              fontSize:12,
-              color:"rgba(255,255,255,0.52)",
-              lineHeight:1.8,
-              marginBottom:24,
-              maxWidth:440,
-            }}>
-              Clear environments. Guided AI. Structured progress.
-            </p>
-
-            {/* CTAs — flex row, nowrap */}
-            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:14,alignItems:"flex-start"}}>
-              <Link href="/docs" className="sh-cta-primary">Start Your Journey →</Link>
-              <Link href="#platform-preview" className="sh-cta-secondary">Explore Worlds</Link>
+            <div className="rounded-md border border-white/10 bg-black/30 px-3 py-2">
+              Copilot suggested 3 safe remediation actions.
             </div>
-
-            <p style={{
-              fontFamily:"var(--font-space-mono,monospace)",
-              fontSize:9,
-              color:"rgba(255,255,255,0.2)",
-              letterSpacing:"0.06em",
-              marginBottom:24,
-              whiteSpace:"normal",
-            }}>
-              No setup required · Start instantly · All environments
-            </p>
-
-            {/* Stats — flex row */}
-            <div style={{display:"flex",gap:20,flexWrap:"nowrap",alignItems:"flex-start",overflowX:"auto"}}>
-              {[{to:7,s:"",l:"Environments"},{to:4,s:" plans",l:"Pricing tiers"},{to:100,s:"%",l:"AI-guided"}].map(x=>(
-                <div key={x.l} style={{minWidth:60}}>
-                  <div style={{
-                    fontFamily:"var(--font-syne,sans-serif)",
-                    fontWeight:800,
-                    fontSize:20,
-                    color:CYAN,
-                    lineHeight:1,
-                    whiteSpace:"nowrap",
-                  }}>
-                    <Counter to={x.to} suffix={x.s}/>
-                  </div>
-                  <div style={{
-                    fontFamily:"var(--font-space-mono,monospace)",
-                    fontSize:9,
-                    color:"rgba(255,255,255,0.3)",
-                    marginTop:3,
-                    letterSpacing:"0.06em",
-                    textTransform:"uppercase",
-                    whiteSpace:"nowrap",
-                  }}>{x.l}</div>
-                </div>
-              ))}
+            <div className="rounded-md border border-white/10 bg-black/30 px-3 py-2">
+              Awaiting approval for restart sequence (non-destructive).
+            </div>
+            <div className="rounded-md border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-emerald-200">
+              Audit log saved. Team notified in Slack.
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ WHAT SHYNVO IS ══ */}
-      <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:28}}>
-          <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
-          <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6,whiteSpace:"nowrap"}}>What Shynvo Is</span>
-          <div style={{flex:1,height:1,background:"linear-gradient(270deg,rgba(0,229,255,0.25),transparent)"}}/>
-        </div>
-        <div style={{display:"grid",gap:12,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))"}}>
-          {VALUES.map(item=>(
-            <Link key={item.tag} href={item.href} className="sh-val-card"
-              onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor=`${item.color}50`;}}
-              onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor="rgba(0,229,255,0.1)";}}
-            >
-              <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${item.color},transparent)`,opacity:0.3,pointerEvents:"none"}}/>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
-                <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:item.color,opacity:0.5,letterSpacing:"0.1em"}}>_{item.tag}</span>
-                <span style={{fontSize:18,color:item.color,opacity:0.5}}>{item.glyph}</span>
-              </div>
-              <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:14,fontWeight:700,color:"#fff",marginBottom:8,lineHeight:1.35}}>{item.title}</div>
-              <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.72,marginBottom:14}}>{item.desc}</p>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:item.color,letterSpacing:"0.08em",textTransform:"uppercase"}}>Learn more</span>
-                <span style={{color:item.color,fontSize:13}}>›</span>
-              </div>
-            </Link>
-          ))}
-        </div>
+      <section className="mt-14 grid gap-4 sm:grid-cols-3">
+        {outcomes.map((item) => (
+          <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <p className="text-3xl font-bold text-cyan-200">{item.value}</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.14em] text-white/55">{item.label}</p>
+          </div>
+        ))}
       </section>
 
-      {/* ══ PLATFORM PREVIEW ══ */}
-      <section id="platform-preview" style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
-          <div style={{flex:1,height:1,background:"linear-gradient(90deg,rgba(0,229,255,0.25),transparent)"}}/>
-          <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.6,whiteSpace:"nowrap"}}>Platform Environments</span>
-          <div style={{flex:1,height:1,background:"linear-gradient(270deg,rgba(0,229,255,0.25),transparent)"}}/>
+      <section className="mt-16">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">Core Platform Modules</h2>
+          <span className="text-xs uppercase tracking-[0.14em] text-cyan-200/70">Built for IT</span>
         </div>
-        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.1rem,2vw,1.6rem)",letterSpacing:"-0.02em",textAlign:"center",color:"#fff",marginBottom:24}}>
-          What the platform looks like
-        </h2>
-        <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:20,flexWrap:"wrap"}}>
-          {ENVS.map((env,i)=>(
-            <button key={env.id} onClick={()=>setActiveEnv(i)} className="sh-tab"
-              style={{color:activeEnv===i?"#020508":"rgba(255,255,255,0.5)",background:activeEnv===i?env.color:"transparent",borderColor:activeEnv===i?env.color:"rgba(255,255,255,0.1)",boxShadow:activeEnv===i?`0 0 16px ${env.color}40`:"none"}}
-            >{env.title}</button>
-          ))}
-        </div>
-        <div style={{display:"grid",gap:12,gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))"}}>
-          {ENVS.map((env,i)=>(
-            <Link key={env.id} href={env.href} className="sh-env-card"
-              style={{border:`1px solid ${activeEnv===i?env.color+"40":"rgba(0,229,255,0.08)"}`,transform:activeEnv===i?"translateY(-3px)":"none",boxShadow:activeEnv===i?`0 6px 24px rgba(0,0,0,0.4),0 0 0 1px ${env.color}16`:"none"}}
+        <div className="grid gap-4 md:grid-cols-3">
+          {modules.map((module) => (
+            <Link
+              key={module.title}
+              href={module.href}
+              className="group rounded-xl border border-white/10 bg-white/[0.02] p-5 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:bg-cyan-400/[0.05]"
             >
-              <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${env.color},transparent)`,opacity:activeEnv===i?0.5:0.12,pointerEvents:"none"}}/>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-                <div style={{fontFamily:"var(--font-syne,sans-serif)",fontSize:13,fontWeight:700,color:"#fff"}}>{env.title}</div>
-                <div style={{display:"flex",alignItems:"center",gap:4}}>
-                  <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-                  <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase",whiteSpace:"nowrap"}}>System Live</span>
-                </div>
-              </div>
-              <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:env.color,opacity:0.6,marginBottom:7,letterSpacing:"0.06em"}}>{env.sub}</div>
-              <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.44)",lineHeight:1.65,marginBottom:11}}>{env.desc}</p>
-              <div style={{background:"#020508",border:"1px solid rgba(0,229,255,0.06)",borderRadius:3,padding:9,position:"relative",overflow:"hidden"}}>
-                {activeEnv===i&&<div aria-hidden style={{position:"absolute",left:0,right:0,height:2,top:`${scanY}%`,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.25),transparent)",pointerEvents:"none",zIndex:5}}/>}
-                <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:env.color,opacity:0.4,marginBottom:4,letterSpacing:"0.08em"}}>local loop ▌</div>
-                <PreviewTypingLoop variant={env.variant} lines={env.lines}/>
-              </div>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10}}>
-                <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:"rgba(255,255,255,0.3)",letterSpacing:"0.06em",textTransform:"uppercase"}}>Open preview</span>
-                <span style={{color:env.color,fontSize:12}}>›</span>
-              </div>
+              <h3 className="mb-2 text-lg font-semibold text-white group-hover:text-cyan-200">
+                {module.title}
+              </h3>
+              <p className="text-sm leading-6 text-white/65">{module.description}</p>
+              <p className="mt-4 text-xs uppercase tracking-[0.12em] text-cyan-200/80">
+                Open Module ->
+              </p>
             </Link>
           ))}
-        </div>
-      </section>
-
-      {/* ══ FINAL CTA ══ */}
-      <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 96px",position:"relative",zIndex:1,textAlign:"center"}}>
-        <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.4,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:12}}>Begin Now</div>
-        <h2 style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1.2rem,2.2vw,2rem)",letterSpacing:"-0.02em",color:"#fff",marginBottom:10,lineHeight:1.1}}>
-          Hello! Welcome to Shynvo.
-        </h2>
-        <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:320,margin:"0 auto 24px",lineHeight:1.8}}>
-          Choose your environment and let the Robot guide you.
-        </p>
-        <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-          <Link href="/docs" className="sh-cta-primary" style={{boxShadow:`0 0 28px rgba(0,229,255,0.32)`}}>Start Your Journey</Link>
-          <Link href="/robot" style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:CYAN,border:`1px solid rgba(0,229,255,0.25)`,padding:"11px 18px",borderRadius:4,textDecoration:"none",letterSpacing:"0.06em",textTransform:"uppercase",display:"inline-block",background:"rgba(0,229,255,0.03)"}}>Open Robot</Link>
         </div>
       </section>
     </main>
