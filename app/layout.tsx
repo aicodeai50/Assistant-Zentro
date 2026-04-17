@@ -106,8 +106,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <UltraPremiumEffects />
           <div className="relative z-10 flex min-h-[100dvh] flex-col">
             <SiteNav />
+            <AIBackground />
             <main className="relative z-10 flex-1">
-              <AIBackground />
               {children}
             </main>
             <div className="relative z-20">
