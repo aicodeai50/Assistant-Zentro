@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { checkAiAccess } from "@/api/_utils/aiAccess";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,8 +41,16 @@ function authHeaders() {
   return headers;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const access = await checkAiAccess(req);
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: access.message },
+        { status: access.status }
+      );
+    }
+
     const base = getBaseUrl();
 
     const upstream = await fetch(`${base}/api/skill-matrix`, {
@@ -65,8 +74,16 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const access = await checkAiAccess(req);
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: access.message },
+        { status: access.status }
+      );
+    }
+
     const base = getBaseUrl();
     const body = await req.json().catch(() => ({}));
 

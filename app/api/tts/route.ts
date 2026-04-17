@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
 
 export const runtime = "nodejs";
 
@@ -8,8 +9,16 @@ function mustEnv(name: string) {
   return v;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const access = await checkAiAccess(req);
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: access.message },
+        { status: access.status }
+      );
+    }
+
     const base = mustEnv("NEXT_PUBLIC_API_URL");
     const key = mustEnv("SH_API_KEY");
 
@@ -27,6 +36,14 @@ export async function POST(req: Request) {
 
     const contentType = res.headers.get("content-type") || "application/octet-stream";
     const buf = await res.arrayBuffer();
+
+    if (res.ok) {
+      try {
+        await recordAiUsage(access);
+      } catch {
+        // ignore
+      }
+    }
 
     return new NextResponse(buf, {
       status: res.status,

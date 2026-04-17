@@ -1,17 +1,30 @@
-export async function POST(req: Request) {
+import { NextRequest, NextResponse } from "next/server";
+import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
+
+export const runtime = "nodejs";
+
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const access = await checkAiAccess(req);
+    if (!access.ok) {
+      return NextResponse.json(
+        { reply: access.message },
+        { status: access.status }
+      );
+    }
+
+    const body = await req.json().catch(() => ({}));
     const message = String(body?.message ?? "").trim();
 
     if (!message) {
-      return Response.json({ reply: "Please enter a message." }, { status: 400 });
+      return NextResponse.json({ reply: "Please enter a message." }, { status: 400 });
     }
 
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      return Response.json(
-        { reply: "Missing OPENAI_API_KEY. Add it in Vercel → Project → Settings → Environment Variables." },
-        { status: 200 }
+      return NextResponse.json(
+        { reply: "AI is not configured." },
+        { status: 500 }
       );
     }
 
@@ -32,15 +45,23 @@ export async function POST(req: Request) {
     });
 
     if (!r.ok) {
-      const err = await r.text();
-      return Response.json({ reply: `OpenAI error: ${r.status}\n${err}` }, { status: 200 });
+      return NextResponse.json(
+        { reply: "AI service is temporarily unavailable." },
+        { status: 502 }
+      );
     }
 
     const data = await r.json();
     const reply = data?.choices?.[0]?.message?.content ?? "No reply.";
 
-    return Response.json({ reply });
-  } catch (e: any) {
-    return Response.json({ reply: `Server error: ${e?.message ?? "unknown"}` }, { status: 200 });
+    try {
+      await recordAiUsage(access);
+    } catch {
+      // ignore usage-recording issues
+    }
+
+    return NextResponse.json({ reply });
+  } catch {
+    return NextResponse.json({ reply: "Server error." }, { status: 500 });
   }
 }

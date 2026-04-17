@@ -36,10 +36,7 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanBase = baseUrl.replace(/\/+$/, "");
-    const apiKey =
-      process.env.SH_API_KEY ||
-      process.env.NEXT_PUBLIC_SH_API_KEY ||
-      "";
+    const apiKey = process.env.SH_API_KEY || "";
 
     const customPath = process.env.BACKEND_CHAT_PATH || "";
     const candidatePaths = customPath

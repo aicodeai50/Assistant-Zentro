@@ -1,10 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { checkAiAccess } from "@/api/_utils/aiAccess";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const access = await checkAiAccess(req);
+    if (!access.ok) {
+      return NextResponse.json(
+        { ok: false, error: access.message },
+        { status: access.status }
+      );
+    }
+
     const base = process.env.SH_BACKEND_URL;
     const key = process.env.SH_API_KEY;
 
