@@ -19,6 +19,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [
+      { url: "https://shynvo.app/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "https://shynvo.app/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "https://shynvo.app/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "https://shynvo.app/icons/icon-192.png",
+  },
   keywords: "robotics, AI, API generation, robot platform, digital twin, automation",
   openGraph: {
     title: "SHYNVO PRI — Planetary Robot Interface",
@@ -26,6 +36,12 @@ export const metadata: Metadata = {
     url: "https://shynvo.app",
     siteName: "Shynvo",
     type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "SHYNVO PRI — Planetary Robot Interface",
+    description: "The operating system for robot intelligence.",
+    images: ["https://shynvo.app/icons/icon-512.png"],
   },
 };
 
