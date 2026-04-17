@@ -62,7 +62,7 @@ export default function HomePage() {
 
       {/* ══ HERO ══ */}
       <section className="sh-page" style={{maxWidth:960,margin:"0 auto",padding:"40px 20px 56px",position:"relative",zIndex:1}}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:40,alignItems:"flex-start"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr",gap:32,alignItems:"flex-start"}} className="lg:grid-cols-[1fr_300px]">
 
           {/* LEFT */}
           <div>
@@ -105,7 +105,7 @@ export default function HomePage() {
             </p>
 
             {/* CTAs — flex row, nowrap */}
-            <div style={{display:"flex",flexWrap:"wrap",gap:10,marginBottom:14,alignItems:"center"}}>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:14,alignItems:"flex-start"}}>
               <Link href="/docs" className="sh-cta-primary">Start Your Journey →</Link>
               <Link href="#platform-preview" className="sh-cta-secondary">Explore Worlds</Link>
             </div>
@@ -122,7 +122,7 @@ export default function HomePage() {
             </p>
 
             {/* Stats — flex row */}
-            <div style={{display:"flex",gap:24,flexWrap:"wrap",alignItems:"flex-start"}}>
+            <div style={{display:"flex",gap:20,flexWrap:"nowrap",alignItems:"flex-start",overflowX:"auto"}}>
               {[{to:7,s:"",l:"Environments"},{to:4,s:" plans",l:"Pricing tiers"},{to:100,s:"%",l:"AI-guided"}].map(x=>(
                 <div key={x.l} style={{minWidth:60}}>
                   <div style={{
@@ -150,7 +150,7 @@ export default function HomePage() {
           </div>
 
           {/* RIGHT — robot, desktop only */}
-          <div style={{display:"flex",justifyContent:"flex-end",alignItems:"flex-start"}}>
+          <div className="hidden lg:flex" style={{justifyContent:"flex-end",alignItems:"flex-start"}}>
             <div style={{width:300,position:"relative"}}>
               <div aria-hidden style={{position:"absolute",inset:-40,background:"radial-gradient(circle at 50% 45%,rgba(0,229,255,0.1),transparent 60%)",pointerEvents:"none",zIndex:0}}/>
               <div style={{position:"relative",zIndex:1,background:"rgba(6,12,20,0.75)",border:"1px solid rgba(0,229,255,0.16)",borderRadius:10,padding:"12px 12px 8px",backdropFilter:"blur(12px)"}}>

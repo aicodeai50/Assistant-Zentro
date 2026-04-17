@@ -45,9 +45,9 @@ export default function SiteNav() {
 
       <header style={{
         position:"sticky",top:0,zIndex:80,
-        borderBottom:scrolled?"1px solid rgba(0,229,255,0.1)":"1px solid transparent",
-        background:scrolled?"rgba(2,5,8,0.75)":"transparent",
-        backdropFilter:scrolled?"blur(20px)":"none",
+        borderBottom:"1px solid rgba(0,229,255,0.07)",
+        background:"rgba(2,5,8,0.55)",
+        backdropFilter:"blur(24px)",
         transition:"background 0.3s,border-color 0.3s",
       }}>
         {/* HUD strip */}
