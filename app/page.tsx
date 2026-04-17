@@ -148,23 +148,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* RIGHT — robot, desktop only */}
-          <div className="hidden lg:flex" style={{justifyContent:"flex-end",alignItems:"flex-start"}}>
-            <div style={{width:300,position:"relative"}}>
-              <div aria-hidden style={{position:"absolute",inset:-40,background:"radial-gradient(circle at 50% 45%,rgba(0,229,255,0.1),transparent 60%)",pointerEvents:"none",zIndex:0}}/>
-              <div style={{position:"relative",zIndex:1,background:"rgba(6,12,20,0.75)",border:"1px solid rgba(0,229,255,0.16)",borderRadius:10,padding:"12px 12px 8px",backdropFilter:"blur(12px)"}}>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,paddingBottom:7,borderBottom:"1px solid rgba(0,229,255,0.08)"}}>
-                  <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:CYAN,opacity:0.55,letterSpacing:"0.1em",textTransform:"uppercase"}}>SH-ROBOT · UNIT-01</span>
-                  <div style={{display:"flex",alignItems:"center",gap:4}}>
-                    <span style={{width:5,height:5,borderRadius:"50%",background:GREEN,display:"inline-block",animation:"sh-pulse-g 2s ease-in-out infinite"}}/>
-                    <span style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:8,color:GREEN,letterSpacing:"0.08em",textTransform:"uppercase"}}>Standby</span>
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-        </div>
+
       </section>
 
       {/* ══ WHAT SHYNVO IS ══ */}
