@@ -225,21 +225,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ QR ══ */}
-      <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 72px",position:"relative",zIndex:1}}>
-        <div style={{background:"#060c14",border:"1px solid rgba(0,229,255,0.12)",borderRadius:6,padding:"28px 24px",position:"relative",overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",gap:20,textAlign:"center"}} className="md:flex-row md:text-left md:justify-between">
-          <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.38),transparent)",pointerEvents:"none"}}/>
-          <div>
-            <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.5,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:8}}>Mobile Access</div>
-            <div style={{fontFamily:"var(--font-syne,sans-serif)",fontWeight:800,fontSize:"clamp(1rem,1.8vw,1.3rem)",color:"#fff",marginBottom:6}}>Scan to explore Shynvo</div>
-            <p style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:11,color:"rgba(255,255,255,0.38)",maxWidth:280,lineHeight:1.7}}>Continue on mobile. Same environments, same AI guidance.</p>
-          </div>
-          <div style={{background:"#fff",padding:10,borderRadius:4,boxShadow:"0 0 28px rgba(0,229,255,0.12)",flexShrink:0}}>
-            <QRCodeSVG value="https://shynvo.app" size={88} bgColor="#ffffff" fgColor="#020508"/>
-          </div>
-        </div>
-      </section>
-
       {/* ══ FINAL CTA ══ */}
       <section style={{maxWidth:960,margin:"0 auto",padding:"0 20px 96px",position:"relative",zIndex:1,textAlign:"center"}}>
         <div style={{fontFamily:"var(--font-space-mono,monospace)",fontSize:9,color:CYAN,opacity:0.4,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:12}}>Begin Now</div>

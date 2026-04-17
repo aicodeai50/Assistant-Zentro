@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { QRCodeSVG } from "qrcode.react";
 
 const mono={fontFamily:"var(--font-space-mono,monospace)"} as React.CSSProperties;
 const sans={fontFamily:"var(--font-syne,sans-serif)"} as React.CSSProperties;
@@ -9,9 +10,7 @@ export default function SiteFooter() {
     <footer style={{position:"relative",borderTop:"1px solid rgba(0,229,255,0.08)"}}>
       <div style={{position:"absolute",top:0,left:"15%",right:"15%",height:1,background:"linear-gradient(90deg,transparent,rgba(0,229,255,0.35),transparent)",pointerEvents:"none"}}/>
       <div style={{maxWidth:960,margin:"0 auto",padding:"48px 20px 0"}}>
-
-        {/* 4 column grid — explicit, never collapses */}
-        <div style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr",gap:32,marginBottom:32}} className="max-sm:grid-cols-2">
+        <div style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr 1fr",gap:32,marginBottom:32}} className="max-sm:grid-cols-2">
 
           {/* Brand */}
           <div>
@@ -34,7 +33,7 @@ export default function SiteFooter() {
             <div style={{...mono,fontSize:8,color:"rgba(0,229,255,0.45)",letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:14}}>Product</div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               {[{href:"/docs",l:"Docs"},{href:"/pricing",l:"Pricing"},{href:"/search",l:"Search"}].map(x=>(
-                <Link key={x.href} href={x.href} style={{...mono,fontSize:11,color:"rgba(255,255,255,0.45)",textDecoration:"none",display:"block",transition:"color 0.15s"}}
+                <Link key={x.href} href={x.href} style={{...mono,fontSize:11,color:"rgba(255,255,255,0.45)",textDecoration:"none",display:"block"}}
                   onMouseEnter={e=>(e.currentTarget.style.color=CYAN)}
                   onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,0.45)")}
                 >{x.l}</Link>
@@ -47,7 +46,7 @@ export default function SiteFooter() {
             <div style={{...mono,fontSize:8,color:"rgba(0,229,255,0.45)",letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:14}}>Platform</div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               {[{href:"/university",l:"University Hub"},{href:"/frontier",l:"Frontier Lab"},{href:"/enterprise",l:"Enterprise"},{href:"/robot",l:"Robot"}].map(x=>(
-                <Link key={x.href} href={x.href} style={{...mono,fontSize:11,color:"rgba(255,255,255,0.45)",textDecoration:"none",display:"block",transition:"color 0.15s"}}
+                <Link key={x.href} href={x.href} style={{...mono,fontSize:11,color:"rgba(255,255,255,0.45)",textDecoration:"none",display:"block"}}
                   onMouseEnter={e=>(e.currentTarget.style.color=CYAN)}
                   onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,0.45)")}
                 >{x.l}</Link>
@@ -59,11 +58,20 @@ export default function SiteFooter() {
           <div>
             <div style={{...mono,fontSize:8,color:"rgba(0,229,255,0.45)",letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:14}}>Company</div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <Link href="/contact" style={{...mono,fontSize:11,color:"rgba(255,255,255,0.45)",textDecoration:"none",display:"block",transition:"color 0.15s"}}
+              <Link href="/contact" style={{...mono,fontSize:11,color:"rgba(255,255,255,0.45)",textDecoration:"none",display:"block"}}
                 onMouseEnter={e=>(e.currentTarget.style.color=CYAN)}
                 onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,0.45)")}
               >Contact</Link>
             </div>
+          </div>
+
+          {/* QR Code */}
+          <div>
+            <div style={{...mono,fontSize:8,color:"rgba(0,229,255,0.45)",letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:14}}>Mobile</div>
+            <div style={{background:"#fff",padding:8,borderRadius:4,display:"inline-block",boxShadow:"0 0 16px rgba(0,229,255,0.1)"}}>
+              <QRCodeSVG value="https://shynvo.app" size={72} bgColor="#ffffff" fgColor="#020508"/>
+            </div>
+            <p style={{...mono,fontSize:9,color:"rgba(255,255,255,0.28)",marginTop:8,lineHeight:1.6}}>Scan to open on mobile</p>
           </div>
         </div>
 
@@ -74,7 +82,7 @@ export default function SiteFooter() {
           </div>
           <div style={{display:"flex",gap:16}}>
             {[{href:"/terms",l:"Terms"},{href:"/privacy",l:"Privacy"},{href:"/refund",l:"Refund"}].map(x=>(
-              <Link key={x.href} href={x.href} style={{...mono,fontSize:9,color:"rgba(255,255,255,0.28)",textDecoration:"none",whiteSpace:"nowrap",transition:"color 0.15s"}}
+              <Link key={x.href} href={x.href} style={{...mono,fontSize:9,color:"rgba(255,255,255,0.28)",textDecoration:"none",whiteSpace:"nowrap"}}
                 onMouseEnter={e=>(e.currentTarget.style.color="rgba(255,255,255,0.65)")}
                 onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,0.28)")}
               >{x.l}</Link>
