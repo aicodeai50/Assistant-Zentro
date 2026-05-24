@@ -1,26 +1,31 @@
-const API = process.env.NEXT_PUBLIC_API_URL;
-const KEY = process.env.NEXT_PUBLIC_SH_API_KEY;
+import { backendFetch, getToken, setToken } from "@/lib/sh-backend";
+
+const API = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+const KEY =
+  process.env.NEXT_PUBLIC_SH_API_KEY || process.env.NEXT_PUBLIC_API_KEY;
 
 export async function api(path: string, options: RequestInit = {}) {
-  if (!API) throw new Error("NEXT_PUBLIC_API_URL missing");
-  if (!KEY) throw new Error("NEXT_PUBLIC_SH_API_KEY missing");
+  if (typeof window !== "undefined" && API) {
+    const token = getToken();
+    const res = await fetch(`${API}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(KEY ? { "x-sh-api-key": KEY } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options.headers || {}),
+      },
+      credentials: "include",
+    });
 
-  const res = await fetch(`${API}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "x-sh-api-key": KEY,
-      ...(options.headers || {}),
-    },
-    credentials: "include",
-  });
-
-  const data = await res.json().catch(() => ({}));
-
-  if (!res.ok) {
-    const msg = data?.error || "Request failed";
-    throw new Error(msg);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data?.error || "Request failed");
+    }
+    return data;
   }
 
-  return data;
+  return backendFetch(path, options);
 }
+
+export { setToken, getToken, backendFetch };

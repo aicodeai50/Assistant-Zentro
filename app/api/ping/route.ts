@@ -17,7 +17,7 @@ export async function GET() {
 
     const res = await fetch(`${base.replace(/\/$/, "")}/health`, {
       method: "GET",
-      headers: key ? { "x-sh-key": key } : {},
+      headers: key ? { "x-sh-api-key": key } : {},
       cache: "no-store",
     });
 
