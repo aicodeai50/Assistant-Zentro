@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "eslint",
-    "generate:icons": "node scripts/generate-zentro-icons.mjs",
-    "prebuild": "node scripts/generate-zentro-icons.mjs"
+    "generate:icons": "node scripts/generate-zentro-icons.mjs"
   },
   "engines": {
     "node": ">=20"
@@ -28,6 +27,7 @@
     "qrcode.react": "^4.2.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "sharp": "^0.34.5",
     "three": "^0.183.1"
   },
   "devDependencies": {
@@ -37,7 +37,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
-    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { SITE_NAME, SITE_SHORT_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_SHORT_NAME } from "@/lib/site";
+import HomeHeroRobot from "./components/HomeHeroRobot";
 
 const modules = [
   {
@@ -12,7 +13,7 @@ const modules = [
     title: "Automation Engine",
     description:
       "Turn repeated IT tasks into guarded workflows with approvals, logs, and rollback plans.",
-    href: "/platform",
+    href: "/robot",
   },
   {
     title: "Runbook Intelligence",
@@ -31,7 +32,7 @@ const outcomes = [
 export default function HomePage() {
   return (
     <main className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20 pt-14 sm:px-8">
-      <section className="grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:items-center">
+      <section className="grid gap-8 lg:grid-cols-[1.15fr_1fr] lg:items-center">
         <div>
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs uppercase tracking-[0.16em] text-cyan-200">
             <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_16px_#34d399]" />
@@ -42,15 +43,15 @@ export default function HomePage() {
             <span className="text-cyan-300"> AI operations</span>
           </h1>
           <p className="mb-8 max-w-2xl text-base text-white/70 sm:text-lg">
-            {SITE_SHORT_NAME} unifies your AI backend and automation backend into one clean command center
-            built for IT teams that need speed, safety, and accountability.
+            {SITE_SHORT_NAME} unifies your AI backend and automation backend into one command center
+            with a real 3D assistant core, built for IT teams that need speed, safety, and accountability.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/docs"
+              href="/robot"
               className="rounded-md bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-slate-950 transition hover:bg-cyan-200"
             >
-              Launch Platform
+              Talk to Robot
             </Link>
             <Link
               href="/pricing"
@@ -61,26 +62,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-          <div className="mb-4 flex items-center justify-between text-xs uppercase tracking-[0.14em] text-white/45">
-            <span>Live Command Feed</span>
-            <span className="text-emerald-300">Operational</span>
-          </div>
-          <div className="space-y-3 font-mono text-xs text-white/80">
-            <div className="rounded-md border border-cyan-400/20 bg-cyan-400/10 px-3 py-2">
-              Incident #9381 detected on API gateway latency.
-            </div>
-            <div className="rounded-md border border-white/10 bg-black/30 px-3 py-2">
-              Copilot suggested 3 safe remediation actions.
-            </div>
-            <div className="rounded-md border border-white/10 bg-black/30 px-3 py-2">
-              Awaiting approval for restart sequence (non-destructive).
-            </div>
-            <div className="rounded-md border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-emerald-200">
-              Audit log saved. Team notified in Slack.
-            </div>
-          </div>
-        </div>
+        <HomeHeroRobot />
       </section>
 
       <section className="mt-14 grid gap-4 sm:grid-cols-3">
@@ -109,7 +91,7 @@ export default function HomePage() {
               </h3>
               <p className="text-sm leading-6 text-white/65">{module.description}</p>
               <p className="mt-4 text-xs uppercase tracking-[0.12em] text-cyan-200/80">
-                Open Module →
+                Explore module
               </p>
             </Link>
           ))}
