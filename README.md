@@ -48,4 +48,6 @@ Set any API keys your app needs (Supabase, OpenAI, backend URLs) in Railway → 
 Brand mark source: `public/icons/zentro-mark.svg`  
 Generated outputs: `public/favicon.png`, `public/icons/icon-*.png`
 
-Icons are regenerated automatically on `npm run build` via `prebuild`.
+Icons are committed in `public/` and can be regenerated locally with `npm run generate:icons`.
+
+<!-- deploy trigger: 2026-06-16 -->
