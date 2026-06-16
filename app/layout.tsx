@@ -3,7 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { Space_Mono, Syne } from "next/font/google";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import ShynvoGuideChat from "@/components/ShynvoGuideChat";
+import ZentroRobotChat from "@/components/robot/ZentroRobotChat";
+import { ZentroRobotProvider } from "@/lib/robot/context";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import AIBackground from "./components/AIBackground";
 import PathTracker from "./components/PathTracker";
@@ -119,20 +120,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="relative min-h-[100dvh] overflow-x-hidden text-white">
         <LanguageProvider>
-          <CapacitorKeyboardFix />
-          <PathTracker />
-          <UltraPremiumEffects />
-          <div className="relative z-10 flex min-h-[100dvh] flex-col">
-            <SiteNav />
-            <AIBackground />
-            <main className="relative z-10 flex-1">
-              {children}
-            </main>
-            <div className="relative z-20" style={{ background: "transparent" }}>
-              <SiteFooter />
+          <ZentroRobotProvider>
+            <CapacitorKeyboardFix />
+            <PathTracker />
+            <UltraPremiumEffects />
+            <div className="relative z-10 flex min-h-[100dvh] flex-col">
+              <SiteNav />
+              <AIBackground />
+              <main className="relative z-10 flex-1">
+                {children}
+              </main>
+              <div className="relative z-20" style={{ background: "transparent" }}>
+                <SiteFooter />
+              </div>
+              <ZentroRobotChat />
             </div>
-            <ShynvoGuideChat />
-          </div>
+          </ZentroRobotProvider>
         </LanguageProvider>
       </body>
     </html>

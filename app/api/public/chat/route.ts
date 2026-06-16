@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
+import { zentroLocalReplyRich } from "@/lib/robot/fallback";
+import { ZENTRO_ROBOT_SYSTEM_PROMPT } from "@/lib/robot/prompt";
 
 const DEFAULT_PATHS = [
   "/api/public/chat",
@@ -8,17 +10,27 @@ const DEFAULT_PATHS = [
   "/chat",
 ];
 
+function localPayload(message: string) {
+  const rich = zentroLocalReplyRich(message);
+  return {
+    answer: rich.text,
+    href: rich.href,
+    label: rich.label,
+    source: "local" as const,
+  };
+}
+
 export async function POST(req: NextRequest) {
+  let userMessage = "";
+
   try {
     const body = await req.json().catch(() => ({}));
+    userMessage = String(body?.message || "").trim();
 
     const access = await checkAiAccess(req);
 
     if (!access.ok) {
-      return NextResponse.json(
-        { error: access.message },
-        { status: access.status }
-      );
+      return NextResponse.json({ ...localPayload(userMessage), error: access.message }, { status: 200 });
     }
 
     const baseUrl =
@@ -29,11 +41,13 @@ export async function POST(req: NextRequest) {
       "";
 
     if (!baseUrl) {
-      return NextResponse.json(
-        { error: "Missing backend URL." },
-        { status: 500 }
-      );
+      return NextResponse.json(localPayload(userMessage), { status: 200 });
     }
+
+    const payload = {
+      ...body,
+      systemPrompt: body?.systemPrompt || ZENTRO_ROBOT_SYSTEM_PROMPT,
+    };
 
     const cleanBase = baseUrl.replace(/\/+$/, "");
     const apiKey =
@@ -63,7 +77,7 @@ export async function POST(req: NextRequest) {
                 }
               : {}),
           },
-          body: JSON.stringify(body),
+          body: JSON.stringify(payload),
           cache: "no-store",
         });
 
@@ -92,16 +106,16 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      {
-        error: "Backend chat endpoint not found or failed.",
-        details: lastText,
-      },
-      { status: lastStatus || 500 }
+      { ...localPayload(userMessage), details: lastText },
+      { status: 200 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { error: "Failed to reach backend chat service." },
-      { status: 500 }
+      {
+        ...localPayload(userMessage),
+        error: "Failed to reach backend chat service.",
+      },
+      { status: 200 }
     );
   }
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE_NAME, SITE_SHORT_NAME } from "@/lib/site";
 import HomeHeroRobot from "./components/HomeHeroRobot";
+import HomeHeroActions, { HomeQuickAsk } from "./components/HomeQuickAsk";
 
 const modules = [
   {
@@ -31,7 +32,7 @@ const outcomes = [
 
 export default function HomePage() {
   return (
-    <main className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20 pt-14 sm:px-8">
+    <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20 pt-14 sm:px-8">
       <section className="grid gap-8 lg:grid-cols-[1.15fr_1fr] lg:items-center">
         <div>
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs uppercase tracking-[0.16em] text-cyan-200">
@@ -46,20 +47,7 @@ export default function HomePage() {
             {SITE_SHORT_NAME} unifies your AI backend and automation backend into one command center
             with a real 3D assistant core, built for IT teams that need speed, safety, and accountability.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/robot"
-              className="rounded-md bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-slate-950 transition hover:bg-cyan-200"
-            >
-              Talk to Robot
-            </Link>
-            <Link
-              href="/pricing"
-              className="rounded-md border border-white/20 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white/85 transition hover:border-cyan-300/60 hover:text-cyan-200"
-            >
-              View Plans
-            </Link>
-          </div>
+          <HomeHeroActions />
         </div>
 
         <HomeHeroRobot />
@@ -73,6 +61,8 @@ export default function HomePage() {
           </div>
         ))}
       </section>
+
+      <HomeQuickAsk />
 
       <section className="mt-16">
         <div className="mb-6 flex items-center justify-between gap-4">
@@ -97,6 +87,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-    </main>
+    </div>
   );
 }

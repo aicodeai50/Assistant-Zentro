@@ -1,12 +1,13 @@
 import { NextRequest } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { hasSupabaseAuth } from "@/lib/supabase/env";
 
 const FREE_DAILY_LIMIT = 5;
 
 type AuthAccessResult =
   | {
       ok: true;
-      mode: "auth";
+      mode: "guest" | "auth";
       userId: string;
       plan: string;
       trialActive: boolean;
@@ -25,11 +26,14 @@ function todayUtc(): string {
 export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult> {
   const admin = getSupabaseAdmin();
 
-  if (!admin) {
+  if (!admin || !hasSupabaseAuth()) {
     return {
-      ok: false,
-      status: 500,
-      message: "Server auth is not configured yet.",
+      ok: true,
+      mode: "guest",
+      userId: "guest",
+      plan: "guest",
+      trialActive: false,
+      remaining: null,
     };
   }
 
@@ -38,9 +42,12 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
 
   if (!token) {
     return {
-      ok: false,
-      status: 401,
-      message: "Create an account or sign in to use AI tools in Shynvo.",
+      ok: true,
+      mode: "guest",
+      userId: "guest",
+      plan: "guest",
+      trialActive: false,
+      remaining: null,
     };
   }
 
@@ -154,6 +161,8 @@ export async function checkAiAccess(req: NextRequest): Promise<AuthAccessResult>
 }
 
 export async function recordAiUsage(access: Extract<AuthAccessResult, { ok: true }>): Promise<void> {
+  if (access.mode === "guest") return;
+
   const admin = getSupabaseAdmin();
   if (!admin) return;
 

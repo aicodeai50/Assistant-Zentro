@@ -174,10 +174,10 @@ export default function SiteNav() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/6 bg-[#070b14]/88 backdrop-blur-md">
       <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="Shynvo home">
+        <Link href="/" className="flex items-center gap-2.5" aria-label="Zentro home">
           <ShynvoLogo />
           <span className="text-sm font-semibold tracking-[0.02em] text-white">
-            Shynvo
+            Zentro
           </span>
         </Link>
 
