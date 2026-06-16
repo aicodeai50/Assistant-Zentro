@@ -58,8 +58,8 @@ export default function PrivacyPage() {
 
       <h2 className="mt-6 font-semibold">9. Contact</h2>
       <p className="text-white/70">
-        hi@shynvo.app<br />
-        support@shynvo.app
+        hi@zentro.run<br />
+        support@zentro.run
       </p>
     </div>
   );

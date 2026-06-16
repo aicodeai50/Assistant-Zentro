@@ -5,8 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start -H 0.0.0.0",
+    "lint": "eslint",
+    "generate:icons": "node scripts/generate-zentro-icons.mjs",
+    "prebuild": "node scripts/generate-zentro-icons.mjs"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.0",

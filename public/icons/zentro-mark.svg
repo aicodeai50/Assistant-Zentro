@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="zentro-a" x1="96" y1="88" x2="416" y2="424" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="0.55" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="zentro-b" x1="128" y1="400" x2="384" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="zentro-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#070a12"/>
+  <rect x="24" y="24" width="464" height="464" rx="96" stroke="url(#zentro-b)" stroke-width="3" opacity="0.55"/>
+  <path
+    d="M148 156h216l-148 100h176l-188 100h220"
+    stroke="url(#zentro-a)"
+    stroke-width="52"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#zentro-glow)"
+  />
+  <circle cx="372" cy="140" r="22" fill="#38bdf8"/>
+  <circle cx="140" cy="372" r="16" fill="#a78bfa" opacity="0.9"/>
+  <path
+    d="M96 256a160 160 0 0 1 88-142"
+    stroke="#2dd4bf"
+    stroke-width="8"
+    stroke-linecap="round"
+    opacity="0.45"
+  />
+</svg>

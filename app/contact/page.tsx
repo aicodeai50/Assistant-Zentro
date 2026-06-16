@@ -10,15 +10,15 @@ export default function ContactPage() {
         <div className="mt-6 space-y-4 text-lg">
           <p>
             General:{" "}
-            <a className="underline hover:opacity-80" href="mailto:hi@shynvo.app">
-              hi@shynvo.app
+            <a className="underline hover:opacity-80" href="mailto:hi@zentro.run">
+              hi@zentro.run
             </a>
           </p>
 
           <p>
             Support:{" "}
-            <a className="underline hover:opacity-80" href="mailto:support@shynvo.app">
-              support@shynvo.app
+            <a className="underline hover:opacity-80" href="mailto:support@zentro.run">
+              support@zentro.run
             </a>
           </p>
         </div>

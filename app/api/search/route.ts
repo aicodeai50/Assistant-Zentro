@@ -51,7 +51,7 @@ function detectSearchReply(input: string) {
     ])
   ) {
     return {
-      answer: "You can contact Shynvo through the Contact page or by email at hi@shynvo.app.",
+      answer: "You can contact Zentro through the Contact page or by email at hi@zentro.run.",
       href: "/contact",
       label: "Open Contact",
     };

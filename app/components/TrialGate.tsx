@@ -79,7 +79,7 @@ export default function TrialGate({ children }: { children: React.ReactNode }) {
               View pricing
             </Link>
             <a
-              href="mailto:hi@shynvo.app?subject=Shynvo%20Robot%20Upgrade%20Request"
+              href="mailto:hi@zentro.run?subject=Zentro%20Assistant%20Upgrade%20Request"
               className="inline-flex justify-center rounded-2xl border border-white/10 bg-white/10 px-5 py-3 text-sm hover:bg-white/15 transition"
             >
               Contact support

@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { SITE_SHORT_NAME } from "@/lib/site";
 
 const NAV = [
   { href:"/pricing", label:"Pricing" },
@@ -52,7 +54,7 @@ export default function SiteNav() {
       }}>
         {/* HUD strip */}
         <div style={{borderBottom:"1px solid rgba(0,229,255,0.05)",padding:"3px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <span style={{fontFamily:mono,fontSize:8,color:"rgba(0,229,255,0.38)",letterSpacing:"0.14em",textTransform:"uppercase"}}>SHYNVO · STRUCTURED AI PLATFORM</span>
+          <span style={{fontFamily:mono,fontSize:8,color:"rgba(0,229,255,0.38)",letterSpacing:"0.14em",textTransform:"uppercase"}}>ZENTRO · AI OPERATIONS ASSISTANT</span>
           <span style={{fontFamily:mono,fontSize:8,color:"rgba(0,229,255,0.3)",letterSpacing:"0.1em"}}>{time} UTC</span>
         </div>
 
@@ -75,8 +77,8 @@ export default function SiteNav() {
             display:"flex",alignItems:"center",gap:7,
             flexShrink:0,marginRight:32,whiteSpace:"nowrap",
           }}>
-            <span style={{width:22,height:22,borderRadius:"50%",background:"#020508",border:"1.5px solid #00e5ff",boxShadow:"0 0 8px rgba(0,229,255,0.5)",display:"inline-flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:10,fontWeight:700,color:"#00e5ff",fontFamily:"var(--font-syne,sans-serif)"}}>S</span>
-            Shynvo
+            <Image src="/favicon.png" alt="" width={22} height={22} style={{borderRadius:"6px",flexShrink:0}} />
+            {SITE_SHORT_NAME}
           </Link>
 
           {/* Nav links */}

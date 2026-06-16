@@ -1,6 +1,6 @@
-# Shynvo Web
+# Zentro Assistant (shynvo-web)
 
-Primary customer-facing frontend for the Shynvo platform.
+Production frontend for **Zentro Assistant** at `https://assistant.zentro.run`.
 
 ## Local development
 
@@ -9,48 +9,43 @@ npm install
 npm run dev
 ```
 
-## Domain strategy
+Regenerate favicon and PWA icons:
 
-- Primary canonical domain: `https://shynvo.app`
-- Secondary domain: `https://www.shynvo.app` (redirects to primary)
+```bash
+npm run generate:icons
+```
 
-Canonical metadata and host redirects are configured in:
+## Domain
 
-- `app/layout.tsx`
-- `next.config.ts`
+- **Canonical:** `https://assistant.zentro.run`
+
+Configured in `lib/site.ts`, `app/layout.tsx`, and `next.config.ts`.
 
 ## Railway deployment
 
-Use this as the production frontend service.
+| Setting | Value |
+|--------|--------|
+| Repo | `aicodeai50/shynvo-web` (or your fork) |
+| Root directory | *(empty — repo root)* |
+| Build command | `npm run build` |
+| Start command | `npm run start` |
+| Port | `3000` (or Railway `PORT`) |
 
-### Service settings
+### Custom domain
 
-- **Service name:** `shynvo-web`
-- **Root directory:** this repository root
-- **Build command:** `npm run build`
-- **Start command:** `npm run start`
-- **Environment:** Production
+In Railway → Networking → add:
 
-### Domains
+- `assistant.zentro.run` → port `3000`
 
-Attach both:
+Add the CNAME/TXT records Railway provides at your DNS host for `zentro.run`.
 
-- `shynvo.app`
-- `www.shynvo.app`
+### Environment variables
 
-The app-level redirect ensures all `www` traffic resolves to `shynvo.app`.
+Set any API keys your app needs (Supabase, OpenAI, backend URLs) in Railway → Variables.
 
-## Platform transformation plan
+## Icons
 
-Current architecture keeps services separate while presenting one platform:
+Brand mark source: `public/icons/zentro-mark.svg`  
+Generated outputs: `public/favicon.png`, `public/icons/icon-*.png`
 
-- `shynvo-web`: flagship frontend experience
-- `sh-backend-api`: AI reasoning backend (Railway service)
-- `Robot_backend`: execution/generation backend (Railway service)
-
-Next step is a unified repo named `shynvo-platform` with:
-
-- `apps/web` (this frontend)
-- `services/sh-backend-api`
-- `services/robot-backend`
-# force redeploy Thu, Apr 16, 2026  8:55:02 PM
+Icons are regenerated automatically on `npm run build` via `prebuild`.

@@ -59,10 +59,10 @@ export default function RefundPage() {
 
             <p className="mt-2">
               <a
-                href="mailto:support@shynvo.app"
+                href="mailto:support@zentro.run"
                 className="text-white underline underline-offset-4"
               >
-                support@shynvo.app
+                support@zentro.run
               </a>
             </p>
           </section>

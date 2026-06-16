@@ -27,7 +27,7 @@ export default function PlatformShowcaseShell({
                 <span className="h-3 w-3 rounded-full bg-[#1a2436]" />
               </div>
               <div className="flex-1 rounded-[1rem] border border-[#1f2b3f] bg-[#02070f] px-4 py-3 text-center text-lg text-white/88 sm:text-2xl">
-                shynvo.app/
+                assistant.zentro.run/
               </div>
               <div className="hidden h-11 w-11 items-center justify-center rounded-[1rem] border border-[#1f2b3f] bg-[#02070f] text-white/30 sm:flex">
                 ↗

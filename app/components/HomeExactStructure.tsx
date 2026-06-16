@@ -175,7 +175,7 @@ export default function HomeExactStructure() {
                 <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-4 shadow-[0_8px_50px_rgba(0,0,0,0.3)]">
                   <div className="rounded-[1rem] bg-white p-3">
                     <QRCodeSVG
-                      value="https://shynvo.app"
+                      value="https://assistant.zentro.run"
                       size={148}
                       bgColor="#ffffff"
                       fgColor="#050811"

@@ -100,7 +100,7 @@ function detectReply(input: string): IntentReply {
     ])
   ) {
     return {
-      reply: "You can contact Shynvo through the Contact page or by email at hi@shynvo.app.",
+      reply: "You can contact Zentro through the Contact page or by email at hi@zentro.run.",
       href: "/contact",
       label: "Open Contact",
     };

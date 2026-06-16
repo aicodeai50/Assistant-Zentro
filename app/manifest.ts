@@ -1,27 +1,50 @@
 import type { MetadataRoute } from "next";
+import { SITE_DESCRIPTION, SITE_SHORT_NAME, SITE_URL } from "@/lib/site";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Shynvo",
-    short_name: "Shynvo",
-    description: "One platform for learning, building, and AI-guided work.",
+    name: SITE_SHORT_NAME,
+    short_name: SITE_SHORT_NAME,
+    description: SITE_DESCRIPTION,
     start_url: "/",
+    id: SITE_URL,
     display: "standalone",
-    background_color: "#020508",
-    theme_color: "#020508",
+    background_color: "#070a12",
+    theme_color: "#070a12",
     orientation: "portrait-primary",
     scope: "/",
     lang: "en",
-    categories: ["education", "productivity", "utilities"],
+    categories: ["productivity", "utilities", "business"],
     icons: [
-      { src: "/icons/icon-192.png",          sizes: "192x192", type: "image/png" },
-      { src: "/icons/icon-512.png",          sizes: "512x512", type: "image/png" },
-      { src: "/icons/icon-192-maskable.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
-      { src: "/icons/icon-512-maskable.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      {
+        src: "/icons/icon-192-maskable.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icons/icon-512-maskable.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
     ],
     shortcuts: [
-      { name: "Robot",      short_name: "Robot",      url: "/robot",      icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
-      { name: "University", short_name: "University", url: "/university", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
-      { name: "Frontier",   short_name: "Frontier",   url: "/frontier",  icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
+      {
+        name: "Docs",
+        short_name: "Docs",
+        url: "/docs",
+        icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }],
+      },
+      {
+        name: "Search",
+        short_name: "Search",
+        url: "/search",
+        icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }],
+      },
     ],
   };
 }

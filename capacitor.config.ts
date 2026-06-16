@@ -1,18 +1,19 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
+import { SITE_SHORT_NAME, SITE_URL } from "./app/lib/site";
 
 const config: CapacitorConfig = {
-  appId: 'com.shynvo.platform',
-  appName: 'Shynvo',
-  webDir: 'www',
+  appId: "run.zentro.assistant",
+  appName: SITE_SHORT_NAME,
+  webDir: "www",
   server: {
-    url: 'https://shynvo.app',
-    cleartext: false
+    url: SITE_URL,
+    cleartext: false,
   },
   plugins: {
     Keyboard: {
-      resizeOnFullScreen: true
-    }
-  }
+      resizeOnFullScreen: true,
+    },
+  },
 };
 
 export default config;

@@ -2,19 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [
-          {
-            type: "host",
-            value: "www.shynvo.app",
-          },
-        ],
-        destination: "https://shynvo.app/:path*",
-        permanent: true,
-      },
-    ];
+    return [];
   },
 };
 

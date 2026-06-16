@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
+import { SITE_SHORT_NAME, SITE_URL } from "@/lib/site";
 
 const mono={fontFamily:"var(--font-space-mono,monospace)"} as React.CSSProperties;
 const sans={fontFamily:"var(--font-syne,sans-serif)"} as React.CSSProperties;
@@ -16,10 +17,10 @@ export default function SiteFooter() {
           <div>
             <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:10}}>
               <span style={{width:6,height:6,borderRadius:"50%",background:CYAN,boxShadow:"0 0 8px rgba(0,229,255,0.8)",display:"inline-block",flexShrink:0}}/>
-              <span style={{...sans,fontWeight:800,fontSize:15,color:"#fff",letterSpacing:"-0.02em"}}>Shynvo</span>
+              <span style={{...sans,fontWeight:800,fontSize:15,color:"#fff",letterSpacing:"-0.02em"}}>{SITE_SHORT_NAME}</span>
             </div>
             <p style={{...mono,fontSize:10,color:"rgba(255,255,255,0.36)",lineHeight:1.7,marginBottom:12,maxWidth:200}}>
-              Structured AI platform for learning, building, and guided digital work.
+              AI operations assistant for incident triage, safe automations, and audit-ready workflows.
             </p>
             <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
               {["AI-guided","Modular","Structured"].map(t=>(
@@ -69,7 +70,7 @@ export default function SiteFooter() {
           <div>
             <div style={{...mono,fontSize:8,color:"rgba(0,229,255,0.45)",letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:14}}>Mobile</div>
             <div style={{background:"#fff",padding:8,borderRadius:4,display:"inline-block",boxShadow:"0 0 16px rgba(0,229,255,0.1)"}}>
-              <QRCodeSVG value="https://shynvo.app" size={72} bgColor="#ffffff" fgColor="#020508"/>
+              <QRCodeSVG value={SITE_URL} size={72} bgColor="#ffffff" fgColor="#020508"/>
             </div>
             <p style={{...mono,fontSize:9,color:"rgba(255,255,255,0.28)",marginTop:8,lineHeight:1.6}}>Scan to open on mobile</p>
           </div>
@@ -78,7 +79,7 @@ export default function SiteFooter() {
         {/* Bottom bar */}
         <div style={{borderTop:"1px solid rgba(255,255,255,0.04)",padding:"16px 0 20px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
           <div style={{...mono,fontSize:9,color:"rgba(255,255,255,0.22)",letterSpacing:"0.06em"}}>
-            © {new Date().getFullYear()} Shynvo. All rights reserved.
+            © {new Date().getFullYear()} {SITE_SHORT_NAME}. All rights reserved.
           </div>
           <div style={{display:"flex",gap:16}}>
             {[{href:"/terms",l:"Terms"},{href:"/privacy",l:"Privacy"},{href:"/refund",l:"Refund"}].map(x=>(

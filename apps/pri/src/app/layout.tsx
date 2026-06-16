@@ -15,25 +15,25 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SHYNVO PRI — Planetary Robot Interface",
   description: "The operating system for robot intelligence. Generate APIs, deploy agents, simulate digital twins, and orchestrate your entire robotics stack.",
-  metadataBase: new URL("https://shynvo.app"),
+  metadataBase: new URL("https://assistant.zentro.run"),
   alternates: {
     canonical: "/",
   },
   icons: {
     icon: [
-      { url: "https://shynvo.app/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "https://shynvo.app/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "https://assistant.zentro.run/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "https://assistant.zentro.run/icons/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "https://shynvo.app/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "https://assistant.zentro.run/icons/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
-    shortcut: "https://shynvo.app/icons/icon-192.png",
+    shortcut: "https://assistant.zentro.run/icons/icon-192.png",
   },
   keywords: "robotics, AI, API generation, robot platform, digital twin, automation",
   openGraph: {
     title: "SHYNVO PRI — Planetary Robot Interface",
     description: "The operating system for robot intelligence.",
-    url: "https://shynvo.app",
+    url: "https://assistant.zentro.run",
     siteName: "Shynvo",
     type: "website",
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "SHYNVO PRI — Planetary Robot Interface",
     description: "The operating system for robot intelligence.",
-    images: ["https://shynvo.app/icons/icon-512.png"],
+    images: ["https://assistant.zentro.run/icons/icon-512.png"],
   },
 };
 
