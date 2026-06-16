@@ -1,4 +1,4 @@
-import { backendFetch, getToken, setToken } from "@/lib/sh-backend";
+import { backendFetch, getToken, setToken } from "./sh-backend";
 
 const API = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 const KEY =
