@@ -19,6 +19,7 @@ export function ZentroRobotModel({ pose = "idle" }: ZentroRobotModelProps) {
   const antenna = useRef<THREE.Mesh>(null);
   const leftEye = useRef<THREE.Mesh>(null);
   const rightEye = useRef<THREE.Mesh>(null);
+  const platformRing = useRef<THREE.Mesh>(null);
 
   const metal = useMemo(
     () =>
@@ -131,6 +132,10 @@ export function ZentroRobotModel({ pose = "idle" }: ZentroRobotModelProps) {
       const pulse = 0.8 + (Math.sin(t * 6) + 1) * 0.35;
       (antenna.current.material as THREE.MeshStandardMaterial).emissiveIntensity = pulse;
     }
+
+    if (platformRing.current) {
+      platformRing.current.rotation.y = t * 0.35;
+    }
   });
 
   return (
@@ -226,6 +231,17 @@ export function ZentroRobotModel({ pose = "idle" }: ZentroRobotModelProps) {
 
       <mesh material={glow} position={[0, -0.55, 0]} receiveShadow>
         <torusGeometry args={[0.4, 0.018, 16, 64]} />
+      </mesh>
+
+      <mesh ref={platformRing} position={[0, -0.72, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.72, 0.008, 8, 80]} />
+        <meshStandardMaterial
+          color="#22d3ee"
+          emissive="#0891b2"
+          emissiveIntensity={0.8}
+          transparent
+          opacity={0.55}
+        />
       </mesh>
     </group>
   );

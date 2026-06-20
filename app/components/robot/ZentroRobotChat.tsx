@@ -19,7 +19,7 @@ import type { ZentroRobotPose } from "./ZentroRobotModel";
 
 const DEFAULT_GREETING: RobotChatMessage = {
   role: "robot",
-  text: `Hi! I'm ${SITE_NAME}. Ask me anything about IT operations, incidents, automations, pricing, or where to go next — I'm all ears (and a waving hand).`,
+  text: `Welcome to ${SITE_NAME}. I'm your operations assistant — ask about incident triage, safe automations, runbooks, pricing, or how to get started.`,
 };
 
 function TypingDots() {
@@ -147,34 +147,38 @@ export default function ZentroRobotChat() {
           />
 
           <div
-            className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[88dvh] flex-col overflow-hidden rounded-t-3xl border border-cyan-400/25 bg-[#070a12]/97 shadow-[0_-8px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(640px,82dvh)] sm:w-[min(420px,calc(100vw-2rem))] sm:max-h-none sm:rounded-3xl"
+            className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[88dvh] flex-col overflow-hidden rounded-t-2xl border border-white/10 bg-[#050810]/98 shadow-[0_-12px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(680px,85dvh)] sm:w-[min(440px,calc(100vw-2rem))] sm:max-h-none sm:rounded-2xl"
             role="dialog"
-            aria-label={`${SITE_NAME} chat`}
+            aria-label={`${SITE_NAME} operations console`}
           >
-            <div className="relative border-b border-white/10 px-4 py-3">
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-violet-500/10" />
-              <div className="relative flex items-center gap-3">
+            <div className="border-b border-white/[0.06] px-4 py-3.5">
+              <div className="flex items-center gap-3">
                 <ZentroRobotAvatar pose={thinking ? "talk" : pose} />
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold text-white">{SITE_NAME}</div>
-                  <div className="text-xs text-cyan-200/75">
-                    {thinking ? "Thinking…" : "Online · smiling & waving"}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-white">Operations Assistant</span>
+                    <span className="rounded border border-emerald-400/25 bg-emerald-400/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-300">
+                      Live
+                    </span>
+                  </div>
+                  <div className="mt-0.5 font-[family-name:var(--font-space-mono)] text-[10px] uppercase tracking-[0.1em] text-white/40">
+                    {thinking ? "Processing inquiry…" : "Zentro AI · No login required"}
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={handleNewChat}
-                    className="rounded-lg px-2 py-1 text-[11px] text-white/55 hover:bg-white/5 hover:text-white"
+                    className="rounded-md px-2 py-1 text-[11px] font-medium text-white/50 hover:bg-white/[0.05] hover:text-white"
                     title="New conversation"
                   >
-                    New
+                    Clear
                   </button>
                   <button
                     type="button"
                     onClick={closeChat}
-                    className="rounded-xl px-2 py-1 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                    aria-label="Close chat"
+                    className="rounded-md px-2 py-1 text-sm text-white/60 hover:bg-white/[0.05] hover:text-white"
+                    aria-label="Close"
                   >
                     ✕
                   </button>
@@ -183,19 +187,22 @@ export default function ZentroRobotChat() {
             </div>
 
             <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {messages.map((msg, i) => {
                   const isLatestRobot = msg.role === "robot" && i === messages.length - 1;
                   const animate = isLatestRobot && typingIndex === i && !thinking;
 
                   return (
-                    <div key={`${i}-${msg.text.slice(0, 12)}`}>
+                    <div key={`${i}-${msg.text.slice(0, 12)}`} className="flex flex-col gap-1">
+                      <span className="font-[family-name:var(--font-space-mono)] text-[9px] uppercase tracking-[0.12em] text-white/30">
+                        {msg.role === "user" ? "You" : "Assistant"}
+                      </span>
                       <div
                         className={[
-                          "max-w-[92%] rounded-2xl px-3 py-2.5 text-sm leading-6",
+                          "max-w-[94%] rounded-xl px-3.5 py-2.5 text-[13px] leading-[1.65]",
                           msg.role === "user"
-                            ? "ml-auto bg-cyan-300 text-slate-950"
-                            : "border border-white/8 bg-white/[0.04] text-white/90",
+                            ? "ml-auto border border-cyan-400/20 bg-cyan-400/10 text-cyan-50"
+                            : "border border-white/[0.06] bg-white/[0.03] text-white/88",
                         ].join(" ")}
                       >
                         {msg.role === "robot" ? (
@@ -216,9 +223,9 @@ export default function ZentroRobotChat() {
                       {msg.role === "robot" && msg.href && (!animate || typingIndex !== i) ? (
                         <Link
                           href={msg.href}
-                          className="mt-2 inline-flex rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-100 hover:bg-cyan-400/15"
+                          className="mt-1.5 inline-flex items-center gap-1 rounded-lg border border-cyan-400/20 bg-cyan-400/[0.06] px-3 py-1.5 text-[11px] font-semibold text-cyan-100 hover:bg-cyan-400/10"
                         >
-                          {msg.label || "Open"}
+                          {msg.label || "Learn more"} →
                         </Link>
                       ) : null}
                     </div>
@@ -233,22 +240,27 @@ export default function ZentroRobotChat() {
               </div>
 
               {showSuggestions ? (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {ZENTRO_QUICK_SUGGESTIONS.map((item) => (
-                    <button
-                      key={item.label}
-                      type="button"
-                      onClick={() => void submitMessage(item.prompt)}
-                      className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] text-white/75 transition hover:border-cyan-400/35 hover:bg-cyan-400/10 hover:text-cyan-100"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                <div className="mt-5 border-t border-white/[0.05] pt-4">
+                  <p className="mb-2 font-[family-name:var(--font-space-mono)] text-[9px] uppercase tracking-[0.14em] text-white/35">
+                    Suggested inquiries
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {ZENTRO_QUICK_SUGGESTIONS.map((item) => (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => void submitMessage(item.prompt)}
+                        className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-1.5 text-[10px] font-medium text-white/60 transition hover:border-cyan-400/25 hover:text-cyan-100"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               ) : null}
             </div>
 
-            <div className="border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="border-t border-white/[0.06] bg-black/20 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               <div className="flex gap-2">
                 <input
                   ref={inputRef}
@@ -257,21 +269,21 @@ export default function ZentroRobotChat() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") void submitMessage(input);
                   }}
-                  placeholder="Ask the Zentro robot anything…"
+                  placeholder="Describe your operations question…"
                   disabled={thinking}
-                  className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none ring-cyan-400/0 transition placeholder:text-white/35 focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20 disabled:opacity-60"
+                  className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 focus:border-cyan-400/30 focus:ring-1 focus:ring-cyan-400/15 disabled:opacity-55"
                 />
                 <button
                   type="button"
                   onClick={() => void submitMessage(input)}
                   disabled={thinking || !input.trim()}
-                  className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:opacity-50"
+                  className="rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:brightness-105 disabled:opacity-45"
                 >
                   Send
                 </button>
               </div>
-              <p className="mt-2 text-center text-[10px] text-white/35">
-                No login needed · answers powered by Zentro AI
+              <p className="mt-2 text-center font-[family-name:var(--font-space-mono)] text-[9px] uppercase tracking-[0.12em] text-white/30">
+                Encrypted in transit · Audit-friendly responses
               </p>
             </div>
           </div>
@@ -280,14 +292,15 @@ export default function ZentroRobotChat() {
         <button
           type="button"
           onClick={() => openChat()}
-          className="group flex items-center gap-3 rounded-full border border-cyan-400/30 bg-[#070a12]/92 py-2 pl-2 pr-4 text-sm font-semibold text-white shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md transition hover:border-cyan-300/55 hover:bg-[#0b1220]"
+          className="group flex items-center gap-2.5 rounded-xl border border-white/10 bg-[#050810]/95 py-2 pl-2 pr-4 text-[13px] font-semibold text-white shadow-[0_8px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl transition hover:border-cyan-400/30 hover:shadow-[0_8px_40px_rgba(34,211,238,0.12)]"
         >
           <ZentroRobotAvatar
             pose="wave"
-            className="h-11 w-11 rounded-full border-cyan-400/35 transition group-hover:border-cyan-300/60"
+            className="h-10 w-10 rounded-lg border-white/10"
           />
-          <span>Ask Zentro Robot</span>
-          <span className="hidden h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399] sm:inline-block" />
+          <span className="hidden sm:inline">Operations Assistant</span>
+          <span className="sm:hidden">Assistant</span>
+          <span className="zentro-status-dot scale-75" />
         </button>
       )}
     </div>

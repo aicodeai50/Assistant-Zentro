@@ -1,8 +1,8 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Space_Mono, Syne } from "next/font/google";
-import SiteNav from "@/components/SiteNav";
-import SiteFooter from "@/components/SiteFooter";
+import ZentroSiteNav from "@/components/ZentroSiteNav";
+import ZentroSiteFooter from "@/components/ZentroSiteFooter";
 import ZentroRobotChat from "@/components/robot/ZentroRobotChat";
 import { ZentroRobotProvider } from "@/lib/robot/context";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
@@ -125,13 +125,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <PathTracker />
             <UltraPremiumEffects />
             <div className="relative z-10 flex min-h-[100dvh] flex-col">
-              <SiteNav />
+              <ZentroSiteNav />
               <AIBackground />
               <main className="relative z-10 flex-1">
                 {children}
               </main>
               <div className="relative z-20" style={{ background: "transparent" }}>
-                <SiteFooter />
+                <ZentroSiteFooter />
               </div>
               <ZentroRobotChat />
             </div>

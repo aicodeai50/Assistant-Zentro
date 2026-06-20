@@ -24,7 +24,7 @@ export function zentroLocalReplyRich(input: string): ZentroLocalReply {
 
   if (!q) {
     return {
-      text: `Hi! I'm the ${SITE_SHORT_NAME} robot. Ask me about IT operations, our platform modules, pricing, or how to get started.`,
+      text: `Welcome. I'm the ${SITE_SHORT_NAME} operations assistant. Ask about incident response, automations, runbooks, pricing, or onboarding.`,
     };
   }
 
@@ -33,7 +33,7 @@ export function zentroLocalReplyRich(input: string): ZentroLocalReply {
     q === "yo"
   ) {
     return {
-      text: `Hello! I'm ${SITE_NAME} — your IT operations copilot. I can help with incidents, automations, runbooks, and navigating the platform. What would you like to know?`,
+      text: `Hello. I'm ${SITE_NAME}, your IT operations copilot. I can help with incidents, automations, runbooks, and platform navigation. What would you like to know?`,
     };
   }
 

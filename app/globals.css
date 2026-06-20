@@ -11,6 +11,10 @@
   --sh-text:    rgba(255,255,255,0.92);
   --sh-dim:     rgba(255,255,255,0.55);
   --sh-faint:   rgba(255,255,255,0.25);
+  --zentro-bg:  #050810;
+  --zentro-accent: #22d3ee;
+  --zentro-accent-dim: rgba(34, 211, 238, 0.15);
+  --zentro-border: rgba(255, 255, 255, 0.08);
 }
 
 html { background: #020508; scroll-behavior: smooth; }
@@ -49,6 +53,80 @@ body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:
 @keyframes blink { 0%,90%,100%{transform:scaleY(1)} 95%{transform:scaleY(0.08)} }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 @keyframes zentro-typing { 0%,100%{opacity:.35;transform:translateY(0)} 50%{opacity:1;transform:translateY(-2px)} }
+@keyframes zentro-glow { 0%,100%{opacity:.6} 50%{opacity:1} }
+
+/* ── Zentro design system ── */
+.zentro-badge {
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  background: rgba(34, 211, 238, 0.08);
+  padding: 0.375rem 1rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(165, 243, 252, 0.95);
+}
+.zentro-status-dot {
+  display: inline-block;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background: #34d399;
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.65);
+  animation: zentro-glow 2.4s ease-in-out infinite;
+}
+.zentro-gradient-text {
+  background: linear-gradient(135deg, #67e8f9 0%, #a5b4fc 55%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.zentro-section-label {
+  font-family: var(--font-space-mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(34, 211, 238, 0.75);
+}
+.zentro-card {
+  border-radius: 1rem;
+  border: 1px solid var(--zentro-border);
+  background: linear-gradient(165deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.zentro-card:hover {
+  border-color: rgba(34, 211, 238, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+.zentro-tag {
+  display: inline-block;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  padding: 0.2rem 0.55rem;
+  font-family: var(--font-space-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.zentro-link { color: rgba(103, 232, 249, 0.85); transition: color 0.15s; }
+.zentro-link:hover { color: #a5f3fc; }
+.zentro-hero-frame {
+  border-radius: 1rem;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.5) 100%);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.zentro-console {
+  background: linear-gradient(145deg, rgba(8,12,20,0.95) 0%, rgba(4,6,12,0.98) 100%);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+}
+.zentro-nav a, .zentro-nav button { min-height: auto; }
 
 .animate-float    { animation: float 4.6s ease-in-out infinite; }
 .animate-wave     { animation: wave 2s ease-in-out infinite; }
