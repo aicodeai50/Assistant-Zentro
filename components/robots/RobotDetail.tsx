@@ -94,7 +94,7 @@ export default function RobotDetail({ id }: { id: string }) {
               This is where the cinematic robot will connect to:
             </div>
             <ul className="mt-3 space-y-2 text-sm text-white/70 list-disc list-inside">
-              <li>Shynvo SH Assistant AI outputs</li>
+              <li>Zentro Assistant outputs</li>
               <li>OS state + logbook events</li>
               <li>Split View mode synchronization</li>
               <li>Voice + presence + gestures</li>

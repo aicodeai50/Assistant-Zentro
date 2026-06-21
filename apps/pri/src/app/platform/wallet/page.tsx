@@ -4,6 +4,13 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { getStoredApiKey } from "@/lib/auth";
 
+type Wallet = {
+  balance?: number;
+  plan_name?: string;
+  total_purchased?: number;
+  total_spent?: number;
+};
+
 const PLANS = [
   { name: "Free", tokens: "10,000", price: "$0", color: "#ffffff", features: ["10K tokens/mo", "Basic API access", "Community support"] },
   { name: "Builder", tokens: "100,000", price: "$9", color: "#00ffe7", features: ["100K tokens/mo", "Full API access", "Priority support", "Advanced analytics"] },
@@ -12,13 +19,13 @@ const PLANS = [
 ];
 
 export default function WalletPage() {
-  const [wallet, setWallet] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [wallet, setWallet] = useState<Wallet | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const key = getStoredApiKey();
-    if (!key) { setLoading(false); return; }
-    apiFetch("/account/wallet", key)
+    if (!key) return;
+    apiFetch<Wallet>("/account/wallet", key)
       .then(data => setWallet(data))
       .catch(() => {})
       .finally(() => setLoading(false));

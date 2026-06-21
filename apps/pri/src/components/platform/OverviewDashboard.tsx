@@ -43,12 +43,10 @@ function Dot({ color = "#00ffe7", pulse = false }: { color?: string; pulse?: boo
 
 export default function OverviewDashboard() {
   const [time, setTime] = useState("");
-  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
       setTime(new Date().toUTCString().slice(0, 25));
-      setTick(t => t + 1);
     }, 1000);
     return () => clearInterval(id);
   }, []);

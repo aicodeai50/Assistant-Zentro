@@ -40,11 +40,9 @@ export default function RobotFleet() {
   const [selected, setSelected] = useState<Robot | null>(null);
   const [command, setCommand] = useState("");
   const [log, setLog] = useState<string[]>(["System initialized.", "Fleet scan complete — 4 units found."]);
-  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTick(t => t + 1);
       // Simulate battery drain
       setRobots(prev => prev.map(r => ({
         ...r,

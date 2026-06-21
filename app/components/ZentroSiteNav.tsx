@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useZentroRobot } from "@/lib/robot/context";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import { SITE_SHORT_NAME } from "@/lib/site";
 import ZentroMark from "./ZentroMark";
 
 const links = [
   { href: "/#platform", label: "Platform" },
   { href: "/#modules", label: "Modules" },
+  { href: "/assistant", label: "Assistant" },
   { href: "/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },
   { href: "/contact", label: "Contact" },
@@ -17,8 +20,70 @@ const links = [
 
 export default function ZentroSiteNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const { openChat } = useZentroRobot();
   const [open, setOpen] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [displayName, setDisplayName] = useState("Account");
+
+  useEffect(() => {
+    let mounted = true;
+    const supabase = getSupabaseClient();
+
+    async function loadSession() {
+      if (!supabase) return;
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!mounted) return;
+
+      if (!session?.user) {
+        setIsSignedIn(false);
+        setDisplayName("Account");
+        return;
+      }
+
+      setIsSignedIn(true);
+      setDisplayName(
+        session.user.user_metadata?.full_name ||
+          session.user.email ||
+          "Account"
+      );
+    }
+
+    void loadSession();
+
+    if (!supabase) {
+      return () => {
+        mounted = false;
+      };
+    }
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      void loadSession();
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  async function handleSignOut() {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+
+    await supabase.auth.signOut();
+    setIsSignedIn(false);
+    setDisplayName("Account");
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <header className="zentro-nav sticky top-0 z-50 border-b border-white/[0.06] bg-[#050810]/80 backdrop-blur-xl">
@@ -43,19 +108,52 @@ export default function ZentroSiteNav() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {isSignedIn ? (
+            <>
+              <Link
+                href="/account"
+                className="hidden max-w-36 truncate rounded-lg border border-white/10 px-3 py-2 text-[13px] font-medium text-white/75 transition hover:border-white/20 hover:text-white sm:inline-flex"
+                title={displayName}
+              >
+                {displayName}
+              </Link>
+              <Link
+                href="/dashboard"
+                className="hidden rounded-lg bg-gradient-to-r from-fuchsia-400 via-pink-300 to-cyan-300 px-4 py-2 text-[13px] font-semibold text-slate-950 shadow-[0_0_24px_rgba(236,72,153,0.22)] transition hover:brightness-105 sm:inline-flex"
+              >
+                Dashboard
+              </Link>
+              <button
+                type="button"
+                onClick={() => void handleSignOut()}
+                className="hidden rounded-lg border border-white/10 px-3 py-2 text-[13px] font-medium text-white/65 transition hover:border-white/20 hover:text-white lg:inline-flex"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                className="hidden rounded-lg border border-white/10 px-3 py-2 text-[13px] font-medium text-white/75 transition hover:border-white/20 hover:text-white sm:inline-flex"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/sign-up"
+                className="hidden rounded-lg bg-gradient-to-r from-fuchsia-400 via-pink-300 to-cyan-300 px-4 py-2 text-[13px] font-semibold text-slate-950 shadow-[0_0_24px_rgba(236,72,153,0.22)] transition hover:brightness-105 sm:inline-flex"
+              >
+                Sign up
+              </Link>
+            </>
+          )}
           <button
             type="button"
             onClick={() => openChat()}
-            className="hidden rounded-lg bg-gradient-to-r from-cyan-400 to-cyan-300 px-4 py-2 text-[13px] font-semibold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.25)] transition hover:brightness-105 sm:inline-flex"
+            className="hidden rounded-lg border border-cyan-300/25 bg-cyan-300/10 px-4 py-2 text-[13px] font-semibold text-cyan-100 transition hover:bg-cyan-300/15 lg:inline-flex"
           >
             Open Assistant
           </button>
-          <Link
-            href="/pricing"
-            className="hidden rounded-lg border border-white/10 px-3 py-2 text-[13px] font-medium text-white/75 transition hover:border-white/20 hover:text-white lg:inline-flex"
-          >
-            Get started
-          </Link>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -92,6 +190,48 @@ export default function ZentroSiteNav() {
                 {item.label}
               </Link>
             ))}
+            {isSignedIn ? (
+              <>
+                <Link
+                  href="/account"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-lg border border-white/10 px-3 py-2.5 text-sm font-medium text-white/75"
+                >
+                  {displayName}
+                </Link>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg bg-gradient-to-r from-fuchsia-400 via-pink-300 to-cyan-300 px-3 py-2.5 text-sm font-semibold text-slate-950"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => void handleSignOut()}
+                  className="rounded-lg border border-white/10 px-3 py-2.5 text-left text-sm font-medium text-white/75"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/sign-in"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-lg border border-white/10 px-3 py-2.5 text-sm font-medium text-white/75"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/sign-up"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg bg-gradient-to-r from-fuchsia-400 via-pink-300 to-cyan-300 px-3 py-2.5 text-sm font-semibold text-slate-950"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
             <button
               type="button"
               onClick={() => {

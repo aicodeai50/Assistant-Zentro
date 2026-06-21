@@ -151,7 +151,7 @@ export default function ApiGeneratorPanel({
 
         {/* Tabs */}
         <div className="mb-3 flex gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-1">
-          {(["Python", "JavaScript", "cURL"] as Tab[]).map((t) => (
+          {TABS.map((t) => (
             <button
               key={t}
               type="button"

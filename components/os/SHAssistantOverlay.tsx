@@ -92,7 +92,7 @@ export default function SHAssistantOverlay({ open, onClose }: Props) {
       <div className="absolute right-[4%] top-[10%] w-[min(520px,92vw)] overflow-hidden rounded-3xl border border-white/15 bg-black/70 shadow-2xl">
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
           <div className="text-sm text-white/85">
-            SH Assistant <span className="text-white/40">• navigator • tutor • operator</span>
+            Zentro Assistant <span className="text-white/40">• navigator • tutor • operator</span>
           </div>
           <button
             type="button"

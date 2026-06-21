@@ -75,7 +75,7 @@ export default function LogbookPage() {
     setSelectedType("general");
   }
 
-  function useStarter(value: string, type: LogEntry["type"]) {
+  function applyStarter(value: string, type: LogEntry["type"]) {
     setEntry(value);
     setSelectedType(type);
   }
@@ -164,7 +164,7 @@ export default function LogbookPage() {
               <button
                 key={item.label}
                 type="button"
-                onClick={() => useStarter(item.value, item.type)}
+                onClick={() => applyStarter(item.value, item.type)}
                 className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/80 transition hover:bg-white/10"
               >
                 {item.label}

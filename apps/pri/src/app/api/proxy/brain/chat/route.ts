@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const data = await res.json();
     const content = data.choices?.[0]?.message?.content || "No response from ARIA.";
     return NextResponse.json({ content });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Brain connection failed" }, { status: 500 });
   }
 }

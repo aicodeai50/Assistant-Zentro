@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { extractReply } from "@/lib/university/extractReply";
 import { renderAssistantHtml } from "@/lib/sh-assistant/render";
@@ -185,18 +186,18 @@ Rules:
           </div>
 
           <div className="flex items-center gap-2">
-            <a
+            <Link
               href="/university"
               className="rounded-2xl border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/85 hover:bg-white/15"
             >
               Back to Hub →
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="rounded-2xl border border-white/15 bg-black/40 px-4 py-2 text-sm text-white/85 hover:bg-white/10"
             >
               Home →
-            </a>
+            </Link>
           </div>
         </div>
 

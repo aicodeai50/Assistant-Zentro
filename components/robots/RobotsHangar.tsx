@@ -35,7 +35,7 @@ export default function RobotsHangar() {
             href="/assistant"
             className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-xs font-extrabold hover:bg-white/5"
           >
-            SH Assistant
+            Zentro Assistant
           </Link>
         </div>
       </div>

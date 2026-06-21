@@ -42,3 +42,44 @@ export function checkAiAccess(user: AiAccessUser | null): AiAccessResult {
     return {
       allowed: true,
       mode: "trial",
+      updatedUser: user,
+    };
+  }
+
+  const paidPlans = new Set(["pro", "team", "custom"]);
+  if (user.plan && paidPlans.has(user.plan)) {
+    return {
+      allowed: true,
+      mode: "paid",
+      updatedUser: user,
+    };
+  }
+
+  const today = getDateKey();
+  const isNewDay = user.lastAiUseDate !== today;
+  const dailyAiUses = isNewDay ? 0 : user.dailyAiUses ?? 0;
+  const remaining = Math.max(0, 5 - dailyAiUses);
+
+  if (remaining <= 0) {
+    return {
+      allowed: false,
+      reason: "You have reached your free AI limit for today. Upgrade to continue.",
+      updatedUser: {
+        ...user,
+        dailyAiUses,
+        lastAiUseDate: today,
+      },
+    };
+  }
+
+  return {
+    allowed: true,
+    mode: "free",
+    remaining,
+    updatedUser: {
+      ...user,
+      dailyAiUses,
+      lastAiUseDate: today,
+    },
+  };
+}

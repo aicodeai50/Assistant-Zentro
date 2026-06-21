@@ -2,8 +2,32 @@
 
 import { useState } from "react";
 
+export type ResultPayload = {
+  spec?: {
+    name?: string;
+    purpose?: string;
+    template?: string;
+    slug?: string;
+  };
+  code?: {
+    route_code?: string;
+    schema_code?: string;
+    curl_example?: string;
+  };
+  endpoint?: string;
+  name?: string;
+  purpose?: string;
+  template?: string;
+  slug?: string;
+  files?: {
+    route_file?: string;
+    schema_file?: string;
+  };
+  [key: string]: unknown;
+};
+
 type Props = {
-  result: any;
+  result: ResultPayload | null;
   mode?: "code" | "text";
 };
 
@@ -108,7 +132,7 @@ Your endpoint is ready to save and run from the Builder below.`;
               <div className="relative rounded-3xl border border-white/10 bg-white/[0.03] p-5">
                 <button
                   type="button"
-                  onClick={() => copy(code.route_code, "route")}
+                onClick={() => copy(code.route_code ?? "", "route")}
                   className="absolute right-5 top-5 rounded-xl border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs text-white/60 hover:text-white transition"
                 >
                   {copied === "route" ? "✓ Copied" : "Copy"}
@@ -124,7 +148,7 @@ Your endpoint is ready to save and run from the Builder below.`;
               <div className="relative rounded-3xl border border-white/10 bg-white/[0.03] p-5">
                 <button
                   type="button"
-                  onClick={() => copy(code.schema_code, "schema")}
+                onClick={() => copy(code.schema_code ?? "", "schema")}
                   className="absolute right-5 top-5 rounded-xl border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs text-white/60 hover:text-white transition"
                 >
                   {copied === "schema" ? "✓ Copied" : "Copy"}
@@ -140,7 +164,7 @@ Your endpoint is ready to save and run from the Builder below.`;
               <div className="relative rounded-3xl border border-white/10 bg-white/[0.03] p-5">
                 <button
                   type="button"
-                  onClick={() => copy(code.curl_example, "curl")}
+                onClick={() => copy(code.curl_example ?? "", "curl")}
                   className="absolute right-5 top-5 rounded-xl border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs text-white/60 hover:text-white transition"
                 >
                   {copied === "curl" ? "✓ Copied" : "Copy"}

@@ -1,12 +1,13 @@
 export async function apiFetch<T>(
   path: string,
-  _apiKey: string = "",
+  apiKey: string = "",
   options: RequestInit = {}
 ): Promise<T> {
   const res = await fetch(path, {
     ...options,
     headers: {
       "Content-Type": "application/json",
+      ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
       ...(options.headers || {}),
     },
     cache: "no-store",
@@ -49,10 +50,10 @@ export type GenerateApiResponse = {
 };
 
 export async function generateApiFromPrompt(
-  _apiKey: string,
+  apiKey: string,
   prompt: string
 ): Promise<GenerateApiResponse> {
-  return apiFetch<GenerateApiResponse>("/api/proxy/generate-api", "", {
+  return apiFetch<GenerateApiResponse>("/api/proxy/generate-api", apiKey, {
     method: "POST",
     body: JSON.stringify({ prompt }),
   });

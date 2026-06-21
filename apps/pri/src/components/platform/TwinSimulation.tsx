@@ -122,7 +122,6 @@ export default function TwinSimulation() {
       setSelected(clicked.id);
       setLog(prev => [`Selected: ${clicked.label} at (${x}, ${y})`, ...prev]);
     } else if (selected) {
-      const robot = objects.find(o => o.id === "robot");
       if (selected === "robot") {
         setObjects(prev => prev.map(o => o.id === "robot" ? { ...o, x, y } : o));
         setLog(prev => [`Robot moved to (${x}, ${y})`, ...prev]);
@@ -188,7 +187,7 @@ export default function TwinSimulation() {
               </button>
               <button
                 onClick={() => {
-                  setObjects(DEMO_ROBOTS => [
+                  setObjects(() => [
                     { id: "robot", type: "robot", x: 1, y: 1, color: "#34d399", label: "Robot" },
                     { id: "cube1", type: "cube", x: 5, y: 3, color: "#60a5fa", label: "Cube A" },
                     { id: "cube2", type: "cube", x: 8, y: 6, color: "#f472b6", label: "Cube B" },

@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "eslint",
-    "generate:icons": "node scripts/generate-zentro-icons.mjs"
+    "generate:icons": "node scripts/generate-zentro-icons.mjs",
+    "lint:pri": "npm --prefix apps/pri run lint",
+    "build:pri": "npm --prefix apps/pri run build",
+    "audit:all": "npm audit && npm --prefix apps/pri audit",
+    "check": "npm run lint && npm run build && npm run lint:pri && npm run build:pri"
   },
   "engines": {
     "node": ">=20"
@@ -22,7 +26,7 @@
     "@supabase/supabase-js": "^2.99.0",
     "cmdk": "^1.1.1",
     "lucide-react": "^0.577.0",
-    "next": "16.1.6",
+    "next": "^16.2.9",
     "openai": "^6.27.0",
     "qrcode.react": "^4.2.0",
     "react": "19.2.3",
@@ -36,8 +40,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "^16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "^8.5.15",
+    "brace-expansion": "^1.1.13"
   }
 }

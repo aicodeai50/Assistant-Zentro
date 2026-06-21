@@ -34,7 +34,7 @@ export default function SplitView() {
           <div>
             <div className="text-sm font-extrabold">Split View</div>
             <div className="text-xs text-white/60">
-              Robot + Shynvo SH Assistant AI
+              Robot + Zentro Assistant
             </div>
           </div>
 

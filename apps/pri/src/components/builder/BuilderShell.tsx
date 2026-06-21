@@ -12,7 +12,7 @@ import ApiGeneratorPanel from "./ApiGeneratorPanel";
 import ApiDefinitionPanel from "./ApiDefinitionPanel";
 import TemplateConfigPanel from "./TemplateConfigPanel";
 import ExecutionPanel from "./ExecutionPanel";
-import ResultPanel from "./ResultPanel";
+import ResultPanel, { type ResultPayload } from "./ResultPanel";
 import WalletPanel from "./WalletPanel";
 import SavedApisPanel from "./SavedApisPanel";
 
@@ -59,6 +59,10 @@ type GeneratedSource = {
   config?: Record<string, unknown>;
   input?: Record<string, unknown>;
   slug?: string;
+};
+
+type GeneratedSpecWithKey = {
+  api_key?: unknown;
 };
 
 function writeOverviewActivity(nextData: Record<string, unknown>) {
@@ -145,6 +149,18 @@ function normalizeGeneratedPayload(data: GenerateApiResponse) {
   };
 }
 
+function readGeneratedApiKey(data: GenerateApiResponse) {
+  if (typeof data.api_key === "string") return data.api_key;
+
+  const spec = data.spec;
+  if (typeof spec === "object" && spec !== null && "api_key" in spec) {
+    const key = (spec as GeneratedSpecWithKey).api_key;
+    return typeof key === "string" ? key : "";
+  }
+
+  return "";
+}
+
 export default function BuilderShell() {
   const searchParams = useSearchParams();
 
@@ -162,11 +178,10 @@ export default function BuilderShell() {
   );
   const [slug, setSlug] = useState("");
   const [templates, setTemplates] = useState<TemplateOption[]>([]);
-  const [result, setResult] = useState<unknown>(null);
+  const [result, setResult] = useState<ResultPayload | null>(null);
   const [statusText, setStatusText] = useState("Idle");
   const [isSaving, setIsSaving] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [apiMode, setApiMode] = useState<"code" | "text">("code");
   const [generatedApiKey, setGeneratedApiKey] = useState("");
 
   const [balance, setBalance] = useState<number | null>(null);
@@ -269,7 +284,7 @@ export default function BuilderShell() {
       setConfigText(JSON.stringify(normalized.config, null, 2));
       setInputText(JSON.stringify(normalized.input, null, 2));
       setSlug(normalized.slug || "");
-      const rawKey = (data as any).api_key || (data as any).spec?.api_key || "";
+      const rawKey = readGeneratedApiKey(data);
       if (rawKey) setGeneratedApiKey(rawKey);
 
       if (normalized.slug) {
@@ -560,7 +575,7 @@ export default function BuilderShell() {
               onRunApi={handleRunApi}
             />
 
-            <ResultPanel result={result} mode={apiMode} />
+            <ResultPanel result={result} mode="code" />
           </div>
         </div>
       </section>

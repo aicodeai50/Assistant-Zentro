@@ -110,7 +110,7 @@ export default function OSLogbookPanel() {
       <div className="mt-4 space-y-3">
         {filtered.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/70">
-            No entries yet. Use Shynvo SH Assistant AI or navigate the OS to
+            No entries yet. Use Zentro Assistant or navigate the OS to
             generate events.
           </div>
         ) : (

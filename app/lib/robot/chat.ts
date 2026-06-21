@@ -1,5 +1,7 @@
 import { zentroLocalReplyRich, type ZentroLocalReply } from "@/lib/robot/fallback";
+import { buildRobotMemoryContext, type RobotMemoryItem } from "@/lib/robot/memory";
 import { ZENTRO_ROBOT_SYSTEM_PROMPT } from "@/lib/robot/prompt";
+import { buildRobotTaskContext, type RobotTaskItem } from "@/lib/robot/tasks";
 
 export type RobotChatMessage = {
   role: "user" | "robot";
@@ -42,7 +44,9 @@ export function clearRobotChatHistory() {
 
 export async function askZentroRobot(
   message: string,
-  history: RobotChatMessage[] = []
+  history: RobotChatMessage[] = [],
+  memory: RobotMemoryItem[] = [],
+  tasks: RobotTaskItem[] = []
 ): Promise<RobotChatMessage> {
   const trimmed = message.trim();
   if (!trimmed) {
@@ -56,7 +60,17 @@ export async function askZentroRobot(
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         message: trimmed,
-        systemPrompt: ZENTRO_ROBOT_SYSTEM_PROMPT,
+        systemPrompt: [
+          ZENTRO_ROBOT_SYSTEM_PROMPT,
+          buildRobotMemoryContext(memory),
+          buildRobotTaskContext(tasks),
+        ]
+          .filter(Boolean)
+          .join("\n\n"),
+        memory: memory.map((item) => item.text),
+        tasks: tasks
+          .filter((item) => item.status === "open")
+          .map((item) => item.title),
         messages: history.map((m) => ({
           role: m.role === "user" ? "user" : "assistant",
           content: m.text,

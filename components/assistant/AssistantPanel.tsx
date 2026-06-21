@@ -66,7 +66,7 @@ export default function AssistantPanel() {
     addEntry({
       id: uid(),
       type,
-      title: "Shynvo SH Assistant AI",
+      title: "Zentro Assistant",
       content,
       timestamp: Date.now(),
     });
@@ -152,7 +152,7 @@ export default function AssistantPanel() {
           </div>
           <div>
             <div className="font-extrabold leading-tight">
-              Shynvo SH Assistant AI
+              Zentro Assistant
             </div>
             <div className="text-xs text-white/60 -mt-0.5">
               secure • calm • clean
@@ -190,7 +190,7 @@ export default function AssistantPanel() {
           <div className="text-sm text-white/60">
             Say hello to{" "}
             <span className="font-semibold text-white/80">
-              Shynvo SH Assistant AI
+              Zentro Assistant
             </span>
             .
           </div>
@@ -220,7 +220,7 @@ export default function AssistantPanel() {
                   )}
                 >
                   <div className="text-xs font-extrabold text-white/60 mb-1">
-                    {isUser ? "You" : "Shynvo SH Assistant AI"}
+                    {isUser ? "You" : "Zentro Assistant"}
                   </div>
 
                   {isUser ? (
@@ -246,7 +246,7 @@ export default function AssistantPanel() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={1}
-          placeholder="Message Shynvo SH Assistant AI… (Enter to send • Shift+Enter new line)"
+          placeholder="Message Zentro Assistant… (Enter to send • Shift+Enter new line)"
           className="flex-1 resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm outline-none focus:border-violet-400/40 focus:ring-4 focus:ring-violet-500/10"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {

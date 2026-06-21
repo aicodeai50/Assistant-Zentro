@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       status: res.status,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Register failed" }, { status: 500 });
   }
 }
