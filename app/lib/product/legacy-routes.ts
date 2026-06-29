@@ -17,8 +17,22 @@ export const LEGACY_ROUTE_PREFIXES = [
   "/ai-guided-intelligence",
 ] as const;
 
+/** Marketing-only legacy pages — redirect to docs instead of serving stale content */
+export const LEGACY_REDIRECT_PREFIXES = [
+  "/worlds",
+  "/structured-progression",
+  "/modular-architecture",
+  "/ai-guided-intelligence",
+] as const;
+
 export function isLegacyRoute(pathname: string): boolean {
   return LEGACY_ROUTE_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+}
+
+export function isLegacyRedirectRoute(pathname: string): boolean {
+  return LEGACY_REDIRECT_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   );
 }
