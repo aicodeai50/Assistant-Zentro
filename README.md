@@ -1,6 +1,21 @@
 # Zentro Assistant (shynvo-web)
 
-Production frontend for **Zentro Assistant** at `https://assistant.zentro.run`.
+**Product:** Zentro Assistant — AI operations assistant for IT teams  
+**Canonical URL:** `https://assistant.zentro.run`  
+**Deploy:** Railway service `shynvo-web`
+
+> See [`docs/PRODUCT_AUDIT.md`](docs/PRODUCT_AUDIT.md) for the full investigation, consolidation decision, and roadmap.
+
+## Product identity
+
+| Layer | Value |
+|-------|-------|
+| User-facing brand | **Zentro Assistant** |
+| npm package | `shynvo-web` |
+| Target audience | IT teams, SREs, platform engineers |
+| Billing | **PayPal Subscriptions** |
+
+Legacy Shynvo environment routes (`/os`, `/university`, `/arcade`, etc.) remain for compatibility but are **not** part of the primary product surface.
 
 ## Local development
 
@@ -9,45 +24,45 @@ npm install
 npm run dev
 ```
 
-Regenerate favicon and PWA icons:
+Full check (lint + build both apps):
 
 ```bash
-npm run generate:icons
+npm run check
 ```
 
-## Domain
+## Environment variables
 
-- **Canonical:** `https://assistant.zentro.run`
+### Supabase (auth & profiles)
 
-Configured in `lib/site.ts`, `app/layout.tsx`, and `next.config.ts`.
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+### PayPal (billing)
+
+```
+NEXT_PUBLIC_PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_WEBHOOK_ID=
+PAYPAL_PRO_PLAN_ID=
+PAYPAL_TEAM_PLAN_ID=
+PAYPAL_API_BASE=https://api-m.sandbox.paypal.com
+```
+
+Webhook URL: `https://assistant.zentro.run/api/webhooks/paypal`
+
+Run `supabase/billing_subscriptions.sql` in Supabase after deploying.
 
 ## Railway deployment
 
 | Setting | Value |
 |--------|--------|
-| Repo | `aicodeai50/shynvo-web` (or your fork) |
-| Root directory | *(empty — repo root)* |
-| Build command | `npm run build` |
-| Start command | `npm run start` |
-| Port | `3000` (or Railway `PORT`) |
+| Build | `npm run build` |
+| Start | `npm run start` |
+| Port | `3000` |
 
-### Custom domain
+## Monorepo note
 
-In Railway → Networking → add:
-
-- `assistant.zentro.run` → port `3000`
-
-Add the CNAME/TXT records Railway provides at your DNS host for `zentro.run`.
-
-### Environment variables
-
-Set any API keys your app needs (Supabase, OpenAI, backend URLs) in Railway → Variables.
-
-## Icons
-
-Brand mark source: `public/icons/zentro-mark.svg`  
-Generated outputs: `public/favicon.png`, `public/icons/icon-*.png`
-
-Icons are committed in `public/` and can be regenerated locally with `npm run generate:icons`.
-
-<!-- deploy trigger: 2026-06-16 -->
+`apps/pri` (`shynvo_pri`) is a **separate** SHYNVO PRI operator app — not deployed as part of the Zentro Assistant production service.

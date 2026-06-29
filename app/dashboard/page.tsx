@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { loadRobotMemory, type RobotMemoryItem } from "@/lib/robot/memory";
 import { loadRobotTasks, type RobotTaskItem } from "@/lib/robot/tasks";
+import { Badge } from "@/components/ui/Badge";
+import { ButtonLink } from "@/components/ui/Button";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { PageShell } from "@/components/ui/PageShell";
 
 type DashboardProfile = {
   email?: string | null;
@@ -17,10 +21,8 @@ type DashboardProfile = {
 function daysLeft(trialEndsAt?: string | null) {
   if (!trialEndsAt) return null;
   const end = new Date(trialEndsAt).getTime();
-  const now = Date.now();
-  const diff = end - now;
-  const d = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  return d;
+  const diff = end - Date.now();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
 export default function DashboardPage() {
@@ -83,130 +85,137 @@ export default function DashboardPage() {
   const left = useMemo(() => daysLeft(profile?.trial_ends_at), [profile?.trial_ends_at]);
   const openTasks = useMemo(() => tasks.filter((item) => item.status === "open"), [tasks]);
   const doneTasks = useMemo(() => tasks.filter((item) => item.status === "done"), [tasks]);
-  const displayName = profile?.full_name || profile?.email || "Builder";
+  const displayName = profile?.full_name || profile?.email || "Operator";
   const plan = profile?.plan || "trial";
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[linear-gradient(135deg,#2e1065,#86198f,#fb7185)] p-10 text-white">
-        Loading your Zentro dashboard...
-      </main>
+      <PageShell eyebrow="Dashboard" title="Loading workspace">
+        <Card>Loading your Zentro dashboard…</Card>
+      </PageShell>
     );
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-4 py-10 text-white sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,rgba(217,70,239,0.26),transparent_34%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.18),transparent_32%),linear-gradient(135deg,#2e1065_0%,#86198f_45%,#fb7185_100%)]" />
+    <PageShell
+      eyebrow="Operations workspace"
+      title={`Welcome back, ${displayName}`}
+      description="Your command center for assistant memory, tasks, billing, and next actions."
+      actions={
+        <>
+          <ButtonLink href="/assistant" size="sm">
+            Open Assistant
+          </ButtonLink>
+          <ButtonLink href="/settings" variant="secondary" size="sm">
+            Settings
+          </ButtonLink>
+        </>
+      }
+    >
+      {message ? (
+        <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/80">
+          {message}
+        </div>
+      ) : null}
 
-      <div className="mx-auto max-w-7xl space-y-8">
-        <section className="overflow-hidden rounded-[2rem] border border-white/25 bg-white/10 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.25)] backdrop-blur-2xl sm:p-8 lg:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-[0.18em] text-white/65">
-                Zentro Dashboard
-              </div>
-              <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">
-                Welcome back, {displayName}.
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-white/75">
-                Your assistant workspace is ready. Continue with memory, tasks, briefings,
-                and your next focused action.
-              </p>
-            </div>
+      <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <Card padding="lg">
+          <CardHeader
+            eyebrow="Today"
+            title="Operating snapshot"
+            description="Track what your assistant knows and what still needs action."
+          />
 
-            <div className="rounded-3xl border border-white/20 bg-white/12 p-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-2xl">
-                  🤖
-                </div>
-                <div>
-                  <div className="font-semibold">Zentro Assistant</div>
-                  <div className="text-sm text-white/60">{profile?.email}</div>
-                </div>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl bg-white/10 p-3">
-                  <div className="text-white/50">Plan</div>
-                  <div className="mt-1 font-semibold capitalize">{plan}</div>
-                </div>
-                <div className="rounded-2xl bg-white/10 p-3">
-                  <div className="text-white/50">Trial</div>
-                  <div className="mt-1 font-semibold">
-                    {left === null ? "Active" : left > 0 ? `${left} day(s)` : "Ended"}
-                  </div>
-                </div>
-              </div>
-
-              <Link
-                href="/pricing"
-                className="mt-4 inline-flex w-full justify-center rounded-2xl bg-white px-4 py-3 text-sm font-bold text-fuchsia-800 transition hover:bg-white/90"
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { label: "Memories", value: memory.length, detail: "Saved assistant context" },
+              { label: "Open tasks", value: openTasks.length, detail: "Waiting for progress" },
+              { label: "Completed", value: doneTasks.length, detail: "Marked done locally" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
               >
-                Manage plan
-              </Link>
+                <div className="text-3xl font-bold text-cyan-100">{item.value}</div>
+                <div className="mt-1 text-sm font-semibold text-white">{item.label}</div>
+                <div className="mt-1 text-xs text-white/45">{item.detail}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card padding="lg">
+          <CardHeader
+            eyebrow="Account"
+            title={profile?.email || "Signed in"}
+            description="Plan status and billing"
+            action={<Badge variant="info">{plan}</Badge>}
+          />
+
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+              <div className="text-white/45">Plan</div>
+              <div className="mt-1 font-semibold capitalize">{plan}</div>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+              <div className="text-white/45">Trial</div>
+              <div className="mt-1 font-semibold">
+                {left === null ? "Active" : left > 0 ? `${left} day(s)` : "Ended"}
+              </div>
             </div>
           </div>
-        </section>
 
-        {message ? (
-          <div className="rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white/85">
-            {message}
+          <div className="mt-5 flex flex-col gap-2">
+            <ButtonLink href="/settings?billing=1" className="w-full">
+              Manage billing
+            </ButtonLink>
+            <ButtonLink href="/pricing" variant="secondary" className="w-full">
+              View plans
+            </ButtonLink>
           </div>
-        ) : null}
+        </Card>
+      </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
-          {[
-            { label: "Memories", value: memory.length, detail: "Saved context for your assistant" },
-            { label: "Open tasks", value: openTasks.length, detail: "Actions waiting for progress" },
-            { label: "Completed", value: doneTasks.length, detail: "Tasks marked done locally" },
-          ].map((item) => (
-            <div key={item.label} className="rounded-3xl border border-white/18 bg-white/10 p-6 backdrop-blur-xl">
-              <div className="text-4xl font-bold">{item.value}</div>
-              <div className="mt-2 text-sm font-semibold">{item.label}</div>
-              <div className="mt-1 text-sm text-white/55">{item.detail}</div>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {[
+          {
+            href: "/assistant",
+            title: "Command Center",
+            body: "Memory, tasks, briefings, and optional cloud sync.",
+            cta: "Open center",
+          },
+          {
+            href: "/settings",
+            title: "Settings",
+            body: "Profile, PayPal billing, and assistant preferences.",
+            cta: "Open settings",
+          },
+          {
+            href: "/search",
+            title: "Runbook search",
+            body: "Find procedures and operational knowledge quickly.",
+            cta: "Search runbooks",
+          },
+          {
+            href: "/docs",
+            title: "Documentation",
+            body: "Platform setup, workflows, and operator guides.",
+            cta: "Read docs",
+          },
+        ].map((card) => (
+          <Link
+            key={card.href}
+            href={card.href}
+            className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition hover:border-cyan-300/20 hover:bg-white/[0.05]"
+          >
+            <div className="text-lg font-semibold text-white">{card.title}</div>
+            <p className="mt-3 text-sm leading-6 text-white/55">{card.body}</p>
+            <div className="mt-5 text-sm font-semibold text-cyan-200 group-hover:text-cyan-100">
+              {card.cta} →
             </div>
-          ))}
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-4">
-          {[
-            {
-              href: "/assistant",
-              title: "Assistant Command Center",
-              body: "Manage memory, tasks, cloud sync, and daily briefings.",
-              cta: "Open center",
-            },
-            {
-              href: "/account",
-              title: "Account",
-              body: "Review your profile, plan, trial status, and daily AI usage.",
-              cta: "View account",
-            },
-            {
-              href: "/os",
-              title: "Zentro OS",
-              body: "Enter the operating layer for missions, focus, and timeline.",
-              cta: "Enter OS",
-            },
-            {
-              href: "/docs",
-              title: "Docs",
-              body: "Learn the platform, workflows, and setup paths.",
-              cta: "Read docs",
-            },
-          ].map((card) => (
-            <Link
-              key={card.href}
-              href={card.href}
-              className="rounded-3xl border border-white/18 bg-white/10 p-6 text-white transition hover:-translate-y-1 hover:bg-white/15"
-            >
-              <div className="text-lg font-bold">{card.title}</div>
-              <p className="mt-3 text-sm leading-6 text-white/62">{card.body}</p>
-              <div className="mt-5 text-sm font-bold text-cyan-100">{card.cta} →</div>
-            </Link>
-          ))}
-        </section>
-      </div>
-    </main>
+          </Link>
+        ))}
+      </section>
+    </PageShell>
   );
 }

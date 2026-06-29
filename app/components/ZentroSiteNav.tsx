@@ -118,6 +118,12 @@ export default function ZentroSiteNav() {
                 {displayName}
               </Link>
               <Link
+                href="/settings"
+                className="hidden rounded-lg border border-white/10 px-3 py-2 text-[13px] font-medium text-white/75 transition hover:border-white/20 hover:text-white sm:inline-flex"
+              >
+                Settings
+              </Link>
+              <Link
                 href="/dashboard"
                 className="hidden rounded-lg bg-gradient-to-r from-fuchsia-400 via-pink-300 to-cyan-300 px-4 py-2 text-[13px] font-semibold text-slate-950 shadow-[0_0_24px_rgba(236,72,153,0.22)] transition hover:brightness-105 sm:inline-flex"
               >
@@ -198,6 +204,13 @@ export default function ZentroSiteNav() {
                   className="mt-2 rounded-lg border border-white/10 px-3 py-2.5 text-sm font-medium text-white/75"
                 >
                   {displayName}
+                </Link>
+                <Link
+                  href="/settings"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg border border-white/10 px-3 py-2.5 text-sm font-medium text-white/75"
+                >
+                  Settings
                 </Link>
                 <Link
                   href="/dashboard"
