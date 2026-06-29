@@ -66,3 +66,7 @@ Run `supabase/billing_subscriptions.sql` in Supabase after deploying.
 ## Monorepo note
 
 `apps/pri` (`shynvo_pri`) is a **separate** SHYNVO PRI operator app — not deployed as part of the Zentro Assistant production service.
+
+## PayPal setup
+
+See [`docs/PAYPAL_SETUP.md`](docs/PAYPAL_SETUP.md) or `/docs/paypal-setup` in the app for the full operator checklist.

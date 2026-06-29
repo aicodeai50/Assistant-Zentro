@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { SITE_NAME } from "@/lib/site";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { PageShell } from "@/components/ui/PageShell";
+import DocsLegacyBanner from "./DocsLegacyBanner";
 
 export const metadata = {
   title: "Documentation",
@@ -41,6 +43,12 @@ const CORE_GUIDES = [
     tag: "Account",
   },
   {
+    title: "PayPal setup (operators)",
+    description: "Configure subscription plans, webhooks, and Railway env vars.",
+    href: "/docs/paypal-setup",
+    tag: "Admin",
+  },
+  {
     title: "Contact support",
     description: "Reach the team for enterprise, billing, or technical questions.",
     href: "/contact",
@@ -54,7 +62,6 @@ const LEGACY_GUIDES = [
   { title: "Academy", href: "/academy", tag: "Legacy" },
   { title: "Arcade", href: "/arcade", tag: "Legacy" },
   { title: "Enterprise demo", href: "/enterprise", tag: "Legacy" },
-  { title: "Robot guide", href: "/robot", tag: "Legacy" },
 ];
 
 export default function DocsPage() {
@@ -69,6 +76,10 @@ export default function DocsPage() {
         </ButtonLink>
       }
     >
+      <Suspense fallback={null}>
+        <DocsLegacyBanner />
+      </Suspense>
+
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {CORE_GUIDES.map((guide) => (
           <Link

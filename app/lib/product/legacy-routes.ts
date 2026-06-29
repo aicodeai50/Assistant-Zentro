@@ -17,13 +17,39 @@ export const LEGACY_ROUTE_PREFIXES = [
   "/ai-guided-intelligence",
 ] as const;
 
-/** Marketing-only legacy pages — redirect to docs instead of serving stale content */
-export const LEGACY_REDIRECT_PREFIXES = [
-  "/worlds",
-  "/structured-progression",
-  "/modular-architecture",
-  "/ai-guided-intelligence",
-] as const;
+type LegacyRedirect = {
+  prefix: string;
+  destination: string;
+  query?: Record<string, string>;
+};
+
+/** Routes that should redirect instead of serving stale content */
+export const LEGACY_REDIRECTS: LegacyRedirect[] = [
+  {
+    prefix: "/worlds",
+    destination: "/docs",
+    query: { legacy: "archived" },
+  },
+  {
+    prefix: "/structured-progression",
+    destination: "/docs",
+    query: { legacy: "archived" },
+  },
+  {
+    prefix: "/modular-architecture",
+    destination: "/docs",
+    query: { legacy: "archived" },
+  },
+  {
+    prefix: "/ai-guided-intelligence",
+    destination: "/docs",
+    query: { legacy: "archived" },
+  },
+  {
+    prefix: "/robot",
+    destination: "/assistant",
+  },
+];
 
 export function isLegacyRoute(pathname: string): boolean {
   return LEGACY_ROUTE_PREFIXES.some(
@@ -31,8 +57,15 @@ export function isLegacyRoute(pathname: string): boolean {
   );
 }
 
-export function isLegacyRedirectRoute(pathname: string): boolean {
-  return LEGACY_REDIRECT_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+export function getLegacyRedirect(pathname: string): LegacyRedirect | null {
+  return (
+    LEGACY_REDIRECTS.find(
+      (entry) => pathname === entry.prefix || pathname.startsWith(`${entry.prefix}/`)
+    ) ?? null
   );
+}
+
+/** @deprecated Use getLegacyRedirect instead */
+export function isLegacyRedirectRoute(pathname: string): boolean {
+  return getLegacyRedirect(pathname) !== null;
 }

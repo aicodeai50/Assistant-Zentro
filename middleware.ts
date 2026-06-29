@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isLegacyRedirectRoute } from "@/lib/product/legacy-routes";
+import { getLegacyRedirect } from "@/lib/product/legacy-routes";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const redirect = getLegacyRedirect(request.nextUrl.pathname);
 
-  if (isLegacyRedirectRoute(pathname)) {
+  if (redirect) {
     const url = request.nextUrl.clone();
-    url.pathname = "/docs";
-    url.searchParams.set("legacy", "archived");
+    url.pathname = redirect.destination;
+    url.search = "";
+
+    if (redirect.query) {
+      for (const [key, value] of Object.entries(redirect.query)) {
+        url.searchParams.set(key, value);
+      }
+    }
+
     return NextResponse.redirect(url);
   }
 
@@ -21,5 +28,6 @@ export const config = {
     "/structured-progression/:path*",
     "/modular-architecture/:path*",
     "/ai-guided-intelligence/:path*",
+    "/robot/:path*",
   ],
 };
