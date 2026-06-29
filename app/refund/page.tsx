@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Refund & Billing | Shynvo",
-  description: "Refund, billing, and cancellation information for Shynvo.",
+  title: "Refund & Billing",
+  description: "Refund, billing, and cancellation information for Zentro Assistant.",
 };
 
 export default function RefundPage() {
@@ -23,12 +23,11 @@ export default function RefundPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">1. Payments</h2>
             <p className="mt-2">
-              Payments for Shynvo may be processed through third-party billing
-              providers such as Lemon Squeezy.
+              Payments for Zentro Assistant are processed through PayPal Subscriptions
+              for Pro and Team plans.
             </p>
             <p className="mt-2">
-              Your bank or card statement may show the billing descriptor used
-              by the payment provider.
+              You can manage or cancel subscriptions from your PayPal account.
             </p>
           </section>
 

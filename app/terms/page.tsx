@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Terms of Service | Shynvo",
-  description: "Terms of Service for using the Shynvo platform.",
+  title: "Terms of Service",
+  description: "Terms of Service for using Zentro Assistant.",
 };
 
 export default function TermsPage() {
@@ -21,11 +21,10 @@ export default function TermsPage() {
 
         <div className="mt-8 space-y-8 text-sm leading-7 text-white/80">
           <section>
-            <h2 className="text-lg font-semibold text-white">1. About Shynvo</h2>
+            <h2 className="text-lg font-semibold text-white">1. About Zentro Assistant</h2>
             <p className="mt-2">
-              Shynvo is a multi-environment AI platform designed for learning,
-              building, thinking, and skill development across different
-              environments such as University, Frontier, Arcade, and others.
+              Zentro Assistant is an AI operations platform for IT teams — incident triage,
+              safe automations, runbook intelligence, and assistant memory/tasks.
             </p>
             <p className="mt-2">
               The platform is continuously evolving, and features may change
@@ -36,7 +35,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">2. Use of the platform</h2>
             <p className="mt-2">
-              By using Shynvo, you agree to use the platform responsibly and
+              By using Zentro Assistant, you agree to use the platform responsibly and
               only for lawful purposes.
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-5">
@@ -54,7 +53,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">3. AI-generated content</h2>
             <p className="mt-2">
-              Shynvo provides AI-generated responses and outputs.
+              Zentro Assistant provides AI-generated responses and outputs.
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-5">
               <li>AI responses may not always be accurate or complete.</li>
@@ -62,7 +61,7 @@ export default function TermsPage() {
               <li>You are responsible for how you use the information.</li>
             </ul>
             <p className="mt-2">
-              Shynvo is not liable for decisions made based on AI outputs.
+              Zentro Assistant is not liable for decisions made based on AI outputs.
             </p>
           </section>
 
@@ -84,7 +83,7 @@ export default function TermsPage() {
               Some features may require payment.
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-5">
-              <li>Payments are processed by third-party providers such as Lemon Squeezy.</li>
+              <li>Payments are processed by PayPal for subscription plans.</li>
               <li>Access may depend on your subscription or purchase.</li>
               <li>Features and pricing may change over time.</li>
             </ul>
@@ -97,7 +96,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">6. Availability</h2>
             <p className="mt-2">
-              We aim to keep Shynvo available at all times, but the service may
+              We aim to keep Zentro Assistant available at all times, but the service may
               experience downtime, interruptions, updates, modifications, or
               feature removals.
             </p>
@@ -109,7 +108,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">7. Intellectual property</h2>
             <p className="mt-2">
-              All content, design, and systems within Shynvo are owned by or
+              All content, design, and systems within Zentro Assistant are owned by or
               licensed to us.
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-5">
@@ -132,7 +131,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">9. Limitation of liability</h2>
             <p className="mt-2">
-              Shynvo is provided “as is” without guarantees.
+              Zentro Assistant is provided “as is” without guarantees.
             </p>
             <p className="mt-2">
               We are not liable for errors or inaccuracies in AI outputs, loss
@@ -146,7 +145,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">10. Changes to these Terms</h2>
             <p className="mt-2">
-              We may update these Terms at any time. Continued use of Shynvo
+              We may update these Terms at any time. Continued use of Zentro Assistant
               means you accept the updated Terms.
             </p>
           </section>

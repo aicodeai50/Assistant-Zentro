@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Privacy Policy | Shynvo",
-  description: "Privacy Policy for Shynvo platform.",
+  title: "Privacy Policy",
+  description: "Privacy Policy for Zentro Assistant.",
 };
 
 export default function PrivacyPage() {
@@ -9,12 +9,12 @@ export default function PrivacyPage() {
       <h1 className="text-2xl font-semibold mb-6">Privacy Policy</h1>
 
       <p className="mb-4 text-white/70">
-        This Privacy Policy explains how Shynvo collects, uses, and protects your information.
+        This Privacy Policy explains how Zentro Assistant collects, uses, and protects your information.
       </p>
 
       <h2 className="mt-6 font-semibold">1. Operator</h2>
       <p className="text-white/70">
-        Shynvo is operated from Norway.
+        Zentro Assistant is operated from Norway.
       </p>
 
       <h2 className="mt-6 font-semibold">2. Data We Collect</h2>
@@ -25,7 +25,8 @@ export default function PrivacyPage() {
 
       <h2 className="mt-6 font-semibold">3. AI Interactions</h2>
       <p className="text-white/70">
-        Shynvo does not store your chat conversations permanently.
+        Zentro Assistant does not store your chat conversations permanently by default.
+        Assistant memory may be stored locally in your browser or synced to your account when enabled.
         Inputs may be processed temporarily to generate responses and improve system safety.
       </p>
 
@@ -37,7 +38,7 @@ export default function PrivacyPage() {
 
       <h2 className="mt-6 font-semibold">5. Third-Party Services</h2>
       <p className="text-white/70">
-        Shynvo uses trusted third-party providers for infrastructure, payments, and AI processing.
+        Zentro Assistant uses trusted third-party providers for infrastructure, PayPal billing, Supabase authentication, and AI processing.
         These providers only process data as necessary to deliver the service.
       </p>
 

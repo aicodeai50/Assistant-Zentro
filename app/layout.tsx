@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Space_Mono, Syne } from "next/font/google";
 import ZentroSiteNav from "@/components/ZentroSiteNav";
+import LegacyRouteNotice from "@/components/LegacyRouteNotice";
 import ZentroSiteFooter from "@/components/ZentroSiteFooter";
 import ZentroRobotChat from "@/components/robot/ZentroRobotChat";
 import { ZentroRobotProvider } from "@/lib/robot/context";
@@ -126,6 +127,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <UltraPremiumEffects />
             <div className="relative z-10 flex min-h-[100dvh] flex-col">
               <ZentroSiteNav />
+              <LegacyRouteNotice />
               <AIBackground />
               <main className="relative z-10 flex-1">
                 {children}
