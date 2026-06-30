@@ -1,22 +1,8 @@
 import { NextResponse } from "next/server";
+import { requireShBackendApiUrl } from "@/lib/backend-env";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function getBaseUrl() {
-  const base =
-    process.env.RAILWAY_API_BASE_URL ||
-    process.env.NEXT_PUBLIC_BACKEND_URL ||
-    process.env.BACKEND_URL;
-
-  if (!base) {
-    throw new Error(
-      "Missing backend base URL. Set RAILWAY_API_BASE_URL (recommended) or NEXT_PUBLIC_BACKEND_URL."
-    );
-  }
-
-  return base.replace(/\/+$/, "");
-}
 
 function getKey() {
   return (
@@ -42,7 +28,7 @@ function authHeaders() {
 
 export async function GET() {
   try {
-    const base = getBaseUrl();
+    const base = requireShBackendApiUrl();
 
     const upstream = await fetch(`${base}/api/skill-matrix`, {
       method: "GET",
@@ -57,17 +43,15 @@ export async function GET() {
         "Content-Type": upstream.headers.get("Content-Type") ?? "application/json",
       },
     });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message ?? "Skill-matrix proxy failed" },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Skill-matrix proxy failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
-    const base = getBaseUrl();
+    const base = requireShBackendApiUrl();
     const body = await req.json().catch(() => ({}));
 
     const upstream = await fetch(`${base}/api/skill-matrix`, {
@@ -84,10 +68,8 @@ export async function POST(req: Request) {
         "Content-Type": upstream.headers.get("Content-Type") ?? "application/json",
       },
     });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message ?? "Skill-matrix proxy failed" },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Skill-matrix proxy failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
+import { requireRobotBackendUrl } from "@/lib/backend-env";
 
 export const runtime = "nodejs";
 
@@ -20,11 +21,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const base = mustEnv("NEXT_PUBLIC_API_URL");
+    const base = requireRobotBackendUrl();
     const key = mustEnv("SH_API_KEY");
     const body = await req.json();
 
-    const res = await fetch(`${base.replace(/\/$/, "")}/api/robot-chat`, {
+    const res = await fetch(`${base}/api/robot-chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,17 +39,15 @@ export async function POST(req: NextRequest) {
 
     if (res.ok) {
       try {
-        await recordAiUsage(access as any);
+        await recordAiUsage(access as Parameters<typeof recordAiUsage>[0]);
       } catch {
         // ignore usage-recording issues
       }
     }
 
     return NextResponse.json(data, { status: res.status });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message || "robot-chat proxy failed" },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "robot-chat proxy failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

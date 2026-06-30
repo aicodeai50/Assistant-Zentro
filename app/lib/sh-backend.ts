@@ -1,12 +1,15 @@
+import {
+  getClientBackendBase,
+  getServerBackendBase,
+} from "./backend-env";
+
 const TOKEN_KEY = "zentro_token";
 
 export function getBackendUrl() {
-  const raw =
-    process.env.NEXT_PUBLIC_API_URL ||
-    process.env.NEXT_PUBLIC_SH_BACKEND_URL ||
-    process.env.NEXT_PUBLIC_BACKEND_URL ||
-    "";
-  return raw.replace(/\/$/, "");
+  if (typeof window !== "undefined") {
+    return getClientBackendBase();
+  }
+  return getServerBackendBase();
 }
 
 export function getApiKey() {
@@ -34,7 +37,11 @@ export function clearToken() {
 
 export async function backendFetch(path: string, options: RequestInit = {}) {
   const base = getBackendUrl();
-  if (!base) throw new Error("NEXT_PUBLIC_API_URL missing");
+  if (!base) {
+    throw new Error(
+      "Missing backend URL. Set REACT_APP_SH_BACKEND_API or SH_BACKEND_URL."
+    );
+  }
 
   const key = getApiKey();
   const token = getToken();

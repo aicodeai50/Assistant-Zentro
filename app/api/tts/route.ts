@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireShBackendApiUrl } from "@/lib/backend-env";
 
 export const runtime = "nodejs";
 
@@ -10,12 +11,12 @@ function mustEnv(name: string) {
 
 export async function POST(req: Request) {
   try {
-    const base = mustEnv("NEXT_PUBLIC_API_URL");
+    const base = requireShBackendApiUrl();
     const key = mustEnv("SH_API_KEY");
 
     const body = await req.json();
 
-    const res = await fetch(`${base.replace(/\/$/, "")}/api/tts`, {
+    const res = await fetch(`${base}/api/tts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,11 +33,8 @@ export async function POST(req: Request) {
       status: res.status,
       headers: { "Content-Type": contentType },
     });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message || "tts proxy failed" },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "tts proxy failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-// force rebuild

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
 import { zentroLocalReplyRich } from "@/lib/robot/fallback";
 import { ZENTRO_ROBOT_SYSTEM_PROMPT } from "@/lib/robot/prompt";
+import { getShBackendApiUrl } from "@/lib/backend-env";
 
 const DEFAULT_PATHS = [
   "/api/public/chat",
@@ -33,12 +34,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ...localPayload(userMessage), error: access.message }, { status: 200 });
     }
 
-    const baseUrl =
-      process.env.SH_BACKEND_URL ||
-      process.env.BACKEND_URL ||
-      process.env.NEXT_PUBLIC_API_URL ||
-      process.env.RAILWAY_API_BASE_URL ||
-      "";
+    const baseUrl = getShBackendApiUrl();
 
     if (!baseUrl) {
       return NextResponse.json(localPayload(userMessage), { status: 200 });

@@ -1,5 +1,4 @@
-export const SH_BACKEND_URL =
-  process.env.NEXT_PUBLIC_SH_BACKEND_URL || "http://localhost:8080";
+import { getShBackendApiUrl } from "@/lib/backend-env";
 
 type ChatPayload = {
   message: string;
@@ -10,10 +9,9 @@ type ChatPayload = {
 };
 
 export async function shChat(payload: ChatPayload) {
-  const res = await fetch(`${SH_BACKEND_URL}/chat`, {
+  const res = await fetch("/api/backend/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    // IMPORTANT: do not send your SH key from frontend
     body: JSON.stringify(payload),
   });
 
@@ -24,3 +22,6 @@ export async function shChat(payload: ChatPayload) {
 
   return res.json();
 }
+
+/** @deprecated Use getShBackendApiUrl() from @/lib/backend-env on the server. */
+export const SH_BACKEND_URL = getShBackendApiUrl();

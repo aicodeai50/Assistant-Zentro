@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getPriBackendBaseUrl } from "@/lib/backend-env";
 
 export async function POST(req: NextRequest) {
   try {
-    const base = process.env.BACKEND_API_BASE_URL;
+    const base = getPriBackendBaseUrl();
     const proxyKey = process.env.BACKEND_PROXY_API_KEY;
     const body = await req.text();
 

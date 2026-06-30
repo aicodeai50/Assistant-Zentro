@@ -104,17 +104,7 @@ export default function CinematicRobotTeaser() {
 
   // --- Robot brain (endpoint if provided) ---
   async function robotReply(userText: string) {
-    // If set, call your endpoint:
-    // POST { message, language } -> { reply }
-    const url = process.env.NEXT_PUBLIC_ROBOT_CHAT_URL;
-
-    if (!url) {
-      // Local fallback so the robot works immediately
-      const langLabel = LANGS.find((l) => l.code === lang)?.label ?? lang;
-      return `Language: ${langLabel}. I can respond in any language you choose. Connect NEXT_PUBLIC_ROBOT_CHAT_URL to enable full long-form answers.`;
-    }
-
-    const res = await fetch(url, {
+    const res = await fetch("/api/robot-chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: userText, language: lang }),
@@ -125,8 +115,8 @@ export default function CinematicRobotTeaser() {
       throw new Error(txt || `Robot endpoint error (${res.status})`);
     }
 
-    const data = (await res.json()) as { reply?: string };
-    return data.reply ?? "No reply received.";
+    const data = (await res.json()) as { reply?: string; answer?: string; message?: string };
+    return data.reply ?? data.answer ?? data.message ?? "No reply received.";
   }
 
   async function send() {
@@ -384,7 +374,7 @@ export default function CinematicRobotTeaser() {
               </div>
 
               <div className="mt-2 text-[11px] text-white/50">
-                Set <span className="text-white/70">NEXT_PUBLIC_ROBOT_CHAT_URL</span> to connect real long answers.
+                Answers route through <span className="text-white/70">/api/robot-chat</span> via the private robot backend.
               </div>
             </div>
           </div>

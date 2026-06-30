@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getShBackendApiUrl } from "@/lib/backend-env";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function getBackendBase() {
-  return (
-    process.env.SH_BACKEND_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    ""
-  ).replace(/\/$/, "");
+  return getShBackendApiUrl();
 }
 
 async function proxy(req: NextRequest, pathParts: string[]) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   open: boolean;
@@ -29,10 +29,6 @@ export default function SHAssistantOverlay({ open, onClose }: Props) {
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const backend = useMemo(() => {
-    return process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/$/, "") || "";
-  }, []);
-
   useEffect(() => {
     if (!open) return;
     setTimeout(() => scrollRef.current?.scrollTo({ top: 999999, behavior: "smooth" }), 50);
@@ -53,19 +49,8 @@ export default function SHAssistantOverlay({ open, onClose }: Props) {
     setInput("");
     setMsgs((prev) => [...prev, { role: "user", text: t }, { role: "assistant", text: "…" }]);
 
-    if (!backend) {
-      setMsgs((prev) => [
-        ...prev.slice(0, -1),
-        {
-          role: "assistant",
-          text: "Backend missing. Add NEXT_PUBLIC_BACKEND_URL to .env.local",
-        },
-      ]);
-      return;
-    }
-
     try {
-      const res = await fetch(`${backend}/api/public/chat`, {
+      const res = await fetch("/api/public/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: t }),

@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getPriBackendBaseUrl } from "@/lib/backend-env";
 
 type Params = Promise<{ slug: string }>;
 
 export async function POST(req: NextRequest, context: { params: Params }) {
   try {
-    const base = process.env.BACKEND_API_BASE_URL;
+    const base = getPriBackendBaseUrl();
     const proxyKey = process.env.BACKEND_PROXY_API_KEY;
 
     if (!base) {
-      return NextResponse.json({ error: "Missing BACKEND_API_BASE_URL" }, { status: 500 });
+      return NextResponse.json({ error: "Missing REACT_APP_SH_BACKEND_API or BACKEND_API_BASE_URL" }, { status: 500 });
     }
 
     if (!proxyKey) {

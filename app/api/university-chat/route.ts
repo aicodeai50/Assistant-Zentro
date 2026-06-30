@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAiAccess, recordAiUsage } from "@/api/_utils/aiAccess";
+import { requireRobotBackendUrl } from "@/lib/backend-env";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -24,14 +25,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const base = process.env.SH_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL;
-    if (!base) {
-      throw new Error("Missing backend URL");
-    }
+    const base = requireRobotBackendUrl();
     const key = mustEnv("SH_API_KEY");
     const body = await req.json();
 
-    const res = await fetch(`${base.replace(/\/$/, "")}/api/robot-chat`, {
+    const res = await fetch(`${base}/api/robot-chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,10 +68,11 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "University chat proxy failed.";
     return NextResponse.json(
       {
-        answer: err?.message || "University chat proxy failed.",
+        answer: message,
       },
       { status: 200 }
     );
